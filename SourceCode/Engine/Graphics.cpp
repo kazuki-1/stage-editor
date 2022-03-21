@@ -59,7 +59,6 @@ bool Graphics::Frame()
     SCENEMANAGER::Instance()->Execute();
     stage->UpdateTransform();
 
-    int a = 0;
     //if (INPUTMANAGER::Instance()->Keyboard()->Triggered('L'))
     //    AUDIOENGINE::Instance()->Retrieve("Test2")->Play();
 
