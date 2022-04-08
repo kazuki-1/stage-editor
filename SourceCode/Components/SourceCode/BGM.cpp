@@ -88,7 +88,7 @@ void BGM::UI()
                 {
                     browser->Open();
                     browser->SetTitle("Open audio file");
-                    browser->SetTypeFilters({ ".wav, .*" });
+                    browser->SetTypeFilters({ ".wav", ".*" });
                     fileOpenBGM = true;
                     isEmpty = true;
                 }
