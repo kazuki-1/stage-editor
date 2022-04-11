@@ -17,6 +17,7 @@ public:
     void OutputFile(std::string file_name);
     void MouseSelect();
     void MoveToTarget();
+    void PlayUI();
     void RemoveGameObject(GAMEOBJECT* g);
     template <class T>
     void serialize(T& t)

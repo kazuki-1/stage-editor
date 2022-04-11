@@ -38,6 +38,10 @@ public:
     /// </summary>
     virtual void Execute();
     /// <summary>
+    /// Called every frame
+    /// </summary>
+    virtual void ExecuteUI();
+    /// <summary>
     /// <para> Called every frame to render all components </para>
     /// <para> コンポネントを描画するように毎フレームに呼び出す </para>
     /// </summary>
@@ -84,10 +88,6 @@ public:
     std::shared_ptr<OBJECT_DATA>Data();
 };
 
-
-
-
-
 class GAMEOBJECT_MANAGER : public SINGLETON<GAMEOBJECT_MANAGER>
 {
     std::map<std::string, std::shared_ptr<GAMEOBJECT>>gameObjects;
@@ -112,6 +112,34 @@ public:
     std::shared_ptr<GAMEOBJECT>Retrieve(std::string);
     std::string RetrieveName(std::shared_ptr<GAMEOBJECT>go);
     std::map<std::string, std::shared_ptr<GAMEOBJECT>>GameObjects();
+
+
+    /// <summary>
+    /// Called at the start of the stage. Initializes all gameObjects and their components
+    /// </summary>
+    void Initialize();
+    /// <summary>
+    /// Performs Game functions. Called every frame to perform functions
+    /// </summary>
+    void Execute();
+    /// <summary>
+    /// Performs UI functions. Called every frame to perform functions. 
+    /// </summary>
+    void ExecuteUI();
+    /// <summary>
+    /// Renders objects. Called every frame to perform rendering
+    /// </summary>
+    void Render();
+    /// <summary>
+    /// Renders UI. Called every frame to perform rendering
+    /// </summary>
+    void RenderUI();
+    /// <summary>
+    /// Called at the end of program to finalize the manager
+    /// </summary>
+    void Finalize();
+
 };
 
 
+#define GAMEOBJECTS GAMEOBJECT_MANAGER::Instance()

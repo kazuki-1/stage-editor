@@ -8,6 +8,7 @@
 #include "Components/Base Classes/DATAMANAGER.h"
 #include "Components/Headers/TRANSFORM_3D.h"
 #include "Components/Headers/MESH.h"
+#include "Scenes/SCENEMANAGER.h"
 static int cur{};
 std::shared_ptr<GAMEOBJECT>selected_model;
 std::shared_ptr<GAMEOBJECT>selected_item;
@@ -16,19 +17,6 @@ std::string output;
 char input_test[256] = { "" };
 std::string gameObjectTypes[] = { "GameObject", "GameObject2D" };
 std::shared_ptr<SPRITE>sprite;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -113,6 +101,7 @@ void STAGE_UI::RenderUI()
     GameObjectWindow();
     HierarchyUI();
     SceneUI();
+    PlayUI();
 }
 
 /*--------------------------------------------------------STAGE_UI GameObjectWindow()--------------------------------------------------------------------*/
@@ -178,8 +167,6 @@ void STAGE_UI::SceneUI()
                 creator->Close();
             }
         }
-
-
 
         ImGui::End();
     }
@@ -334,6 +321,29 @@ void STAGE_UI::MoveToTarget()
 
 
 
+
+}
+
+/*--------------------------------------------------------STAGE_UI PlayUI()--------------------------------------------------------------------*/
+
+void STAGE_UI::PlayUI()
+{
+    ImGui::Begin("Control");
+    if (ImGui::Button("Play"))
+    {
+        SCENEMANAGER::Instance()->Play();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Pause"))
+    {
+        SCENEMANAGER::Instance()->Pause();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Stop"))
+    {
+        SCENEMANAGER::Instance()->Stop();
+    }
+    ImGui::End();
 
 }
 

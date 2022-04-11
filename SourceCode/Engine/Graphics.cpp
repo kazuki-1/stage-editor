@@ -8,7 +8,7 @@
 #include "MODEL.h"
 #include "IMGUI.h"
 #include "../GUI.h"
-#include "../SCENEMANAGER.h"
+#include "../Scenes/SCENEMANAGER.h"
 #include "Audio.h"
 #include <time.h>
 using namespace DirectX;

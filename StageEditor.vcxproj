@@ -73,9 +73,9 @@
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp" />
     <ClCompile Include="SourceCode\GUI.cpp" />
     <ClCompile Include="SourceCode\OBJECT_DATA.cpp" />
-    <ClCompile Include="SourceCode\SCENEMANAGER.cpp" />
-    <ClCompile Include="SourceCode\SCENE_DEMO.cpp" />
-    <ClCompile Include="SourceCode\SCENE_UI.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENE_DEMO.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENE_UI.cpp" />
     <ClCompile Include="SourceCode\STAGE_UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,14 +141,14 @@
     <ClInclude Include="SourceCode\Engine\TEXTURE_MANAGER.h" />
     <ClInclude Include="SourceCode\GAMEOBJECT.h" />
     <ClInclude Include="SourceCode\GAMEOBJECT_2D.h" />
-    <ClInclude Include="SourceCode\SCENE_DEMO.h" />
     <ClInclude Include="SourceCode\Graphics.h" />
     <ClInclude Include="SourceCode\GUI.h" />
     <ClInclude Include="SourceCode\OBJECT_DATA.h" />
     <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h" />
-    <ClInclude Include="SourceCode\SCENE.h" />
-    <ClInclude Include="SourceCode\SCENE_DATA.h" />
-    <ClInclude Include="SourceCode\SCENE_UI.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENE.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENEMANAGER.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENE_DEMO.h" />
+    <ClInclude Include="SourceCode\Scenes\SCENE_UI.h" />
     <ClInclude Include="SourceCode\STAGE_UI.h" />
   </ItemGroup>
   <ItemGroup>

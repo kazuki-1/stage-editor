@@ -75,6 +75,42 @@ void GAMEOBJECT::Execute()
 
 }
 
+/*--------------------------------GAMEOBJECT ExecuteUI()----------------------------------*/
+void GAMEOBJECT::ExecuteUI()
+{
+    if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
+    {
+        std::filesystem::path path(DROPMANAGER::Instance()->Path());
+
+        if (path.extension() == ".mrs")
+        {
+            AddComponent(COMPONENT_TYPE::MESH);
+            MESH* m{ GetComponent<MESH>() };
+            m->Data()->model_path = path.string();
+            std::string directory{ "./Data/Model/" };
+            std::filesystem::path path(m->Data()->model_path);
+            std::filesystem::path name(path.filename().string());
+            std::string full_name{ name.string() };
+            name.replace_extension("");
+            directory += name.string() + "/" + full_name;
+            m->Data()->model_path = directory;
+            m->Data()->model_name = name.string();
+
+            GetComponent<MESH>()->Initialize();
+        }
+    }
+
+    for (auto& c : components) {
+        if (dynamic_cast<TRANSFORM_3D*>(c.get()))
+            continue;
+
+        c->Execute();
+    }
+    GetComponent<TRANSFORM_3D>()->Execute();
+
+}
+
+
 /*--------------------------------GAMEOBJECT Render()----------------------------------*/
 
 void GAMEOBJECT::Render()
@@ -283,6 +319,67 @@ void GAMEOBJECT_MANAGER::Clear()
 std::map<std::string, std::shared_ptr<GAMEOBJECT>>GAMEOBJECT_MANAGER::GameObjects()
 {
     return gameObjects;
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER Initialize()----------------------------------*/
+/// <summary>
+/// Called at the start of the stage. Initializes all gameObjects and their components
+/// </summary>
+void GAMEOBJECT_MANAGER::Initialize()
+{
+    for (auto& g : gameObjects)
+        g.second->Initialize();
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER Execute()----------------------------------*/
+/// <summary>
+/// Performs Game functions. Called every frame to perform functions
+/// </summary>
+void GAMEOBJECT_MANAGER::Execute()
+{
+    for (auto& g : gameObjects)
+        g.second->Execute();
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER ExecuteUI()----------------------------------*/
+/// <summary>
+/// Performs UI functions. Called every frame to perform functions. 
+/// </summary>
+void GAMEOBJECT_MANAGER::ExecuteUI()
+{
+    for (auto& g : gameObjects)
+        g.second->ExecuteUI();
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER Render()----------------------------------*/
+/// <summary>
+/// Renders objects. Called every frame to perform rendering
+/// </summary>
+void GAMEOBJECT_MANAGER::Render()
+{
+    for (auto& g : gameObjects)
+        g.second->Render();
+
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER RenderUI()----------------------------------*/
+/// <summary>
+/// Renders UI. Called every frame to perform rendering
+/// </summary>
+void GAMEOBJECT_MANAGER::RenderUI()
+{
+    for (auto& g : gameObjects)
+        g.second->RenderUI();
+
+}
+
+/*--------------------------------GAMEOBJECT_MANAGER Finalize()----------------------------------*/
+/// <summary>
+/// Called at the end of program to finalize the manager
+/// </summary>
+void GAMEOBJECT_MANAGER::Finalize()
+{
+    gameObjects.clear();
 }
 
 #pragma endregion
