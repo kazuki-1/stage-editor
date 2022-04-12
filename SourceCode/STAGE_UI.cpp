@@ -224,7 +224,8 @@ void STAGE_UI::Render()
     // Rendering everything in the scene
     for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
     {
-        o.second->Execute();
+        o.second->ExecuteUI();
+        o.second->RenderUI();
         o.second->Render();
     }
 

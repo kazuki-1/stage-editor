@@ -306,7 +306,7 @@ bool INPUTMANAGER::MouseRayCast(MODEL* m, D3D11_VIEWPORT vp)
 	m_pos.z = 1.0f;
 	end.Load(XMVector3Unproject(m_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), m->TransformMatrix()));
 	COLLIDERS::RAYCASTDATA hr{};
-	if (COLLIDERS::RayCast(start, end, m, hr))
+	if (COLLIDERS::RayCast(start, end, m, hr, -1))
 		return true;
 	return false;
 }

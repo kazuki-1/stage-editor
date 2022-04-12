@@ -7,5 +7,5 @@ class SCENE_UI : public SCENE
     HRESULT Initialize() override;
     void Execute() override;
     void Render() override;
-    void Finalize() override;
+    //void Finalize() override;
 };

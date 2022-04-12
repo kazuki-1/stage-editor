@@ -2,12 +2,14 @@
 #include "../Components/Base Classes/COMPONENT_CREATOR.h"
 #include "../Engine/DEBUG_MANAGER.h"
 #include "../Engine/IMGUI.h"
+#include "../GAMEOBJECT.h"
 #include "../Engine/LIGHTING.h"
 #include "../STAGE_UI.h"
-
+#include "../Components/Base Classes/DATAMANAGER.h"
 
 HRESULT SCENE_UI::Initialize()
 {
+    DATAMANAGER::Instance()->InsertAndInitialize();
     COMPONENT_CREATOR::Instance()->Initialize();
     DEBUG_MANAGER::Instance()->Initialize();
     return S_OK;
@@ -26,7 +28,8 @@ void SCENE_UI::Render()
     IMGUI::Instance()->Render();
 
 }
-void SCENE_UI::Finalize()
-{
-
-}
+//void SCENE_UI::Finalize()
+//{
+//    GAMEOBJECTS->Finalize();
+//    
+//}

@@ -55,14 +55,14 @@ void CAPSULE_COLLIDER::Execute()
     // Updates the properties of the collider
     TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
     XMMATRIX world{ XMMatrixIdentity() };
-    if (data->bone_name == "") 
+    if (data->bone_name == "")
     {
         // If not attached to bone
         collider->Execute(transform->TransformMatrix());
         world = collider->MatrixOffset() * transform->TransformMatrix();
         VECTOR3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
     }
-    else 
+    else
     {
         // If attached to bone
         collider->FitToBone(data->bone_name, GetComponent<MESH>()->Model().get());
@@ -79,14 +79,14 @@ void CAPSULE_COLLIDER::Execute(XMMATRIX transform)
 {
     // Updates the properties of the collider
     XMMATRIX world{ XMMatrixIdentity() };
-    if (data->bone_name == "") 
+    if (data->bone_name == "")
     {
         // If not attached to bone
         collider->Execute(transform);
         world = collider->MatrixOffset() * transform;
         VECTOR3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
     }
-    else 
+    else
     {
         // If attached to bone
         collider->FitToBone(data->bone_name, GetComponent<MESH>()->Model().get());
@@ -128,7 +128,7 @@ void CAPSULE_COLLIDER::UI()
         ImGui::DragFloat("Radius", &data->radius, 0.05f, 0.0f);
         if (ImGui::Button("Set Data to collider"))
         {
-            
+
             collider->SetRadius(data->radius);
             collider->SetHeight(data->height);
             collider->OffsetCollider(data->center);
@@ -193,7 +193,7 @@ VECTOR3 CAPSULE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 bool CAPSULE_COLLIDER::Collide(GAMEOBJECT* target)
 {
     CAPSULE_COLLIDER* other = target->GetComponent<CAPSULE_COLLIDER>();
-    if(other)
+    if (other)
     {
         return collider->Collide(other->Collider().get());
     }
@@ -271,16 +271,14 @@ CAPSULE_COLLIDER_DATA* CAPSULE_COLLIDER::Data()
 
 /*----------------------------------------------CAPSULE COLLIDER Collider()------------------------------------------*/
 
-COMPONENT_TYPE CAPSULE_COLLIDER::GetComponentType()
-{
-    return data->type;
-}
-
-/*----------------------------------------------CAPSULE COLLIDER Collider()------------------------------------------*/
-
 std::shared_ptr<COLLIDERS::COLLIDER_BASE>CAPSULE_COLLIDER::Collider()
 {
     return collider;
 }
 
+/*----------------------------------------------CAPSULE COLLIDER GetComponentType()------------------------------------------*/
 
+COMPONENT_TYPE CAPSULE_COLLIDER::GetComponentType()
+{
+    return data->type;
+}

@@ -2,6 +2,9 @@
 #include "../Base Classes/COMPONENT.h"
 class OBB_COLLIDER;
 
+
+
+// UNUSED
 class OBB_TERRAIN_DATA : public COMPONENT_DATA
 {
 public:
@@ -18,7 +21,7 @@ public:
     }
 };
 
-
+// UNUSED
 class OBB_TERRAIN : public COMPONENT
 {
     std::shared_ptr<OBB_COLLIDER>collider;

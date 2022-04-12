@@ -166,6 +166,12 @@ void MODEL::SetTransformation(VECTOR3 s, VECTOR3 r, VECTOR3 t)
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
     translation = t;
 }
+void MODEL::SetTransformation(VECTOR3 s, VECTOR4 q, VECTOR3 t)
+{
+    scale = s;
+    quaternion = q;
+    translation = t;
+}
 //void MODEL::SetTransformationQ(VECTOR3 s, VECTOR4 q, VECTOR3 t)
 //{
 //    scale = s.XMF3();

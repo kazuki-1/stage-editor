@@ -104,6 +104,7 @@ public:
     void SetRotation(VECTOR3 r);
     void SetScale(VECTOR3 s);
     void SetTransformation(VECTOR3 s, VECTOR3 r, VECTOR3 t);
+    void SetTransformation(VECTOR3 s, VECTOR4 q, VECTOR3 t);
     void OffsetTransform(XMMATRIX mat);
     void SetTake(int take);
     void SetFrame(int frame);

@@ -49,6 +49,7 @@ void SCENEMANAGER::ChangeScene(ScenesEnum name)
     if (cur_Scene)
         Finalize();
     cur_Scene = scenes.find(name)->second;
+    cur_Scene->Initialize();
     current_Enum = name;
 }
 

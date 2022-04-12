@@ -6,6 +6,7 @@
 #include "Components/Base Classes/COMPONENT.h"
 #include "Components/Headers/TRANSFORM_3D.h"
 #include "Components/Headers/MESH.h"
+#include "Components/Headers/PLAYER_CONTROLLER.h"
 std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGM", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "Sprite 2D"};
 bool popup{};
 //int selected_comp{};
@@ -43,32 +44,31 @@ HRESULT GAMEOBJECT::Initialize()
 
 void GAMEOBJECT::Execute()
 {
-    if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
-    {
-        std::filesystem::path path(DROPMANAGER::Instance()->Path());
+    //if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
+    //{
+    //    std::filesystem::path path(DROPMANAGER::Instance()->Path());
 
-        if (path.extension() == ".mrs")
-        {
-            AddComponent(COMPONENT_TYPE::MESH);
-            MESH* m{ GetComponent<MESH>() };
-            m->Data()->model_path = path.string();
-            std::string directory{ "./Data/Model/" };
-            std::filesystem::path path(m->Data()->model_path);
-            std::filesystem::path name(path.filename().string());
-            std::string full_name{ name.string() };
-            name.replace_extension("");
-            directory += name.string() + "/" + full_name;
-            m->Data()->model_path = directory;
-            m->Data()->model_name = name.string();
+    //    if (path.extension() == ".mrs")
+    //    {
+    //        AddComponent(COMPONENT_TYPE::MESH);
+    //        MESH* m{ GetComponent<MESH>() };
+    //        m->Data()->model_path = path.string();
+    //        std::string directory{ "./Data/Model/" };
+    //        std::filesystem::path path(m->Data()->model_path);
+    //        std::filesystem::path name(path.filename().string());
+    //        std::string full_name{ name.string() };
+    //        name.replace_extension("");
+    //        directory += name.string() + "/" + full_name;
+    //        m->Data()->model_path = directory;
+    //        m->Data()->model_name = name.string();
 
-            GetComponent<MESH>()->Initialize();
-        }
-    }
+    //        GetComponent<MESH>()->Initialize();
+    //    }
+    //}
 
     for (auto& c : components) {
         if (dynamic_cast<TRANSFORM_3D*>(c.get()))
             continue;
-
         c->Execute();
     }
     GetComponent<TRANSFORM_3D>()->Execute();
@@ -103,7 +103,8 @@ void GAMEOBJECT::ExecuteUI()
     for (auto& c : components) {
         if (dynamic_cast<TRANSFORM_3D*>(c.get()))
             continue;
-
+        if (dynamic_cast<PLAYER_CONTROLLER*>(c.get()))
+            continue;
         c->Execute();
     }
     GetComponent<TRANSFORM_3D>()->Execute();

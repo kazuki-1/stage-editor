@@ -3,8 +3,19 @@
 #include "../Components/Headers/OBB_COLLIDER.h"
 #include "../Components/Headers/SPHERE_COLLIDER.h"
 #include "../Components/Headers/CAPSULE_COLLIDER.h"
+#include "../Components/Headers/MESH.h"
+#include "../Components/Headers/TRANSFORM_3D.h"
 using namespace COLLIDERS;
 
+/*---------------------------------------------------PointLineClosest()---------------------------------------------------*/
+
+/// <summary>
+/// <para> Calculates a point on a line that is closest to the target point </para>
+/// <para> 目標点に一番近い点を計算 </para>
+/// </summary>
+/// <param name="top"> : Starting point of vector</param>
+/// <param name="bot"> : Ending point of vector</param>
+/// <returns></returns>
 VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 top, VECTOR3 bottom, VECTOR3 target)
 {
     // Forming a line vector
@@ -28,6 +39,11 @@ VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 top, VECTOR3 bottom, VECTOR3 target)
     return point;
 
 }
+/// <summary>
+/// <para> Calculates a point on a line that is closest to the target point </para>
+/// <para> 目標点に一番近い点を計算 </para>
+/// </summary>
+/// <returns></returns>
 VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 origin, CAPSULE* target)
 {
     // Forming a line vector
@@ -56,18 +72,79 @@ VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 origin, CAPSULE* target)
     return point;
 
 }
+
+
+/*---------------------------------------------------AxisCasting()---------------------------------------------------*/
+/// <summary>
+/// <para> Performs axis casting, where each point is casted onto the axis, and is compared </para>
+/// <para> 各点を軸にキャストして比較される </para>
+/// </summary>
+/// <param name="oriMin"> ： Minimum point of first collider</param>
+/// <param name="oriMax"> ： Maximum point of first collider</param>
+/// <param name="tarMin"> ： Minimum point of second collider</param>
+/// <param name="tarMax"> ： Maximum point of second collider</param>
+/// <param name="rotation"> : Rotation of first collider</param>
+/// <param name="colCount"> : Output. Shows how many time it is a hit</param>
+void COLLIDERS::AxisCasting(VECTOR3 oriMin, VECTOR3 oriMax, VECTOR3 tarMin, VECTOR3 tarMax, VECTOR3 rotation, int* colCount)
+{
+    // Extracing the axises from the rotation matrix 
+    // 回転MatrixからXYZ軸を抽出
+    XMFLOAT3 temp{ rotation.x, rotation.y, rotation.z };
+    XMMATRIX tempM{ XMMatrixIdentity() };
+    tempM = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+    XMFLOAT3 r, t, f;
+    XMStoreFloat3(&r, tempM.r[0]);
+    XMStoreFloat3(&t, tempM.r[1]);
+    XMStoreFloat3(&f, tempM.r[2]);
+    VECTOR3 Right{ r }, Top{ t }, Front{ f };
+
+    float ori_x1, ori_y1, ori_z1, ori_x2, ori_y2, ori_z2;
+    float tar_x1, tar_y1, tar_z1, tar_x2, tar_y2, tar_z2;
+
+    // Perform dot on each points to check if they are within range
+    // 各座標を内積して範囲内チェック
+    ori_x1 = Right.Dot(oriMin);
+    ori_x2 = Right.Dot(oriMax);
+    ori_y1 = Top.Dot(oriMin);
+    ori_y2 = Top.Dot(oriMax);
+    ori_z1 = Front.Dot(oriMin);
+    ori_z2 = Front.Dot(oriMax);
+
+    tar_x1 = Right.Dot(tarMin);
+    tar_x2 = Right.Dot(tarMax);
+    tar_y1 = Top.Dot(tarMin);
+    tar_y2 = Top.Dot(tarMax);
+    tar_z1 = Front.Dot(tarMin);
+    tar_z2 = Front.Dot(tarMax);
+
+    if (ori_x1 > tar_x2 || ori_x2 < tar_x1)
+        return;
+    if (ori_y1 > tar_y2 || ori_y2 < tar_y1)
+        return;
+    if (ori_z1 > tar_z2 || ori_z2 < tar_z1)
+        return;
+    *colCount += 3;
+
+
+
+
+}
+
+/*---------------------------------------------------OBBCollision()---------------------------------------------------*/
+/// <summary>
+/// <para> Performs collision check between 2 OBBs </para>
+/// <para> 2つのOBBに当たり判定を計算 </para>
+/// </summary>
+/// <returns></returns>
 bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 {
+    // Check if colliders are activated
+    // コライダーのステータスチェック
     if (!ori->Status() || !tar->Status())
         return false;
 
-    VECTOR3 cb{ tar->Center() };
-    VECTOR3 ca = ori->Center();
-    if (Math::Length(ca, cb) > 1.0f)
-    {
-        return false;
-    }
-
+    // Check both OBB for their minimum and maximum points
+    // 両方のOBBの最小と最大点をチェック
     VECTOR3 min1, max1, min2, max2;
     for (auto& v : ori->Points())
     {
@@ -111,7 +188,8 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
             max2.z = v.z;
     }
 
-
+    // Perform axis casting to see if all points are within range
+    // Axis Castを使ってすべての座標は範囲内チェック
     int count{};
     AxisCasting(min1, max1, min2, max2, ori->Rotation(), &count);
     AxisCasting(min1, max1, min2, max2, tar->Rotation(), &count);
@@ -119,65 +197,56 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 
 
 }
-void COLLIDERS::AxisCasting(VECTOR3 oriMin, VECTOR3 oriMax, VECTOR3 tarMin, VECTOR3 tarMax, VECTOR3 rotation, int* colCount)
+
+/*---------------------------------------------------RayCast()---------------------------------------------------*/
+/// <summary>
+/// <para> Perform Raycasting </para>
+/// <para> レイーキャストを計算 </para>
+/// </summary>
+/// <param name="s"> : Starting point of ray</param>
+/// <param name="e"> : Direction of ray</param>
+/// <param name="m"> : Target model</param>
+/// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
+/// <returns></returns>
+bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
 {
-    XMFLOAT3 temp{ rotation.x, rotation.y, rotation.z };
-    XMMATRIX tempM{ XMMatrixIdentity() };
-    tempM = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
-    XMFLOAT3 r, t, f;
-    XMStoreFloat3(&r, tempM.r[0]);
-    XMStoreFloat3(&t, tempM.r[1]);
-    XMStoreFloat3(&f, tempM.r[2]);
 
-    VECTOR3 Right{ r }, Top{ t }, Front{ f };
-
-    float ori_x1, ori_y1, ori_z1, ori_x2, ori_y2, ori_z2;
-    float tar_x1, tar_y1, tar_z1, tar_x2, tar_y2, tar_z2;
-
-    ori_x1 = Right.Dot(oriMin);
-    ori_x2 = Right.Dot(oriMax);
-    ori_y1 = Top.Dot(oriMin);
-    ori_y2 = Top.Dot(oriMax);
-    ori_z1 = Front.Dot(oriMin);
-    ori_z2 = Front.Dot(oriMax);
-
-    tar_x1 = Right.Dot(tarMin);
-    tar_x2 = Right.Dot(tarMax);
-    tar_y1 = Top.Dot(tarMin);
-    tar_y2 = Top.Dot(tarMax);
-    tar_z1 = Front.Dot(tarMin);
-    tar_z2 = Front.Dot(tarMax);
-
-    if (ori_x1 > tar_x2 || ori_x2 < tar_x1)
-        return;
-    if (ori_y1 > tar_y2 || ori_y2 < tar_y1)
-        return;
-    if (ori_z1 > tar_z2 || ori_z2 < tar_z1)
-        return;
-    *colCount += 3;
-
-
-
-
-}
-bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
-{
-    
     XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
     XMVECTOR w_End{ e.XMV() };                             // Ray World End Position
     XMVECTOR w_RayVector{ w_End - w_Start };                        // World Ray Vector 
     XMVECTOR w_RayLength = XMVector3Length(w_RayVector);            // World Ray Length
     XMStoreFloat(&hr.distance, w_RayLength);
 
+    // Retrieve current keyframe 
+    // 現在のキーフレームを抽出
     bool hit{};
     MODEL_RESOURCES::ANIMATION::KEYFRAME& kf = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame());
+    int cur_index{};
     for (auto& ms : m->Resource()->Meshes)
     {
+        bool onTarget{};
+        if (mesh_index != -1)
+        {
+            if (mesh_index != cur_index)
+            {
+                ++cur_index;
+                continue;
+            }
+            else
+                onTarget = true;
+        }
+
+        if (!onTarget && mesh_index != -1)
+            continue;
+
+        // Retrieve the current mesh node and transform matrix to Local Transformation
+        // げんざいMESHNODEを抽出し、ローカル変換行列に変換
         MODEL_RESOURCES::ANIMATION::KEYFRAME::NODE& n = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame()).Nodes.at(ms.n_Index);
 
         XMMATRIX w_Transform{ XMLoadFloat4x4(&n.g_Transform) };
         w_Transform *= m->TransformMatrix();
         XMMATRIX inv_w_Transform{ XMMatrixInverse(nullptr, w_Transform) };
+
         XMVECTOR S{ XMVector3TransformCoord(w_Start, inv_w_Transform) };
         XMVECTOR E{ XMVector3TransformCoord(w_End, inv_w_Transform) };
 
@@ -207,44 +276,47 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
 
 
                 //  Step 1: Triangle Vertex Retrieval
+                // 三角の生成
                 XMVECTOR A{ a.position.XMV() };
                 XMVECTOR B{ b.position.XMV() };
                 XMVECTOR C{ c.position.XMV() };
 
+                // Skip if not near
+                VECTOR3 point{};
+                point.Load(A);
+                //if ((point - s).Length() > 10.0f)
+                //    continue;
 
                 //  Step 2: Vector of edges
+                // 三角のベクタ
                 XMVECTOR AB{ B - A };
                 XMVECTOR BC{ C - B };
                 XMVECTOR CA{ A - C };
 
 
                 //  Step 3: Normal retrieval
+                // 法線抽出
                 XMVECTOR Normal{ XMVector3Cross(AB, BC) };
 
 
                 //  Step 4: In front of or behind
+                // ターゲットは三角以外か以内
                 XMVECTOR Dot{ XMVector3Dot(Normal, Dir) };
                 float f_Dot;
                 XMStoreFloat(&f_Dot, Dot);
                 if (f_Dot >= 0)
                     continue;
-                //return false;
-                // 
-                // 
-                // 
-            //  Step 5: Point of intersection
+                // Step 5: Point of intersection
+                // 交差点
                 XMVECTOR distance{ A - S };
                 XMVECTOR T = XMVector3Dot(Normal, distance) / Dot;
-
-
                 float length = XMVectorGetX(T);
                 if (length > min_Length || length < 0)
                     continue;
-
-
                 XMVECTOR ContactPoint{ S + Dir * T };
 
-
+                // Perform dot check on each point on the triangle 
+                // 各点に内積チェック
                 XMVECTOR PA{ A - ContactPoint };
                 XMVECTOR PB{ B - ContactPoint };
                 XMVECTOR PC{ C - ContactPoint };
@@ -269,6 +341,9 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
         }
         if (m_Index >= 0)
         {
+            // RAYCASTDATA storing
+            // RAYCASTDATA 保存
+
             XMVECTOR w_Position{ XMVector3TransformCoord(h_Pos, w_Transform) };
             XMVECTOR w_CrossVector{ w_Position - w_Start };
             XMVECTOR w_CrossLength{ XMVector3Length(w_CrossVector) };
@@ -283,7 +358,7 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
                 // XMStoreFloat3(&hr.normal, XMVector3Normalize(w_Normal));
                 hr.position.Load(w_Position);
                 hr.normal.Load(w_Normal);
-
+                hr.normal.Normalize();
                 hit = true;
             }
         }
@@ -292,6 +367,16 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr)
 }
 
 
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------COLLIDER_BASE Class--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------COLLIDER_BASE FitToBone()--------------------------------------------------------------*/
+/// <summary>
+/// <para> virtual Function. Called to fit the collider to the bone of the model</para>
+/// <para> 仮想関数。モデルにしてされたボーンにコライダーをセット</para>
+/// </summary>
+/// <param name="name"> : Name of bone</param>
+/// <param name="m"> : Pointer of model</param>
 void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
 {
     int64_t index{ -1 };
@@ -327,10 +412,19 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
     Execute(bone);
 
 }
+
+/*-----------------------------------------------------COLLIDER_BASE MatrixOffset()--------------------------------------------------------------*/
+
+
 XMMATRIX COLLIDER_BASE::MatrixOffset()
 {
     return XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(Math::Quaternion(rotation).XMV()) * XMMatrixTranslationFromVector(offset.XMV());
 }
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------SPHERE Class--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------SPHERE Constructor--------------------------------------------------------------*/
 
 #pragma region SPHERE
 SPHERE::SPHERE(VECTOR3 pos, float rad)
@@ -339,18 +433,23 @@ SPHERE::SPHERE(VECTOR3 pos, float rad)
     radius = rad;
 
 }
-//HRESULT SPHERE::Initialize(VECTOR3* pos, float rad)
-//{
-//    return S_OK;
-//}
+
+/*-----------------------------------------------------SPHERE Execute()--------------------------------------------------------------*/
+
 void SPHERE::Execute(XMMATRIX mat)
 {
     center.Load(XMVector3TransformCoord({}, mat));
 }
+
+/*-----------------------------------------------------SPHERE Render()--------------------------------------------------------------*/
+
 void SPHERE::Render()
 {
 
 }
+
+/*-----------------------------------------------------SPHERE Collide()--------------------------------------------------------------*/
+
 bool SPHERE::Collide(COLLIDER_BASE* other)
 {
     SPHERE* target{ dynamic_cast<SPHERE*>(other) };
@@ -368,22 +467,37 @@ bool SPHERE::Collide(VECTOR3 p)
 {
     return (Center() - p).Length() < radius;
 }
+
+/*-----------------------------------------------------SPHERE Center()--------------------------------------------------------------*/
+
 VECTOR3 SPHERE::Center()
 {
     return center;
 }
+
+/*-----------------------------------------------------SPHERE Radius()--------------------------------------------------------------*/
+
 float SPHERE::Radius()
 {
     return radius;
 }
+
+/*-----------------------------------------------------SPHERE SetCenter()--------------------------------------------------------------*/
+
 void SPHERE::SetCenter(VECTOR3 v)
 {
     center = v;
 }
+
+/*-----------------------------------------------------SPHERE SetRadius()--------------------------------------------------------------*/
+
 void SPHERE::SetRadius(float rad)
 {
     radius = rad;
 }
+
+/*-----------------------------------------------------SPHERE SetData()--------------------------------------------------------------*/
+
 void SPHERE::SetData(COMPONENT_DATA* data)
 {
     SPHERE_COLLIDER_DATA* d{ CastData<SPHERE_COLLIDER_DATA>(data) };
@@ -393,6 +507,10 @@ void SPHERE::SetData(COMPONENT_DATA* data)
 
 #pragma endregion
 #pragma region OBB
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------OBB Class--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------OBB Constructor--------------------------------------------------------------*/
 
 OBB::OBB()
 {
@@ -423,20 +541,16 @@ OBB::OBB(VECTOR3 vMin, VECTOR3 vMax)
     Initialize();
 
 }
+
+/*-----------------------------------------------------OBB Initialize()--------------------------------------------------------------*/\
+
 HRESULT OBB::Initialize()
 {
     return S_OK;
-//    testCubes.resize(points.size());
-//
-//    for (auto& t : testCubes)
-//    {
-//        t = std::make_shared<MODEL>();
-//        t->Initialize("Data/Model/Debug Primitives/cube.mrs");
-//        t->SetTake(0);
-//        t->SetScale({ 0.1f, 0.1f, 0.1f });
-//    }
-//
 }
+
+/*-----------------------------------------------------OBB UpdatePosition()--------------------------------------------------------------*/\
+
 void OBB::UpdatePosition(XMMATRIX mat)
 {
     std::vector<VECTOR3>& ps(points);
@@ -450,8 +564,7 @@ void OBB::UpdatePosition(XMMATRIX mat)
     ps[6] = VECTOR3{ oriMin.x, oriMax.y, oriMax.z };
     ps[7] = oriMax;
 
-
-    //XMMATRIX temp{ PLAYERMANAGER::Instance()->Get()->Model()->TransformMatrix() };
+    // Changing points to global transfrom
     XMMATRIX world{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(offset.XMV()) };
     for (auto& p : points)
     {
@@ -459,16 +572,10 @@ void OBB::UpdatePosition(XMMATRIX mat)
         pss = XMVector3TransformCoord(pss, mat);
         p.Load(pss);
     }
-    //XMVECTOR p1 = XMVector3TransformCoord(ps[1].XMV(), PLAYERMANAGER::Instance()->Get()->Model()->TransformMatrix());
-    //ps[1].Load(p1);
-    //((DEBUG_CUBIC*)(d_Primitive.get()))->UpdateVertices(points);
-    //for (int a = 0; a < points.size(); ++a)
-    //{
-    //    testCubes[a]->SetTransformation({ 0.1f, 0.1f, 0.1f }, {}, { points[a].x, points[a].y, points[a].z });
-    //    testCubes[a]->SetTake(0);
-    //    testCubes[a]->UpdateTransform();
-    //}
 }
+
+/*-----------------------------------------------------OBB Update()--------------------------------------------------------------*/\
+
 void OBB::Update(VECTOR3 pos, VECTOR3 rot)
 {
     XMMATRIX T{ XMMatrixTranslationFromVector(pos.XMV()) };
@@ -477,30 +584,24 @@ void OBB::Update(VECTOR3 pos, VECTOR3 rot)
     XMMATRIX W{ R * T };
     UpdatePosition(W);
 
-    //for (int a = 0; a < points.size(); ++a)
-    //{
-    //    testCubes[a]->SetTranslation(points[a].XMF3());
-    //    testCubes[a]->UpdateTransform();
-    //}
 }
+
+/*-----------------------------------------------------OBB Execute()--------------------------------------------------------------*/\
+
 void OBB::Execute(XMMATRIX mat)
 {
     UpdatePosition(mat);
-    //for (int a = 0; a < points.size(); ++a)
-    //{
-    //    testCubes[a]->SetTransformation({ 0.1f, 0.1f, 0.1f }, { 0, 0 ,0 }, { points[a].x, points[a].y, points[a].z });
-    //    testCubes[a]->SetTake(0);
-    //    testCubes[a]->UpdateTransform();
-
-    //}
-    //for (int a = 0; a < points.size(); ++a)
-    //{
-    //}
 }
+
+/*-----------------------------------------------------OBB Render()--------------------------------------------------------------*/\
+
 void OBB::Render()
 {
 
 }
+
+/*-----------------------------------------------------OBB Collide()--------------------------------------------------------------*/\
+
 bool OBB::Collide(COLLIDER_BASE* other)
 {
     return OBBCollision(this, static_cast<OBB*>(other));
@@ -510,14 +611,23 @@ bool OBB::Collide(VECTOR3 p)
     float size = (points[0] - points[8]).Length();
     return (Center() - p).Length() < size;
 }
+
+/*-----------------------------------------------------OBB Points()--------------------------------------------------------------*/\
+
 std::vector<VECTOR3>OBB::Points()
 {
     return points;
 }
+
+/*-----------------------------------------------------OBB Rotation()--------------------------------------------------------------*/\
+
 VECTOR3 OBB::Rotation()
 {
     return rotation;
 }
+
+/*-----------------------------------------------------OBB Center()--------------------------------------------------------------*/\
+
 VECTOR3 OBB::Center()
 {
     VECTOR3 temp;
@@ -525,23 +635,38 @@ VECTOR3 OBB::Center()
     temp *= .5;
     return *points.begin() + temp;
 }
+
+/*-----------------------------------------------------OBB Size()--------------------------------------------------------------*/\
+
 float OBB::Size()
 {
     VECTOR3 center{ Center() };
     return (points[0] - center).Length();
 }
+
+/*-----------------------------------------------------OBB Status()--------------------------------------------------------------*/\
+
 bool OBB::Status()
 {
     return isActive;
 }
+
+/*-----------------------------------------------------OBB SetMin()--------------------------------------------------------------*/\
+
 void OBB::SetMin(VECTOR3 min)
 {
     oriMin = min;
 }
+
+/*-----------------------------------------------------OBB SetMax()--------------------------------------------------------------*/\
+
 void OBB::SetMax(VECTOR3 max)
 {
     oriMax = max;
 }
+
+/*-----------------------------------------------------OBB SetData()--------------------------------------------------------------*/\
+
 void OBB::SetData(COMPONENT_DATA* d)
 {
     OBB_COLLIDER_DATA* od{ static_cast<OBB_COLLIDER_DATA*>(d) };
@@ -550,7 +675,9 @@ void OBB::SetData(COMPONENT_DATA* d)
 }
 
 #pragma endregion
-#pragma region CYLINDER
+#pragma region CYLINDER_UNUSED
+
+
 CYLINDER::CYLINDER()
 {
 
@@ -619,6 +746,11 @@ float CYLINDER::Radius()
 #pragma endregion
 #pragma region CAPSULE
 
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------CAPSULE Class--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------CAPSULE Constructor--------------------------------------------------------------*/
+
 CAPSULE::CAPSULE() : center(), radius()
 {
     Initialize();
@@ -631,25 +763,42 @@ CAPSULE::CAPSULE(VECTOR3 cent, float rad, float ht) : center(cent), radius(rad),
 {
     Initialize();
 }
+
+/*-----------------------------------------------------CAPSULE Initialize()--------------------------------------------------------------*/
+
 HRESULT CAPSULE::Initialize()
 {
     return S_OK;
 }
+
+/*-----------------------------------------------------CAPSULE Execute()--------------------------------------------------------------*/
+
 void CAPSULE::Execute(XMMATRIX mat)
 {
     world = MatrixOffset() * mat;
 }
+
+/*-----------------------------------------------------CAPSULE Render()--------------------------------------------------------------*/
+
 void CAPSULE::Render()
 {
 }
+
+/*-----------------------------------------------------CAPSULE Collide()--------------------------------------------------------------*/
+
 bool CAPSULE::Collide(COLLIDER_BASE* other)
 {
     CAPSULE* target{ static_cast<CAPSULE*>(other) };
+
+    // Check for point closest to each other 
+    //一番近い点を検索
     VECTOR3 p0, p1;
     VECTOR3 top{ Top() }, bottom{ Bottom() };
     p0 = top;
-    p1 = PointLineClosest(target->Top() , target->Bottom(), p0);
+    p1 = PointLineClosest(target->Top(), target->Bottom(), p0);
     p0 = PointLineClosest(top, bottom, p1);
+
+
     float minDist{ radius + target->radius };
     if (Length(p0, p1) < minDist)
         return true;
@@ -663,6 +812,9 @@ bool CAPSULE::Collide(VECTOR3 p)
     return (p - point).Length() < radius;
 
 }
+
+/*-----------------------------------------------------CAPSULE Top()--------------------------------------------------------------*/
+
 VECTOR3 CAPSULE::Top()
 {
     VECTOR3 center_point{};
@@ -671,6 +823,9 @@ VECTOR3 CAPSULE::Top()
     top.Load(XMVector3TransformCoord(top.XMV(), world));
     return top;
 }
+
+/*-----------------------------------------------------CAPSULE Bottom()--------------------------------------------------------------*/
+
 VECTOR3 CAPSULE::Bottom()
 {
     VECTOR3 center_point{};
@@ -681,34 +836,57 @@ VECTOR3 CAPSULE::Bottom()
     return bottom;
 
 }
+
+/*-----------------------------------------------------CAPSULE Center()--------------------------------------------------------------*/
+
 VECTOR3 CAPSULE::Center()
 {
     return center;
 }
+
+/*-----------------------------------------------------CAPSULE Radius()--------------------------------------------------------------*/
+
 float CAPSULE::Radius()
 {
     return radius;
 }
+
+/*-----------------------------------------------------CAPSULE Size()--------------------------------------------------------------*/
+
 float CAPSULE::Size()
 {
     return radius;
 }
 
+/*-----------------------------------------------------CAPSULE OffsetCenter()--------------------------------------------------------------*/
+
 void CAPSULE::OffsetCenter(XMMATRIX world)
 {
 }
+
+/*-----------------------------------------------------CAPSULE Center()--------------------------------------------------------------*/
+
 void CAPSULE::SetCenter(VECTOR3 c)
 {
     center = c;
 }
+
+/*-----------------------------------------------------CAPSULE SetRadius()--------------------------------------------------------------*/
+
 void CAPSULE::SetRadius(float r)
 {
     radius = r;
 }
+
+/*-----------------------------------------------------CAPSULE SetHeight()--------------------------------------------------------------*/
+
 void CAPSULE::SetHeight(float h)
 {
     height = h;
 }
+
+/*-----------------------------------------------------CAPSULE SetData()--------------------------------------------------------------*/
+
 void CAPSULE::SetData(COMPONENT_DATA* d)
 {
     CAPSULE_COLLIDER_DATA* cd = (static_cast<CAPSULE_COLLIDER_DATA*>(d));
@@ -716,4 +894,95 @@ void CAPSULE::SetData(COMPONENT_DATA* d)
 }
 
 
+#pragma endregion
+#pragma region RAYCAST_MANAGER
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------RAYCAST_MANAGER Class--------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------RAYCAST_MANAGER Insert()--------------------------------------------------------------*/
+/// <summary>
+/// <para> Inserts the model into the map and allow it to perform collision check </para>
+/// <para> モデルをマップに登録し、MESH COLLIDERの対象内になる</para>
+/// </summary>
+/// <param name="name"> : Name of model</param>
+/// <param name="m"> : Model pointer</param>
+void RAYCAST_MANAGER::Insert(MESH* m)
+{
+    meshes.push_back(m);
+}
+
+/*-----------------------------------------------------RAYCAST_MANAGER Finalize()--------------------------------------------------------------*/
+/// <summary>
+/// Called at the end of the program or when switching scenes
+/// </summary>
+void RAYCAST_MANAGER::Finalize()
+{
+    meshes.clear();
+}
+
+/*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
+/// <summary>
+/// <para> Perform ray casting collision check </para>
+/// <para> レイーキャストを利用して当たり判定を計算 </para>
+/// </summary>
+/// <param name="name"> : Name of current model. Collision check will not be performed onto this model</param>
+/// <param name="startOfRay"> : Starting point of object</param>
+/// <param name="direction_vector"> : Direction of movement</param>
+/// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
+/// <returns></returns>
+bool RAYCAST_MANAGER::Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd)
+{
+    bool output{};
+    for (auto& m : meshes)
+    {
+        VECTOR3 target{ m->Parent()->GetComponent<TRANSFORM_3D>()->Translation() };
+        //if ((target - startOfRay).Length() > 0.3f)
+        //    continue;
+        if (m == cur_mesh)
+            continue;
+        output = RayCast(startOfRay, endOfRay, m->Model().get(), rcd);
+        if (output)
+            break;
+    }
+    return output;
+}
+
+/*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
+
+bool RAYCAST_MANAGER::Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
+{
+    bool output{};
+    for (auto& m : meshes)
+    {
+        if (m != target_mesh)
+            continue;
+        output = RayCast(startofRay, endOfRay, m->Model().get(), rcd);
+        if (output)
+            break;
+    }
+    return output;
+}
+
+
+/*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
+
+void RAYCAST_MANAGER::GetListOfCollided(MESH* cur_Mesh, VECTOR3 startOfRay, VECTOR3 directionVector, std::vector<RAYCASTDATA>& rcd)
+{
+    for (auto& m : meshes)
+    {
+        RAYCASTDATA& cur_rcd{ rcd.emplace_back() };
+        if (RayCast(startOfRay, directionVector, m->Model().get(), cur_rcd))
+        {
+            cur_rcd.model_name = m->Parent()->Data()->Name();
+        }
+    }
+}
+
+/*-----------------------------------------------------RAYCAST_MANAGER ModelMap()--------------------------------------------------------------*/
+
+std::vector<MESH*>RAYCAST_MANAGER::Meshes()
+{
+    return meshes;
+}
 #pragma endregion

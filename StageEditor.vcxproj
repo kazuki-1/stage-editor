@@ -26,6 +26,7 @@
     <ClCompile Include="External\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="External\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="SourceCode\Audio\AudioController.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.cpp" />
     <ClCompile Include="SourceCode\Components\Base Classes\DATAMANAGER.cpp" />
@@ -49,6 +50,12 @@
     <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_2D.cpp" />
     <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_3D.cpp" />
     <ClCompile Include="SourceCode\Engine\Audio.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStates.cpp" />
     <ClCompile Include="SourceCode\Engine\BlendMode.cpp" />
     <ClCompile Include="SourceCode\Engine\Camera.cpp" />
     <ClCompile Include="SourceCode\Engine\COLLISION.cpp" />
@@ -73,6 +80,7 @@
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp" />
     <ClCompile Include="SourceCode\GUI.cpp" />
     <ClCompile Include="SourceCode\OBJECT_DATA.cpp" />
+    <ClCompile Include="SourceCode\Scenes\SCENE.cpp" />
     <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp" />
     <ClCompile Include="SourceCode\Scenes\SCENE_DEMO.cpp" />
     <ClCompile Include="SourceCode\Scenes\SCENE_UI.cpp" />
@@ -88,6 +96,7 @@
     <ClInclude Include="External\ImGui\imstb_rectpack.h" />
     <ClInclude Include="External\ImGui\imstb_textedit.h" />
     <ClInclude Include="External\ImGui\imstb_truetype.h" />
+    <ClInclude Include="SourceCode\Audio\AudioController.h" />
     <ClInclude Include="SourceCode\CerealHeaders.h" />
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT.h" />
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.h" />
@@ -114,6 +123,12 @@
     <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_2D.h" />
     <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_3D.h" />
     <ClInclude Include="SourceCode\Engine\Audio.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h" />
     <ClInclude Include="SourceCode\Engine\BlendMode.h" />
     <ClInclude Include="SourceCode\Engine\Camera.h" />
     <ClInclude Include="SourceCode\Engine\COLLISION.h" />
@@ -135,6 +150,7 @@
     <ClInclude Include="SourceCode\Engine\ResourceManager.h" />
     <ClInclude Include="SourceCode\Engine\SHADERS.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
+    <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
     <ClInclude Include="SourceCode\Engine\Texture.h" />

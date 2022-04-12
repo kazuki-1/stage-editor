@@ -1,6 +1,7 @@
 #include "SCENE_DEMO.h"
 #include "../GAMEOBJECT.h"
 #include "../STAGE_UI.h"
+#include "../Audio/AudioController.h"
 #include "../Components\Base Classes\DATAMANAGER.h"
 #include "../Engine/IMGUI.h"
 
@@ -10,6 +11,7 @@
 HRESULT SCENE_DEMO::Initialize()
 {
     DATAMANAGER::Instance()->InsertAndInitialize();
+    AudioController::Instance()->Initialize();
     return S_OK;
 }
 
@@ -18,6 +20,7 @@ HRESULT SCENE_DEMO::Initialize()
 void SCENE_DEMO::Execute()
 {
     IMGUI::Instance()->Execute();
+    AudioController::Instance()->Execute();
     if(state)
         GAMEOBJECTS->Execute();;
 }
@@ -28,17 +31,18 @@ void SCENE_DEMO::Render()
 {
     GAMEOBJECTS->Render();  
     STAGE_UI::Instance()->PlayUI();
+    AudioController::Instance()->DebugUI();
     IMGUI::Instance()->Render();
 
 }
 
 /*--------------------------------------------------SCENE_DEMO Finalize()-------------------------------------*/
 
-void SCENE_DEMO::Finalize()
-{
-    GAMEOBJECTS->Finalize();
-}
-
+//void SCENE_DEMO::Finalize()
+//{
+//    GAMEOBJECTS->Finalize();
+//}
+//
 /*--------------------------------------------------SCENE_DEMO Pause()-------------------------------------*/
 
 void SCENE_DEMO::Pause()

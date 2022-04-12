@@ -50,7 +50,7 @@ void TRANSFORM_3D::Execute()
         velocity = {};
 
 
-
+    // quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(data->rotation.XMV()));
     // VECTOR3 r{ ToRadians(data->rotation) };
     // quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
     XMMATRIX S, R, T;
@@ -158,6 +158,19 @@ XMMATRIX TRANSFORM_3D::TransformMatrix()
     return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
 }
 
+/*---------------------------------------TRANSFORM_3D TranformMatrixQuaternion()-------------------------------------------------*/
+/// <summary>
+/// <para> Returns the transformation matrix in a XMMATRIX form </para>
+/// <para> ïœä∑çsóÒÇXMMATRIXÇÃå`Ç≈ñﬂÇÈ</para>
+/// </summary>
+/// <returns></returns>
+XMMATRIX TRANSFORM_3D::TransformMatrixQuaternion()
+{
+    return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
+}
+
+
+
 /*---------------------------------------TRANSFORM_3D Data()-------------------------------------------------*/
 /// <summary>
 /// <para> Returns the data class that stores all the data of this component </para>
@@ -190,7 +203,7 @@ VECTOR3 TRANSFORM_3D::Right()
 /// <returns></returns>
 VECTOR3 TRANSFORM_3D::Forward()
 {
-    XMMATRIX temp{ TransformMatrix() };
+    XMMATRIX temp{ TransformMatrixQuaternion() };
     VECTOR3 r{};
     r.Load(temp.r[2]);
     r.Normalize();

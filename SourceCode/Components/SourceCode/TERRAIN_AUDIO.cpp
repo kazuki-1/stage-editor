@@ -1,5 +1,7 @@
 #include "../Headers/TERRAIN_AUDIO.h"
 #include "../Headers/MESH.h"
+#include "../../Audio/AudioController.h"
+#include "../../Engine/SoundEffect.h"
 std::string types[] = { "Emitter", "Receiver" };
 
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -32,6 +34,24 @@ TERRAIN_AUDIO::TERRAIN_AUDIO(GAMEOBJECT* g, COMPONENT_DATA* d)
 /// <returns></returns>
 HRESULT TERRAIN_AUDIO::Initialize()
 {
+
+    TERRAIN_AUDIO_DATA_EMITTER* emitter = dynamic_cast<TERRAIN_AUDIO_DATA_EMITTER*>(data->property_data.get());
+    if (emitter)
+    {
+        AUDIOENGINE::Instance()->Insert(emitter->audio_data->name, emitter->audio_data->file_path);
+        buffers.resize(32);
+        for (auto& b : buffers)
+        {
+            b.buffer = std::make_shared<SoundEffect>(emitter->audio_data->file_path);
+            b.buffer->Initialize();
+            b.buffer->SetBuffer(AUDIOENGINE::Instance()->Retrieve(emitter->audio_data->name)->Buffer());
+
+        }
+    }
+
+
+
+
     return S_OK;
 }
 
@@ -42,7 +62,19 @@ HRESULT TERRAIN_AUDIO::Initialize()
 /// </summary>
 void TERRAIN_AUDIO::Execute()
 {
-
+    if (data->class_type != TERRAIN_AUDIO_PROPERTY::EMITTER)
+        return;
+    for (auto& b : buffers)
+    {
+        if (b.state)
+            ++b.timer;
+        if (b.timer > 120)
+        {
+            b.buffer->Stop();
+            b.timer = 0;
+            b.state = false;
+        }
+    }
 }
 
 /*----------------------------------------------TERRAIN_AUDIO Initialize()------------------------------------------------*/
@@ -106,6 +138,7 @@ void TERRAIN_AUDIO::UI()
             if (ImGui::TreeNode("Emitter Properties"))
             {
 
+
                 TERRAIN_AUDIO_DATA_EMITTER* current = static_cast<TERRAIN_AUDIO_DATA_EMITTER*>(data->property_data.get());
                 ImGui::InputText("Terrain name", current->name, 256);
                 ImGui::Text(std::to_string(current->mesh_index).c_str());
@@ -113,52 +146,24 @@ void TERRAIN_AUDIO::UI()
                 IMGUI::Instance()->InputText("Audio File", &current->audio_data->file_path);
 
                 MODEL_RESOURCES* mr{ mesh->Model()->Resource().get() };
-                ImGui::ListBoxHeader("Meshes");
+                ImGui::ListBoxHeader("Materials");
                 static int sel{ -1 };
-                int index{};
-                for (auto& m : mr->Meshes)
+                for (auto& m : mr->Materials)
                 {
-                    if (ImGui::Selectable(m.Name.c_str()))
+                    if (ImGui::Selectable(m.second.name.c_str()))
                     {
-                        sel = index;
+                        sel = (int)m.first;
                         break;
                     }
-                    index++;
                 }
                 ImGui::ListBoxFooter();
-
-
-                ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
-                static bool fileOpenTA{};
-                bool isEmpty{};
                 if (ImGui::Button("Set Parameters"))
                 {
-                    if (current->audio_data->file_path == L"")
-                    {
-                        isEmpty = true;
-                        browser->Open();
-                        browser->SetTitle("Open audio file");
-                        browser->SetTypeFilters({ ".wav", ".*" });
-                        fileOpenTA = true;
-                    }
-                    // TODO : Link mesh to the terrain audio
-                    if (!isEmpty)
-                    {
-                        current->mesh_index = sel;
-                        std::wstring dir{ L"./Data/Audio/" };
-                        std::filesystem::path filename(current->audio_data->file_path);
-                        dir += filename.filename().wstring();
-                        current->audio_data->file_path = dir;
-                    }
-                }
-                if (fileOpenTA)
-                {
-                    browser->Display();
-                    if (browser->HasSelected())
-                    {
-                        current->audio_data->file_path = browser->GetSelected().wstring();
-                        browser->Close();
-                    }
+                    current->mesh_index = sel;
+                    std::wstring dir{ L"./Data/Audio/" };
+                    std::filesystem::path filename(current->audio_data->file_path);
+                    dir += filename.filename().wstring();
+                    current->audio_data->file_path = dir;
                 }
                 ImGui::TreePop();
             }
@@ -172,7 +177,7 @@ void TERRAIN_AUDIO::UI()
                 TERRAIN_AUDIO_DATA_RECEIVER* current = static_cast<TERRAIN_AUDIO_DATA_RECEIVER*>(data->property_data.get());
                 if (ImGui::BeginCombo("Insert Bone", "Select bone"))
                 {
-                    for (auto m : mesh->Model()->Resource()->Meshes)
+                    for (auto& m : mesh->Model()->Resource()->Meshes)
                     {
                         bool selected{};
                         for (auto& b : m.Bind_Pose.Bones)
@@ -205,7 +210,53 @@ void TERRAIN_AUDIO::UI()
     }
 }
 
-/*----------------------------------------------------------TERRAIN_AUDIO GetComponentType()-----------------------------------------------------------*/
+/*----------------------------------------------TERRAIN_AUDIO Initialize()------------------------------------------------*/
+/// <summary>
+/// <para> Cycles through the buffer for unplayed audio and play it</para>
+/// <para> バッファーの中にプレイしてないサウンドを探しプレイする</para>
+/// </summary>
+void TERRAIN_AUDIO::Play()
+{
+    TERRAIN_AUDIO_DATA_EMITTER* emitter = dynamic_cast<TERRAIN_AUDIO_DATA_EMITTER*>(data->property_data.get());
+    if (!emitter)
+        return;
+    bool isDucking{ AudioController::Instance()->IsDucking() };
+    for (auto& b : buffers)
+    {
+        if (isDucking)
+            b.buffer->SetVolume(0.3f);
+        else
+            b.buffer->SetVolume(1.0f);
+        if (b.state)
+            continue;
+        b.buffer->Play();
+        b.state = true;
+        break;
+    }
+}
+
+/*----------------------------------------------TERRAIN_AUDIO Property()------------------------------------------------*/
+
+TERRAIN_AUDIO_PROPERTY TERRAIN_AUDIO::Property()
+{
+    return data->class_type;
+}
+
+/*----------------------------------------------TERRAIN_AUDIO Data()------------------------------------------------*/
+
+TERRAIN_AUDIO_DATA* TERRAIN_AUDIO::Data()
+{
+    return data;
+}
+
+/*----------------------------------------------TERRAIN_AUDIO Buffers()------------------------------------------------*/
+
+std::vector<TERRAIN_AUDIO::AUDIO_BUFFER> TERRAIN_AUDIO::Buffers()
+{
+    return buffers;
+}
+
+/*----------------------------------------------TERRAIN_AUDIO GetComponentType()------------------------------------------------*/
 
 COMPONENT_TYPE TERRAIN_AUDIO::GetComponentType()
 {

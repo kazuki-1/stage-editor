@@ -24,7 +24,7 @@ public:
 };
 
 
-
+//TODO Velocity control and terrain sound
 class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
 {
     PLAYER_CONTROLLER_DATA* data;
@@ -40,13 +40,40 @@ class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
     /// </summary>
     void RotationInput();
     /// <summary>
+    /// <para> SPACE jump input</para>
+    /// <para> SPACE ジャンプ入力</para>
+    /// </summary>    
+    void JumpInput();
+    /// <summary>
     /// <para> Perform collision check with ENVIRONMENTAL_AUDIO gameObjects </para>
     /// <para> ENVIRONMENTAL_AUDIOゲームオブジェクトと当たり判定を計算 </para>
     /// </summary>
     void SoundCollision();
-
-
-
+    /// <summary>
+    /// <para> Performs velocity control </para>
+    /// <para> 加速度の調整を行う </para>
+    /// </summary>
+    void VelocityControl();
+    /// <summary>
+    /// <para> Performs gravity control </para>
+    /// <para> 重力による落下処理の調整を行う </para>
+    /// </summary>
+    void GravityControl();
+    /// <summary>
+    /// <para> Calculates the velocity based on collision with anything below the player </para>
+    /// <para> 他のモデルが衝突によって加速度の調整を行う </para>
+    /// </summary>
+    void GroundCollision();
+    /// <summary>
+    /// <para> Calculates the velocity based on collision with anything in front the player </para>
+    /// <para> 他のモデルが衝突によって加速度の調整を行う </para>
+    /// </summary>
+    void WallCollision();
+    /// <summary>
+    /// <para> Performs collision check for TERRAIN_AUDIO component </para>
+    /// <para> TERRAIN_AUDIOコンポネントの当たり判定を計算する </para>
+    /// </summary>
+    void TerrainAudioCollision();
 
 
 public:
@@ -97,7 +124,6 @@ public:
     /// <para> 回転を更新</para>
     /// </summary>
     void UpdateRotation() override;
-    COMPONENT_TYPE GetComponentType() override;
 };
 
 CEREAL_REGISTER_TYPE(PLAYER_CONTROLLER_DATA)

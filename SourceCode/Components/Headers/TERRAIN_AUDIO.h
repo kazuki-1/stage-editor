@@ -3,7 +3,8 @@
 
 enum class TERRAIN_AUDIO_PROPERTY
 {
-    EMITTER, 
+    MIN = -1,
+    EMITTER,
     RECEIVER
 };
 class TERRAIN_AUDIO;
@@ -49,9 +50,9 @@ public:
 class TERRAIN_AUDIO_DATA : public COMPONENT_DATA
 {
 public:
-    
+
     friend class TERRAIN_AUDIO;
-    TERRAIN_AUDIO_PROPERTY class_type;
+    TERRAIN_AUDIO_PROPERTY class_type{ -1 };
     std::shared_ptr<TERRAIN_AUDIO_DATA_BASE>property_data;
     TERRAIN_AUDIO_DATA();
     template <class T>
@@ -67,7 +68,14 @@ public:
 
 class TERRAIN_AUDIO : public COMPONENT
 {
+    struct AUDIO_BUFFER
+    {
+        std::shared_ptr<AUDIO>buffer;
+        bool state{};
+        int timer{};
+    };
     TERRAIN_AUDIO_DATA* data{};
+    std::vector<AUDIO_BUFFER>buffers;
 public:
     TERRAIN_AUDIO() {};
     TERRAIN_AUDIO(GAMEOBJECT* g, COMPONENT_DATA* d);
@@ -92,6 +100,14 @@ public:
     /// <para> UIを描画 </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// <para> Cycles through the buffer for unplayed audio and play it</para>
+    /// <para> バッファーの中にプレイしてないサウンドを探しプレイする</para>
+    /// </summary>
+    void Play();
+    TERRAIN_AUDIO_DATA* Data();
+    TERRAIN_AUDIO_PROPERTY Property();
+    std::vector<AUDIO_BUFFER>Buffers();
     COMPONENT_TYPE GetComponentType() override;
 };
 

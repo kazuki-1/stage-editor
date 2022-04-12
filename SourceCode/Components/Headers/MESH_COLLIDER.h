@@ -16,7 +16,10 @@ public:
 class MESH_COLLIDER : public COMPONENT
 {
     MESH_COLLIDER_DATA* data;
+
 public:
+    // Check last state and gives true on moment of collision
+    bool trigger;
     MESH_COLLIDER() {};
     MESH_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data);
 
@@ -41,9 +44,23 @@ public:
     /// <para> UIを描画 </para>
     /// </summary>
     void UI() override;
-    COMPONENT_TYPE GetComponentType() override;
+    /// <summary>
+    /// <para> Sets the trigger state to true,</para>
+    /// <para> トリガーステートをTrueに設定する </para>
+    /// </summary>
+    void Triggered();
+    /// <summary>
+    /// <para> Sets the trigger state to false,</para>
+    /// <para> トリガーステートをfalseに設定する </para>
+    /// </summary>
+    void NotTriggered();
+    /// <summary>
+    /// <para> Returns the boolean member trigger </para>
+    /// <para> triggerメンバーを返す </para>
+    /// </summary>
+    /// <returns></returns>
+    bool OnTrigger();
 };
-
 
 
 CEREAL_REGISTER_TYPE(MESH_COLLIDER_DATA)

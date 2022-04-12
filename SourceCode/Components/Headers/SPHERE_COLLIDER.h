@@ -79,6 +79,7 @@ public:
     std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider() override;
     SPHERE_COLLIDER_DATA* Data();
     COMPONENT_TYPE GetComponentType() override;
+
 };
 
 CEREAL_REGISTER_TYPE(SPHERE_COLLIDER_DATA)

@@ -55,7 +55,7 @@ void MESH::Execute()
     if (!model)
         return;
 
-    model->SetTransformation(transform->Scale(), transform->Rotation(), transform->Translation());
+    model->SetTransformation(transform->Scale(), transform->Quaternion(), transform->Translation());
     model->UpdateTransform();
 }
 
@@ -80,45 +80,21 @@ void MESH::UI()
 {
     if (ImGui::TreeNode("Mesh"))
     {
-        ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
-        static bool fileOpenM{};
         IMGUI::Instance()->InputText("Model Path", &data->model_path);
-        bool isEmpty{};
         if (ImGui::Button("Load Model"))
         {
-            if (data->model_path == "")
-            {
-                fileOpenM = true;
-                isEmpty = true;
-                browser->SetTitle("Open model file");
-                browser->SetTypeFilters({ ".mrs" , ".*" });
-                browser->Open();
-            }
-            if (!isEmpty)
-            {
-                std::string directory{ "./Data/Model/" };
-                FS::path path(data->model_path);
-                FS::path name(path.filename().string());
-                std::string full_name{ name.string() };
-                name.replace_extension("");
-                directory += name.string() + "/" + full_name;
-                data->model_path = directory;
-                data->model_name = name.string();
+            std::string directory{ "./Data/Model/" };
+            FS::path path(data->model_path);
+            FS::path name(path.filename().string());
+            std::string full_name{ name.string() };
+            name.replace_extension("");
+            directory += name.string() + "/" + full_name;
+            data->model_path = directory;
+            data->model_name = name.string();
 
-                model = std::make_shared<MODEL>();
+            model = std::make_shared<MODEL>();
 
-                model->Initialize(data->model_path);
-            }
-        }
-        if (fileOpenM)
-        {
-            browser->Display();
-            if (browser->HasSelected())
-            {
-                data->model_path = browser->GetSelected().string();
-                browser->Close();
-                fileOpenM = false;
-            }
+            model->Initialize(data->model_path);
         }
         if (!model)
         {
@@ -204,9 +180,45 @@ MESH_DATA* MESH::Data()
     return data;
 }
 
-/*----------------------------------------------------------MESH GetComponentType()-----------------------------------------------------------*/
-
-COMPONENT_TYPE MESH::GetComponentType()
+/*----------------------------------------------------------MESH GetBoneTransform()-----------------------------------------------------------*/
+/// <summary>
+/// <para> Retrieves the world transform for the bone </para>
+/// <para> 求められているボーンのワールド行列を返す </para>
+/// </summary>
+/// <returns></returns>
+XMMATRIX MESH::GetBoneTransform(std::string name)
 {
-    return data->type;
+    TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
+
+
+    int64_t index{ -1 };
+    XMMATRIX bone, global;
+    for (auto& m : model->Resource()->Meshes)
+    {
+        for (auto& b : m.Bind_Pose.Bones)
+        {
+            if (b.Name == name)
+            {
+                index = b.n_Index;
+                break;
+            }
+        }
+    }
+    if (index != -1)
+    {
+        int kf{ model->NextFrame() };
+        MODEL_RESOURCES::ANIMATION& an{ model->Resource()->Animations[model->CurrentTake()] };
+
+        int size{ (int)an.Keyframes.size() - 1 };
+        int take{ model->CurrentFrame() };
+        kf = (std::min)((std::max)(kf, 0), (int)an.Keyframes.size() - 1);
+        XMFLOAT4X4 temp = model->Resource()->Animations[model->CurrentTake()].Keyframes[kf].Nodes.at(index).g_Transform;
+        bone = XMLoadFloat4x4(&temp);
+    }
+    global = transform->TransformMatrix();;
+    XMFLOAT4X4 temp{ model->Resource()->Axises.AxisCoords };
+
+    bone *= XMLoadFloat4x4(&temp);
+    bone *= global;
+    return bone;
 }

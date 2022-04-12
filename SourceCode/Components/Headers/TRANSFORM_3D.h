@@ -90,6 +90,12 @@ public:
     /// <returns></returns>
     XMMATRIX TransformMatrix();
     /// <summary>
+    /// <para> Returns the transformation matrix in a XMMATRIX form </para>
+    /// <para> 変換行列をXMMATRIXの形で戻る</para>
+    /// </summary>
+    /// <returns></returns>
+    XMMATRIX TransformMatrixQuaternion();
+    /// <summary>
     /// <para> Returns the data class that stores all the data of this component </para>
     /// <para> コンポネントをエキスパート用データを戻る</para>
     /// </summary>

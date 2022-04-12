@@ -1,5 +1,6 @@
 #include "../Headers/MESH_COLLIDER.h"
-
+#include "../../Engine/COLLISION.h"
+#include "../Headers/MESH.h"
 /*----------------------------------------------MESH_COLLIDER Class----------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------*/
@@ -8,7 +9,7 @@
 MESH_COLLIDER::MESH_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data)
 {
     parent = t;
-    this->data = static_cast<MESH_COLLIDER_DATA*>(data);
+    data = static_cast<MESH_COLLIDER_DATA*>(data);
 }
 
 /*----------------------------------------------MESH_COLLIDER Initialize()------------------------------------------------------*/
@@ -19,6 +20,11 @@ MESH_COLLIDER::MESH_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data)
 /// <returns></returns>
 HRESULT MESH_COLLIDER::Initialize()
 {
+
+    if (data)
+    {
+        COLLIDERS::RAYCAST_MANAGER::Instance()->Insert(GetComponent<MESH>());
+    }
     return S_OK;
 }
 
@@ -39,6 +45,7 @@ void MESH_COLLIDER::Execute()
 /// </summary>
 void MESH_COLLIDER::Render()
 {
+
 }
 
 /*----------------------------------------------MESH_COLLIDER UI()------------------------------------------------------*/
@@ -48,17 +55,36 @@ void MESH_COLLIDER::Render()
 /// </summary>
 void MESH_COLLIDER::UI()
 {
-    if (ImGui::TreeNode("Mesh Collider"))
-    {
-        ImGui::TreePop();
-    }
 
 }
 
-
-/*----------------------------------------------------------MESH_COLLIDER GetComponentType()-----------------------------------------------------------*/
-
-COMPONENT_TYPE MESH_COLLIDER::GetComponentType()
+/*----------------------------------------------MESH_COLLIDER Triggered()------------------------------------------------------*/
+/// <summary>
+/// <para> Sets the trigger state to true,</para>
+/// <para> トリガーステートをTrueに設定する </para>
+/// </summary>
+void MESH_COLLIDER::Triggered()
 {
-    return data->type;
+    trigger = true;
+}
+
+/*----------------------------------------------MESH_COLLIDER NotTriggered()------------------------------------------------------*/
+/// <summary>
+/// <para> Sets the trigger state to false,</para>
+/// <para> トリガーステートをfalseに設定する </para>
+/// </summary>
+void MESH_COLLIDER::NotTriggered()
+{
+    trigger = false;
+}
+
+/*----------------------------------------------MESH_COLLIDER OnTrigger()------------------------------------------------------*/
+/// <summary>
+/// <para> Returns the boolean member trigger </para>
+/// <para> triggerメンバーを返す </para>
+/// </summary>
+/// <returns></returns>
+bool MESH_COLLIDER::OnTrigger()
+{
+    return trigger;
 }

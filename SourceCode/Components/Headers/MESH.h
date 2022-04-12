@@ -76,7 +76,16 @@ public:
     /// </summary>
     /// <returns></returns>
     MESH_DATA* Data();
-    COMPONENT_TYPE GetComponentType() override;
+    /// <summary>
+    /// <para> Retrieves the world transform for the bone </para>
+    /// <para> 求められているボーンのワールド行列を返す </para>
+    /// </summary>
+    /// <returns></returns>
+    XMMATRIX GetBoneTransform(std::string name);
+
+
+
+
 };
 
 CEREAL_REGISTER_TYPE(MESH_DATA)

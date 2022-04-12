@@ -197,17 +197,16 @@ HRESULT ENVIRONMENTAL_AUDIO::Initialize()
         {
             AUDIOENGINE::Instance()->Insert(data->name, data->file_path);
             audio = AUDIOENGINE::Instance()->Retrieve(data->name);
+            audio->Loop();
+            if (data->collider_dataset.size() > 0)
+            {
+                for (auto& d : data->collider_dataset) {
+                    colliders.push_back(std::make_shared<LOCALIZED_COLLIDER>(this, d.get()));
+                    colliders.back()->Initialize();
 
-        }
-        if (data->collider_dataset.size() > 0)
-        {
-            for (auto& d : data->collider_dataset) {
-                colliders.push_back(std::make_shared<LOCALIZED_COLLIDER>(this, d.get()));
-                colliders.back()->Initialize();
-
+                }
             }
         }
-
 
     }
     return S_OK;
@@ -246,49 +245,17 @@ void ENVIRONMENTAL_AUDIO::UI()
 {
     if (ImGui::TreeNode("Environmental Audio"))
     {
-        ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
         ImGui::InputText("Audio name", data->name, 256);
         IMGUI::Instance()->InputText("Audio File Path", &data->file_path);
-        bool isEmpty{};
-        static bool fileOpenEA{};
         if (ImGui::Button("Load Audio"))
         {
-            if (data->file_path == L"")
-            {
-                browser->Open();
-                browser->SetTitle("Open audio file");
-                browser->SetTypeFilters({ ".wav" , ".*" });
-                isEmpty = true;
-                fileOpenEA = true;
-            }
-            if (!isEmpty)
-            {
-                std::filesystem::path path(data->file_path);
-                std::filesystem::path name(path.filename());
-                std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
-                AUDIOENGINE::Instance()->Insert(data->name, full_path);
-                data->file_path = full_path;
-                audio = AUDIOENGINE::Instance()->Retrieve(data->name);
-                int ind{};
-                name.replace_extension("");
-
-                for (auto& c : name.string())
-                {
-                    data->name[ind] = c;
-                    ++ind;
-                }
-            }
-        }
-        //IMGUI::Instance()->DisplayBrowser(&data->file_path, &browser);
-        if (fileOpenEA)
-        {
-            browser->Display();
-            if (browser->HasSelected())
-            {
-                data->file_path = browser->GetSelected().wstring();
-                browser->Close();
-                fileOpenEA = false;
-            }
+            //data->name += "##" + std::to_string(data->id);
+            std::filesystem::path path(data->file_path);
+            std::filesystem::path name(path.filename());
+            std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
+            AUDIOENGINE::Instance()->Insert(data->name, full_path);
+            data->file_path = full_path;
+            audio = AUDIOENGINE::Instance()->Retrieve(data->name);
         }
         if (ImGui::Button("Play"))
             audio->Play();
@@ -352,10 +319,9 @@ void ENVIRONMENTAL_AUDIO::UI()
 
         }
 
-        //if (colliders.size() > 0)
-        //    colliders[index]->UI();
-        for (auto& c : colliders)
-            c->UI();
+        if (colliders.size() > 0)
+            colliders[index]->UI();
+
 
 
 
@@ -366,18 +332,15 @@ void ENVIRONMENTAL_AUDIO::UI()
 
 /*--------------------------------------------ENVIRONMENTAL_AUDIO Colliders()--------------------------------------------------*/
 
-COMPONENT_TYPE ENVIRONMENTAL_AUDIO::GetComponentType()
-{
-    return data->type;
-}
-
-/*--------------------------------------------ENVIRONMENTAL_AUDIO Colliders()--------------------------------------------------*/
-
 std::vector<std::shared_ptr<LOCALIZED_COLLIDER>>ENVIRONMENTAL_AUDIO::Colliders()
 {
     return colliders;
 }
 
-
+/*--------------------------------------------ENVIRONMENTAL_AUDIO GetComponentType()--------------------------------------------------*/
+COMPONENT_TYPE ENVIRONMENTAL_AUDIO::GetComponentType()
+{
+    return data->type;
+}
 
 #pragma endregion

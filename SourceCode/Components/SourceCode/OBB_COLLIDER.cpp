@@ -255,8 +255,7 @@ OBB_COLLIDER_DATA* OBB_COLLIDER::Data()
     return data;
 }
 
-/*----------------------------------------------------------OBB_COLLIDER GetComponentType()-----------------------------------------------------------*/
-
+/*-------------------------------------------------OBB_COLLIDER GetComponentType()--------------------------------------------*/
 COMPONENT_TYPE OBB_COLLIDER::GetComponentType()
 {
     return data->type;
