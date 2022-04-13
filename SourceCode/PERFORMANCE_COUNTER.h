@@ -6,7 +6,7 @@
 /// Performance Counter class. You can retrieve average frame time and the frames per second of the applcation
 /// Singleton class. Access with PERFORMANCE_COUNTER::Instance()
 /// </summary>
-class PERFORMANCE_COUNTER : public SINGLETON<PERFORMANCE_COUNTER>
+class PERFORMANCE_COUNTER : public Singleton<PERFORMANCE_COUNTER>
 {
     LARGE_INTEGER start, end, freq;
     int fps;

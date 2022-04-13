@@ -70,7 +70,7 @@ void OBB_COLLIDER::Execute(XMMATRIX transform)
 {
     XMVECTOR s, r, t;
     XMMatrixDecompose(&s, &r, &t, transform);
-    VECTOR3 target{};
+    Vector3 target{};
     target.Load(t);
     if (data->bone_name == "") {
         collider->Execute(transform);
@@ -167,9 +167,9 @@ void OBB_COLLIDER::UI()
 /// <para> Calculates the distance to the player </para>
 /// <para> プレイヤーとの距離を計算する </para>
 /// </summary>
-VECTOR3 OBB_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
+Vector3 OBB_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 {
-    VECTOR3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
+    Vector3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
     return collider->Center() - player_position;
 
 }
@@ -193,7 +193,7 @@ bool OBB_COLLIDER::Collide(GAMEOBJECT* target)
 /// <para> 座標点を基づいて当たり判定を計算 </para>
 /// </summary>
 /// <returns></returns>
-bool OBB_COLLIDER::Collide(VECTOR3 p)
+bool OBB_COLLIDER::Collide(Vector3 p)
 {
     return collider->Collide(p);
 }
@@ -230,7 +230,7 @@ std::shared_ptr<COLLIDERS::COLLIDER_BASE>OBB_COLLIDER::Collider()
 /// Returns the minimum point of the collider
 /// </summary>
 /// <returns></returns>
-VECTOR3 OBB_COLLIDER::Min()
+Vector3 OBB_COLLIDER::Min()
 {
     return data->min;
 }
@@ -240,7 +240,7 @@ VECTOR3 OBB_COLLIDER::Min()
 /// Returns the maximum point of the collider
 /// </summary>
 /// <returns></returns>
-VECTOR3 OBB_COLLIDER::Max()
+Vector3 OBB_COLLIDER::Max()
 {
     return data->max;
 }

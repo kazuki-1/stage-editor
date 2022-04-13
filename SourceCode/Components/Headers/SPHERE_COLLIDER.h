@@ -6,7 +6,7 @@ class SPHERE_COLLIDER_DATA : public COMPONENT_DATA
 public:
     char name[256] = "";
     std::string bone_name{};
-    VECTOR3 center{};
+    Vector3 center{};
     float radius{};
     SPHERE_COLLIDER_DATA();
     template <class T>
@@ -61,7 +61,7 @@ public:
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>
     /// </summary>
-    VECTOR3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
+    Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
     /// <summary>
     /// <para> Perform collision check with another gameObject </para>
     /// <para> 引数であるゲームオブジェクトを当たり判定を計算</para>
@@ -73,9 +73,9 @@ public:
     /// <para> 座標点を基づいて当たり判定を計算 </para>
     /// </summary>
     /// <returns></returns>
-    bool Collide(VECTOR3 p) override;
+    bool Collide(Vector3 p) override;
     float Radius();
-    VECTOR3 Center();
+    Vector3 Center();
     std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider() override;
     SPHERE_COLLIDER_DATA* Data();
     COMPONENT_TYPE GetComponentType() override;

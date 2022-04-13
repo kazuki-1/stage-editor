@@ -32,14 +32,6 @@ HRESULT AudioController::Initialize()
     return S_OK;
 }
 
-/*---------------------------------------------------AUDIO STATE MACHINE Enter()------------------------------------------------*/
-
-void AudioController::Enter()
-{
-    cur_BGM->Stop();
-    //cur_BGM->Play();
-}
-
 /*---------------------------------------------------AUDIO STATE MACHINE Execute()------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame. Performs fadeIn and fadeOut effects of current and next bgm</para>
@@ -156,6 +148,14 @@ void AudioController::Finalize()
     audioMap.clear();
 }
 
+/*---------------------------------------------------AUDIO STATE MACHINE Enter()------------------------------------------------*/
+
+void AudioController::Enter()
+{
+    //cur_BGM->Play();
+    cur_BGM->GetStateMachine()->Initialize();
+    cur_BGM->FadeIn(1.0f);
+}
 
 /*---------------------------------------------------AUDIO STATE MACHINE Exit()------------------------------------------------*/
 /// <summary>
@@ -176,6 +176,7 @@ void AudioController::Exit()
 void AudioController::Transition(AudioStates next_state)
 {
     next_BGM = audioMap.find(next_state)->second;
+    
     transitioning = true;
 }
 

@@ -64,14 +64,14 @@ void DIRECTIONAL_LIGHT::UI()
 
 /*---------------------------------------------------DIRECTIONAL_LIGHT Direction()---------------------------------------------------------------*/
 
-VECTOR3 DIRECTIONAL_LIGHT::Direction()
+Vector3 DIRECTIONAL_LIGHT::Direction()
 {
     return data->direction;
 }
 
 /*---------------------------------------------------DIRECTIONAL_LIGHT Colour()---------------------------------------------------------------*/
 
-VECTOR4 DIRECTIONAL_LIGHT::Colour()
+Vector4 DIRECTIONAL_LIGHT::Colour()
 {
     return data->colour;
 }

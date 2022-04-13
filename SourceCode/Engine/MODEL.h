@@ -19,12 +19,12 @@ class MODEL
     bool isTransitioning{};
 
     std::shared_ptr<MODEL_RESOURCES>resource{};
-    VECTOR3 scale{ 1, 1, 1 };        // Scale
-    VECTOR3 rotation{};            // Rotation
-    VECTOR3 translation{};         // Position
+    Vector3 scale{ 1, 1, 1 };        // Scale
+    Vector3 rotation{};            // Rotation
+    Vector3 translation{};         // Position
 
 
-    VECTOR4 quaternion;
+    Vector4 quaternion;
     XMFLOAT4X4 transform{};         // Float4X4 Transform Matrix
     XMMATRIX m_Transform{};         // Transform Matrix
 
@@ -69,7 +69,7 @@ public:
     /// <summary>
     /// For debug. Renders the wireframe of the model
     /// </summary>
-    void RenderWireframe(VECTOR4 colour = { 1.0f, 1.0f, 1.0f, 1.0f });
+    void RenderWireframe(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f });
 #pragma endregion
 #pragma region SUB FUNCTIONS
 
@@ -100,11 +100,11 @@ public:
 
 #pragma region PARAMATER SETTING
 
-    void SetTranslation(VECTOR3 t);
-    void SetRotation(VECTOR3 r);
-    void SetScale(VECTOR3 s);
-    void SetTransformation(VECTOR3 s, VECTOR3 r, VECTOR3 t);
-    void SetTransformation(VECTOR3 s, VECTOR4 q, VECTOR3 t);
+    void SetTranslation(Vector3 t);
+    void SetRotation(Vector3 r);
+    void SetScale(Vector3 s);
+    void SetTransformation(Vector3 s, Vector3 r, Vector3 t);
+    void SetTransformation(Vector3 s, Vector4 q, Vector3 t);
     void OffsetTransform(XMMATRIX mat);
     void SetTake(int take);
     void SetFrame(int frame);
@@ -125,17 +125,17 @@ public:
     /// Returns the scale of the model
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Scale();
+    Vector3 Scale();
     /// <summary>
     /// Returns the rotation of the model
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Rotation();
+    Vector3 Rotation();
     /// <summary>
     /// Returns the translation of the model
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Translation();
+    Vector3 Translation();
     /// <summary>
     /// Returns the rotation quaternion
     /// </summary>
@@ -170,26 +170,26 @@ public:
     /// <summary>
     /// Returns the Right Axis
     /// </summary>
-    VECTOR3 Right();
+    Vector3 Right();
 
     /// <summary>
     /// Returns the Up axis
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Up();
+    Vector3 Up();
 
     /// <summary>
     /// Retrieves the forward axis
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Forward();
+    Vector3 Forward();
     /// <summary>
 /// Retrieve the axises in XMFLOAT3 form
 /// </summary>
 /// <param name="r"> : The Right axis will be stored here</param>
 /// <param name="u"> : The Up axis will be stored here</param>
 /// <param name="f"> : The Forward axis will be stored here</param>
-    void RetrieveAxisesQ(VECTOR3* r, VECTOR3* u, VECTOR3* f);
+    void RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f);
     /// <summary>
     /// Retrieves the next animation take
     /// </summary>

@@ -15,7 +15,7 @@ void AudioStateFadeOut::Execute(AUDIO* parent)
 	if (fabs(vol_difference) > 0.01f)
 		parent->SetVolume(volume - fade_increment);
 	else
-		parent->stateMachine->Transition(AudioStateEnum::AudioStatePause);
+		parent->GetStateMachine()->Transition(AudioStateEnum::AudioStatePause);
 }
 
 

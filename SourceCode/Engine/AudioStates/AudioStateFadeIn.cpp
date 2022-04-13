@@ -26,6 +26,6 @@ void AudioStateFadeIn::Execute(AUDIO* parent)
 	if (fabsf(volume - fade_target) > 0.01f)
 		parent->SetVolume(volume - fade_increment);
 	else
-		parent->stateMachine->Transition(AudioStateEnum::AudioStatePlay);
+		parent->GetStateMachine()->Transition(AudioStateEnum::AudioStatePlay);
 }
 

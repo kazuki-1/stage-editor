@@ -5,10 +5,10 @@ class POINT_LIGHT_DATA : public COMPONENT_DATA
 {
 public:
     POINT_LIGHT_DATA();
-    VECTOR3 position{};
-    VECTOR4 colour{};
+    Vector3 position{};
+    Vector4 colour{};
     float range{};
-    VECTOR3 placeholder{};
+    Vector3 placeholder{};
     template <class T>
     void serialize(T& t)
     {
@@ -46,8 +46,8 @@ public:
     /// </summary>
     void UI() override;
 
-    VECTOR3 Position();
-    VECTOR4 Colour();
+    Vector3 Position();
+    Vector4 Colour();
     float Range();
     COMPONENT_TYPE GetComponentType() override;
 };

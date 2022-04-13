@@ -34,7 +34,7 @@ HRESULT SPRITE_2D::Initialize()
 {
     if (data->image_path == L"")
         return S_OK;
-    sprite = std::make_shared<SPRITE>(data->image_path.c_str(), DirectX11::Instance()->Device());
+    sprite = std::make_shared<SPRITE>(data->image_path.c_str());
     return sprite ? S_OK : E_FAIL;
 }
 
@@ -47,7 +47,7 @@ void SPRITE_2D::Render()
 {
     TRANSFORM_2D* t = GetComponent<TRANSFORM_2D>();
     if (sprite)
-        sprite->Render(t->Position().XMF2(), data->size.XMF2(), data->uvPosition.XMF2(), data->uvSize.XMF2(), data->pivot.XMF2(), data->colour.XMF4(), t->Rotation());
+        sprite->Render(t->Position(), data->size, data->uvPosition, data->uvSize, data->pivot, data->colour, t->Rotation());
 }
 
 /*---------------------------------------SPRITE_2D UI()----------------------------------------------------*/
@@ -70,7 +70,7 @@ void SPRITE_2D::UI()
             name.replace_extension("");
             directory +=  path.filename().wstring();
             data->image_path = directory;
-            sprite->Initialize(data->image_path.c_str(), DirectX11::Instance()->Device());
+            sprite->Initialize(data->image_path.c_str());
             D3D11_TEXTURE2D_DESC t2d;
             sprite->Texture()->QueryTextureDesc(&t2d);
 
@@ -101,35 +101,35 @@ const std::string& SPRITE_2D::ImageName()
 
 /*---------------------------------------SPRITE_2D Size()----------------------------------------------------*/
 
-VECTOR2& SPRITE_2D::Size()
+Vector2& SPRITE_2D::Size()
 {
     return data->size;
 }
 
 /*---------------------------------------SPRITE_2D UVPosition()----------------------------------------------------*/
 
-VECTOR2& SPRITE_2D::UVPosition()
+Vector2& SPRITE_2D::UVPosition()
 {
     return data->uvPosition;
 }
 
 /*---------------------------------------SPRITE_2D UVSize()----------------------------------------------------*/
 
-VECTOR2& SPRITE_2D::UVSize()
+Vector2& SPRITE_2D::UVSize()
 {
     return data->uvSize;
 }
 
 /*---------------------------------------SPRITE_2D Pivot()----------------------------------------------------*/
 
-VECTOR2& SPRITE_2D::Pivot()
+Vector2& SPRITE_2D::Pivot()
 {
     return data->pivot;
 }
 
 /*---------------------------------------SPRITE_2D Colour()----------------------------------------------------*/
 
-VECTOR4& SPRITE_2D::Colour()
+Vector4& SPRITE_2D::Colour()
 {
     return data->colour;
 }

@@ -7,7 +7,7 @@
 
 
 
-class DATAMANAGER : public SINGLETON<DATAMANAGER>
+class DATAMANAGER : public Singleton<DATAMANAGER>
 {
     std::vector<std::shared_ptr<OBJECT_DATA>>dataset;
 

@@ -78,14 +78,14 @@ void POINT_LIGHT::UI()
 
 /*---------------------------------------POINT_LIGHT Position()--------------------------------------------------*/
 
-VECTOR3 POINT_LIGHT::Position()
+Vector3 POINT_LIGHT::Position()
 {
     return data->position;
 }
 
 /*---------------------------------------POINT_LIGHT Colour()--------------------------------------------------*/
 
-VECTOR4 POINT_LIGHT::Colour()
+Vector4 POINT_LIGHT::Colour()
 {
     return data->colour;
 }

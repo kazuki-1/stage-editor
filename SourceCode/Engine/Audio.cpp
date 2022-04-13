@@ -232,7 +232,8 @@ void AUDIO::Stop()
 {
     if (!isPlaying)
         return;
-    stateMachine->FadeOut(1.0f);
+    //stateMachine->FadeOut(1.0f);
+    sourceVoice->Stop();
 
     //sourceVoice->Stop();
     //sourceVoice->DestroyVoice();
@@ -433,6 +434,13 @@ bool AUDIO::IsPlaying()
 bool AUDIO::IsDucking()
 {
     return isDucking;
+}
+
+/*---------------------------------------------AUDIO IsDucking()----------------------------------------------------*/
+
+std::shared_ptr<AUDIO_STATES::AudioStateMachine>AUDIO::GetStateMachine()
+{
+    return stateMachine;
 }
 
 /*---------------------------------------------AUDIO FilePath()----------------------------------------------------*/

@@ -5,9 +5,9 @@
 class TRANSFORM_3D_DATA : public COMPONENT_DATA
 {
 public:
-    VECTOR3 scale{ 1, 1, 1 };
-    VECTOR3 rotation{};
-    VECTOR3 translation{};
+    Vector3 scale{ 1, 1, 1 };
+    Vector3 rotation{};
+    Vector3 translation{};
 
     TRANSFORM_3D_DATA();
     template <class T>
@@ -27,8 +27,8 @@ class TRANSFORM_3D : public COMPONENT
 private :
     //VECTOR3 translation;
     //VECTOR3 scale;
-    VECTOR4 quaternion;
-    VECTOR3 velocity;
+    Vector4 quaternion;
+    Vector3 velocity;
 protected:
     XMFLOAT4X4 transform{};
     TRANSFORM_3D_DATA* data{};
@@ -61,22 +61,22 @@ public:
     /// Returns the scale 
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Scale();
+    Vector3 Scale();
     /// <summary>
     /// Returns the rotation
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Rotation();
+    Vector3 Rotation();
     /// <summary>
     /// Returns the translation
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Translation();
+    Vector3 Translation();
     /// <summary>
     /// Returns the velocity
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Velocity();
+    Vector3 Velocity();
     /// <summary>
     /// <para> Returns the transformation matrix in a XMFLOAT4X4 form </para>
     /// <para> 変換行列をXMFLOAT4X4の形で戻る</para>
@@ -105,40 +105,40 @@ public:
     /// Returns the right vector of the object
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Right();
+    Vector3 Right();
     /// <summary>
     /// Returns the forward vector of the object
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Forward();
+    Vector3 Forward();
     /// <summary>
     /// Returns the up vector of the object
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Up();
+    Vector3 Up();
     /// <summary>
     /// Returns the quaternion of rotation
     /// </summary>
     /// <returns></returns>
-    VECTOR4 Quaternion();
+    Vector4 Quaternion();
     /// <summary>
     /// <para> Slerps the rotation to the target vector </para>
     /// <para> Targetに対して球面線形補間を行う</para>
     /// </summary>
-    void SlerpRotation(VECTOR3 target);
+    void SlerpRotation(Vector3 target);
     /// <summary>
     /// <para> Slerps the rotation to the target quaternion </para>
     /// <para> Targetに対して球面線形補間を行う</para>
     /// </summary>
-    void SlerpRotation(VECTOR4 target);
+    void SlerpRotation(Vector4 target);
 
 
 
-    void SetScale(VECTOR3 s);
-    void SetRotation(VECTOR3 s);
-    void SetTranslation(VECTOR3 s);
-    void SetVelocity(VECTOR3 v);
-    void OffsetTranslation(VECTOR3 off);
+    void SetScale(Vector3 s);
+    void SetRotation(Vector3 s);
+    void SetTranslation(Vector3 s);
+    void SetVelocity(Vector3 v);
+    void OffsetTranslation(Vector3 off);
     COMPONENT_TYPE GetComponentType() override;
 };
 

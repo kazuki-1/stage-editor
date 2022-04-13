@@ -90,10 +90,10 @@ VS_OUT VS_MAIN(VS_IN vin)
     }
     vout.world_position = mul(float4(n_Pos.xyz, 1.0f), world);
     vout.normal = mul(float4(n_Normal.xyz, 0.0f), world).xyz;
-    vout.world_position += float4(normalize(vout.normal).xyz, 1.0f) * outline_size;
     vout.position = mul(vout.world_position, view_proj);
-    vout.position += float4(normalize(vout.normal).xyz , 1.0f) * outline_size;
     vout.tangent = mul(float4(n_Tangent.xyz, 0.0f), world).xyz;
+    vout.world_position += float4(normalize(vout.normal).xyz, 1.0f) * outline_size;
+    vout.position += float4(normalize(vout.normal).xyz , 1.0f) * outline_size;
     //vout.tangent = mul(float4(vout.tangent.xyz, 0.0f), view_proj).xyz;
     //vout.normal = mul(float4(vout.normal.xyz, 0.0f), view_proj).xyz;
     vout.tangent = normalize(vout.tangent).xyz;

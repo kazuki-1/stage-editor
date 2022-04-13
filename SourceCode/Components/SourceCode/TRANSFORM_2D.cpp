@@ -60,7 +60,7 @@ void TRANSFORM_2D::UI()
 /// Returns the position
 /// </summary>
 /// <returns></returns>
-VECTOR2 TRANSFORM_2D::Position()
+Vector2 TRANSFORM_2D::Position()
 {
     return data->position;
 }

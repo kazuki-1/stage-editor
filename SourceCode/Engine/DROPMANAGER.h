@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <string>
 
-class DROPMANAGER : public SINGLETON<DROPMANAGER>
+class DROPMANAGER : public Singleton<DROPMANAGER>
 {
     std::string path{};
     std::wstring wpath{};

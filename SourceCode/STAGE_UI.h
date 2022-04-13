@@ -4,7 +4,7 @@
 #include "CerealHeaders.h"
 
 
-class STAGE_UI : public SINGLETON<STAGE_UI>
+class STAGE_UI : public Singleton<STAGE_UI>
 {
     std::vector<std::shared_ptr<OBJECT_DATA>>objectDataset;
 public:

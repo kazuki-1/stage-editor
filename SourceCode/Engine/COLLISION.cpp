@@ -16,22 +16,22 @@ using namespace COLLIDERS;
 /// <param name="top"> : Starting point of vector</param>
 /// <param name="bot"> : Ending point of vector</param>
 /// <returns></returns>
-VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 top, VECTOR3 bottom, VECTOR3 target)
+Vector3 COLLIDERS::PointLineClosest(Vector3 top, Vector3 bottom, Vector3 target)
 {
     // Forming a line vector
     // 直線ベクター
-    VECTOR3 line(top - bottom);
+    Vector3 line(top - bottom);
     line.Normalize();
 
     // Dot product to get the point
     // 座標点を計算
-    VECTOR3 dist(target - bottom);
+    Vector3 dist(target - bottom);
     float dot = dist.Dot(line);
-    VECTOR3 point = bottom + line * dot;
+    Vector3 point = bottom + line * dot;
 
     // Limiting point inside the line
     // 座標点を線内に制限
-    float d1(VECTOR3(point - top).Dot(line)), d2(VECTOR3(point - bottom).Dot(line));
+    float d1(Vector3(point - top).Dot(line)), d2(Vector3(point - bottom).Dot(line));
     if (d1 > 0)
         point = top;
     if (d2 < 0)
@@ -44,24 +44,24 @@ VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 top, VECTOR3 bottom, VECTOR3 target)
 /// <para> 目標点に一番近い点を計算 </para>
 /// </summary>
 /// <returns></returns>
-VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 origin, CAPSULE* target)
+Vector3 COLLIDERS::PointLineClosest(Vector3 origin, CAPSULE* target)
 {
     // Forming a line vector
     // 直線ベクター
-    VECTOR3 top, bottom;
+    Vector3 top, bottom;
     top = target->Top();
     bottom = target->Bottom();
-    VECTOR3 line(top - bottom);
+    Vector3 line(top - bottom);
     //line = line.Normalize();
     line.Normalize();
 
 
     // Dot product to get the point
     // 座標点を計算
-    VECTOR3 dist(origin - bottom);
+    Vector3 dist(origin - bottom);
     float dot = dist.Dot(line);
-    VECTOR3 point = bottom + line * dot;
-    float d1(VECTOR3(point - top).Dot(line)), d2(VECTOR3(point - bottom).Dot(line));
+    Vector3 point = bottom + line * dot;
+    float d1(Vector3(point - top).Dot(line)), d2(Vector3(point - bottom).Dot(line));
 
     // Limiting point inside the line
     // 座標点を線内に制限
@@ -85,7 +85,7 @@ VECTOR3 COLLIDERS::PointLineClosest(VECTOR3 origin, CAPSULE* target)
 /// <param name="tarMax"> ： Maximum point of second collider</param>
 /// <param name="rotation"> : Rotation of first collider</param>
 /// <param name="colCount"> : Output. Shows how many time it is a hit</param>
-void COLLIDERS::AxisCasting(VECTOR3 oriMin, VECTOR3 oriMax, VECTOR3 tarMin, VECTOR3 tarMax, VECTOR3 rotation, int* colCount)
+void COLLIDERS::AxisCasting(Vector3 oriMin, Vector3 oriMax, Vector3 tarMin, Vector3 tarMax, Vector3 rotation, int* colCount)
 {
     // Extracing the axises from the rotation matrix 
     // 回転MatrixからXYZ軸を抽出
@@ -96,7 +96,7 @@ void COLLIDERS::AxisCasting(VECTOR3 oriMin, VECTOR3 oriMax, VECTOR3 tarMin, VECT
     XMStoreFloat3(&r, tempM.r[0]);
     XMStoreFloat3(&t, tempM.r[1]);
     XMStoreFloat3(&f, tempM.r[2]);
-    VECTOR3 Right{ r }, Top{ t }, Front{ f };
+    Vector3 Right{ r }, Top{ t }, Front{ f };
 
     float ori_x1, ori_y1, ori_z1, ori_x2, ori_y2, ori_z2;
     float tar_x1, tar_y1, tar_z1, tar_x2, tar_y2, tar_z2;
@@ -145,7 +145,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 
     // Check both OBB for their minimum and maximum points
     // 両方のOBBの最小と最大点をチェック
-    VECTOR3 min1, max1, min2, max2;
+    Vector3 min1, max1, min2, max2;
     for (auto& v : ori->Points())
     {
         if (v == ori->Points().at(0))
@@ -208,7 +208,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 /// <param name="m"> : Target model</param>
 /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
+bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
 {
 
     XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
@@ -282,7 +282,7 @@ bool COLLIDERS::RayCast(VECTOR3& s, VECTOR3& e, MODEL* m, RAYCASTDATA& hr, int m
                 XMVECTOR C{ c.position.XMV() };
 
                 // Skip if not near
-                VECTOR3 point{};
+                Vector3 point{};
                 point.Load(A);
                 //if ((point - s).Length() > 10.0f)
                 //    continue;
@@ -427,7 +427,7 @@ XMMATRIX COLLIDER_BASE::MatrixOffset()
 /*-----------------------------------------------------SPHERE Constructor--------------------------------------------------------------*/
 
 #pragma region SPHERE
-SPHERE::SPHERE(VECTOR3 pos, float rad)
+SPHERE::SPHERE(Vector3 pos, float rad)
 {
     center = pos;
     radius = rad;
@@ -463,14 +463,14 @@ bool SPHERE::Collide(COLLIDER_BASE* other)
     }
     return false;
 }
-bool SPHERE::Collide(VECTOR3 p)
+bool SPHERE::Collide(Vector3 p)
 {
     return (Center() - p).Length() < radius;
 }
 
 /*-----------------------------------------------------SPHERE Center()--------------------------------------------------------------*/
 
-VECTOR3 SPHERE::Center()
+Vector3 SPHERE::Center()
 {
     return center;
 }
@@ -484,7 +484,7 @@ float SPHERE::Radius()
 
 /*-----------------------------------------------------SPHERE SetCenter()--------------------------------------------------------------*/
 
-void SPHERE::SetCenter(VECTOR3 v)
+void SPHERE::SetCenter(Vector3 v)
 {
     center = v;
 }
@@ -516,27 +516,27 @@ OBB::OBB()
 {
     *this = OBB({}, {});
 }
-OBB::OBB(VECTOR3 vMin, VECTOR3 vMax)
+OBB::OBB(Vector3 vMin, Vector3 vMax)
 {
     oriMin = vMin;
     oriMax = vMax;
 
 
-    VECTOR3& p = points.emplace_back();
+    Vector3& p = points.emplace_back();
     p = vMin;
-    VECTOR3& p2 = points.emplace_back();
+    Vector3& p2 = points.emplace_back();
     p2 = { vMax.x, vMin.y, vMin.z };
-    VECTOR3& p3 = points.emplace_back();
+    Vector3& p3 = points.emplace_back();
     p3 = { vMin.x, vMax.y, vMin.z };
-    VECTOR3& p4 = points.emplace_back();
+    Vector3& p4 = points.emplace_back();
     p4 = { vMax.x, vMax.y, vMin.z };
-    VECTOR3& p5 = points.emplace_back();
+    Vector3& p5 = points.emplace_back();
     p5 = { vMin.x, vMin.y, vMax.z };
-    VECTOR3& p6 = points.emplace_back();
+    Vector3& p6 = points.emplace_back();
     p6 = { vMax.x, vMin.y, vMax.z };
-    VECTOR3& p7 = points.emplace_back();
+    Vector3& p7 = points.emplace_back();
     p7 = { vMin.x, vMax.y, vMax.z };
-    VECTOR3& p8 = points.emplace_back();
+    Vector3& p8 = points.emplace_back();
     p8 = vMax;
     Initialize();
 
@@ -553,15 +553,15 @@ HRESULT OBB::Initialize()
 
 void OBB::UpdatePosition(XMMATRIX mat)
 {
-    std::vector<VECTOR3>& ps(points);
+    std::vector<Vector3>& ps(points);
 
     ps[0] = oriMin;
-    ps[1] = VECTOR3{ oriMax.x, oriMin.y, oriMin.z };
-    ps[2] = VECTOR3{ oriMin.x, oriMax.y, oriMin.z };
-    ps[3] = VECTOR3{ oriMax.x, oriMax.y, oriMin.z };
-    ps[4] = VECTOR3{ oriMin.x, oriMin.y, oriMax.z };
-    ps[5] = VECTOR3{ oriMax.x, oriMin.y, oriMax.z };
-    ps[6] = VECTOR3{ oriMin.x, oriMax.y, oriMax.z };
+    ps[1] = Vector3{ oriMax.x, oriMin.y, oriMin.z };
+    ps[2] = Vector3{ oriMin.x, oriMax.y, oriMin.z };
+    ps[3] = Vector3{ oriMax.x, oriMax.y, oriMin.z };
+    ps[4] = Vector3{ oriMin.x, oriMin.y, oriMax.z };
+    ps[5] = Vector3{ oriMax.x, oriMin.y, oriMax.z };
+    ps[6] = Vector3{ oriMin.x, oriMax.y, oriMax.z };
     ps[7] = oriMax;
 
     // Changing points to global transfrom
@@ -576,7 +576,7 @@ void OBB::UpdatePosition(XMMATRIX mat)
 
 /*-----------------------------------------------------OBB Update()--------------------------------------------------------------*/\
 
-void OBB::Update(VECTOR3 pos, VECTOR3 rot)
+void OBB::Update(Vector3 pos, Vector3 rot)
 {
     XMMATRIX T{ XMMatrixTranslationFromVector(pos.XMV()) };
     XMVECTOR Q{ XMQuaternionRotationRollPitchYawFromVector(rot.XMV()) };
@@ -606,7 +606,7 @@ bool OBB::Collide(COLLIDER_BASE* other)
 {
     return OBBCollision(this, static_cast<OBB*>(other));
 }
-bool OBB::Collide(VECTOR3 p)
+bool OBB::Collide(Vector3 p)
 {
     float size = (points[0] - points[8]).Length();
     return (Center() - p).Length() < size;
@@ -614,23 +614,23 @@ bool OBB::Collide(VECTOR3 p)
 
 /*-----------------------------------------------------OBB Points()--------------------------------------------------------------*/\
 
-std::vector<VECTOR3>OBB::Points()
+std::vector<Vector3>OBB::Points()
 {
     return points;
 }
 
 /*-----------------------------------------------------OBB Rotation()--------------------------------------------------------------*/\
 
-VECTOR3 OBB::Rotation()
+Vector3 OBB::Rotation()
 {
     return rotation;
 }
 
 /*-----------------------------------------------------OBB Center()--------------------------------------------------------------*/\
 
-VECTOR3 OBB::Center()
+Vector3 OBB::Center()
 {
-    VECTOR3 temp;
+    Vector3 temp;
     temp = points[7] - points[0];
     temp *= .5;
     return *points.begin() + temp;
@@ -640,7 +640,7 @@ VECTOR3 OBB::Center()
 
 float OBB::Size()
 {
-    VECTOR3 center{ Center() };
+    Vector3 center{ Center() };
     return (points[0] - center).Length();
 }
 
@@ -653,14 +653,14 @@ bool OBB::Status()
 
 /*-----------------------------------------------------OBB SetMin()--------------------------------------------------------------*/\
 
-void OBB::SetMin(VECTOR3 min)
+void OBB::SetMin(Vector3 min)
 {
     oriMin = min;
 }
 
 /*-----------------------------------------------------OBB SetMax()--------------------------------------------------------------*/\
 
-void OBB::SetMax(VECTOR3 max)
+void OBB::SetMax(Vector3 max)
 {
     oriMax = max;
 }
@@ -682,7 +682,7 @@ CYLINDER::CYLINDER()
 {
 
 }
-CYLINDER::CYLINDER(VECTOR3 tp, VECTOR3 bot, float rad) : top(tp), bottom(bot), radius(rad)
+CYLINDER::CYLINDER(Vector3 tp, Vector3 bot, float rad) : top(tp), bottom(bot), radius(rad)
 {
 
 }
@@ -704,13 +704,13 @@ bool CYLINDER::Collide(COLLIDER_BASE* other)
 {
     CYLINDER* target = (CYLINDER*)other;
 
-    VECTOR3 ori_closest_point{ top }, tar_closest_point{ target->Top() };
+    Vector3 ori_closest_point{ top }, tar_closest_point{ target->Top() };
 
     tar_closest_point = PointLineClosest(target->top, target->bottom, ori_closest_point);
     ori_closest_point = PointLineClosest(top, bottom, tar_closest_point);
 
 
-    VECTOR3 v1, v2;
+    Vector3 v1, v2;
     v1 = top - bottom;
     v2 = bottom - top;
     if (v1.Dot(tar_closest_point) < 0 || v2.Dot(tar_closest_point) < 0)
@@ -718,18 +718,18 @@ bool CYLINDER::Collide(COLLIDER_BASE* other)
     return (tar_closest_point - ori_closest_point).Length() < radius + target->Radius();
 
 }
-void CYLINDER::SetData(VECTOR3 tp, VECTOR3 bot, float rad)
+void CYLINDER::SetData(Vector3 tp, Vector3 bot, float rad)
 {
     top = tp;
     bottom = bot;
     radius = rad;
 }
 
-VECTOR3 CYLINDER::Top()
+Vector3 CYLINDER::Top()
 {
     return top;
 }
-VECTOR3 CYLINDER::Bottom()
+Vector3 CYLINDER::Bottom()
 {
     return bottom;
 }
@@ -759,7 +759,7 @@ CAPSULE::CAPSULE(float rad) : center(), radius(rad)
 {
     Initialize();
 }
-CAPSULE::CAPSULE(VECTOR3 cent, float rad, float ht) : center(cent), radius(rad), height(ht)
+CAPSULE::CAPSULE(Vector3 cent, float rad, float ht) : center(cent), radius(rad), height(ht)
 {
     Initialize();
 }
@@ -792,8 +792,8 @@ bool CAPSULE::Collide(COLLIDER_BASE* other)
 
     // Check for point closest to each other 
     //一番近い点を検索
-    VECTOR3 p0, p1;
-    VECTOR3 top{ Top() }, bottom{ Bottom() };
+    Vector3 p0, p1;
+    Vector3 top{ Top() }, bottom{ Bottom() };
     p0 = top;
     p1 = PointLineClosest(target->Top(), target->Bottom(), p0);
     p0 = PointLineClosest(top, bottom, p1);
@@ -805,9 +805,9 @@ bool CAPSULE::Collide(COLLIDER_BASE* other)
     return false;
 
 }
-bool CAPSULE::Collide(VECTOR3 p)
+bool CAPSULE::Collide(Vector3 p)
 {
-    VECTOR3 point = PointLineClosest(Top(), Bottom(), p);
+    Vector3 point = PointLineClosest(Top(), Bottom(), p);
     float distance{ (p - point).Length() };
     return (p - point).Length() < radius;
 
@@ -815,23 +815,23 @@ bool CAPSULE::Collide(VECTOR3 p)
 
 /*-----------------------------------------------------CAPSULE Top()--------------------------------------------------------------*/
 
-VECTOR3 CAPSULE::Top()
+Vector3 CAPSULE::Top()
 {
-    VECTOR3 center_point{};
+    Vector3 center_point{};
     center_point.Load(XMVector3TransformCoord(center.XMV(), world));
-    VECTOR3 top = { center.x, center.y + height / 2, center.z };
+    Vector3 top = { center.x, center.y + height / 2, center.z };
     top.Load(XMVector3TransformCoord(top.XMV(), world));
     return top;
 }
 
 /*-----------------------------------------------------CAPSULE Bottom()--------------------------------------------------------------*/
 
-VECTOR3 CAPSULE::Bottom()
+Vector3 CAPSULE::Bottom()
 {
-    VECTOR3 center_point{};
+    Vector3 center_point{};
     center_point.Load(XMVector3TransformCoord(center.XMV(), world));
 
-    VECTOR3 bottom = { center.x, center.y - height / 2, center.z };
+    Vector3 bottom = { center.x, center.y - height / 2, center.z };
     bottom.Load(XMVector3TransformCoord(bottom.XMV(), world));
     return bottom;
 
@@ -839,7 +839,7 @@ VECTOR3 CAPSULE::Bottom()
 
 /*-----------------------------------------------------CAPSULE Center()--------------------------------------------------------------*/
 
-VECTOR3 CAPSULE::Center()
+Vector3 CAPSULE::Center()
 {
     return center;
 }
@@ -866,7 +866,7 @@ void CAPSULE::OffsetCenter(XMMATRIX world)
 
 /*-----------------------------------------------------CAPSULE Center()--------------------------------------------------------------*/
 
-void CAPSULE::SetCenter(VECTOR3 c)
+void CAPSULE::SetCenter(Vector3 c)
 {
     center = c;
 }
@@ -931,12 +931,12 @@ void RAYCAST_MANAGER::Finalize()
 /// <param name="direction_vector"> : Direction of movement</param>
 /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool RAYCAST_MANAGER::Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd)
 {
     bool output{};
     for (auto& m : meshes)
     {
-        VECTOR3 target{ m->Parent()->GetComponent<TRANSFORM_3D>()->Translation() };
+        Vector3 target{ m->Parent()->GetComponent<TRANSFORM_3D>()->Translation() };
         //if ((target - startOfRay).Length() > 0.3f)
         //    continue;
         if (m == cur_mesh)
@@ -950,7 +950,7 @@ bool RAYCAST_MANAGER::Collide(VECTOR3 startOfRay, VECTOR3 endOfRay, MESH* cur_me
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-bool RAYCAST_MANAGER::Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
 {
     bool output{};
     for (auto& m : meshes)
@@ -967,7 +967,7 @@ bool RAYCAST_MANAGER::Collide(VECTOR3 startofRay, VECTOR3 endOfRay, MESH* target
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-void RAYCAST_MANAGER::GetListOfCollided(MESH* cur_Mesh, VECTOR3 startOfRay, VECTOR3 directionVector, std::vector<RAYCASTDATA>& rcd)
+void RAYCAST_MANAGER::GetListOfCollided(MESH* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd)
 {
     for (auto& m : meshes)
     {

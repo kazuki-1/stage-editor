@@ -64,7 +64,7 @@ public:
         d2d.SampleDesc = { 1, 0 };
         d2d.BindFlags = D3D11_BIND_SHADER_RESOURCE;
         d2d.Width = d2d.Height = dimensions;
-        size_t texels{ dimensions * dimensions };
+        size_t texels{ (unsigned long long)(dimensions * dimensions )};
         std::unique_ptr<DWORD[]>sysMem{ std::make_unique<DWORD[]>(texels) };
         for (size_t alpha = 0; alpha < texels; ++alpha)
             sysMem[alpha] = rgb_value;

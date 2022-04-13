@@ -88,7 +88,7 @@ public:
     std::shared_ptr<OBJECT_DATA>Data();
 };
 
-class GAMEOBJECT_MANAGER : public SINGLETON<GAMEOBJECT_MANAGER>
+class GAMEOBJECT_MANAGER : public Singleton<GAMEOBJECT_MANAGER>
 {
     std::map<std::string, std::shared_ptr<GAMEOBJECT>>gameObjects;
 public:

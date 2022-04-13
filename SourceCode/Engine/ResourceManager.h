@@ -8,7 +8,7 @@
 #include "MODEL_RESOURCE.h"
 class MODEL;
 
-class RESOURCEMANAGER : public SINGLETON<RESOURCEMANAGER>
+class RESOURCEMANAGER : public Singleton<RESOURCEMANAGER>
 {
 public:
     std::map<std::string, std::weak_ptr<MODEL_RESOURCES>>ResourceMap;

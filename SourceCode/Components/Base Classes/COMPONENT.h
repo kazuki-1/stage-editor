@@ -111,9 +111,9 @@ class BASE_COLLIDER_COMPONENT : public COMPONENT
 public:
     virtual std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider() { return 0; }
     virtual bool Collide(GAMEOBJECT* target) { return false; };
-    virtual bool Collide(VECTOR3 p) { return false; }
+    virtual bool Collide(Vector3 p) { return false; }
     virtual void Execute(XMMATRIX transform) {};
-    virtual VECTOR3 DistanceToPlayer(PLAYER_CONTROLLER* target) { return {}; }
+    virtual Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) { return {}; }
 };
 
 

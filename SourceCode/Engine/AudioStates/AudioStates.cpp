@@ -13,10 +13,11 @@ using namespace AUDIO_STATES;
 /*----------------------------------------AudioStateMachine Initialize()---------------------------------------------*/
 /// <summary>
 /// <para> Called when AudioStateMachine is initialized </para>
-/// <para> ステートマシンが生成時に呼び出す </para>
 /// </summary>
 void AudioStateMachine::Initialize()
 {
+    if (audioStates.size() > 0)
+        audioStates.clear();
     audioStates.emplace(AudioStateEnum::AudioStatePlay, std::make_shared<AudioStatePlay>());
     audioStates.emplace(AudioStateEnum::AudioStatePause, std::make_shared<AudioStatePause>());
     audioStates.emplace(AudioStateEnum::AudioStateFadeIn, std::make_shared<AudioStateFadeIn>());
@@ -45,7 +46,6 @@ void AudioStateMachine::Transition(AudioStateEnum next_state)
 /*----------------------------------------AudioStateMachine Execute()---------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> 毎フE`ムに呼び出す </para>
 /// </summary>
 void AudioStateMachine::Execute()
 {
@@ -56,7 +56,6 @@ void AudioStateMachine::Execute()
 /*----------------------------------------AudioStateMachine FadeTo()---------------------------------------------*/
 /// <summary>
 /// <para> Perform fade to the specified volume in the specified time</para>
-/// <para> 指定さE恳袅郡蛑付à丹丒繒r間にフェード </para>
 /// </summary>
 /// <param name="fade_time"> : Fade will be done in this. Unit is second</param>
 /// <param name="fade_vol"> : Fade volume target</param>

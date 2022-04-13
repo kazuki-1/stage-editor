@@ -10,7 +10,7 @@ class TRANSFORM_3D;
 /// <summary>
 /// Use this to call out the translation arrow, rotation circles and the scaling scalars
 /// </summary>
-class DEBUG_MANAGER : public SINGLETON<DEBUG_MANAGER>
+class DEBUG_MANAGER : public Singleton<DEBUG_MANAGER>
 {
     //XMMATRIX target;
     //TRANSFORM_3D* target;

@@ -24,24 +24,24 @@ class SPOTLIGHT;
 
 struct DLIGHT_DATA
 {
-	VECTOR4 direction{};
-	VECTOR4 colour{};
+	Vector4 direction{};
+	Vector4 colour{};
 
 };
 
 struct PLIGHT_DATA
 {
-	VECTOR4 position{};
-	VECTOR4 colour{};
+	Vector4 position{};
+	Vector4 colour{};
 	float range{};
-	VECTOR3 temp{};
+	Vector3 temp{};
 };
 
 struct SLIGHT_DATA
 {
-	VECTOR4 position{};
-	VECTOR4 direction{};
-	VECTOR4 colour{};
+	Vector4 position{};
+	Vector4 direction{};
+	Vector4 colour{};
 	float range{};
 	float inner{};
 	float outer{};
@@ -60,15 +60,15 @@ public:
 
 
 
-	enum L_TYPE
+	enum class L_TYPE
 	{
 		DIRECTIONAL, POINT, SPOT
 	};
 private:
-	L_TYPE type{DIRECTIONAL};
-	 VECTOR3 direction{};
-	 VECTOR3 position{};
-	 VECTOR4 colour{};
+	L_TYPE type{L_TYPE::DIRECTIONAL};
+	 Vector3 direction{};
+	 Vector3 position{};
+	 Vector4 colour{};
 	 float range{};
 	 float inner{};
 	 float outer{};
@@ -83,16 +83,16 @@ public:
 		//t = (T*)data.get();
 		switch (type)
 		{
-		case DIRECTIONAL:
+		case L_TYPE::DIRECTIONAL:
 			((DLIGHT_DATA*)t)->direction = { direction.x, direction.y, direction.z, 0.0f };
 			((DLIGHT_DATA*)t)->colour = colour;
 			break;
-		case POINT:
+		case L_TYPE::POINT:
 			((PLIGHT_DATA*)t)->position = { position.x, position.y, position.z, 0 };
 			((PLIGHT_DATA*)t)->colour = colour;
 			((PLIGHT_DATA*)t)->range = range;
 			break;
-		case SPOT:
+		case L_TYPE::SPOT:
 			((SLIGHT_DATA*)t)->position = { position.x, position.y, position.z, 0 };
 			((SLIGHT_DATA*)t)->direction = { direction.x, direction.y, direction.z, 0.0f };
 			((SLIGHT_DATA*)t)->colour = colour;
@@ -107,9 +107,9 @@ public:
 	void WriteToData(POINT_LIGHT* p);
 	void WriteToData(SPOTLIGHT* s);
 	L_TYPE Type();
-	VECTOR3 Direction();
-	VECTOR3 Position();
-	VECTOR4 Colour();
+	Vector3 Direction();
+	Vector3 Position();
+	Vector4 Colour();
 	float Range();
 	float Inner();
 	float Outer();
@@ -119,9 +119,9 @@ public:
 
 	void RenderDebug();
 
-	void SetDirection(VECTOR3 dir);
-	void SetPosition(VECTOR3 pos);
-	void SetColour(VECTOR4 col);
+	void SetDirection(Vector3 dir);
+	void SetPosition(Vector3 pos);
+	void SetColour(Vector4 col);
 	void SetRange(float r);
 	void SetInnerCorner(float inner);
 	void SetOuterCorner(float outer);
@@ -135,7 +135,7 @@ public:
 };
 
 
-class LIGHTINGMANAGER : public SINGLETON<LIGHTINGMANAGER>
+class LIGHTINGMANAGER : public Singleton<LIGHTINGMANAGER>
 {
 	std::map<std::string, std::shared_ptr<LIGHTING>>dataset;
 public:

@@ -78,21 +78,21 @@ void SPOTLIGHT::UI()
 
 /*---------------------------------------SPOTLIGHT Direction()----------------------------------------------------*/
 
-VECTOR3 SPOTLIGHT::Direction()
+Vector3 SPOTLIGHT::Direction()
 {
     return data->direction;
 }
 
 /*---------------------------------------SPOTLIGHT Position()----------------------------------------------------*/
 
-VECTOR3 SPOTLIGHT::Position()
+Vector3 SPOTLIGHT::Position()
 {
     return data->position;
 }
 
 /*---------------------------------------SPOTLIGHT Colour()----------------------------------------------------*/
 
-VECTOR4 SPOTLIGHT::Colour()
+Vector4 SPOTLIGHT::Colour()
 {
     return data->colour;
 }

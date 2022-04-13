@@ -137,18 +137,18 @@ public:
     };
     struct OUTLINE_CONSTANT_BUFFER
     {
-        VECTOR4 outline_colour{};
+        Vector4 outline_colour{};
         float outline_size{ 0.1f };
-        VECTOR3 placeholder;
+        Vector3 placeholder;
     };
 #pragma region STRUCTS
 
 #pragma region VERTEX
     struct VERTEX
     {
-        VECTOR3 position, normal;
-        VECTOR4 tangent;
-        VECTOR2 UV;
+        Vector3 position, normal;
+        Vector4 tangent;
+        Vector2 UV;
         struct BONE
         {
             float Weights[BONE_INFL]{ 1, 0, 0, 0 };

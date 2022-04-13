@@ -7,7 +7,7 @@
 #include "Camera.h"
 bool scaling{}, moving{ true }, rotating{};
 bool start;
-VECTOR2 clicked_pos, movement;
+Vector2 clicked_pos, movement;
 
 HRESULT DEBUG_MANAGER::Initialize()
 {
@@ -92,7 +92,7 @@ void DEBUG_MANAGER::ClearTarget()
 }
 void DEBUG_MANAGER::MouseControl()
 {
-    VECTOR2 pos;
+    Vector2 pos;
     INPUTMANAGER::MOUSE* m{ INPUTMANAGER::Instance()->Mouse().get() };
     if (m->LButton().Triggered())
     {
@@ -102,7 +102,7 @@ void DEBUG_MANAGER::MouseControl()
     if (m->LButton().Held() && start)
     {
         pos = m->fPosition();
-        VECTOR2 v{ pos - clicked_pos };
+        Vector2 v{ pos - clicked_pos };
         v *= 0.1f;
         clicked_pos = pos;
     }
@@ -112,8 +112,8 @@ void DEBUG_MANAGER::MouseControl()
         start = false;
     }
 
-    VECTOR3 m_pos;
-    VECTOR4 start, end;
+    Vector3 m_pos;
+    Vector4 start, end;
     m_pos.x = m->fPosition().x;
     m_pos.y = m->fPosition().y;
     m_pos.z = 0.0f;
@@ -128,7 +128,7 @@ bool x{}, y{}, z{};
 void DEBUG_MANAGER::TranslateArrows()
 {
     INPUTMANAGER* in{ INPUTMANAGER::Instance() };
-    VECTOR2 movement{};
+    Vector2 movement{};
     D3D11_VIEWPORT vp;
     UINT num{ 1 };
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
@@ -138,15 +138,15 @@ void DEBUG_MANAGER::TranslateArrows()
     TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
 
 
-    VECTOR3 horizontol, vertical, forward;
+    Vector3 horizontol, vertical, forward;
     horizontol.Load(target->TransformMatrix().r[0]);
     vertical.Load(target->TransformMatrix().r[1]);
     forward.Load(target->TransformMatrix().r[2]);
 
-    static VECTOR2 clicked_pos{};
+    static Vector2 clicked_pos{};
     static bool start;
-    VECTOR2 pos;
-    VECTOR2 v;
+    Vector2 pos;
+    Vector2 v;
 
     if (in->Mouse()->LButton().Triggered())
     {

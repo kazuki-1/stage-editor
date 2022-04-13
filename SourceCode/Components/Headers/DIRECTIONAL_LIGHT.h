@@ -4,8 +4,8 @@ class DIRECTIONAL_LIGHT_DATA : public COMPONENT_DATA
 {
 public:
     DIRECTIONAL_LIGHT_DATA();
-    VECTOR3 direction{};
-    VECTOR4 colour{};
+    Vector3 direction{};
+    Vector4 colour{};
     template <class T>
     void serialize(T& t)
     {
@@ -26,8 +26,8 @@ public:
     void Render() override;
     void UI() override;
 
-    VECTOR3 Direction();
-    VECTOR4 Colour();
+    Vector3 Direction();
+    Vector4 Colour();
     COMPONENT_TYPE GetComponentType() override;
 
 };

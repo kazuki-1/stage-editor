@@ -113,9 +113,9 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 
 
 }
-void MODEL::RenderWireframe(VECTOR4 colour)
+void MODEL::RenderWireframe(Vector4 colour)
 {
-    VECTOR3 old_scale{ scale };
+    Vector3 old_scale{ scale };
     SetScale(scale * 1.01f);
     UpdateTransform();
     DirectX11::Instance()->DeviceContext()->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("Wireframe")->Rasterizer().Get());
@@ -143,7 +143,7 @@ void MODEL::ResumeAnim()
 {
     animPaused = false;
 }
-void MODEL::SetTranslation(VECTOR3 t)
+void MODEL::SetTranslation(Vector3 t)
 {
     translation = t;
 }
@@ -151,22 +151,22 @@ void MODEL::SetTranslation(VECTOR3 t)
 //{
 //    quaternion = q;
 //}
-void MODEL::SetRotation(VECTOR3 r)
+void MODEL::SetRotation(Vector3 r)
 {
     rotation = r;
 }
-void MODEL::SetScale(VECTOR3 s)
+void MODEL::SetScale(Vector3 s)
 {
     scale = s;
 }
-void MODEL::SetTransformation(VECTOR3 s, VECTOR3 r, VECTOR3 t)
+void MODEL::SetTransformation(Vector3 s, Vector3 r, Vector3 t)
 {
     scale = s;
     rotation = ToRadians(r);
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
     translation = t;
 }
-void MODEL::SetTransformation(VECTOR3 s, VECTOR4 q, VECTOR3 t)
+void MODEL::SetTransformation(Vector3 s, Vector4 q, Vector3 t)
 {
     scale = s;
     quaternion = q;
@@ -199,15 +199,15 @@ int MODEL::CurrentFrame()
 {
     return cur_Keyframe;
 }
-VECTOR3 MODEL::Scale()
+Vector3 MODEL::Scale()
 {
     return scale;
 }
-VECTOR3 MODEL::Rotation()
+Vector3 MODEL::Rotation()
 {
     return rotation;
 }
-VECTOR3 MODEL::Translation()
+Vector3 MODEL::Translation()
 {
     return translation;
 }
@@ -222,8 +222,8 @@ XMFLOAT4X4 MODEL::Transform()
 XMMATRIX MODEL::TransformMatrix()
 {
     //return XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslation(translation.x, translation.y, translation.z);
-    VECTOR4 q;
-    VECTOR3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
+    Vector4 q;
+    Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
 
     return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
@@ -240,25 +240,25 @@ std::vector<std::shared_ptr<MODEL::BOUNDING_BOX>>MODEL::GetBB()
 {
     return Boxes;
 }
-VECTOR3 MODEL::Right()
+Vector3 MODEL::Right()
 {
-    VECTOR3 temp;
+    Vector3 temp;
     temp.Load(TransformMatrix().r[0]);
     return temp;
 }
-VECTOR3 MODEL::Up()
+Vector3 MODEL::Up()
 {
-    VECTOR3 temp;
+    Vector3 temp;
     temp.Load(TransformMatrix().r[1]);
     return temp;
 }
-VECTOR3 MODEL::Forward()
+Vector3 MODEL::Forward()
 {
-    VECTOR3 temp;
+    Vector3 temp;
     temp.Load(TransformMatrix().r[2]);
     return temp;
 }
-void MODEL::RetrieveAxisesQ(VECTOR3* r, VECTOR3* u, VECTOR3* f)
+void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
 {
     UpdateTransform();
     XMMATRIX temp{ TransformMatrix() };

@@ -3,7 +3,7 @@
 #include "Components\Headers\TRANSFORM_2D.h"
 #include "Components\Headers\TRANSFORM_3D.h"
 
-/*--------------------------------GAMEOBJECT_2D Constructor----------------------------------*/
+/*--------------------------------GAMEOBJECT_2D Constructor()----------------------------------*/
 
 GAMEOBJECT_2D::GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d) 
 {
@@ -13,7 +13,7 @@ GAMEOBJECT_2D::GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d)
         name_buffer[a] = data->name[a];
 }
 
-/*--------------------------------GAMEOBJECT_2D Initialize----------------------------------*/
+/*--------------------------------GAMEOBJECT_2D Initialize()----------------------------------*/
 
 HRESULT GAMEOBJECT_2D::Initialize()
 {
@@ -30,7 +30,7 @@ HRESULT GAMEOBJECT_2D::Initialize()
 
 }
 
-/*--------------------------------GAMEOBJECT_2D Execute----------------------------------*/
+/*--------------------------------GAMEOBJECT_2D Execute()----------------------------------*/
 
 void GAMEOBJECT_2D::Execute()
 {
@@ -44,7 +44,14 @@ void GAMEOBJECT_2D::Execute()
     GetComponent<TRANSFORM_2D>()->Execute();
 }
 
-/*--------------------------------GAMEOBJECT_2D Render----------------------------------*/
+/*--------------------------------GAMEOBJECT_2D ExecuteUI()----------------------------------*/
+
+void GAMEOBJECT_2D::ExecuteUI()
+{
+    Execute();
+}
+
+/*--------------------------------GAMEOBJECT_2D Render()----------------------------------*/
 
 void GAMEOBJECT_2D::Render()
 {
@@ -57,7 +64,7 @@ void GAMEOBJECT_2D::Render()
     GetComponent<TRANSFORM_2D>()->Execute();
 }
 
-/*--------------------------------GAMEOBJECT_2D RenderUI----------------------------------*/
+/*--------------------------------GAMEOBJECT_2D RenderUI()----------------------------------*/
 
 void GAMEOBJECT_2D::RenderUI()
 {

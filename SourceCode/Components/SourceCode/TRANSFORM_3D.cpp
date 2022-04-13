@@ -98,7 +98,7 @@ void TRANSFORM_3D::UI()
 /// Returns the scale 
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Scale()
+Vector3 TRANSFORM_3D::Scale()
 {
     return data->scale;
 }
@@ -108,7 +108,7 @@ VECTOR3 TRANSFORM_3D::Scale()
 /// Returns the rotation
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Rotation()
+Vector3 TRANSFORM_3D::Rotation()
 {
     return data->rotation;
 }
@@ -118,7 +118,7 @@ VECTOR3 TRANSFORM_3D::Rotation()
 /// Returns the translation
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Translation()
+Vector3 TRANSFORM_3D::Translation()
 {
     return data->translation;
 }
@@ -128,7 +128,7 @@ VECTOR3 TRANSFORM_3D::Translation()
 /// Returns the velocity
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Velocity()
+Vector3 TRANSFORM_3D::Velocity()
 {
     return velocity;
 }
@@ -152,8 +152,8 @@ XMFLOAT4X4 TRANSFORM_3D::Transform()
 /// <returns></returns>
 XMMATRIX TRANSFORM_3D::TransformMatrix()
 {
-    VECTOR4 q{};
-    VECTOR3 r{ ToRadians(data->rotation) };
+    Vector4 q{};
+    Vector3 r{ ToRadians(data->rotation) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
     return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
 }
@@ -187,10 +187,10 @@ TRANSFORM_3D_DATA* TRANSFORM_3D::Data()
 /// Returns the right vector of the object
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Right()
+Vector3 TRANSFORM_3D::Right()
 {
     XMMATRIX temp{ TransformMatrix() };
-    VECTOR3 r{};
+    Vector3 r{};
     r.Load(temp.r[0]);
     r.Normalize();
     return r;
@@ -201,10 +201,10 @@ VECTOR3 TRANSFORM_3D::Right()
 /// Returns the forward vector of the object
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Forward()
+Vector3 TRANSFORM_3D::Forward()
 {
     XMMATRIX temp{ TransformMatrixQuaternion() };
-    VECTOR3 r{};
+    Vector3 r{};
     r.Load(temp.r[2]);
     r.Normalize();
     return r;
@@ -215,10 +215,10 @@ VECTOR3 TRANSFORM_3D::Forward()
 /// Returns the up vector of the object
 /// </summary>
 /// <returns></returns>
-VECTOR3 TRANSFORM_3D::Up()
+Vector3 TRANSFORM_3D::Up()
 {
     XMMATRIX temp{ TransformMatrix() };
-    VECTOR3 r{};
+    Vector3 r{};
     r.Load(temp.r[1]);
     r.Normalize();
     return r;
@@ -230,7 +230,7 @@ VECTOR3 TRANSFORM_3D::Up()
 /// Returns the quaternion of rotation
 /// </summary>
 /// <returns></returns>
-VECTOR4 TRANSFORM_3D::Quaternion()
+Vector4 TRANSFORM_3D::Quaternion()
 {
     return quaternion;
 }
@@ -240,9 +240,9 @@ VECTOR4 TRANSFORM_3D::Quaternion()
 /// <para> Slerps the rotation to the target vector. Target is in radian</para>
 /// <para> Targetに対して球面線形補間を行う. VECTOR3はラジアン型</para>
 /// </summary>
-void TRANSFORM_3D::SlerpRotation(VECTOR3 target)
+void TRANSFORM_3D::SlerpRotation(Vector3 target)
 {
-    VECTOR4 q1;
+    Vector4 q1;
     q1.Load(XMQuaternionRotationRollPitchYawFromVector(target.XMV()));
     quaternion.Load(XMQuaternionSlerp(quaternion.XMV(), q1.XMV(), 0.1f));
 
@@ -251,42 +251,42 @@ void TRANSFORM_3D::SlerpRotation(VECTOR3 target)
 /// <para> Slerps the rotation to the target quaternion </para>
 /// <para> Targetに対して球面線形補間を行う</para>
 /// </summary>
-void TRANSFORM_3D::SlerpRotation(VECTOR4 target)
+void TRANSFORM_3D::SlerpRotation(Vector4 target)
 {
     quaternion.Load(XMQuaternionSlerp(quaternion.XMV(), target.XMV(), 0.1f));
 }
 
 /*---------------------------------------TRANSFORM_3D SetScale()-------------------------------------------------*/
 
-void TRANSFORM_3D::SetScale(VECTOR3 s)
+void TRANSFORM_3D::SetScale(Vector3 s)
 {
     data->scale = s;
 }
 
 /*---------------------------------------TRANSFORM_3D SetRotation()-------------------------------------------------*/
 
-void TRANSFORM_3D::SetRotation(VECTOR3 r)
+void TRANSFORM_3D::SetRotation(Vector3 r)
 {
     data->rotation = r;
 }
 
 /*---------------------------------------TRANSFORM_3D SetTranslation-------------------------------------------------*/
 
-void TRANSFORM_3D::SetTranslation(VECTOR3 t)
+void TRANSFORM_3D::SetTranslation(Vector3 t)
 {
     data->translation = t;
 }
 
 /*---------------------------------------TRANSFORM_3D OffsetTranslation()-------------------------------------------------*/
 
-void TRANSFORM_3D::OffsetTranslation(VECTOR3 off)
+void TRANSFORM_3D::OffsetTranslation(Vector3 off)
 {
     data->translation += off;
 }
 
 /*---------------------------------------TRANSFORM_3D SetVelocity()-------------------------------------------------*/
 
-void TRANSFORM_3D::SetVelocity(VECTOR3 v)
+void TRANSFORM_3D::SetVelocity(Vector3 v)
 {
     velocity = v;
 }

@@ -19,7 +19,7 @@ enum class AudioStates
 
 
 
-class AudioController : public SINGLETON<AudioController>
+class AudioController : public Singleton<AudioController>
 {
     std::map<AudioStates, std::shared_ptr<AUDIO>>audioMap;
     std::shared_ptr<AUDIO>cur_BGM;
@@ -44,10 +44,6 @@ public:
     /// <param name="name"> : Name of audio. Will be retrieved from AUDIOENGINE</param>
     void Insert(AudioStates state, std::string name);
     /// <summary>
-    /// Plays the current BGM
-    /// </summary>
-    void Enter();
-    /// <summary>
     /// <para> Called every frame. Performs fadeIn and fadeOut effects of current and next bgm</para>
     /// <para> 各Audioのフェードインとフェードアウトエフェクトを処理するように毎フレームに呼び出す</para> 
     /// </summary>
@@ -60,6 +56,10 @@ public:
     /// Call at the end of scene
     /// </summary>
     void Finalize();
+    /// <summary>
+    /// Called when transitioning into this state
+    /// </summary>
+    void Enter();
     /// <summary>
     /// Changes the current BGM to the next BGM
     /// </summary>

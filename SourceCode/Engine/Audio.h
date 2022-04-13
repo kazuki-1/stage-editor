@@ -13,7 +13,7 @@ class AUDIO;
 /// <summary>
 /// Use this to create an AUDIO object by calling AUDIOENGINE::Instance()->Insert(std::string name, std::wstring file_path)
 /// </summary>
-class AUDIOENGINE : public SINGLETON<AUDIOENGINE>
+class AUDIOENGINE : public Singleton<AUDIOENGINE>
 {
 
     ComPtr<IXAudio2>xAudio;
@@ -67,8 +67,8 @@ protected:
 
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
-public:
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>stateMachine;
+public:
 
     float volume{ 1.0f };
     float fade_in_volume{};
@@ -147,6 +147,7 @@ public:
     IXAudio2SourceVoice* SourceVoice();
     bool IsPlaying();
     bool IsDucking();
+    std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
 };
 
 

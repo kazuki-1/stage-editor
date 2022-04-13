@@ -16,19 +16,19 @@ class DEBUG_PRIMITIVE
 {
 protected:
     std::shared_ptr<MODEL>model;
-    VECTOR3 scale;
-    VECTOR3 position;
-    VECTOR3 rotation;
+    Vector3 scale;
+    Vector3 position;
+    Vector3 rotation;
 public:
 
     virtual void Execute();
-    virtual void Render(VECTOR4 colour = { 1.0f, 1.0f, 1.0f, 1.0f });
+    virtual void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f });
 
-    VECTOR3 Position() { return position; }
-    VECTOR3 Rotation() { return rotation; }
+    Vector3 Position() { return position; }
+    Vector3 Rotation() { return rotation; }
 
-    void SetPosition(VECTOR3 p) { position = p; }
-    void SetRotation(VECTOR3 r) { rotation = r; }
+    void SetPosition(Vector3 p) { position = p; }
+    void SetRotation(Vector3 r) { rotation = r; }
 
 };
 
@@ -62,16 +62,16 @@ class DEBUG_ARROWS : public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>yAxis;
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
-    VECTOR3 position, rotation;
+    Vector3 position, rotation;
     friend class DEBUG_MANAGER;
 public:
     DEBUG_ARROWS() {};
     void Initialize();
     void Execute() override;
     void Execute(XMMATRIX mat);
-    void Render(VECTOR4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
-    void SetTarget(VECTOR3 p, VECTOR3 r);
+    void SetTarget(Vector3 p, Vector3 r);
 };
 
 class DEBUG_SCALARS: public DEBUG_PRIMITIVE
@@ -80,16 +80,16 @@ class DEBUG_SCALARS: public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>yAxis;
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
-    VECTOR3 position, rotation;
+    Vector3 position, rotation;
     friend class DEBUG_MANAGER;
 public:
     DEBUG_SCALARS() {};
     void Initialize();
     void Execute() override;
     void Execute(XMMATRIX mat);
-    void Render(VECTOR4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
-    void SetTarget(VECTOR3 p, VECTOR3 r);
+    void SetTarget(Vector3 p, Vector3 r);
 };
 
 class DEBUG_DISCS : public DEBUG_PRIMITIVE
@@ -98,16 +98,16 @@ class DEBUG_DISCS : public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>yAxis;
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
-    VECTOR3 position, rotation;
+    Vector3 position, rotation;
     friend class DEBUG_MANAGER;
 public:
     DEBUG_DISCS() {};
     void Initialize();
     void Execute() override;
     void Execute(XMMATRIX mat);
-    void Render(VECTOR4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
-    void SetTarget(VECTOR3 p, VECTOR3 r);
+    void SetTarget(Vector3 p, Vector3 r);
 };
 
 /// <summary>
@@ -118,12 +118,12 @@ class DYNAMIC_DEBUG_PRIMITIVE : public DEBUG_PRIMITIVE
 protected:
     struct VERTEX
     {
-        VECTOR3 position;
+        Vector3 position;
     };
     struct CBUFFER_M
     {
         XMFLOAT4X4 world;
-        VECTOR4 colour;
+        Vector4 colour;
     };
     std::vector<VERTEX>vertices;
     std::vector<int>indices;
@@ -148,9 +148,9 @@ public:
     /// Virtual render function. Called every frame to render the primitive object
     /// </summary>
     /// <param name="colour"> : The primitive will be rendered with these colour parameters</param>
-    virtual void Render(VECTOR4 colour = {1.0f, 1.0f, 1.0f, 1.0f});
-    virtual void SetTarget(VECTOR3 target);
-    virtual void SetTransform(VECTOR3 pos, VECTOR3 rot) { position = pos; rotation = rot; }
+    virtual void Render(Vector4 colour = {1.0f, 1.0f, 1.0f, 1.0f});
+    virtual void SetTarget(Vector3 target);
+    virtual void SetTransform(Vector3 pos, Vector3 rot) { position = pos; rotation = rot; }
 };
 
 
@@ -161,7 +161,7 @@ class DYNAMIC_CUBE : public DYNAMIC_DEBUG_PRIMITIVE
 {
 public:
     DYNAMIC_CUBE();
-    void UpdateVertices(std::vector<VECTOR3>pos);
+    void UpdateVertices(std::vector<Vector3>pos);
     
 };
 
@@ -186,7 +186,7 @@ public:
 
 class DYNAMIC_CYLINDER : public DYNAMIC_DEBUG_PRIMITIVE
 {
-    VECTOR3 center{};
+    Vector3 center{};
     float height{};
     float radius{0.1f};
     int vertex_count{ 32 };
@@ -205,7 +205,7 @@ public:
 
 class DYNAMIC_CAPSULE : public DYNAMIC_DEBUG_PRIMITIVE
 {
-    VECTOR3 center{};
+    Vector3 center{};
     float height;
     float radius{};
     int vertex_count{ 32 };

@@ -42,7 +42,7 @@ public:
     }
 };
 
-class SHADERMANAGER : public SINGLETON<SHADERMANAGER>
+class SHADERMANAGER : public Singleton<SHADERMANAGER>
 {
     std::map<std::wstring, std::shared_ptr<SHADERS>>shaders;
 

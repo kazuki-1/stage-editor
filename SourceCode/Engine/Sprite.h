@@ -13,18 +13,18 @@ class SPRITE : protected OBJECT
 {
     struct VERTEX
     {
-        XMFLOAT3 position;
-        XMFLOAT4 colour;
-        XMFLOAT2 uv;
+        Vector3 position;
+        Vector4 colour;
+        Vector2 uv;
     };
     std::shared_ptr<TEXTURE>texture;
     ComPtr<ID3D11Buffer>dxVertexBuffer, dxIndexBuffer;
     std::vector<VERTEX>Vertices;
 public:
-    SPRITE(const wchar_t* img_path, ID3D11Device* dv);
+    SPRITE(const wchar_t* img_path);
     SPRITE() {};
-    HRESULT Initialize(const wchar_t* img_path, ID3D11Device* dv);
-    void Render(XMFLOAT2 position = { 0,0 }, XMFLOAT2 scale = { 1, 1 }, XMFLOAT2 tPos = { 0, 0 }, XMFLOAT2 tSize = { 0, 0 }, XMFLOAT2 pivot = { 0, 0 }, XMFLOAT4 colour = { 1, 1, 1, 1 }, float angle = 0);
+    HRESULT Initialize(const wchar_t* img_path);
+    void Render(Vector2 position = { 0,0 }, Vector2 scale = { 1, 1 }, Vector2 tPos = { 0, 0 }, Vector2 tSize = { 0, 0 }, Vector2 pivot = { 0, 0 }, Vector4 colour = { 1, 1, 1, 1 }, float angle = 0);
     std::shared_ptr<TEXTURE>Texture() { return texture; }
 };
 

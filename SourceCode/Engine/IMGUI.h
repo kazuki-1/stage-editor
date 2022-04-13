@@ -11,7 +11,7 @@
 #include "DirectX11.h"
 using namespace DirectX;
 
-class IMGUI : public SINGLETON<IMGUI>
+class IMGUI : public Singleton<IMGUI>
 {
     ImGuiContext* imContext;
     ImGui::FileBrowser fileBrowser;

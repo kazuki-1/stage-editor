@@ -9,6 +9,7 @@ public:
     GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d);
     HRESULT Initialize() override;
     void Execute() override;
+    void ExecuteUI() override;
     void Render() override;
     void RenderUI() override;
 };

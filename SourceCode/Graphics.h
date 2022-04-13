@@ -36,7 +36,7 @@ public:
         SLIGHT_DATA spotlights[SLIGHT_MAX];
         int pLightCount{};
         int sLightCount{};
-        VECTOR2 temp;
+        Vector2 temp;
     };
     
     HRESULT Initialize(int Width, int Height, HWND hwnd);

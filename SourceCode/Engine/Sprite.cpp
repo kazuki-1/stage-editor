@@ -1,7 +1,7 @@
 #include "RASTERIZER.h"
 #include "Sprite.h"
 #include "BlendMode.h"
-SPRITE::SPRITE(const wchar_t* img_path, ID3D11Device* dv)
+SPRITE::SPRITE(const wchar_t* img_path)
 {
     HRESULT hr{ S_OK };
     Vertices.resize(4);
@@ -30,9 +30,9 @@ SPRITE::SPRITE(const wchar_t* img_path, ID3D11Device* dv)
     vbd.Usage = D3D11_USAGE_DYNAMIC;
     vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-
     vd.pSysMem = Vertices.data();
+
+    ID3D11Device* dv = DirectX11::Instance()->Device();
     hr = dv->CreateBuffer(&vbd, &vd, dxVertexBuffer.GetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create Vertex Buffer");
@@ -67,7 +67,7 @@ SPRITE::SPRITE(const wchar_t* img_path, ID3D11Device* dv)
 
 }
 
-HRESULT SPRITE::Initialize(const wchar_t* img_path, ID3D11Device* dv)
+HRESULT SPRITE::Initialize(const wchar_t* img_path)
 {
     HRESULT hr{ S_OK };
     Vertices.resize(4);
@@ -91,14 +91,16 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path, ID3D11Device* dv)
     // Vertex and Index Buffer Subresource Data
     D3D11_SUBRESOURCE_DATA vd{}, id{};
 
+    ID3D11Device* dv = DirectX11::Instance()->Device();
+
     /*-------------------------------------Vertex Buffer Creation--------------------------------------------*/
     vbd.ByteWidth = (UINT)(sizeof(VERTEX) * Vertices.size());
     vbd.Usage = D3D11_USAGE_DYNAMIC;
     vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-
     vd.pSysMem = Vertices.data();
+
+
     hr = dv->CreateBuffer(&vbd, &vd, dxVertexBuffer.GetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create Vertex Buffer");
@@ -134,7 +136,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path, ID3D11Device* dv)
 
 
 
-void SPRITE::Render(XMFLOAT2 position, XMFLOAT2 scale, XMFLOAT2 tPos, XMFLOAT2 tSize, XMFLOAT2 pivot, XMFLOAT4 colour, float angle)
+void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSize, Vector2 pivot, Vector4 colour, float angle)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
     dc->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("2D")->Rasterizer().Get());
@@ -210,7 +212,7 @@ void SPRITE::Render(XMFLOAT2 position, XMFLOAT2 scale, XMFLOAT2 tPos, XMFLOAT2 t
     for (auto& s : shaders)
     {
         
-        s->SetShaders(dc);
+        s.second->SetShaders(dc);
         dc->OMSetBlendState(BLENDMODE::Instance()->Get().Get(), 0, 0xffffffff);
         dc->IASetVertexBuffers(0, 1, dxVertexBuffer.GetAddressOf(), &stride, &offset);
         dc->IASetIndexBuffer(dxIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);

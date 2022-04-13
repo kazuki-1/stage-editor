@@ -60,7 +60,7 @@ void CAPSULE_COLLIDER::Execute()
         // If not attached to bone
         collider->Execute(transform->TransformMatrix());
         world = collider->MatrixOffset() * transform->TransformMatrix();
-        VECTOR3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
+        Vector3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
     }
     else
     {
@@ -84,7 +84,7 @@ void CAPSULE_COLLIDER::Execute(XMMATRIX transform)
         // If not attached to bone
         collider->Execute(transform);
         world = collider->MatrixOffset() * transform;
-        VECTOR3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
+        Vector3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
     }
     else
     {
@@ -179,9 +179,9 @@ void CAPSULE_COLLIDER::UI()
 /// <para> プレイヤーとの距離を計算する </para>    
 /// </summary>
 /// <returns></returns>
-VECTOR3 CAPSULE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
+Vector3 CAPSULE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 {
-    VECTOR3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
+    Vector3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
     return COLLIDERS::PointLineClosest(player_position, collider.get());
 }
 
@@ -204,7 +204,7 @@ bool CAPSULE_COLLIDER::Collide(GAMEOBJECT* target)
 /// <para> 座標点を基づいて当たり判定を計算 </para>
 /// </summary>
 /// <returns></returns>
-bool CAPSULE_COLLIDER::Collide(VECTOR3 p)
+bool CAPSULE_COLLIDER::Collide(Vector3 p)
 {
     return collider->Collide(p);
 }
@@ -234,7 +234,7 @@ const std::string& CAPSULE_COLLIDER::ColliderName()
 /// Returns the center point of the collider
 /// </summary>
 /// <returns></returns>
-const VECTOR3 CAPSULE_COLLIDER::Center()
+const Vector3 CAPSULE_COLLIDER::Center()
 {
     return data->center;
 }

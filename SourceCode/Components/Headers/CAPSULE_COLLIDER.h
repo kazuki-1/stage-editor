@@ -6,9 +6,9 @@ class CAPSULE_COLLIDER_DATA : public COMPONENT_DATA
 public:
     char name[256] = "";
     std::string bone_name{};
-    VECTOR3 center{};
+    Vector3 center{};
     //VECTOR3 offset{};
-    VECTOR3 rotation{};
+    Vector3 rotation{};
     float height{ 1.0f };
     float radius{ 0.5f };
 
@@ -59,7 +59,7 @@ public:
     /// <para> プレイヤーとの距離を計算する </para>    
     /// </summary>
     /// <returns></returns>
-    VECTOR3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
+    Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
     /// <summary>
     /// <para> Perform collision check to the target gameObject </para>
     /// <para> ゲームオブジェクトに当たり判定を計算 </para>
@@ -70,7 +70,7 @@ public:
     /// <para> 座標点を基づいて当たり判定を計算 </para>
     /// </summary>
     /// <returns></returns>
-    bool Collide(VECTOR3 p) override;
+    bool Collide(Vector3 p) override;
     /// <summary>
     /// Returns the name of the bone the collider is attached to
     /// </summary>
@@ -85,7 +85,7 @@ public:
     /// Returns the center point of the collider
     /// </summary>
     /// <returns></returns>
-    const VECTOR3 Center();
+    const Vector3 Center();
     /// <summary>
     /// Returns the radius of the collider
     /// </summary>

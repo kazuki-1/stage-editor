@@ -9,7 +9,7 @@ class COMPONENT_DATA;
 
 
 
-class COMPONENT_CREATOR : public SINGLETON<COMPONENT_CREATOR>
+class COMPONENT_CREATOR : public Singleton<COMPONENT_CREATOR>
 {
     std::map<COMPONENT_TYPE, std::function<std::shared_ptr<COMPONENT>(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>)>>componentTypes;
     std::map<COMPONENT_TYPE, std::function<std::shared_ptr<COMPONENT_DATA>()>>dataTypes;

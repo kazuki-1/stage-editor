@@ -75,6 +75,7 @@
     <ClCompile Include="SourceCode\Engine\SHADERS.cpp" />
     <ClCompile Include="SourceCode\Engine\Sprite.cpp" />
     <ClCompile Include="SourceCode\Engine\System.cpp" />
+    <ClCompile Include="SourceCode\Engine\Text.cpp" />
     <ClCompile Include="SourceCode\Engine\TEXTURE_MANAGER.cpp" />
     <ClCompile Include="SourceCode\GAMEOBJECT.cpp" />
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
+    <ClInclude Include="SourceCode\Engine\Text.h" />
     <ClInclude Include="SourceCode\Engine\Texture.h" />
     <ClInclude Include="SourceCode\Engine\TEXTURE_MANAGER.h" />
     <ClInclude Include="SourceCode\GAMEOBJECT.h" />

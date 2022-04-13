@@ -1,3 +1,4 @@
+#include <time.h>
 #include "Graphics.h"
 #include "DirectX11.h"
 #include "Sprite.h"
@@ -7,16 +8,19 @@
 #include "BlendMode.h"
 #include "MODEL.h"
 #include "IMGUI.h"
+#include "Audio.h"
+#include "Text.h"
 #include "../GUI.h"
 #include "../Scenes/SCENEMANAGER.h"
-#include "Audio.h"
-#include <time.h>
 using namespace DirectX;
 std::shared_ptr<MODEL>stage;
 
 HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 {
+
 #pragma region SETTING INITIALIZATION
+
+
     DirectX11* DX = DirectX11::Instance();
     if (FAILED(DirectX11::Instance()->Initialize(Width, Height, true, hwnd, false, 10000.0f, 0.001f)))
         assert(!"Failed to Initilize DirectX11 Class");
@@ -28,34 +32,54 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     HRESULT hr = DX->Device()->CreateBuffer(&cbd, nullptr, dxSceneConstantBuffer.ReleaseAndGetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create constant buffer");
+
 #pragma endregion
-#pragma region SHADER SETTINGS
+    // Perform shader initialization by inserting used shaders into the map
     SHADERMANAGER::Instance()->Initialize();
-    AUDIOENGINE::Instance()->Initialize();
-#pragma endregion
+
+    // Create a default blend mode for use
     BLENDMODE::Instance()->Create(BLENDMODE::BLEND_MODE::ALPHA, DirectX11::Instance()->Device());
+
+    // Initializes anything needed by XAudio2
+    AUDIOENGINE::Instance()->Initialize();
+
+    // Perform Camera Initialization 
     Camera::Instance()->Initialize({ 0, 0, 1 }, { 0, 0, 0 });
     Camera::Instance()->SetRange(10);
+
+    // Perform initialization for the user interface
     GUI::Instance()->Initialize();
+
+    // Insert a directional light into the map for preview
     std::shared_ptr<LIGHTING>data = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
     data->SetDirection({ 0, -1, 1 });
     data->SetColour({ 1.0f, 1.0f, 1.0f, 1.0f });
+
     LIGHTINGMANAGER::Instance()->Insert("Default", data);
+
+    // Initialzes the text manager by inserting used fonts into the map
+    TextManager::Instance()->Initialize();
+
+    // Initialzes the scene manager by inserting used scenes into the map
+    SCENEMANAGER::Instance()->Initialize();
+
+    // Initializes the white board below
     stage = std::make_shared<MODEL>();
     stage->Initialize("./Data/Model/stage.mrs");
-    //stage->Resource()->SetShader(L"Base3DShader.fx");
-    SCENEMANAGER::Instance()->Initialize();
     stage->SetTake(0);
     stage->SetScale({ 20, 20, 20});
     stage->SetTranslation({ 0, -20, 0 });
-    //AUDIOENGINE::Instance()->Retrieve("Test")->Play();
+
+
+
+
+
     return S_OK;
 }
 
 bool Graphics::Frame()
 {
 
-    //GUI::Instance()->Execute();
     SCENEMANAGER::Instance()->Execute();
     stage->UpdateTransform();
 
@@ -76,16 +100,12 @@ bool Graphics::Frame()
 
 bool Graphics::Render()
 {
-
-#pragma region BASE SETTINGS
+    // Prepares the viewport
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
     DirectX11::Instance()->Begin({ .2f, .2f, .2f, 1.0f });
-
-#pragma endregion
-#pragma region CAMERA SETTINGS
+    
+    // Perform execution of camera
     Camera::Instance()->Execute();
-#pragma endregion
-#pragma region SCENE_CONSTANTS
 
     // Scene Constant buffer update (Camera Settings and Light Directions)
     SCENE_CONSTANT_DATA data;
@@ -100,9 +120,7 @@ bool Graphics::Render()
     data.camera_position.w = 1;
     data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
 
-    // Light Direction
-    //data.light_dir = { 0.0f, -1.0f, -1.0f, 1 };
-
+    // Write lighting properties into the constant buffer
     LIGHTINGMANAGER::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&data.directional);
     int p_LightCount{}, s_LightCount{};
     for (auto& d : LIGHTINGMANAGER::Instance()->Dataset())
@@ -123,29 +141,24 @@ bool Graphics::Render()
         }
     }
 
+    // Updates the constant buffer and uploads it
     dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &data, 0, 0);
     dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
-#pragma endregion
 
-#pragma region PUT RENDER FUNCTIONS HERE 
 
     stage->Render(0.0f, { 1.0f, 1.0f, 1.0f, 0.7f });
+
+
     Camera::Instance()->Render();
-    //GUI::Instance()->Render();
     SCENEMANAGER::Instance()->Render();
     LIGHTINGMANAGER::Instance()->RenderDebug();
 #pragma endregion
 
     INPUTMANAGER::Instance()->Execute();
+
+
     DirectX11::Instance()->End();
-
-
-
-
-
-
-
 
 
     return true;

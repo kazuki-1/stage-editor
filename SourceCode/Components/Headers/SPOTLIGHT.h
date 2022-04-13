@@ -5,9 +5,9 @@ class SPOTLIGHT_DATA : public COMPONENT_DATA
 {
 public:
     SPOTLIGHT_DATA();
-    VECTOR3 position{};
-    VECTOR3 direction{};
-    VECTOR4 colour{};
+    Vector3 position{};
+    Vector3 direction{};
+    Vector4 colour{};
     float range{};
     float innerCorner{};
     float outerCorner{};
@@ -50,9 +50,9 @@ public:
     /// </summary>
     void UI() override;
 
-    VECTOR3 Position();
-    VECTOR3 Direction();
-    VECTOR4 Colour();
+    Vector3 Position();
+    Vector3 Direction();
+    Vector4 Colour();
     float Range();
     float InnerCorner();
     float OuterCorner();

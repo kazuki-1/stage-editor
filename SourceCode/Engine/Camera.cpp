@@ -31,9 +31,9 @@ void Camera::Execute()
         wheel = 5.0f;
     if (m->Wheel().Down().Held())
         wheel = -5.0f;
-    static VECTOR2 clicked_pos{}, move_pos{};
-    static VECTOR2 movement;
-    VECTOR2 pos, pos2, drag_pos;
+    static Vector2 clicked_pos{}, move_pos{};
+    static Vector2 movement;
+    Vector2 pos, pos2, drag_pos;
     static bool start{};
     if (i->AltKeys()->State().Held())
     {
@@ -44,7 +44,7 @@ void Camera::Execute()
         if (m->LButton().Held() && start)
         {
             pos = m->fPosition();
-            VECTOR2 vector{ pos - clicked_pos };
+            Vector2 vector{ pos - clicked_pos };
             vector *= 0.1f;
             rotation.y += ToRadians(vector.x);
             rotation.x += -ToRadians(vector.y);
@@ -75,7 +75,7 @@ void Camera::Execute()
     }
 
     XMMATRIX temp{ XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
-    VECTOR3 horizontol, vertical, forward;
+    Vector3 horizontol, vertical, forward;
     horizontol.Load(temp.r[0]);
     vertical.Load(temp.r[1]);
     horizontol.Normalize();
@@ -131,7 +131,7 @@ void Camera::ResetCamera()
     rotation = {};
 }
 
-void Camera::ResetToTarget(VECTOR3 t)
+void Camera::ResetToTarget(Vector3 t)
 {
     next_target = t;
     reset = true;

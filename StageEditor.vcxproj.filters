@@ -45,6 +45,54 @@
     <Filter Include="Source Files\AudioController">
       <UniqueIdentifier>{1b74c311-b989-43b9-8016-f74e7cfa3e8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Text">
+      <UniqueIdentifier>{542a6913-5df3-4595-b7f9-8d468fc0f187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\BlendMode">
+      <UniqueIdentifier>{7446f2ee-c52c-4b23-aa33-ab73ee2f6f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{5ff13701-0dfb-4300-9219-962ee26f77ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Collision">
+      <UniqueIdentifier>{e69baf3b-fba9-4e20-a023-71ed384aed21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Debug Primitives">
+      <UniqueIdentifier>{f9227a40-13f9-4907-a055-65a44d180766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\DirectX11">
+      <UniqueIdentifier>{5e68f97e-4e98-4369-863c-1b47645ebee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drag and Drop">
+      <UniqueIdentifier>{07439a85-95f9-4175-80a6-094f3bd53d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Input Manager">
+      <UniqueIdentifier>{14cd12de-5a0e-4052-8c56-117a8bab14b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Lighting">
+      <UniqueIdentifier>{5181323f-9a2e-4974-b3e5-dad0f1f87ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Model">
+      <UniqueIdentifier>{e8af09d5-e5da-424c-947f-bf1f4c05d3e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rasterizer Manager">
+      <UniqueIdentifier>{0d38783f-c7f6-4889-b01b-d0a78d2bae30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource Manager">
+      <UniqueIdentifier>{e2062893-0e09-42d0-8410-3607381994cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders">
+      <UniqueIdentifier>{bbba8e28-94ca-4aed-a93b-949a908f64c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Sprite">
+      <UniqueIdentifier>{214436eb-ac5a-405b-a786-39c3ba8e944b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Main System Files">
+      <UniqueIdentifier>{e66bca12-18aa-494e-b368-07a684b2964a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Effects">
+      <UniqueIdentifier>{f0616519-8ef3-4a07-8732-f0406dcafe44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -140,68 +188,11 @@
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Engine\EFFECTS.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Input.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\LIGHTING.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\MODEL.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\SHADERS.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Sprite.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\System.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\TEXTURE_MANAGER.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\BlendMode.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Camera.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\COLLISION.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\DEBUG_MANAGER.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\DEBUG_PRIMITIVE.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\DirectX11.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\DROPMANAGER.cpp">
-      <Filter>Engine\SourceCode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Components\SourceCode\MESH_COLLIDER.cpp">
       <Filter>Components\SourceCode</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Graphics.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Main.cpp">
-      <Filter>Engine\SourceCode</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\SourceCode\OBB_TERRAIN.cpp">
       <Filter>Components\SourceCode</Filter>
@@ -244,6 +235,66 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\BlendMode.cpp">
+      <Filter>Engine\BlendMode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Camera.cpp">
+      <Filter>Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\COLLISION.cpp">
+      <Filter>Engine\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\DEBUG_MANAGER.cpp">
+      <Filter>Engine\Debug Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\DEBUG_PRIMITIVE.cpp">
+      <Filter>Engine\Debug Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\DirectX11.cpp">
+      <Filter>Engine\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\DROPMANAGER.cpp">
+      <Filter>Engine\Drag and Drop</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Input.cpp">
+      <Filter>Engine\Input Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\LIGHTING.cpp">
+      <Filter>Engine\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\MODEL.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp">
+      <Filter>Engine\Rasterizer Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\TEXTURE_MANAGER.cpp">
+      <Filter>Engine\Resource Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
+      <Filter>Engine\Resource Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\SHADERS.cpp">
+      <Filter>Engine\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Sprite.cpp">
+      <Filter>Engine\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\System.cpp">
+      <Filter>Engine\Main System Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Main.cpp">
+      <Filter>Engine\Main System Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\EFFECTS.cpp">
+      <Filter>Engine\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Text.cpp">
+      <Filter>Engine\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,73 +415,19 @@
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Engine\RASTERIZER.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\ResourceManager.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\SHADERS.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Engine\Singleton.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Sprite.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\System.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Texture.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Engine\TEXTURE_MANAGER.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\BlendMode.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Camera.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\COLLISION.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\DEBUG_MANAGER.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\DEBUG_PRIMITIVE.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\DirectX11.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\DROPMANAGER.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Engine\DXMath.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\EFFECTS.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Graphics.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\IMGUI.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Input.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\LIGHTING.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\MODEL.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\MODEL_RESOURCE.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\OBJECT.h">
@@ -483,6 +480,63 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\BlendMode.h">
+      <Filter>Engine\BlendMode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Camera.h">
+      <Filter>Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\COLLISION.h">
+      <Filter>Engine\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DEBUG_MANAGER.h">
+      <Filter>Engine\Debug Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DEBUG_PRIMITIVE.h">
+      <Filter>Engine\Debug Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DirectX11.h">
+      <Filter>Engine\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DROPMANAGER.h">
+      <Filter>Engine\Drag and Drop</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Input.h">
+      <Filter>Engine\Input Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\LIGHTING.h">
+      <Filter>Engine\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\MODEL.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\MODEL_RESOURCE.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\RASTERIZER.h">
+      <Filter>Engine\Rasterizer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\TEXTURE_MANAGER.h">
+      <Filter>Engine\Resource Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\ResourceManager.h">
+      <Filter>Engine\Resource Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\SHADERS.h">
+      <Filter>Engine\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Sprite.h">
+      <Filter>Engine\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\System.h">
+      <Filter>Engine\Main System Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\EFFECTS.h">
+      <Filter>Engine\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Text.h">
+      <Filter>Engine\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

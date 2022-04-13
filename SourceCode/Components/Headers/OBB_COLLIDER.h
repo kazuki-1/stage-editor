@@ -6,9 +6,9 @@ class OBB_COLLIDER_DATA : public COMPONENT_DATA
 public:
     char name[256] = "";
     std::string bone_name{};
-    VECTOR3 offset{};
-    VECTOR3 min{};
-    VECTOR3 max{};
+    Vector3 offset{};
+    Vector3 min{};
+    Vector3 max{};
 
     OBB_COLLIDER_DATA();
     template <class T>
@@ -57,7 +57,7 @@ public:
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>
     /// </summary>
-    VECTOR3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
+    Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
     /// <summary>
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>
@@ -68,7 +68,7 @@ public:
     /// <para> 座標点を基づいて当たり判定を計算 </para>
     /// </summary>
     /// <returns></returns>
-    bool Collide(VECTOR3 p) override;
+    bool Collide(Vector3 p) override;
     /// <summary>
     /// Returns the name of the collider
     /// </summary>
@@ -84,12 +84,12 @@ public:
     /// Returns the minimum point of the collider
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Min();
+    Vector3 Min();
     /// <summary>
     /// Returns the maximum point of the collider
     /// </summary>
     /// <returns></returns>
-    VECTOR3 Max();
+    Vector3 Max();
     /// <summary>
     /// Returns the data class that stores all the data used in this component
     /// </summary>

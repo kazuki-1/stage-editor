@@ -4,7 +4,7 @@
 class TRANSFORM_2D_DATA : public COMPONENT_DATA
 {
 public:
-    VECTOR2 position;
+    Vector2 position;
     float rotation;
 
     TRANSFORM_2D_DATA();
@@ -40,7 +40,7 @@ public:
     /// Returns the position
     /// </summary>
     /// <returns></returns>
-    VECTOR2 Position();
+    Vector2 Position();
     /// <summary>
     /// Returns the angle of rotation
     /// </summary>

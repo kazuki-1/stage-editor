@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-class TEXTURE_MANAGER : public SINGLETON<TEXTURE_MANAGER>
+class TEXTURE_MANAGER : public Singleton<TEXTURE_MANAGER>
 {
     std::map<std::wstring, std::weak_ptr<TEXTURE>>textureMap;
     /// <summary>

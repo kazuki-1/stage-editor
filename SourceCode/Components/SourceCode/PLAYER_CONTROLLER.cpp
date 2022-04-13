@@ -10,7 +10,7 @@
 #include "../Headers/TERRAIN_AUDIO.h"
 #define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;
-std::vector<VECTOR3>receivers;
+std::vector<Vector3>receivers;
 
 /*--------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------PLAYER_CONTROLLER Class-------------------------------------------------------*/
@@ -32,24 +32,24 @@ PLAYER_CONTROLLER::PLAYER_CONTROLLER(GAMEOBJECT* g, COMPONENT_DATA* d)
 void PLAYER_CONTROLLER::MovementInput()
 {
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
-    static VECTOR3 d_Rot{ Camera::Instance()->Rotation() };
+    static Vector3 d_Rot{ Camera::Instance()->Rotation() };
     static float move{};
-    VECTOR2 k_Axis{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
+    Vector2 k_Axis{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
     if (!k_Axis.x && !k_Axis.y)
     {
         move = 0;
         return;
     }
-    VECTOR2 limit{ -20.0f, 20.0f };
+    Vector2 limit{ -20.0f, 20.0f };
     if (k_Axis.x || k_Axis.y)
         move += 0.005f;
     move = Math::Clamp(move, 0, 0.2f);
     fabs(move) < 0.0001f ? move = 0 : move = move;
-    VECTOR3 f;
+    Vector3 f;
     f = GetComponent<TRANSFORM_3D>()->Forward();
     f = { f.x, 0, f.z };
     f.Normalize();
-    VECTOR3 output{};
+    Vector3 output{};
     output.x = (f * move).x;
     output.z = (f * move).z;
     transform->SetVelocity(output);
@@ -63,7 +63,7 @@ void PLAYER_CONTROLLER::MovementInput()
 void PLAYER_CONTROLLER::RotationInput()
 {
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
-    VECTOR2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
+    Vector2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
     if (!ax.x && !ax.y)
     {
         //isRotating = false;
@@ -73,13 +73,13 @@ void PLAYER_CONTROLLER::RotationInput()
 
 
 
-    VECTOR3 d_Front{ 0, 0, 1 }, d_Right{ 1, 0, 0 };
-    VECTOR3 input{ ax.x, 0, ax.y };
+    Vector3 d_Front{ 0, 0, 1 }, d_Right{ 1, 0, 0 };
+    Vector3 input{ ax.x, 0, ax.y };
     float t_Angle{ Math::GetDirection(d_Front, input) };
     if (d_Right.Dot(input) < 0)
         t_Angle *= -1;
     float new_Angle = y_ax + t_Angle;
-    VECTOR3 rotation = transform->Rotation();
+    Vector3 rotation = transform->Rotation();
     rotation.y = new_Angle;
     transform->SlerpRotation(rotation);
 
@@ -99,8 +99,8 @@ void PLAYER_CONTROLLER::JumpInput()
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
     if (INPUTMANAGER::Instance()->Keyboard()->Triggered(VK_SPACE))
     {
-        VECTOR3 velocity{ transform->Velocity() };
-        VECTOR3 position{ transform->Translation() };
+        Vector3 velocity{ transform->Velocity() };
+        Vector3 position{ transform->Translation() };
         velocity.y += 5.0f;
         position.y += 0.3f;
         transform->SetTranslation(position);
@@ -134,7 +134,7 @@ void PLAYER_CONTROLLER::SoundCollision()
                 {
                     audio->Audio()->Play();
                 }
-                VECTOR3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
+                Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
                 closest_dist -= transform->Translation();
                 float length{ closest_dist.Length() };
                 length = max(c->Data()->minimum_distance, length);
@@ -167,7 +167,7 @@ void PLAYER_CONTROLLER::VelocityControl()
 void PLAYER_CONTROLLER::GravityControl()
 {
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
-    VECTOR3 velocity = transform->Velocity();
+    Vector3 velocity = transform->Velocity();
     velocity.y -= 0.1f;
     velocity.y = min(velocity.y, 15.0f);
     transform->SetVelocity(velocity);
@@ -188,7 +188,7 @@ void PLAYER_CONTROLLER::GroundCollision()
     // Prepare parameters for rayCasting
     MESH* mesh{ GetComponent<MESH>() };
     TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
-    VECTOR3 start, end;
+    Vector3 start, end;
     start = transform->Translation();
     end = transform->Translation();
     end.y += transform->Velocity().y;
@@ -207,10 +207,10 @@ void PLAYER_CONTROLLER::GroundCollision()
     // Offsets position when collided
     if (collided)
     {
-        VECTOR3 normal, position;
+        Vector3 normal, position;
         normal = rcd.normal;
         transform->SetTranslation(rcd.position);
-        VECTOR3 velocity;
+        Vector3 velocity;
         velocity = transform->Velocity();
         velocity.y = 0;
         transform->SetVelocity(velocity);
@@ -234,7 +234,7 @@ void PLAYER_CONTROLLER::WallCollision()
     // Prepare parameters for rayCasting
     MESH* mesh{ GetComponent<MESH>() };
     TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
-    VECTOR3 start, end;
+    Vector3 start, end;
     start = transform->Translation();
     end = transform->Translation();
     end.x += transform->Velocity().x;
@@ -253,11 +253,11 @@ void PLAYER_CONTROLLER::WallCollision()
     // Offsets position when collided
     if (collided)
     {
-        VECTOR3 normal, position;
+        Vector3 normal, position;
         normal = rcd.normal;
         rcd.position += normal * 0.5f;
         transform->SetTranslation(rcd.position);
-        VECTOR3 velocity;
+        Vector3 velocity;
         velocity = transform->Velocity();
         velocity.y = 0;
         transform->SetVelocity(velocity);
@@ -327,8 +327,8 @@ void PLAYER_CONTROLLER::TerrainAudioCollision()
                 if (b.buffer->IsDucking())
                     b.buffer->SetVolume(0.3f);
             }
-            VECTOR3 start{ receivers[ind] };
-            VECTOR3 end{ start };
+            Vector3 start{ receivers[ind] };
+            Vector3 end{ start };
             end.y -= 0.005f;
             COLLIDERS::RAYCASTDATA rcd{};
             bool collided{ RAYCAST(start, end, emitter_mesh, ((TERRAIN_AUDIO_DATA_EMITTER*)emitter->Data())->mesh_index, rcd) };
@@ -361,7 +361,7 @@ HRESULT PLAYER_CONTROLLER::Initialize()
 /// </summary>
 void PLAYER_CONTROLLER::Execute()
 {
-    VECTOR3 position = GetComponent<TRANSFORM_3D>()->Translation();
+    Vector3 position = GetComponent<TRANSFORM_3D>()->Translation();
     position.y += 5.0f;
     Camera::Instance()->SetTarget(position);
     MovementInput();
@@ -384,7 +384,7 @@ void PLAYER_CONTROLLER::Execute()
 /// </summary>
 void PLAYER_CONTROLLER::Render()
 {
-    VECTOR3 velocity, position;
+    Vector3 velocity, position;
     velocity = GetComponent<TRANSFORM_3D>()->Velocity();
     position = GetComponent<TRANSFORM_3D>()->Translation();
 }
@@ -422,7 +422,7 @@ void PLAYER_CONTROLLER::AnimationSettings()
 {
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
     MESH* mesh = GetComponent<MESH>();
-    VECTOR3 velocity = transform->Velocity();
+    Vector3 velocity = transform->Velocity();
     velocity.y = 0;
     INPUTMANAGER::KEYBOARD* kb{ INPUTMANAGER::Instance()->Keyboard().get() };
     if (velocity.Length() >= 0.05f)

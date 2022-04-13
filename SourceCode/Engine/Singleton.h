@@ -1,6 +1,6 @@
 #pragma once
 template <class T>
-class SINGLETON
+class Singleton
 {
 public:
     static T* Instance()

@@ -6,7 +6,7 @@ class EFFECT_DATA : public COMPONENT_DATA
 public:
     std::string effect_path;
     std::string effect_name;
-    VECTOR3 position;
+    Vector3 position;
     float scale;
 
     EFFECT_DATA();

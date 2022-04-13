@@ -5,7 +5,7 @@
 //#include "OBJECT.h"
 #pragma region DEBUG_PRIMITIVE
 
-void DEBUG_PRIMITIVE::Render(VECTOR4 colour)
+void DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     model->Render(0.0f, colour.XMF4());
 }
@@ -85,14 +85,14 @@ void DEBUG_ARROWS::Initialize()
     yAxis = std::make_shared<MODEL>();
     zAxis = std::make_shared<MODEL>();
 
-    VECTOR3 s{ 0.1f, 0.1f, 0.1f };
+    Vector3 s{ 0.1f, 0.1f, 0.1f };
 
     xAxis->Initialize("./Data/Model/Debug Primitives/arrows.mrs");
     yAxis->Initialize("./Data/Model/Debug Primitives/arrows.mrs");
     zAxis->Initialize("./Data/Model/Debug Primitives/arrows.mrs");
 
     xAxis->SetTransformation(s, {0, 0, -90}, {});
-    yAxis->SetTransformation(s, VECTOR3{}, {});
+    yAxis->SetTransformation(s, Vector3{}, {});
     zAxis->SetTransformation(s, {90, 0, 0}, {});
 
     xAxis->SetTake(0);
@@ -115,8 +115,8 @@ void DEBUG_ARROWS::Execute()
 
 
     //target = XMMatrixScaling(1, 1, 1);
-    VECTOR3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
-    VECTOR4 q;
+    Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
+    Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
@@ -124,11 +124,11 @@ void DEBUG_ARROWS::Execute()
     //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    VECTOR3 x;
+    Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
-    VECTOR3 y;
+    Vector3 y;
     y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), target) });
-    VECTOR3 z;
+    Vector3 z;
     z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), target) });
 
     xAxis->SetTranslation(x);
@@ -144,7 +144,7 @@ void DEBUG_ARROWS::Execute()
 void DEBUG_ARROWS::Execute(XMMATRIX mat)
 {
 }
-void DEBUG_ARROWS::Render(VECTOR4 colour)
+void DEBUG_ARROWS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
@@ -154,7 +154,7 @@ void DEBUG_ARROWS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
-void DEBUG_ARROWS::SetTarget(VECTOR3 p, VECTOR3 r)
+void DEBUG_ARROWS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
     rotation = r;
@@ -172,15 +172,15 @@ void DEBUG_SCALARS::Initialize()
     yAxis = std::make_shared<MODEL>();
     zAxis = std::make_shared<MODEL>();
 
-    VECTOR3 x, z;
-    VECTOR3 s{ 0.1f, 0.1f, 0.1f };
+    Vector3 x, z;
+    Vector3 s{ 0.1f, 0.1f, 0.1f };
 
     xAxis->Initialize("./Data/Model/Debug Primitives/scalar.mrs");
     yAxis->Initialize("./Data/Model/Debug Primitives/scalar.mrs");
     zAxis->Initialize("./Data/Model/Debug Primitives/scalar.mrs");
 
     xAxis->SetTransformation(s, { 0, 0, -90 }, {});
-    yAxis->SetTransformation(s, VECTOR3{}, VECTOR3{});
+    yAxis->SetTransformation(s, Vector3{}, Vector3{});
     zAxis->SetTransformation(s, { 90, 0, 0 }, {});
 
     xAxis->SetTake(0);
@@ -203,8 +203,8 @@ void DEBUG_SCALARS::Execute()
 
 
     //target = XMMatrixScaling(1, 1, 1);
-    VECTOR3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
-    VECTOR4 q;
+    Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
+    Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
@@ -212,11 +212,11 @@ void DEBUG_SCALARS::Execute()
     //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    VECTOR3 x;
+    Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
-    VECTOR3 y;
+    Vector3 y;
     y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), target) });
-    VECTOR3 z;
+    Vector3 z;
     z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), target) });
 
     xAxis->SetTranslation(x);
@@ -246,7 +246,7 @@ void DEBUG_SCALARS::Execute(XMMATRIX mat)
     //yAxis->UpdateTransform();
     //zAxis->UpdateTransform();
 }
-void DEBUG_SCALARS::Render(VECTOR4 colour)
+void DEBUG_SCALARS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
@@ -256,7 +256,7 @@ void DEBUG_SCALARS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
-void DEBUG_SCALARS::SetTarget(VECTOR3 p, VECTOR3 r)
+void DEBUG_SCALARS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
     rotation = r;
@@ -274,14 +274,14 @@ void DEBUG_DISCS::Initialize()
     yAxis = std::make_shared<MODEL>();
     zAxis = std::make_shared<MODEL>();
 
-    VECTOR3 x, z;
-    VECTOR3 s{ 2.0f, 2.0f, 2.0f };
+    Vector3 x, z;
+    Vector3 s{ 2.0f, 2.0f, 2.0f };
 
     xAxis->Initialize("./Data/Model/Debug Primitives/disc.mrs");
     yAxis->Initialize("./Data/Model/Debug Primitives/disc.mrs");
     zAxis->Initialize("./Data/Model/Debug Primitives/disc.mrs");
 
-    xAxis->SetTransformation(s, VECTOR3{}, {});
+    xAxis->SetTransformation(s, Vector3{}, {});
     yAxis->SetTransformation(s, {90, 0, 0}, {});
     zAxis->SetTransformation(s, { 90, 90, 0 }, {});
 
@@ -305,8 +305,8 @@ void DEBUG_DISCS::Execute()
 
 
     //target = XMMatrixScaling(1, 1, 1);
-    VECTOR3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
-    VECTOR4 q;
+    Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
+    Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
@@ -314,11 +314,11 @@ void DEBUG_DISCS::Execute()
     //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    VECTOR3 x;
+    Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
-    VECTOR3 y;
+    Vector3 y;
     y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), target) });
-    VECTOR3 z;
+    Vector3 z;
     z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), target) });
 
     xAxis->SetTranslation(x);
@@ -348,7 +348,7 @@ void DEBUG_DISCS::Execute(XMMATRIX mat)
     //yAxis->UpdateTransform();
     //zAxis->UpdateTransform();
 }
-void DEBUG_DISCS::Render(VECTOR4 colour)
+void DEBUG_DISCS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
@@ -358,7 +358,7 @@ void DEBUG_DISCS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
-void DEBUG_DISCS::SetTarget(VECTOR3 p, VECTOR3 r)
+void DEBUG_DISCS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
     rotation = r;
@@ -405,7 +405,7 @@ void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
         v.position.Load(XMVector3TransformCoord(v.position.XMV(), target));
 
 }
-void DYNAMIC_DEBUG_PRIMITIVE::Render(VECTOR4 colour)
+void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
     shader->SetShaders(dc);
@@ -413,7 +413,7 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(VECTOR4 colour)
     dc->OMSetBlendState(BLENDMODE::Instance()->Get().Get(), 0, 0xFFFFFFFF);
     CBUFFER_M data;
     data.colour = colour;
-    VECTOR4 q{};
+    Vector4 q{};
     q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
     XMStoreFloat4x4(&data.world, XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(q.XMV()) *  XMMatrixTranslationFromVector(position.XMV()));
 
@@ -426,7 +426,7 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(VECTOR4 colour)
     dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     dc->DrawIndexed((UINT)indices.size(), 0, 0);
 }
-void DYNAMIC_DEBUG_PRIMITIVE::SetTarget(VECTOR3 t)
+void DYNAMIC_DEBUG_PRIMITIVE::SetTarget(Vector3 t)
 {
     position = t;
 }
@@ -480,7 +480,7 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
 
 
 }
-void DYNAMIC_CUBE::UpdateVertices(std::vector<VECTOR3>pos)
+void DYNAMIC_CUBE::UpdateVertices(std::vector<Vector3>pos)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
     for (int ind = 0; ind < 8; ++ind)

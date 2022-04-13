@@ -9,6 +9,7 @@
 #include "Components/Headers/TRANSFORM_3D.h"
 #include "Components/Headers/MESH.h"
 #include "Scenes/SCENEMANAGER.h"
+#include "Engine/Text.h"
 static int cur{};
 std::shared_ptr<GAMEOBJECT>selected_model;
 std::shared_ptr<GAMEOBJECT>selected_item;
@@ -120,7 +121,7 @@ void STAGE_UI::GameObjectWindow()
 }
 
 /*--------------------------------------------------------STAGE_UI SceneUI()--------------------------------------------------------------------*/
-
+bool text_test{};
 void STAGE_UI::SceneUI()
 {
     // Data saving and loading
@@ -168,6 +169,9 @@ void STAGE_UI::SceneUI()
             }
         }
 
+
+        if (ImGui::Button("Create text"))
+            text_test = text_test ? false : true;
         ImGui::End();
     }
 
@@ -229,6 +233,9 @@ void STAGE_UI::Render()
         o.second->Render();
     }
 
+    if(text_test)
+        TextManager::Instance()->PrintOutSequence("The monkey throws the apple", { 0, 0 }, { 1, 1 });
+
     //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
     DEBUG_MANAGER::Instance()->Execute();
     DEBUG_MANAGER::Instance()->Render();
@@ -261,7 +268,7 @@ void STAGE_UI::MouseSelect()
     {
         return;
     }
-    VECTOR3 cur_pos;
+    Vector3 cur_pos;
     cur_pos.x = INPUTMANAGER::Instance()->Mouse()->fPosition().x;
     cur_pos.y = INPUTMANAGER::Instance()->Mouse()->fPosition().y;
     D3D11_VIEWPORT vp;
@@ -278,15 +285,15 @@ void STAGE_UI::MouseSelect()
         cur_pos.z = 1.0f;
         Far = XMVector3Unproject(cur_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), o.second->GetComponent<TRANSFORM_3D>()->TransformMatrix());
 
-        VECTOR3 N, F;
+        Vector3 N, F;
         N.Load(Near);
         F.Load(Far);
 
 
 
         COLLIDERS::RAYCASTDATA rcd{};
-        VECTOR3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<TRANSFORM_3D>()->Translation() };
-        VECTOR3 dist = tar - cam;
+        Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<TRANSFORM_3D>()->Translation() };
+        Vector3 dist = tar - cam;
         float f_dist{ dist.Length() };
 
 

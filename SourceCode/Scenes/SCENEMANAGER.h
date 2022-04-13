@@ -16,7 +16,7 @@ enum class ScenesEnum
 
 
 
-class SCENEMANAGER : public SINGLETON<SCENEMANAGER>
+class SCENEMANAGER : public Singleton<SCENEMANAGER>
 {
     std::map<ScenesEnum, std::shared_ptr<SCENE>>scenes;
     std::shared_ptr<SCENE> cur_Scene;

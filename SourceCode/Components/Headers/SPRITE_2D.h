@@ -6,11 +6,11 @@ class SPRITE_2D_DATA : public COMPONENT_DATA
 public:
     std::wstring image_path{};
     std::string image_name{};
-    VECTOR2 size{1, 1};
-    VECTOR2 uvPosition{};
-    VECTOR2 uvSize{};
-    VECTOR2 pivot{};
-    VECTOR4 colour{1, 1, 1, 1};
+    Vector2 size{1, 1};
+    Vector2 uvPosition{};
+    Vector2 uvSize{};
+    Vector2 pivot{};
+    Vector4 colour{1, 1, 1, 1};
 
     SPRITE_2D_DATA();
     template <class T>
@@ -47,11 +47,11 @@ public:
 
     const std::wstring& ImagePath();
     const std::string& ImageName();
-    VECTOR2& Size();
-    VECTOR2& UVPosition();
-    VECTOR2& UVSize();
-    VECTOR2& Pivot();
-    VECTOR4& Colour();
+    Vector2& Size();
+    Vector2& UVPosition();
+    Vector2& UVSize();
+    Vector2& Pivot();
+    Vector4& Colour();
     SPRITE_2D_DATA* Data();
     COMPONENT_TYPE GetComponentType() override;
 

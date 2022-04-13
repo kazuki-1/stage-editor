@@ -32,15 +32,15 @@ void LIGHTING::RenderDebug()
 
 #pragma region Setters
 
-void LIGHTING::SetDirection(VECTOR3 dir)
+void LIGHTING::SetDirection(Vector3 dir)
 {
 	direction = dir;
 }
-void LIGHTING::SetPosition(VECTOR3 pos)
+void LIGHTING::SetPosition(Vector3 pos)
 {
 	position = pos;
 }
-void LIGHTING::SetColour(VECTOR4 col)
+void LIGHTING::SetColour(Vector4 col)
 {
 	colour = col;
 }
@@ -88,15 +88,15 @@ void LIGHTING::WriteToData(SPOTLIGHT* s)
 #pragma endregion
 #pragma region Getters
 
-VECTOR3 LIGHTING::Direction()
+Vector3 LIGHTING::Direction()
 {
 	return direction;
 }
-VECTOR3 LIGHTING::Position()
+Vector3 LIGHTING::Position()
 {
 	return position;
 }
-VECTOR4 LIGHTING::Colour()
+Vector4 LIGHTING::Colour()
 {
 	return colour;
 }

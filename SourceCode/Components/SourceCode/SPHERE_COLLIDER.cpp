@@ -160,9 +160,9 @@ void SPHERE_COLLIDER::UI()
 /// <para> Calculates the distance to the player </para>
 /// <para> プレイヤーとの距離を計算する </para>
 /// </summary>
-VECTOR3 SPHERE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
+Vector3 SPHERE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 {
-    VECTOR3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
+    Vector3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
     return collider->Center() - player_position;
 }
 
@@ -186,7 +186,7 @@ bool SPHERE_COLLIDER::Collide(GAMEOBJECT* target)
 /// <para> 座標点を基づいて当たり判定を計算 </para>
 /// </summary>
 /// <returns></returns>
-bool SPHERE_COLLIDER::Collide(VECTOR3 p)
+bool SPHERE_COLLIDER::Collide(Vector3 p)
 {
     return collider->Collide(p);
 }
@@ -200,7 +200,7 @@ float SPHERE_COLLIDER::Radius()
 
 /*---------------------------------------SPHERE_COLLIDER Center()----------------------------------------------*/
 
-VECTOR3 SPHERE_COLLIDER::Center()
+Vector3 SPHERE_COLLIDER::Center()
 {
     return data->center;
 }

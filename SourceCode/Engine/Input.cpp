@@ -140,11 +140,11 @@ INPUTMANAGER::KEYSTATE INPUTMANAGER::KEYBOARD::KeyState(unsigned int k)
 {
 	return Keys[k];
 }
-VECTOR2 INPUTMANAGER::KEYBOARD::AxisX()
+Vector2 INPUTMANAGER::KEYBOARD::AxisX()
 {
 	return axisX;
 }
-VECTOR2 INPUTMANAGER::KEYBOARD::AxisY()
+Vector2 INPUTMANAGER::KEYBOARD::AxisY()
 {
 	return axisY;
 }
@@ -228,7 +228,7 @@ INPUTMANAGER::MOUSE::MOUSE_WHEEL INPUTMANAGER::MOUSE::Wheel()
 {
 	return wheel;
 }
-VECTOR2 INPUTMANAGER::MOUSE::fPosition()
+Vector2 INPUTMANAGER::MOUSE::fPosition()
 {
 	return { (float)position.x, (float)position.y };
 }
@@ -277,10 +277,10 @@ void INPUTMANAGER::ResetState()
 	mouse->ResetState();
 	keyboard->ResetReleasedState();
 }
-void INPUTMANAGER::DragMousePosition(VECTOR2* v, KEYSTATE* k)
+void INPUTMANAGER::DragMousePosition(Vector2* v, KEYSTATE* k)
 {
 	bool start{};
-	static VECTOR2 pos, clicked_pos;
+	static Vector2 pos, clicked_pos;
 	if (k->Triggered())
 	{
 		clicked_pos += Mouse()->fPosition();
@@ -299,8 +299,8 @@ void INPUTMANAGER::DragMousePosition(VECTOR2* v, KEYSTATE* k)
 }
 bool INPUTMANAGER::MouseRayCast(MODEL* m, D3D11_VIEWPORT vp)
 {
-	VECTOR3 m_pos;
-	VECTOR3 start, end;
+	Vector3 m_pos;
+	Vector3 start, end;
 	m_pos = { mouse->fPosition().x, mouse->fPosition().y, 0.0f};
 	start.Load(XMVector3Unproject(m_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), m->TransformMatrix()));
 	m_pos.z = 1.0f;
