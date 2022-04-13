@@ -27,12 +27,6 @@
     <Filter Include="Components">
       <UniqueIdentifier>{e182182d-4e4f-42c2-8edc-76ba3d7f21cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\SourceCode">
-      <UniqueIdentifier>{baf5681b-4e29-4a41-9ed4-237ce94a82d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components\Headers">
-      <UniqueIdentifier>{2a423515-14b4-4379-a535-4b97b57a1c55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components\Base Classes">
       <UniqueIdentifier>{1cfec75e-97fa-494b-85b4-cd1315505906}</UniqueIdentifier>
     </Filter>
@@ -93,6 +87,69 @@
     <Filter Include="Engine\Effects">
       <UniqueIdentifier>{f0616519-8ef3-4a07-8732-f0406dcafe44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\BGM">
+      <UniqueIdentifier>{c4cfb011-1a33-46a8-8c92-796d1a870868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Capsule Collider">
+      <UniqueIdentifier>{f9c7abae-116a-4ef1-89d6-4e447c3abff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Directional Light">
+      <UniqueIdentifier>{6ba22507-5bb6-4363-a18e-38529dc41f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Enemy Controller">
+      <UniqueIdentifier>{4924f936-fbe2-4a8f-80d9-329cc700659a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Environmental Audio">
+      <UniqueIdentifier>{61039196-0a5a-4618-a079-26563ab8d4e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Mesh">
+      <UniqueIdentifier>{d041846f-bb8a-405d-bc6a-1c3715da7bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Mesh Collider">
+      <UniqueIdentifier>{1c910502-aebe-4f92-9ed2-027a5b279d07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\OBB Collider">
+      <UniqueIdentifier>{bb8f1b41-95de-4ec0-86ba-8ecf0dfcab4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Unused Components">
+      <UniqueIdentifier>{0840ea53-f288-4ddd-b15d-c1fb06a416ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Unused Components\OBB Terrain">
+      <UniqueIdentifier>{e800d925-b9ba-4754-b0c1-9a67dab1949f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Unused Components\Effect">
+      <UniqueIdentifier>{e6a9ccac-094f-4ac8-9652-d623f8ce93ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Unused Components\CAMERA_COMPONENT">
+      <UniqueIdentifier>{2d281bbb-7c3b-4a41-9937-edb38b18e5c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Player Controller">
+      <UniqueIdentifier>{35fa836d-8214-4429-ad0a-e45c53e8d9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Point Light">
+      <UniqueIdentifier>{efde8acd-5455-4726-9dcc-173fa08b4538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Sphere Collider">
+      <UniqueIdentifier>{4f6a9a15-9d09-4ff9-8e66-625f3a7adc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Spotlight">
+      <UniqueIdentifier>{f20d8378-942b-4e59-a2c6-cffb5e1f9bd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Sprite 2D">
+      <UniqueIdentifier>{6a826715-95fc-4d53-b0fe-c67fd87dc5a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Terrain Audio">
+      <UniqueIdentifier>{764b313f-2077-4d4f-9d12-d19683e37059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Transform 2D">
+      <UniqueIdentifier>{8c591db2-7586-4b9f-899d-d17450679558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Transform 3D">
+      <UniqueIdentifier>{600a9837-6df4-4982-8aba-e6121110ed22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\NPC Dialogue">
+      <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -122,48 +179,6 @@
     <ClCompile Include="External\ImGui\imgui_widgets.cpp">
       <Filter>Engine\External</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\DIRECTIONAL_LIGHT.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\EFFECT.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\ENVIRONMENTAL_AUDIO.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\MESH.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\OBB_COLLIDER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\POINT_LIGHT.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\SPHERE_COLLIDER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\SPOTLIGHT.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\SPRITE_2D.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_2D.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\TRANSFORM_3D.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\BGM.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\CAMERA_COMPONENT.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\CAPSULE_COLLIDER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Components\Base Classes\DATAMANAGER.cpp">
       <Filter>Components\Base Classes</Filter>
     </ClCompile>
@@ -179,26 +194,11 @@
     <ClCompile Include="SourceCode\STAGE_UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\PLAYER_CONTROLLER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\ENEMY_CONTROLLER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\MESH_COLLIDER.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Engine\Graphics.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\OBB_TERRAIN.cpp">
-      <Filter>Components\SourceCode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Components\SourceCode\TERRAIN_AUDIO.cpp">
-      <Filter>Components\SourceCode</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp">
       <Filter>Source Files\Scenes</Filter>
@@ -296,6 +296,63 @@
     <ClCompile Include="SourceCode\Engine\Text.cpp">
       <Filter>Engine\Text</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Components\BGM.cpp">
+      <Filter>Components\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\CAMERA_COMPONENT.cpp">
+      <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\CAPSULE_COLLIDER.cpp">
+      <Filter>Components\Capsule Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\DIRECTIONAL_LIGHT.cpp">
+      <Filter>Components\Directional Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\EFFECT.cpp">
+      <Filter>Components\Unused Components\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\ENEMY_CONTROLLER.cpp">
+      <Filter>Components\Enemy Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.cpp">
+      <Filter>Components\Environmental Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\MESH.cpp">
+      <Filter>Components\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\MESH_COLLIDER.cpp">
+      <Filter>Components\Mesh Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\OBB_COLLIDER.cpp">
+      <Filter>Components\OBB Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\OBB_TERRAIN.cpp">
+      <Filter>Components\Unused Components\OBB Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\PLAYER_CONTROLLER.cpp">
+      <Filter>Components\Player Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\POINT_LIGHT.cpp">
+      <Filter>Components\Point Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\SPHERE_COLLIDER.cpp">
+      <Filter>Components\Sphere Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\SPOTLIGHT.cpp">
+      <Filter>Components\Spotlight</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\SPRITE_2D.cpp">
+      <Filter>Components\Sprite 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\TERRAIN_AUDIO.cpp">
+      <Filter>Components\Terrain Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\TRANSFORM_2D.cpp">
+      <Filter>Components\Transform 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Components\TRANSFORM_3D.cpp">
+      <Filter>Components\Transform 3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -340,48 +397,6 @@
     <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\ENVIRONMENTAL_AUDIO.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\MESH.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\OBB_COLLIDER.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\POINT_LIGHT.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\SPHERE_COLLIDER.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\SPOTLIGHT.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\SPRITE_2D.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_2D.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\TRANSFORM_3D.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\BGM.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\CAMERA_COMPONENT.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\CAPSULE_COLLIDER.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\DIRECTIONAL_LIGHT.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\EFFECT.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
@@ -397,20 +412,11 @@
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\PLAYER_CONTROLLER.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\ENEMY_CONTROLLER.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\GAMEOBJECT.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\MESH_COLLIDER.h">
-      <Filter>Components\Headers</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h">
       <Filter>Engine\Header</Filter>
@@ -435,12 +441,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\CerealHeaders.h">
       <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\OBB_TERRAIN.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Components\Headers\TERRAIN_AUDIO.h">
-      <Filter>Components\Headers</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Scenes\SCENE_DEMO.h">
       <Filter>Source Files\Scenes</Filter>
@@ -537,6 +537,66 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Text.h">
       <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\BGM.h">
+      <Filter>Components\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\CAMERA_COMPONENT.h">
+      <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\CAPSULE_COLLIDER.h">
+      <Filter>Components\Capsule Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\DIRECTIONAL_LIGHT.h">
+      <Filter>Components\Directional Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\EFFECT.h">
+      <Filter>Components\Unused Components\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\ENEMY_CONTROLLER.h">
+      <Filter>Components\Enemy Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.h">
+      <Filter>Components\Environmental Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\MESH.h">
+      <Filter>Components\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\MESH_COLLIDER.h">
+      <Filter>Components\Mesh Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\OBB_COLLIDER.h">
+      <Filter>Components\OBB Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\OBB_TERRAIN.h">
+      <Filter>Components\Unused Components\OBB Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\PLAYER_CONTROLLER.h">
+      <Filter>Components\Player Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\POINT_LIGHT.h">
+      <Filter>Components\Point Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\SPHERE_COLLIDER.h">
+      <Filter>Components\Sphere Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\SPOTLIGHT.h">
+      <Filter>Components\Spotlight</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\SPRITE_2D.h">
+      <Filter>Components\Sprite 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\TERRAIN_AUDIO.h">
+      <Filter>Components\Terrain Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\TRANSFORM_2D.h">
+      <Filter>Components\Transform 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\TRANSFORM_3D.h">
+      <Filter>Components\Transform 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\NPCDialogue.h">
+      <Filter>Components\NPC Dialogue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
