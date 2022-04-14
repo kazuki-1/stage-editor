@@ -1,7 +1,7 @@
 #include "GAMEOBJECT_2D.h"
 //#include "GAMEOBJECT.h"
-#include "Components\Headers\TRANSFORM_2D.h"
-#include "Components\Headers\TRANSFORM_3D.h"
+#include "Components\TRANSFORM_2D.h"
+#include "Components\TRANSFORM_3D.h"
 
 /*--------------------------------GAMEOBJECT_2D Constructor()----------------------------------*/
 

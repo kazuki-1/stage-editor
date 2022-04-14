@@ -18,3 +18,4 @@
 #include "../MESH_COLLIDER.h"
 #include "../OBB_TERRAIN.h"
 #include "../TERRAIN_AUDIO.h"
+#include "../NPCDialogue.h"

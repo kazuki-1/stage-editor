@@ -39,6 +39,7 @@
     <ClCompile Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.cpp" />
     <ClCompile Include="SourceCode\Components\MESH.cpp" />
     <ClCompile Include="SourceCode\Components\MESH_COLLIDER.cpp" />
+    <ClCompile Include="SourceCode\Components\NPCDialogue.cpp" />
     <ClCompile Include="SourceCode\Components\OBB_COLLIDER.cpp" />
     <ClCompile Include="SourceCode\Components\OBB_TERRAIN.cpp" />
     <ClCompile Include="SourceCode\Components\PLAYER_CONTROLLER.cpp" />

@@ -17,6 +17,7 @@ enum class COMPONENT_TYPE
     TERRAIN_AUDIO, 
     PLAYER_CONTROLLER,
     ENEMY_CONTROLLER, 
+    NPC_DIALOGUE,
     SPRITE_2D,
     EFFECT,                 // Unused
     CAMERA,                 // Unused

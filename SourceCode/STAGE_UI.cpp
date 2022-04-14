@@ -6,8 +6,8 @@
 #include "Engine/DEBUG_MANAGER.h"
 #include "GAMEOBJECT.h"
 #include "Components/Base Classes/DATAMANAGER.h"
-#include "Components/Headers/TRANSFORM_3D.h"
-#include "Components/Headers/MESH.h"
+#include "Components/TRANSFORM_3D.h"
+#include "Components/MESH.h"
 #include "Scenes/SCENEMANAGER.h"
 #include "Engine/Text.h"
 static int cur{};
@@ -229,7 +229,7 @@ void STAGE_UI::Render()
     for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
     {
         o.second->ExecuteUI();
-        o.second->RenderUI();
+        //o.second->RenderUI();
         o.second->Render();
     }
 

@@ -353,6 +353,9 @@
     <ClCompile Include="SourceCode\Components\TRANSFORM_3D.cpp">
       <Filter>Components\Transform 3D</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Components\NPCDialogue.cpp">
+      <Filter>Components\NPC Dialogue</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">

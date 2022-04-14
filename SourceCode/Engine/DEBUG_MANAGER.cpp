@@ -1,6 +1,6 @@
 #include "DEBUG_MANAGER.h"
 #include "../Components/Base Classes/COMPONENT.h"
-#include "../Components/Headers/TRANSFORM_3D.h"
+#include "../Components/TRANSFORM_3D.h"
 #include "../GAMEOBJECT_2D.h"
 #include "IMGUI.h"
 #include "Input.h"

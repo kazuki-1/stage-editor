@@ -4,10 +4,10 @@
 #include "Engine/Input.h"
 #include "Components/Base Classes/COMPONENT_CREATOR.h"
 #include "Components/Base Classes/COMPONENT.h"
-#include "Components/Headers/TRANSFORM_3D.h"
-#include "Components/Headers/MESH.h"
-#include "Components/Headers/PLAYER_CONTROLLER.h"
-std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGM", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "Sprite 2D"};
+#include "Components/TRANSFORM_3D.h"
+#include "Components/MESH.h"
+#include "Components/PLAYER_CONTROLLER.h"
+std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGM", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "NPC Dialogue", "Sprite 2D"};
 bool popup{};
 //int selected_comp{};
 

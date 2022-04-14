@@ -2,6 +2,10 @@
 #include "../../GAMEOBJECT.h"
 #include "COMPONENT.h"
 #include "COMPONENT_HEADERS.h"
+
+
+#pragma region Component Constructors
+
 std::shared_ptr<TRANSFORM_3D> __TRANSFORM_3D(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>d)
 {
     return std::make_shared<TRANSFORM_3D>(g, d.get());
@@ -70,10 +74,19 @@ std::shared_ptr<PLAYER_CONTROLLER>__PLAYER_CONTROLLER(GAMEOBJECT* g, std::shared
 {
     return std::make_shared<PLAYER_CONTROLLER>(g, d.get());
 }
+std::shared_ptr<NPCDialogue>__NPCDialogue(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>d)
+{
+    return std::make_shared<NPCDialogue>(g, d.get());
+}
 std::shared_ptr<COMPONENT>__COMPONENT(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>d)
 {
     return std::make_shared<COMPONENT>(g, d);
 }
+
+
+#pragma endregion
+
+#pragma region Component Data Constructors
 
 std::shared_ptr<TRANSFORM_3D_DATA>__TRANSFORM_3D_DATA()
 {
@@ -151,6 +164,10 @@ std::shared_ptr<ENEMY_CONTROLLER_DATA>__ENEMY_CONTROLLER_DATA()
 {
     return std::make_shared<ENEMY_CONTROLLER_DATA>();
 }
+std::shared_ptr<NPCDialogue_Data>__NPCDialogue_Data()
+{
+    return std::make_shared<NPCDialogue_Data>();
+}
 //std::shared_ptr<CYLINDER_COLLIDER_DATA>CCDD()
 //{
 //    return std::make_shared<CYLINDER_COLLIDER_DATA>();
@@ -161,10 +178,13 @@ std::shared_ptr<ENEMY_CONTROLLER_DATA>__ENEMY_CONTROLLER_DATA()
 //}
 
 
-
+#pragma endregion
 
 void COMPONENT_CREATOR::Initialize()
 {
+
+#pragma region Component Data Registering
+
     RegisterData(COMPONENT_TYPE::TRANSFORM_3D, __TRANSFORM_3D_DATA);
     RegisterData(COMPONENT_TYPE::TRANSFORM_2D, __TRANSFORM_2D_DATA);
     RegisterData(COMPONENT_TYPE::SPHERE_COL, __SPHERE_COLLIDER_DATA);
@@ -183,6 +203,11 @@ void COMPONENT_CREATOR::Initialize()
     RegisterData(COMPONENT_TYPE::CHARACTER, __CHARACTER_DATA);
     RegisterData(COMPONENT_TYPE::PLAYER_CONTROLLER, __PLAYER_CONTROLLER_DATA);
     RegisterData(COMPONENT_TYPE::ENEMY_CONTROLLER, __ENEMY_CONTROLLER_DATA);
+    RegisterData(COMPONENT_TYPE::NPC_DIALOGUE, __NPCDialogue_Data);
+
+#pragma endregion
+
+#pragma region Component Registering
 
     RegisterComponent(COMPONENT_TYPE::TRANSFORM_3D, __TRANSFORM_3D);
     RegisterComponent(COMPONENT_TYPE::TRANSFORM_2D, __TRANSFORM_2D);
@@ -200,6 +225,9 @@ void COMPONENT_CREATOR::Initialize()
     RegisterComponent(COMPONENT_TYPE::ENV_AUDIO, __ENVIRONMENTAL_AUDIO);
     RegisterComponent(COMPONENT_TYPE::PLAYER_CONTROLLER, __PLAYER_CONTROLLER);
     RegisterComponent(COMPONENT_TYPE::ENEMY_CONTROLLER, __ENEMY_CONTROLLER);
+    RegisterComponent(COMPONENT_TYPE::NPC_DIALOGUE, __NPCDialogue);
+
+#pragma endregion
 
 }
 void COMPONENT_CREATOR::RegisterComponent(COMPONENT_TYPE t, std::function<std::shared_ptr<COMPONENT>(GAMEOBJECT*, std::shared_ptr<COMPONENT_DATA>)> constructor)

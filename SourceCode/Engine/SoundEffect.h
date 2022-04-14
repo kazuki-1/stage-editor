@@ -1,5 +1,6 @@
 #pragma once
 #include "Audio.h"
+#include <assert.h>
 
 class SoundEffect : public AUDIO
 {

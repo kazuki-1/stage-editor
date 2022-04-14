@@ -1,10 +1,10 @@
 #include "COLLISION.h"
 #include "../Components/Base Classes/COMPONENT_DATA.h"
-#include "../Components/Headers/OBB_COLLIDER.h"
-#include "../Components/Headers/SPHERE_COLLIDER.h"
-#include "../Components/Headers/CAPSULE_COLLIDER.h"
-#include "../Components/Headers/MESH.h"
-#include "../Components/Headers/TRANSFORM_3D.h"
+#include "../Components/OBB_COLLIDER.h"
+#include "../Components/SPHERE_COLLIDER.h"
+#include "../Components/CAPSULE_COLLIDER.h"
+#include "../Components/MESH.h"
+#include "../Components/TRANSFORM_3D.h"
 using namespace COLLIDERS;
 
 /*---------------------------------------------------PointLineClosest()---------------------------------------------------*/

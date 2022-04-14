@@ -1,9 +1,9 @@
 #include "LIGHTING.h"
 #include "IMGUI.h"
 #include "../Components/Base Classes/COMPONENT.h"
-#include "../Components/Headers/DIRECTIONAL_LIGHT.h"
-#include "../Components/Headers/POINT_LIGHT.h"
-#include "../Components/Headers/SPOTLIGHT.h"
+#include "../Components/DIRECTIONAL_LIGHT.h"
+#include "../Components/POINT_LIGHT.h"
+#include "../Components/SPOTLIGHT.h"
 #include <filesystem>
 #pragma region LIGHTING
 
