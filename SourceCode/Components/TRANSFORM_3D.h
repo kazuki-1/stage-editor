@@ -47,6 +47,7 @@ public:
     /// <para> フレームごっこに呼び出せる </para>
     /// </summary>
     void Execute() override;
+    void ExecuteUI();
     /// <summary>
     /// <para>Called after Execute to perform any render functions </para>
     /// <para>Execute実行後に描画用関数を呼び出す関数</para>

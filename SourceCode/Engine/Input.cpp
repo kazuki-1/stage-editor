@@ -37,17 +37,17 @@ bool INPUTMANAGER::KEYSTATE::Triggered()
 #pragma endregion
 #pragma region KEYBOARD
 
-void INPUTMANAGER::KEYBOARD::ResetPressedState()
-{
-    //for (auto& k : Keys)
-    //    k.held = false;
-
-}
-void INPUTMANAGER::KEYBOARD::ResetReleasedState()
-{
-    //for (auto& k : Keys)
-    //    k.released = false;
-}
+//void INPUTMANAGER::KEYBOARD::ResetPressedState()
+//{
+//    //for (auto& k : Keys)
+//    //    k.held = false;
+//
+//}
+//void INPUTMANAGER::KEYBOARD::ResetReleasedState()
+//{
+//    //for (auto& k : Keys)
+//    //    k.released = false;
+//}
 void INPUTMANAGER::KEYBOARD::Execute()
 {
 #pragma region KEYSTATE SETTINGS
@@ -62,9 +62,13 @@ void INPUTMANAGER::KEYBOARD::Execute()
 		else
 			k.triggered = false;
 		if (k.code == 0 && k.last_code != k.code)
+		{
 			k.released = true;
+			k.last_code = k.code;
+		}
 		else
 			k.released = false;
+		k.last_code = k.code;
 	}
 
 #pragma endregion
@@ -275,7 +279,7 @@ void INPUTMANAGER::Execute()
 void INPUTMANAGER::ResetState()
 {
 	mouse->ResetState();
-	keyboard->ResetReleasedState();
+	//keyboard->ResetReleasedState();
 }
 void INPUTMANAGER::DragMousePosition(Vector2* v, KEYSTATE* k)
 {

@@ -82,18 +82,15 @@ public:
     void Resume();
     /// <summary>
     /// <para> Performs audio ducking. dock_target variable will be exempt </para>
-    /// <para> •™©`•«•£•™•¿•√•≠•Û•∞§Ú––§¶°£dock_target§œ≥˝Õ‚§µ§ÅEÅE/para>
     /// </summary>
     /// <param name="dock_target"></param>
     void PerformDucking(std::shared_ptr<AUDIO>dock_target = {});
     /// <summary>
     /// <para> Stops audio ducking if is ducking. </para>
-    /// <para> •¿•√•≠•Û•∞§Ú÷π§·§ÅE</para>
     /// </summary>
     void StopDucking();
     /// <summary>
     /// <para> Returns true if audio is in ducking state </para>
-    /// <para> •™©`•«•£•™§œ•¿•√•≠•Û•∞•π•∆©`•»§«§¢§ÅE–True§Ú∑µ§π</para>
     /// </summary>
     /// <returns></returns>
     bool IsDucking();

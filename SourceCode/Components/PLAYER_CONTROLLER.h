@@ -24,7 +24,6 @@ public:
 };
 
 
-//TODO Velocity control and terrain sound
 class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
 {
     PLAYER_CONTROLLER_DATA* data;
@@ -75,7 +74,7 @@ class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
     /// </summary>
     void TerrainAudioCollision();
 
-
+    bool inDialogue{};
 public:
     PLAYER_CONTROLLER(GAMEOBJECT* g, COMPONENT_DATA* d);
     /// <summary>
@@ -124,6 +123,8 @@ public:
     /// <para> âÒì]ÇçXêV</para>
     /// </summary>
     void UpdateRotation() override;
+
+    void NPCDialogueTrigger();
 };
 
 CEREAL_REGISTER_TYPE(PLAYER_CONTROLLER_DATA)

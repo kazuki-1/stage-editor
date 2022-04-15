@@ -42,8 +42,8 @@ public:
 
 	public:
 		KEYBOARD() {};
-		void ResetPressedState();
-		void ResetReleasedState();
+		//void ResetPressedState();
+		//void ResetReleasedState();
 		void Execute();
 
 		void KeyDown(unsigned int k);
@@ -135,7 +135,7 @@ public:
 };
 
 
-namespace IN_BOOL
+namespace KEYS
 {
 	enum MBS
 	{
@@ -161,6 +161,21 @@ namespace IN_BOOL
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Held();
 
 		}
+		return false;
+	}
+	inline bool Triggered(MBS mb)
+	{
+		switch (mb)
+		{
+		case LB:
+			return INPUTMANAGER::Instance()->Mouse()->LButton().Triggered();
+		case RB:
+			return INPUTMANAGER::Instance()->Mouse()->RButton().Triggered();
+		case MB:
+			return INPUTMANAGER::Instance()->Mouse()->MButton().Triggered();
+
+		}
+		return false;
 	}
 	inline bool Released(MBS mb)
 	{
@@ -174,6 +189,9 @@ namespace IN_BOOL
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Released();
 
 		}
+		return false;
 	}
 
 }
+
+

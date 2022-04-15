@@ -224,7 +224,22 @@ namespace Math
             return XMLoadFloat2(&temp);
         }
 
-
+        static Vector2 Distance(Vector2& v1, Vector2& v2)
+        {
+            return v2 - v1;
+        }
+        static float Dot(Vector2& v1, Vector2& v2)
+        {
+            return v1.Dot(v2);
+        }
+        static float Length(Vector2& v)
+        {
+            return v.Length();
+        }
+        static float LengthSq(Vector2& v)
+        {
+            return v.LengthSq();
+        }
         template <class T>
         void serialize(T& t)
         {
@@ -389,6 +404,15 @@ namespace Math
             tar = &v;
         }
         /// <summary>
+        /// Returns a normalized Vector3 of this vector
+        /// </summary>
+        /// <returns></returns>
+        Vector3 Normalized()
+        {
+            float l{ Length() };
+            return { x / l, y / l, z / l };
+        }
+        /// <summary>
         /// Returns the cross product between this and the target Vector3
         /// </summary>
         /// <param name="tar"> : Target Vector3</param>
@@ -427,8 +451,34 @@ namespace Math
 
             return XMLoadFloat3(&temp);
         }
-
-
+        /// <summary>
+        /// Returns the length of the Vector3
+        /// </summary>
+        /// <returns></returns>
+        static float Length(Vector3& v)
+        {
+            return v.Length();
+        }
+        /// <summary>
+        /// Returns the square length of the Vector3
+        /// </summary>
+        /// <returns></returns>
+        static float LengthSq(Vector3& v)
+        {
+            return v.LengthSq();
+        }
+        static float Dot(Vector3& v1, Vector3& v2)
+        {
+            return v1.Dot(v2);
+        }
+        static Vector3 Distance(Vector3& v1, Vector3& v2)
+        {
+            return v2 - v1;
+        }
+        static Vector3 Cross(Vector3& v1, Vector3& v2)
+        {
+            return v1.Cross(v2);
+        }
 
         template <class T>
         void serialize(T& t)

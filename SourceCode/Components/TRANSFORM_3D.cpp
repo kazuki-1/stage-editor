@@ -65,6 +65,18 @@ void TRANSFORM_3D::Execute()
 
 }
 
+/*---------------------------------------TRANSFORM_3D ExecuteUI()-------------------------------------------------*/
+
+void TRANSFORM_3D::ExecuteUI()
+{
+    XMMATRIX S, R, T;
+    S = XMMatrixScalingFromVector(data->scale.XMV());
+    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(ToRadians(data->rotation).XMV()) );
+    R = XMMatrixRotationQuaternion(quaternion.XMV());
+    T = XMMatrixTranslationFromVector(data->translation.XMV());
+    XMStoreFloat4x4(&transform, S * R * T);
+}
+
 /*---------------------------------------TRANSFORM_3D Render()-------------------------------------------------*/
 /// <summary>
 /// <para>Called after Execute to perform any render functions </para>

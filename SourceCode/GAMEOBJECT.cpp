@@ -107,7 +107,7 @@ void GAMEOBJECT::ExecuteUI()
             continue;
         c->Execute();
     }
-    GetComponent<TRANSFORM_3D>()->Execute();
+    GetComponent<TRANSFORM_3D>()->ExecuteUI();
 
 }
 

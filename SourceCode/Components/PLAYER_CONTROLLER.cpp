@@ -8,6 +8,8 @@
 #include "ENVIRONMENTAL_AUDIO.h"
 #include "CAPSULE_COLLIDER.h"
 #include "TERRAIN_AUDIO.h"
+#include "NPCDialogue.h"
+#include "../DialogueManager.h"
 #define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;
 std::vector<Vector3>receivers;
@@ -364,6 +366,11 @@ void PLAYER_CONTROLLER::Execute()
     Vector3 position = GetComponent<TRANSFORM_3D>()->Translation();
     position.y += 5.0f;
     Camera::Instance()->SetTarget(position);
+    inDialogue = DialogueController::Instance()->GetStatus();
+
+    if (inDialogue)
+        return;
+
     MovementInput();
     RotationInput();
     JumpInput();
@@ -374,6 +381,7 @@ void PLAYER_CONTROLLER::Execute()
     VelocityControl();
     TerrainAudioCollision();
     AnimationSettings();
+    NPCDialogueTrigger();
 
 }
 
@@ -462,3 +470,38 @@ void PLAYER_CONTROLLER::UpdateRotation()
 
 }
 
+/*--------------------------------------------------------PLAYER_CONTROLLER NPCDialogueTrigger()-------------------------------------------------*/
+
+void PLAYER_CONTROLLER::NPCDialogueTrigger()
+{
+    if (inDialogue)
+        return;
+    std::vector<GAMEOBJECT*>npcs;
+    for (auto& g : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    {
+        if (g.second->GetComponent<NPCDialogue>())
+            npcs.push_back(g.second.get());
+    }
+    TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
+    Vector3 player_pos = transform->Translation();
+    for (auto npc : npcs)
+    {
+        Vector3 target_pos{ npc->GetComponent<TRANSFORM_3D>()->Translation() };
+
+        Vector3 distance = Vector3::Distance(player_pos, target_pos);
+        Vector3 n_TargetPos{target_pos.Normalized()}, n_PlayerPos{player_pos.Normalized()};
+        float angle_diff = Math::GetAngle(n_PlayerPos, n_TargetPos);
+        float length{ Length(distance) };
+        if (angle_diff < ToRadians(90) && Length(distance) < 10.0f)
+        {
+            if (INPUTMANAGER::Instance()->Keyboard()->Triggered('F'))
+            {
+                npc->GetComponent<NPCDialogue>()->Trigger();
+                inDialogue = true;
+            }
+        }
+        
+    }
+
+
+}

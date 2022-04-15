@@ -50,6 +50,7 @@
     <ClCompile Include="SourceCode\Components\TERRAIN_AUDIO.cpp" />
     <ClCompile Include="SourceCode\Components\TRANSFORM_2D.cpp" />
     <ClCompile Include="SourceCode\Components\TRANSFORM_3D.cpp" />
+    <ClCompile Include="SourceCode\DialogueController.cpp" />
     <ClCompile Include="SourceCode\Engine\Audio.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="SourceCode\Components\TERRAIN_AUDIO.h" />
     <ClInclude Include="SourceCode\Components\TRANSFORM_2D.h" />
     <ClInclude Include="SourceCode\Components\TRANSFORM_3D.h" />
+    <ClInclude Include="SourceCode\DialogueManager.h" />
     <ClInclude Include="SourceCode\Engine\Audio.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h" />

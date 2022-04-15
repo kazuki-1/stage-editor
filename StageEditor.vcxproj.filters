@@ -150,12 +150,15 @@
     <Filter Include="Components\NPC Dialogue">
       <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DialogueManager">
+      <UniqueIdentifier>{1c211116-b97e-4698-aa8a-5bf62992261b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject">
+      <UniqueIdentifier>{530aa874-d386-42aa-bcdf-3d02ceb806a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\GAMEOBJECT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="External\ImGui\imgui.cpp">
@@ -192,9 +195,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\STAGE_UI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Graphics.cpp">
@@ -356,6 +356,15 @@
     <ClCompile Include="SourceCode\Components\NPCDialogue.cpp">
       <Filter>Components\NPC Dialogue</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\DialogueController.cpp">
+      <Filter>Source Files\DialogueManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GAMEOBJECT.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -414,12 +423,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT.h">
       <Filter>Components\Base Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\GAMEOBJECT.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h">
       <Filter>Engine\Header</Filter>
@@ -600,6 +603,15 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Components\NPCDialogue.h">
       <Filter>Components\NPC Dialogue</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DialogueManager.h">
+      <Filter>Source Files\DialogueManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GAMEOBJECT.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
+      <Filter>Source Files\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -210,7 +210,6 @@ void AudioController::Resume()
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Performs audio ducking. dock_target variable will be exempt </para>
-/// <para> •™©`•«•£•™•¿•√•≠•Û•∞§Ú––§¶°£dock_target§œ≥˝Õ‚§µ§ÅEÅE/para>
 /// </summary>
 /// <param name="dock_target"></param>
 void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
@@ -225,7 +224,6 @@ void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
 /*---------------------------------------------------AUDIO STATE MACHINE PerformDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Stops audio ducking if is ducking. </para>
-/// <para> •¿•√•≠•Û•∞§Ú÷π§·§ÅE</para>
 /// </summary>
 void AudioController::StopDucking()
 {
@@ -238,7 +236,6 @@ void AudioController::StopDucking()
 /*---------------------------------------------------AUDIO STATE MACHINE IsDucking()------------------------------------------------*/
 /// <summary>
 /// <para> Returns true if audio is in ducking state </para>
-/// <para> •™©`•«•£•™§œ•¿•√•≠•Û•∞•π•∆©`•»§«§¢§ÅE–True§Ú∑µ§π</para>
 /// </summary>
 /// <returns></returns>
 bool AudioController::IsDucking()

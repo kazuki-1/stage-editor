@@ -3,13 +3,15 @@
 #include "../STAGE_UI.h"
 #include "../Audio/AudioController.h"
 #include "../Components\Base Classes\DATAMANAGER.h"
+#include "../DialogueManager.h"
 #include "../Engine/IMGUI.h"
-
+#include "../DialogueManager.h"
 
 /*--------------------------------------------------SCENE_DEMO Insert()-------------------------------------*/
 
 HRESULT SCENE_DEMO::Initialize()
 {
+    DialogueController::Instance()->Initialize(L"./Data/Images/text_box.png", {50, 600}, {800, 200});
     DATAMANAGER::Instance()->InsertAndInitialize();
     AudioController::Instance()->Initialize();
     return S_OK;
@@ -32,6 +34,7 @@ void SCENE_DEMO::Render()
     GAMEOBJECTS->Render();  
     STAGE_UI::Instance()->PlayUI();
     AudioController::Instance()->DebugUI();
+    DialogueController::Instance()->Render();
     IMGUI::Instance()->Render();
 
 }
