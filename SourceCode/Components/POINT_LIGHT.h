@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class POINT_LIGHT_DATA : public COMPONENT_DATA
+class POINT_LIGHT_DATA : public ComponentData
 {
 public:
     POINT_LIGHT_DATA();
@@ -12,17 +12,17 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), position, colour, range, placeholder);
+        t(cereal::base_class<ComponentData>(this), position, colour, range, placeholder);
     }
 };
 
 
-class POINT_LIGHT : public COMPONENT
+class POINT_LIGHT : public Component
 {
     std::shared_ptr<LIGHTING>light;
     POINT_LIGHT_DATA* data;
 public:
-    POINT_LIGHT(GAMEOBJECT* t, COMPONENT_DATA* data);
+    POINT_LIGHT(GameObject* t, ComponentData* data);
 
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>

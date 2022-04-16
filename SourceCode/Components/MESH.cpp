@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "MESH.h"
 #include "TRANSFORM_3D.h"
 
@@ -20,7 +20,7 @@ MESH_DATA::MESH_DATA()
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------MESH Constructor-----------------------------------------------------------*/
 
-MESH::MESH(GAMEOBJECT* t, COMPONENT_DATA* data)
+MESH::MESH(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<MESH_DATA*>(data);
@@ -28,7 +28,7 @@ MESH::MESH(GAMEOBJECT* t, COMPONENT_DATA* data)
 
 /*----------------------------------------------------------MESH Initialize()-----------------------------------------------------------*/
 /// <summary>
-/// <para>Called when component is created. Initializes the component with the component data of its matching type (CAPSULE_COLLIDER_DATA)</para>
+/// <para>Called when component is created. Initializes the component with the component data of its matching type (CapsuleCollider_Data)</para>
 /// <para> 生成時に呼び出す。対象のデータを使って初期化する (CAPSULE COLLIDER DATA) </para>
 /// </summary>
 /// <returns></returns>

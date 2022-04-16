@@ -1,4 +1,4 @@
-#include "CAPSULE_COLLIDER.h"
+#include "CapsuleCollider.h"
 #include "MESH.h"
 #include "TRANSFORM_3D.h"
 #include "PLAYER_CONTROLLER.h"
@@ -10,7 +10,7 @@ int selected_bone_c{};
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------CAPSULE COLLIDER DATA Constructor------------------------------------------*/
 
-CAPSULE_COLLIDER_DATA::CAPSULE_COLLIDER_DATA()
+CapsuleCollider_Data::CapsuleCollider_Data()
 {
     type = COMPONENT_TYPE::CAPSULE_COL;
 }
@@ -20,19 +20,19 @@ CAPSULE_COLLIDER_DATA::CAPSULE_COLLIDER_DATA()
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------CAPSULE COLLIDER Constructor-----------------------------------------------*/
 
-CAPSULE_COLLIDER::CAPSULE_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data)
+CapsuleCollider::CapsuleCollider(GameObject* t, ComponentData* data)
 {
     parent = t;
-    this->data = static_cast<CAPSULE_COLLIDER_DATA*>(data);
+    this->data = static_cast<CapsuleCollider_Data*>(data);
 }
 
 /*----------------------------------------------CAPSULE COLLIDER Initialize()------------------------------------------*/
 /// <summary>
-/// <para>Called when component is created. Initializes the component with the component data of its matching type (CAPSULE_COLLIDER_DATA)</para>
+/// <para>Called when component is created. Initializes the component with the component data of its matching type (CapsuleCollider_Data)</para>
 /// <para> 生成時に呼び出す。対象のデータを使って初期化する (CAPSULE COLLIDER DATA) </para>
 /// </summary>
 /// <returns></returns>
-HRESULT CAPSULE_COLLIDER::Initialize()
+HRESULT CapsuleCollider::Initialize()
 {
     // Creates a collider and its debug primitive using the data
     collider = std::make_shared<COLLIDERS::CAPSULE>(data->center, data->radius, data->height);
@@ -50,7 +50,7 @@ HRESULT CAPSULE_COLLIDER::Initialize()
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void CAPSULE_COLLIDER::Execute()
+void CapsuleCollider::Execute()
 {
     // Updates the properties of the collider
     TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
@@ -75,7 +75,7 @@ void CAPSULE_COLLIDER::Execute()
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void CAPSULE_COLLIDER::Execute(XMMATRIX transform)
+void CapsuleCollider::Execute(XMMATRIX transform)
 {
     // Updates the properties of the collider
     XMMATRIX world{ XMMatrixIdentity() };
@@ -101,7 +101,7 @@ void CAPSULE_COLLIDER::Execute(XMMATRIX transform)
 /// <para> Called after Execute() to perform any render functions </para>
 /// <para> Execute()後にレンダー関数を実行するように毎フレームに呼び出す </para>
 /// </summary>
-void CAPSULE_COLLIDER::Render()
+void CapsuleCollider::Render()
 {
     if (collider) {
         collider->Render();
@@ -115,7 +115,7 @@ void CAPSULE_COLLIDER::Render()
 /// <para> Renders the UI for this component </para>
 /// <para> UIを描画 </para>
 /// </summary>
-void CAPSULE_COLLIDER::UI()
+void CapsuleCollider::UI()
 {
     if (!collider)
         collider = std::make_shared<COLLIDERS::CAPSULE>(data->center, data->height, data->radius);
@@ -179,7 +179,7 @@ void CAPSULE_COLLIDER::UI()
 /// <para> プレイヤーとの距離を計算する </para>    
 /// </summary>
 /// <returns></returns>
-Vector3 CAPSULE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
+Vector3 CapsuleCollider::DistanceToPlayer(PLAYER_CONTROLLER* target)
 {
     Vector3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
     return COLLIDERS::PointLineClosest(player_position, collider.get());
@@ -190,9 +190,9 @@ Vector3 CAPSULE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 /// <para> Perform collision check to the target gameObject </para>
 /// <para> ゲームオブジェクトに当たり判定を計算 </para>
 /// </summary
-bool CAPSULE_COLLIDER::Collide(GAMEOBJECT* target)
+bool CapsuleCollider::Collide(GameObject* target)
 {
-    CAPSULE_COLLIDER* other = target->GetComponent<CAPSULE_COLLIDER>();
+    CapsuleCollider* other = target->GetComponent<CapsuleCollider>();
     if (other)
     {
         return collider->Collide(other->Collider().get());
@@ -204,7 +204,7 @@ bool CAPSULE_COLLIDER::Collide(GAMEOBJECT* target)
 /// <para> 座標点を基づいて当たり判定を計算 </para>
 /// </summary>
 /// <returns></returns>
-bool CAPSULE_COLLIDER::Collide(Vector3 p)
+bool CapsuleCollider::Collide(Vector3 p)
 {
     return collider->Collide(p);
 }
@@ -214,7 +214,7 @@ bool CAPSULE_COLLIDER::Collide(Vector3 p)
 /// Returns the name of the bone the collider is attached to
 /// </summary>
 /// <returns></returns>
-const std::string& CAPSULE_COLLIDER::BoneName()
+const std::string& CapsuleCollider::BoneName()
 {
     return data->bone_name;
 }
@@ -224,7 +224,7 @@ const std::string& CAPSULE_COLLIDER::BoneName()
 /// Returns the name of the collider
 /// </summary>
 /// <returns></returns>
-const std::string& CAPSULE_COLLIDER::ColliderName()
+const std::string& CapsuleCollider::ColliderName()
 {
     return std::string(data->name);
 }
@@ -234,7 +234,7 @@ const std::string& CAPSULE_COLLIDER::ColliderName()
 /// Returns the center point of the collider
 /// </summary>
 /// <returns></returns>
-const Vector3 CAPSULE_COLLIDER::Center()
+const Vector3 CapsuleCollider::Center()
 {
     return data->center;
 }
@@ -244,7 +244,7 @@ const Vector3 CAPSULE_COLLIDER::Center()
 /// Returns the radius of the collider
 /// </summary>
 /// <returns></returns>
-const float CAPSULE_COLLIDER::Radius()
+const float CapsuleCollider::Radius()
 {
     return data->radius;
 }
@@ -254,7 +254,7 @@ const float CAPSULE_COLLIDER::Radius()
 /// Returns the height of the collider
 /// </summary>
 /// <returns></returns>
-const float CAPSULE_COLLIDER::Height()
+const float CapsuleCollider::Height()
 {
     return data->height;
 }
@@ -264,21 +264,21 @@ const float CAPSULE_COLLIDER::Height()
 /// Returns the data class that stores all the data used in this component
 /// </summary>
 /// <returns></returns>
-CAPSULE_COLLIDER_DATA* CAPSULE_COLLIDER::Data()
+CapsuleCollider_Data* CapsuleCollider::Data()
 {
     return data;
 }
 
 /*----------------------------------------------CAPSULE COLLIDER Collider()------------------------------------------*/
 
-std::shared_ptr<COLLIDERS::COLLIDER_BASE>CAPSULE_COLLIDER::Collider()
+std::shared_ptr<COLLIDERS::COLLIDER_BASE>CapsuleCollider::Collider()
 {
     return collider;
 }
 
 /*----------------------------------------------CAPSULE COLLIDER GetComponentType()------------------------------------------*/
 
-COMPONENT_TYPE CAPSULE_COLLIDER::GetComponentType()
+COMPONENT_TYPE CapsuleCollider::GetComponentType()
 {
     return data->type;
 }

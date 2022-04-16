@@ -3,18 +3,18 @@
 #include <map>
 #include "../../Engine/Singleton.h"
 enum class COMPONENT_TYPE;
-class COMPONENT;
-class GAMEOBJECT;
-class COMPONENT_DATA;
+class Component;
+class GameObject;
+class ComponentData;
 
 
 
-class COMPONENT_CREATOR : public Singleton<COMPONENT_CREATOR>
+class ComponentCreator : public Singleton<ComponentCreator>
 {
-    std::map<COMPONENT_TYPE, std::function<std::shared_ptr<COMPONENT>(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>)>>componentTypes;
-    std::map<COMPONENT_TYPE, std::function<std::shared_ptr<COMPONENT_DATA>()>>dataTypes;
-    void RegisterComponent(COMPONENT_TYPE t, std::function<std::shared_ptr<COMPONENT>(GAMEOBJECT*, std::shared_ptr<COMPONENT_DATA>)> constructor);
-    void RegisterData(COMPONENT_TYPE t, std::function<std::shared_ptr<COMPONENT_DATA>()>constructor);
+    std::map<COMPONENT_TYPE, std::function<std::shared_ptr<Component>(GameObject* g, std::shared_ptr<ComponentData>)>>componentTypes;
+    std::map<COMPONENT_TYPE, std::function<std::shared_ptr<ComponentData>()>>dataTypes;
+    void RegisterComponent(COMPONENT_TYPE t, std::function<std::shared_ptr<Component>(GameObject*, std::shared_ptr<ComponentData>)> constructor);
+    void RegisterData(COMPONENT_TYPE t, std::function<std::shared_ptr<ComponentData>()>constructor);
 public:
     /// <summary>
     /// <para> Register all the types of component and its respective component data into the map </para>
@@ -27,13 +27,13 @@ public:
     /// <param name="g : ">GameObject parent, basically the gameobject where you are registering the component to</param>
     /// <param name="data"></param>
     /// <returns></returns>
-    std::shared_ptr<COMPONENT>Instantiate(GAMEOBJECT* g, std::shared_ptr<COMPONENT_DATA>data);
+    std::shared_ptr<Component>Instantiate(GameObject* g, std::shared_ptr<ComponentData>data);
     /// <summary>
     /// <para> Instantiate a component data based on the component type </para>
     /// <para> 引数にあるコンポネントタイプを基づきコンポネントデータを生成　</para>
     /// </summary>
     /// <returns></returns>
-    std::shared_ptr<COMPONENT_DATA>Instantiate(COMPONENT_TYPE t);
+    std::shared_ptr<ComponentData>Instantiate(COMPONENT_TYPE t);
 };
 
-#define INSTANTIATE COMPONENT_CREATOR::Instance()->Instantiate
+#define INSTANTIATE ComponentCreator::Instance()->Instantiate

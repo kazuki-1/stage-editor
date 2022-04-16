@@ -1,22 +1,22 @@
-#include "GAMEOBJECT.h"
+#include "GameObject.h"
 #include "GAMEOBJECT_2D.h"
 #include "Engine/DROPMANAGER.h"
 #include "Engine/Input.h"
-#include "Components/Base Classes/COMPONENT_CREATOR.h"
-#include "Components/Base Classes/COMPONENT.h"
+#include "Components/Base Classes/ComponentCreator.h"
+#include "Components/Base Classes/Component.h"
 #include "Components/TRANSFORM_3D.h"
 #include "Components/MESH.h"
 #include "Components/PLAYER_CONTROLLER.h"
-std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGM", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "NPC Dialogue", "Sprite 2D"};
+std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGMComponent", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "NPC Dialogue", "Sprite 2D"};
 bool popup{};
 //int selected_comp{};
 
 
 #pragma region MAIN_FUNCTIONS
 
-/*--------------------------------GAMEOBJECT Constructor----------------------------------*/
+/*--------------------------------GameObject Constructor----------------------------------*/
 
-GAMEOBJECT::GAMEOBJECT(std::shared_ptr<OBJECT_DATA>d)
+GameObject::GameObject(std::shared_ptr<OBJECT_DATA>d)
 {
     data = d;
     //name_buffer = (char*)data->name.c_str();
@@ -24,9 +24,9 @@ GAMEOBJECT::GAMEOBJECT(std::shared_ptr<OBJECT_DATA>d)
         name_buffer[a] = data->name[a];
 }
 
-/*--------------------------------GAMEOBJECT Initialize()----------------------------------*/
+/*--------------------------------GameObject Initialize()----------------------------------*/
 
-HRESULT GAMEOBJECT::Initialize()
+HRESULT GameObject::Initialize()
 {
     if (data->Dataset().size() <= 0)
         __InternalAddComponent(COMPONENT_TYPE::TRANSFORM_3D);
@@ -40,9 +40,9 @@ HRESULT GAMEOBJECT::Initialize()
     return S_OK;
 }
 
-/*--------------------------------GAMEOBJECT Execute()----------------------------------*/
+/*--------------------------------GameObject Execute()----------------------------------*/
 
-void GAMEOBJECT::Execute()
+void GameObject::Execute()
 {
     //if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
     //{
@@ -75,8 +75,8 @@ void GAMEOBJECT::Execute()
 
 }
 
-/*--------------------------------GAMEOBJECT ExecuteUI()----------------------------------*/
-void GAMEOBJECT::ExecuteUI()
+/*--------------------------------GameObject ExecuteUI()----------------------------------*/
+void GameObject::ExecuteUI()
 {
     if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
     {
@@ -112,9 +112,9 @@ void GAMEOBJECT::ExecuteUI()
 }
 
 
-/*--------------------------------GAMEOBJECT Render()----------------------------------*/
+/*--------------------------------GameObject Render()----------------------------------*/
 
-void GAMEOBJECT::Render()
+void GameObject::Render()
 {
     for (auto& c : components)
     {
@@ -125,9 +125,9 @@ void GAMEOBJECT::Render()
     GetComponent<TRANSFORM_3D>()->Render();
 }
 
-/*--------------------------------GAMEOBJECT RenderUI()----------------------------------*/
+/*--------------------------------GameObject RenderUI()----------------------------------*/
 
-void GAMEOBJECT::RenderUI()
+void GameObject::RenderUI()
 {
     ImGui::InputText("Name", name_buffer, 256);
     data->name = name_buffer;
@@ -181,23 +181,23 @@ void GAMEOBJECT::RenderUI()
 #pragma endregion
 #pragma region SUB_FUNCTIONS
 
-/*--------------------------------GAMEOBJECT Reset()----------------------------------*/
+/*--------------------------------GameObject Reset()----------------------------------*/
 
-void GAMEOBJECT::Reset()
+void GameObject::Reset()
 {
 
 }
 
-/*--------------------------------GAMEOBJECT Activate()----------------------------------*/
+/*--------------------------------GameObject Activate()----------------------------------*/
 
-void GAMEOBJECT::Activate()
+void GameObject::Activate()
 {
     windowActive = true;
 }
 
-/*--------------------------------GAMEOBJECT Deactivate()----------------------------------*/
+/*--------------------------------GameObject Deactivate()----------------------------------*/
 
-void GAMEOBJECT::Deactivate()
+void GameObject::Deactivate()
 {
     windowActive = false;
 }
@@ -205,35 +205,35 @@ void GAMEOBJECT::Deactivate()
 #pragma endregion
 #pragma region COMPONENT INSERTION
 
-/*--------------------------------GAMEOBJECT __InternalAddComponent()----------------------------------*/
+/*--------------------------------GameObject __InternalAddComponent()----------------------------------*/
 
-void GAMEOBJECT::__InternalAddComponent(COMPONENT_TYPE t)
+void GameObject::__InternalAddComponent(COMPONENT_TYPE t)
 {
-    data->dataset.push_back(COMPONENT_CREATOR::Instance()->Instantiate(t));
+    data->dataset.push_back(ComponentCreator::Instance()->Instantiate(t));
     components.push_back(INSTANTIATE(this, data->dataset.back()));
     components.back()->Initialize();
 
 }
-void GAMEOBJECT::__InternalAddComponent(COMPONENT_TYPE t, std::shared_ptr<COMPONENT_DATA>d)
+void GameObject::__InternalAddComponent(COMPONENT_TYPE t, std::shared_ptr<ComponentData>d)
 {
     components.push_back(INSTANTIATE(this, d));
     components.back()->Initialize();
 
 }
 
-/*--------------------------------GAMEOBJECT AddComponent()----------------------------------*/
+/*--------------------------------GameObject AddComponent()----------------------------------*/
 
-void GAMEOBJECT::AddComponent(COMPONENT_TYPE t)
+void GameObject::AddComponent(COMPONENT_TYPE t)
 {
-    data->dataset.push_back(COMPONENT_CREATOR::Instance()->Instantiate(t));
+    data->dataset.push_back(ComponentCreator::Instance()->Instantiate(t));
     components.push_back(INSTANTIATE(this, data->dataset.back()));
     components.back()->Initialize();
 
 }
 
-/*--------------------------------GAMEOBJECT RemoveComponent()----------------------------------*/
+/*--------------------------------GameObject RemoveComponent()----------------------------------*/
 
-void GAMEOBJECT::RemoveComponent(int id)
+void GameObject::RemoveComponent(int id)
 {
     components.erase(components.begin() + id);
     data->Remove(id);
@@ -242,16 +242,16 @@ void GAMEOBJECT::RemoveComponent(int id)
 #pragma endregion
 #pragma region GETTERS
 
-/*--------------------------------GAMEOBJECT Data()----------------------------------*/
+/*--------------------------------GameObject Data()----------------------------------*/
 
-std::shared_ptr<OBJECT_DATA>GAMEOBJECT::Data()
+std::shared_ptr<OBJECT_DATA>GameObject::Data()
 {
     return data;
 }
 
-/*--------------------------------GAMEOBJECT Components()----------------------------------*/
+/*--------------------------------GameObject Components()----------------------------------*/
 
-std::vector<std::shared_ptr<COMPONENT>>GAMEOBJECT::Components()
+std::vector<std::shared_ptr<Component>>GameObject::Components()
 {
     return components;
 }
@@ -259,34 +259,34 @@ std::vector<std::shared_ptr<COMPONENT>>GAMEOBJECT::Components()
 #pragma endregion
 #pragma region GAMEOBJECT MANAGER
 
-/*--------------------------------GAMEOBJECT_MANAGER Insert()----------------------------------*/
+/*--------------------------------GameObjectManager Insert()----------------------------------*/
 
-void GAMEOBJECT_MANAGER::Insert(std::string n, std::shared_ptr<OBJECT_DATA>d)
+void GameObjectManager::Insert(std::string n, std::shared_ptr<OBJECT_DATA>d)
 {
-    gameObjects.insert(std::make_pair(n, std::make_shared<GAMEOBJECT>(d)));
+    gameObjects.insert(std::make_pair(n, std::make_shared<GameObject>(d)));
     gameObjects.find(n)->second->Initialize();
 
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Insert2D()----------------------------------*/
+/*--------------------------------GameObjectManager Insert2D()----------------------------------*/
 
-void GAMEOBJECT_MANAGER::Insert2D(std::string n, std::shared_ptr<OBJECT_DATA>d)
+void GameObjectManager::Insert2D(std::string n, std::shared_ptr<OBJECT_DATA>d)
 {
-    gameObjects.insert(std::make_pair(n, std::make_shared<GAMEOBJECT_2D>(d)));
+    gameObjects.insert(std::make_pair(n, std::make_shared<GameObject_2D>(d)));
     gameObjects.find(n)->second->Initialize();
 
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Retrieve()----------------------------------*/
+/*--------------------------------GameObjectManager Retrieve()----------------------------------*/
 
-std::shared_ptr<GAMEOBJECT> GAMEOBJECT_MANAGER::Retrieve(std::string n)
+std::shared_ptr<GameObject> GameObjectManager::Retrieve(std::string n)
 {
     return gameObjects.find(n)->second;
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER RetrieveName()----------------------------------*/
+/*--------------------------------GameObjectManager RetrieveName()----------------------------------*/
 
-std::string GAMEOBJECT_MANAGER::RetrieveName(std::shared_ptr<GAMEOBJECT>go)
+std::string GameObjectManager::RetrieveName(std::shared_ptr<GameObject>go)
 {
     for (auto& g : gameObjects)
         if (g.second == go)
@@ -295,90 +295,90 @@ std::string GAMEOBJECT_MANAGER::RetrieveName(std::shared_ptr<GAMEOBJECT>go)
     return "";
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Remove()----------------------------------*/
+/*--------------------------------GameObjectManager Remove()----------------------------------*/
 
-void GAMEOBJECT_MANAGER::Remove(std::string n)
+void GameObjectManager::Remove(std::string n)
 {
     gameObjects.erase(n);
     
 }
-void GAMEOBJECT_MANAGER::Remove(std::shared_ptr<GAMEOBJECT>gameObject)
+void GameObjectManager::Remove(std::shared_ptr<GameObject>gameObject)
 {
     std::string target{ RetrieveName(gameObject) };
     Remove(target);
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Clear()----------------------------------*/
+/*--------------------------------GameObjectManager Clear()----------------------------------*/
 
-void GAMEOBJECT_MANAGER::Clear()
+void GameObjectManager::Clear()
 {
     gameObjects.clear();
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER GameObjects()----------------------------------*/
+/*--------------------------------GameObjectManager GetGameObjects()----------------------------------*/
 
-std::map<std::string, std::shared_ptr<GAMEOBJECT>>GAMEOBJECT_MANAGER::GameObjects()
+std::map<std::string, std::shared_ptr<GameObject>>GameObjectManager::GetGameObjects()
 {
     return gameObjects;
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Initialize()----------------------------------*/
+/*--------------------------------GameObjectManager Initialize()----------------------------------*/
 /// <summary>
 /// Called at the start of the stage. Initializes all gameObjects and their components
 /// </summary>
-void GAMEOBJECT_MANAGER::Initialize()
+void GameObjectManager::Initialize()
 {
     for (auto& g : gameObjects)
         g.second->Initialize();
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Execute()----------------------------------*/
+/*--------------------------------GameObjectManager Execute()----------------------------------*/
 /// <summary>
 /// Performs Game functions. Called every frame to perform functions
 /// </summary>
-void GAMEOBJECT_MANAGER::Execute()
+void GameObjectManager::Execute()
 {
     for (auto& g : gameObjects)
         g.second->Execute();
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER ExecuteUI()----------------------------------*/
+/*--------------------------------GameObjectManager ExecuteUI()----------------------------------*/
 /// <summary>
 /// Performs UI functions. Called every frame to perform functions. 
 /// </summary>
-void GAMEOBJECT_MANAGER::ExecuteUI()
+void GameObjectManager::ExecuteUI()
 {
     for (auto& g : gameObjects)
         g.second->ExecuteUI();
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Render()----------------------------------*/
+/*--------------------------------GameObjectManager Render()----------------------------------*/
 /// <summary>
 /// Renders objects. Called every frame to perform rendering
 /// </summary>
-void GAMEOBJECT_MANAGER::Render()
+void GameObjectManager::Render()
 {
     for (auto& g : gameObjects)
         g.second->Render();
 
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER RenderUI()----------------------------------*/
+/*--------------------------------GameObjectManager RenderUI()----------------------------------*/
 /// <summary>
 /// Renders UI. Called every frame to perform rendering
 /// </summary>
-void GAMEOBJECT_MANAGER::RenderUI()
+void GameObjectManager::RenderUI()
 {
     for (auto& g : gameObjects)
         g.second->RenderUI();
 
 }
 
-/*--------------------------------GAMEOBJECT_MANAGER Finalize()----------------------------------*/
+/*--------------------------------GameObjectManager Finalize()----------------------------------*/
 /// <summary>
 /// Called at the end of program to finalize the manager
 /// </summary>
-void GAMEOBJECT_MANAGER::Finalize()
+void GameObjectManager::Finalize()
 {
     gameObjects.clear();
 }

@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class SPOTLIGHT_DATA : public COMPONENT_DATA
+class SPOTLIGHT_DATA : public ComponentData
 {
 public:
     SPOTLIGHT_DATA();
@@ -20,12 +20,12 @@ public:
 };
 
 
-class SPOTLIGHT : public COMPONENT
+class SPOTLIGHT : public Component
 {
     std::shared_ptr<LIGHTING>light;
     SPOTLIGHT_DATA* data;
 public:
-    SPOTLIGHT(GAMEOBJECT* t, COMPONENT_DATA* data);
+    SPOTLIGHT(GameObject* t, ComponentData* data);
 
 
     /// <summary>

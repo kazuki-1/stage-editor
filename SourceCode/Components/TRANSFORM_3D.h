@@ -1,8 +1,8 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
 
-class TRANSFORM_3D_DATA : public COMPONENT_DATA
+class TRANSFORM_3D_DATA : public ComponentData
 {
 public:
     Vector3 scale{ 1, 1, 1 };
@@ -13,16 +13,16 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), scale, rotation, translation);
+        t(cereal::base_class<ComponentData>(this), scale, rotation, translation);
     }
 };
 
 
 /// <summary>
-/// <para> Class to manage the transform of a 3d gameobject. GameObjects will generally have one when created. </para>
+/// <para> Class to manage the transform of a 3d gameobject. GetGameObjects will generally have one when created. </para>
 /// <para> ３Dゲームオブジェクトの変換行列を管理するクラス。GameObjectは基本的に既存に入ってます　</para>
 /// </summary>
-class TRANSFORM_3D : public COMPONENT
+class TRANSFORM_3D : public Component
 {
 private :
     //VECTOR3 translation;
@@ -35,7 +35,7 @@ protected:
     friend class DEBUG_MANAGER;
 public:
     TRANSFORM_3D() {};
-    TRANSFORM_3D(GAMEOBJECT* t, COMPONENT_DATA* data);
+    TRANSFORM_3D(GameObject* t, ComponentData* data);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (TRANSFORM_3D_DATA) </para>
     /// <para>コンポネント生成時呼び出せます。対応したコンポネントデータを用いてこのコンポネントを初期化する（TRANSFORM_3D_DATA）</para>

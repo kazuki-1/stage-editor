@@ -6,7 +6,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------MESH_COLLIDER Constructor------------------------------------------------------*/
 
-MESH_COLLIDER::MESH_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data)
+MESH_COLLIDER::MESH_COLLIDER(GameObject* t, ComponentData* data)
 {
     parent = t;
     data = static_cast<MESH_COLLIDER_DATA*>(data);

@@ -182,13 +182,13 @@
     <ClCompile Include="External\ImGui\imgui_widgets.cpp">
       <Filter>Engine\External</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\Base Classes\DATAMANAGER.cpp">
+    <ClCompile Include="SourceCode\Components\Base Classes\DataManager.cpp">
       <Filter>Components\Base Classes</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT.cpp">
+    <ClCompile Include="SourceCode\Components\Base Classes\Component.cpp">
       <Filter>Components\Base Classes</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.cpp">
+    <ClCompile Include="SourceCode\Components\Base Classes\ComponentCreator.cpp">
       <Filter>Components\Base Classes</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\OBJECT_DATA.cpp">
@@ -200,13 +200,13 @@
     <ClCompile Include="SourceCode\Engine\Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Scenes\SCENEMANAGER.cpp">
+    <ClCompile Include="SourceCode\Scenes\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Scenes\SCENE_UI.cpp">
+    <ClCompile Include="SourceCode\Scenes\SceneUI.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Scenes\SCENE_DEMO.cpp">
+    <ClCompile Include="SourceCode\Scenes\SceneDemo.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Audio.cpp">
@@ -227,7 +227,7 @@
     <ClCompile Include="SourceCode\Audio\AudioController.cpp">
       <Filter>Source Files\AudioController</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Scenes\SCENE.cpp">
+    <ClCompile Include="SourceCode\Scenes\Scene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp">
@@ -296,22 +296,22 @@
     <ClCompile Include="SourceCode\Engine\Text.cpp">
       <Filter>Engine\Text</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\BGM.cpp">
+    <ClCompile Include="SourceCode\Components\BGMComponent.cpp">
       <Filter>Components\BGM</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\CAMERA_COMPONENT.cpp">
       <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\CAPSULE_COLLIDER.cpp">
+    <ClCompile Include="SourceCode\Components\CapsuleCollider.cpp">
       <Filter>Components\Capsule Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\DIRECTIONAL_LIGHT.cpp">
+    <ClCompile Include="SourceCode\Components\DirectionalLight.cpp">
       <Filter>Components\Directional Light</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\EFFECT.cpp">
       <Filter>Components\Unused Components\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\ENEMY_CONTROLLER.cpp">
+    <ClCompile Include="SourceCode\Components\EnemyController.cpp">
       <Filter>Components\Enemy Controller</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.cpp">
@@ -359,10 +359,10 @@
     <ClCompile Include="SourceCode\DialogueController.cpp">
       <Filter>Source Files\DialogueManager</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\GAMEOBJECT.cpp">
+    <ClCompile Include="SourceCode\GameObject.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\GAMEOBJECT_2D.cpp">
+    <ClCompile Include="SourceCode\GameObject_2D.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -409,19 +409,19 @@
     <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_CREATOR.h">
+    <ClInclude Include="SourceCode\Components\Base Classes\ComponentCreator.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_DATA.h">
+    <ClInclude Include="SourceCode\Components\Base Classes\ComponentData.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT_HEADERS.h">
+    <ClInclude Include="SourceCode\Components\Base Classes\ComponentHeaders.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Base Classes\DATAMANAGER.h">
+    <ClInclude Include="SourceCode\Components\Base Classes\DataManager.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\Base Classes\COMPONENT.h">
+    <ClInclude Include="SourceCode\Components\Base Classes\Component.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h">
@@ -448,16 +448,16 @@
     <ClInclude Include="SourceCode\CerealHeaders.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Scenes\SCENE_DEMO.h">
+    <ClInclude Include="SourceCode\Scenes\SceneDemo.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Scenes\SCENE_UI.h">
+    <ClInclude Include="SourceCode\Scenes\SceneUI.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Scenes\SCENEMANAGER.h">
+    <ClInclude Include="SourceCode\Scenes\SceneManager.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Scenes\SCENE.h">
+    <ClInclude Include="SourceCode\Scenes\Scene.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Audio.h">
@@ -544,22 +544,22 @@
     <ClInclude Include="SourceCode\Engine\Text.h">
       <Filter>Engine\Text</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\BGM.h">
+    <ClInclude Include="SourceCode\Components\BGMComponent.h">
       <Filter>Components\BGM</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\CAMERA_COMPONENT.h">
       <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\CAPSULE_COLLIDER.h">
+    <ClInclude Include="SourceCode\Components\CapsuleCollider.h">
       <Filter>Components\Capsule Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\DIRECTIONAL_LIGHT.h">
+    <ClInclude Include="SourceCode\Components\DirectionalLight.h">
       <Filter>Components\Directional Light</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\EFFECT.h">
       <Filter>Components\Unused Components\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\ENEMY_CONTROLLER.h">
+    <ClInclude Include="SourceCode\Components\EnemyController.h">
       <Filter>Components\Enemy Controller</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.h">
@@ -604,13 +604,13 @@
     <ClInclude Include="SourceCode\Components\NPCDialogue.h">
       <Filter>Components\NPC Dialogue</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\DialogueManager.h">
+    <ClInclude Include="SourceCode\DialogueController.h">
       <Filter>Source Files\DialogueManager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\GAMEOBJECT.h">
+    <ClInclude Include="SourceCode\GameObject.h">
       <Filter>Source Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\GAMEOBJECT_2D.h">
+    <ClInclude Include="SourceCode\GameObject_2D.h">
       <Filter>Source Files\GameObject</Filter>
     </ClInclude>
   </ItemGroup>

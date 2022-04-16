@@ -1,4 +1,4 @@
-#include "DialogueManager.h"
+#include "DialogueController.h"
 #include "Engine/Text.h"
 #include "Engine/Input.h"
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -61,7 +61,7 @@ void DialogueController::Render()
 
 }
 
-/*---------------------------------------DialogueManager Render()-------------------------------------------------*/
+/*---------------------------------------DialogueController Render()-------------------------------------------------*/
 /// <summary>
 /// Returns true if dialogue is triggered
 /// </summary>

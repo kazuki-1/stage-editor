@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "SCENE.h"
-class SCENE_DEMO : public SCENE
+class SceneDemo : public Scene
 {
 
     bool state{ true };       // Paused or playing

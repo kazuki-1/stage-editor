@@ -1,11 +1,11 @@
-#include "GAMEOBJECT_2D.h"
-//#include "GAMEOBJECT.h"
+#include "GameObject_2D.h"
+//#include "GameObject.h"
 #include "Components\TRANSFORM_2D.h"
 #include "Components\TRANSFORM_3D.h"
 
-/*--------------------------------GAMEOBJECT_2D Constructor()----------------------------------*/
+/*--------------------------------GameObject_2D Constructor()----------------------------------*/
 
-GAMEOBJECT_2D::GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d) 
+GameObject_2D::GameObject_2D(std::shared_ptr<OBJECT_DATA>d) 
 {
     data = d;
     //name_buffer = (char*)data->name.c_str();
@@ -13,9 +13,9 @@ GAMEOBJECT_2D::GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d)
         name_buffer[a] = data->name[a];
 }
 
-/*--------------------------------GAMEOBJECT_2D Initialize()----------------------------------*/
+/*--------------------------------GameObject_2D Initialize()----------------------------------*/
 
-HRESULT GAMEOBJECT_2D::Initialize()
+HRESULT GameObject_2D::Initialize()
 {
     if (data->Dataset().size() <= 0)
     {
@@ -30,9 +30,9 @@ HRESULT GAMEOBJECT_2D::Initialize()
 
 }
 
-/*--------------------------------GAMEOBJECT_2D Execute()----------------------------------*/
+/*--------------------------------GameObject_2D Execute()----------------------------------*/
 
-void GAMEOBJECT_2D::Execute()
+void GameObject_2D::Execute()
 {
     for (auto& c : components)
     {
@@ -44,16 +44,16 @@ void GAMEOBJECT_2D::Execute()
     GetComponent<TRANSFORM_2D>()->Execute();
 }
 
-/*--------------------------------GAMEOBJECT_2D ExecuteUI()----------------------------------*/
+/*--------------------------------GameObject_2D ExecuteUI()----------------------------------*/
 
-void GAMEOBJECT_2D::ExecuteUI()
+void GameObject_2D::ExecuteUI()
 {
     Execute();
 }
 
-/*--------------------------------GAMEOBJECT_2D Render()----------------------------------*/
+/*--------------------------------GameObject_2D Render()----------------------------------*/
 
-void GAMEOBJECT_2D::Render()
+void GameObject_2D::Render()
 {
     for(auto& c : components)
     {
@@ -64,9 +64,9 @@ void GAMEOBJECT_2D::Render()
     GetComponent<TRANSFORM_2D>()->Execute();
 }
 
-/*--------------------------------GAMEOBJECT_2D RenderUI()----------------------------------*/
+/*--------------------------------GameObject_2D RenderUI()----------------------------------*/
 
-void GAMEOBJECT_2D::RenderUI()
+void GameObject_2D::RenderUI()
 {
     for (auto& c : components)
         c->UI();

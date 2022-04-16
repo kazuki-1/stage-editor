@@ -1,18 +1,18 @@
 #pragma once
-#include "./Base Classes/COMPONENT.h"
+#include "./Base Classes/Component.h"
 
-class CAMERA_DATA : public COMPONENT_DATA
+class CAMERA_DATA : public ComponentData
 {
 
 };
 
 
 
-class CAMERA : public COMPONENT
+class CAMERA : public Component
 {
     CAMERA_DATA* data;
 public:
-    CAMERA(GAMEOBJECT* g, COMPONENT_DATA* d);
+    CAMERA(GameObject* g, ComponentData* d);
 };
 
 CEREAL_REGISTER_TYPE(CAMERA_DATA)

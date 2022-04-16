@@ -1,11 +1,11 @@
-#include "Base Classes/COMPONENT.h"
-#include "Base Classes/COMPONENT_CREATOR.h"
+#include "Base Classes/Component.h"
+#include "Base Classes/ComponentCreator.h"
 #include "../Engine/Audio.h"
 #include "../Engine/Input.h"
 #include "../Engine/IMGUI.h"
 #include "ENVIRONMENTAL_AUDIO.h"
 #include "SPHERE_COLLIDER.h"
-#include "CAPSULE_COLLIDER.h"
+#include "CapsuleCollider.h"
 #include "OBB_COLLIDER.h"
 #include "TRANSFORM_3D.h"
 #define POINTER_CAST std::dynamic_pointer_cast
@@ -26,9 +26,9 @@ bool popup_e = {};
 
 LOCALIZED_COLLIDER_DATA::LOCALIZED_COLLIDER_DATA(COMPONENT_TYPE t)
 {
-    transform = std::dynamic_pointer_cast<TRANSFORM_3D_DATA>(COMPONENT_CREATOR::Instance()->Instantiate(COMPONENT_TYPE::TRANSFORM_3D));
+    transform = std::dynamic_pointer_cast<TRANSFORM_3D_DATA>(ComponentCreator::Instance()->Instantiate(COMPONENT_TYPE::TRANSFORM_3D));
     transform->scale = { 1.0f, 1.0f ,1.0f };
-    collider_data = COMPONENT_CREATOR::Instance()->Instantiate(t);
+    collider_data = ComponentCreator::Instance()->Instantiate(t);
 }
 
 /*--------------------------------------------LOCALIZED_COLLIDER_DATA Initialize()--------------------------------------------------*/
@@ -39,7 +39,7 @@ LOCALIZED_COLLIDER_DATA::LOCALIZED_COLLIDER_DATA(COMPONENT_TYPE t)
 /// <param name="t3d"> : TRANSFORD_3D_DATA</param>
 /// <param name="cd"> : collider Data</param>
 /// <returns></returns>
-HRESULT LOCALIZED_COLLIDER_DATA::Initialize(std::shared_ptr<COMPONENT_DATA>t3d, std::shared_ptr<COMPONENT_DATA>cd)
+HRESULT LOCALIZED_COLLIDER_DATA::Initialize(std::shared_ptr<ComponentData>t3d, std::shared_ptr<ComponentData>cd)
 {
     transform = std::dynamic_pointer_cast<TRANSFORM_3D_DATA>(t3d);
     collider_data = cd;
@@ -66,11 +66,11 @@ LOCALIZED_COLLIDER::LOCALIZED_COLLIDER(ENVIRONMENTAL_AUDIO* g, LOCALIZED_COLLIDE
 /// <para> Use this when creating a localized collider</para>
 /// <para> LOCALIZED_COLLIDERÇê∂ê¨éûÇ…åƒÇ—èoÇ∑</para>
 /// </summary>
-LOCALIZED_COLLIDER::LOCALIZED_COLLIDER(GAMEOBJECT* g, LOCALIZED_COLLIDER_DATA* data)
+LOCALIZED_COLLIDER::LOCALIZED_COLLIDER(GameObject* g, LOCALIZED_COLLIDER_DATA* data)
 {
     this->data = data;
     transform = POINTER_CAST<TRANSFORM_3D>(INSTANTIATE(g, data->transform));
-    collider = POINTER_CAST<BASE_COLLIDER_COMPONENT>(INSTANTIATE(g, data->collider_data));
+    collider = POINTER_CAST<BaseColliderComponent>(INSTANTIATE(g, data->collider_data));
     transform->Initialize();
     collider->Initialize();
 }
@@ -84,7 +84,7 @@ LOCALIZED_COLLIDER::LOCALIZED_COLLIDER(GAMEOBJECT* g, LOCALIZED_COLLIDER_DATA* d
 HRESULT LOCALIZED_COLLIDER::Initialize()
 {
     transform = POINTER_CAST<TRANSFORM_3D>(INSTANTIATE(parent->parent, data->transform));
-    collider = POINTER_CAST<BASE_COLLIDER_COMPONENT>(INSTANTIATE(parent->parent, data->collider_data));
+    collider = POINTER_CAST<BaseColliderComponent>(INSTANTIATE(parent->parent, data->collider_data));
     transform->Initialize();
     collider->Initialize();
 
@@ -134,7 +134,7 @@ void LOCALIZED_COLLIDER::UI()
 
 /*--------------------------------------------LOCALIZED_COLLIDER Collider()--------------------------------------------------*/
 
-std::shared_ptr<BASE_COLLIDER_COMPONENT>LOCALIZED_COLLIDER::Collider()
+std::shared_ptr<BaseColliderComponent>LOCALIZED_COLLIDER::Collider()
 {
     return collider;
 }
@@ -170,14 +170,14 @@ void ENVIRONMENTAL_AUDIO::CreateLocalizedCollider(COMPONENT_TYPE t)
     data->collider_dataset.push_back(std::make_shared<LOCALIZED_COLLIDER_DATA>(t));
     LOCALIZED_COLLIDER_DATA* cur_data = data->collider_dataset.back().get();
 
-    std::shared_ptr<COMPONENT_DATA> cd = std::dynamic_pointer_cast<COMPONENT_DATA>(cur_data->transform);
+    std::shared_ptr<ComponentData> cd = std::dynamic_pointer_cast<ComponentData>(cur_data->transform);
     colliders.push_back(std::make_shared<LOCALIZED_COLLIDER>(parent, cur_data));
     colliders.back()->data = data->collider_dataset.back().get();
 }
 
 /*--------------------------------------------ENVIRONMENTAL_AUDIO Constructor--------------------------------------------------*/
 
-ENVIRONMENTAL_AUDIO::ENVIRONMENTAL_AUDIO(GAMEOBJECT* t, COMPONENT_DATA* data)
+ENVIRONMENTAL_AUDIO::ENVIRONMENTAL_AUDIO(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<ENVIRONMENTAL_AUDIO_DATA*>(data);

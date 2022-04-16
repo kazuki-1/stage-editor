@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class MESH_DATA : public COMPONENT_DATA
+class MESH_DATA : public ComponentData
 {
 public:
     std::string model_path{};
@@ -13,18 +13,18 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), model_path, model_name, animationTake, playAnimationFlag);
+        t(cereal::base_class<ComponentData>(this), model_path, model_name, animationTake, playAnimationFlag);
     }
 
 };
 
-class MESH : public COMPONENT
+class MESH : public Component
 {
     std::shared_ptr<MODEL>model{};
     MESH_DATA* data;
 public:
     MESH() {};
-    MESH(GAMEOBJECT* t, COMPONENT_DATA* data);
+    MESH(GameObject* t, ComponentData* data);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (MESH_DATA)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (MESH_DATA) </para>

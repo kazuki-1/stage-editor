@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "SPHERE_COLLIDER.h"
 #include "TRANSFORM_3D.h"
 #include "MESH.h"
@@ -21,7 +21,7 @@ SPHERE_COLLIDER_DATA::SPHERE_COLLIDER_DATA()
 /*----------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------SPHERE_COLLIDER Constructor----------------------------------------------*/
 
-SPHERE_COLLIDER::SPHERE_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* d)
+SPHERE_COLLIDER::SPHERE_COLLIDER(GameObject* t, ComponentData* d)
 {
     parent = t;
     this->data = static_cast<SPHERE_COLLIDER_DATA*>(d);
@@ -172,7 +172,7 @@ Vector3 SPHERE_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 /// <para> 引数であるゲームオブジェクトを当たり判定を計算</para>
 /// </summary>
 /// <returns></returns>
-bool SPHERE_COLLIDER::Collide(GAMEOBJECT* target)
+bool SPHERE_COLLIDER::Collide(GameObject* target)
 {
     SPHERE_COLLIDER* other = target->GetComponent<SPHERE_COLLIDER>();
     if (other)

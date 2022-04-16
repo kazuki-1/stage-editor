@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class SPHERE_COLLIDER_DATA : public COMPONENT_DATA
+class SPHERE_COLLIDER_DATA : public ComponentData
 {
 public:
     char name[256] = "";
@@ -17,7 +17,7 @@ public:
 };
 
 
-class SPHERE_COLLIDER : public BASE_COLLIDER_COMPONENT
+class SPHERE_COLLIDER : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::SPHERE>collider;
     std::shared_ptr<DYNAMIC_SPHERE>sphere;
@@ -28,9 +28,9 @@ public:
     /// <para> Call this constructor when creating this component. Registers the parent of the component and the data linked to the component </para>
     /// <para> コンポネントを生成時呼び出したください。コンポネントのParentとデータを登録する </para>
     /// </summary>
-    /// <param name="t"> : Parent of component (GAMEOBJECT class)</param>
+    /// <param name="t"> : Parent of component (GameObject class)</param>
     /// <param name="d"> : Data used by the component</param>
-    SPHERE_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* d);
+    SPHERE_COLLIDER(GameObject* t, ComponentData* d);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (SPHERE_COLLIDER_DATA) </para>
     /// <para>コンポネント生成時呼び出せます。対応したコンポネントデータを用いてこのコンポネントを初期化する（SPHERE_COLLIDER_DATA）</para>
@@ -67,7 +67,7 @@ public:
     /// <para> 引数であるゲームオブジェクトを当たり判定を計算</para>
     /// </summary>
     /// <returns></returns>
-    bool Collide(GAMEOBJECT* target) override;
+    bool Collide(GameObject* target) override;
     /// <summary>
     /// <para> Perform collision check based on coordinates </para>
     /// <para> 座標点を基づいて当たり判定を計算 </para>
@@ -83,4 +83,4 @@ public:
 };
 
 CEREAL_REGISTER_TYPE(SPHERE_COLLIDER_DATA)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(COMPONENT_DATA, SPHERE_COLLIDER_DATA)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ComponentData, SPHERE_COLLIDER_DATA)

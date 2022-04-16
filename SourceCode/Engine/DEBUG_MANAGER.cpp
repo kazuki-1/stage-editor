@@ -1,5 +1,5 @@
 #include "DEBUG_MANAGER.h"
-#include "../Components/Base Classes/COMPONENT.h"
+#include "../Components/Base Classes/Component.h"
 #include "../Components/TRANSFORM_3D.h"
 #include "../GAMEOBJECT_2D.h"
 #include "IMGUI.h"
@@ -24,7 +24,7 @@ void DEBUG_MANAGER::Execute()
 {
     if (!hasTarget)
         return;
-    if (dynamic_cast<GAMEOBJECT_2D*>(target))
+    if (dynamic_cast<GameObject_2D*>(target))
         return;
     TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
     arrows->SetTarget(target->Translation(), target->Rotation());
@@ -80,7 +80,7 @@ void DEBUG_MANAGER::Render()
         arrows->Render();
 
 }
-void DEBUG_MANAGER::SetTarget(GAMEOBJECT* g)
+void DEBUG_MANAGER::SetTarget(GameObject* g)
 {
     target = g;
     hasTarget = true;
@@ -133,7 +133,7 @@ void DEBUG_MANAGER::TranslateArrows()
     UINT num{ 1 };
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
  
-    if (dynamic_cast<GAMEOBJECT_2D*>(target))
+    if (dynamic_cast<GameObject_2D*>(target))
         return;
     TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
 

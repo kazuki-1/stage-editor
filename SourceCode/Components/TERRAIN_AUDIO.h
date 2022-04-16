@@ -1,5 +1,5 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
 enum class TERRAIN_AUDIO_PROPERTY
 {
@@ -10,7 +10,7 @@ enum class TERRAIN_AUDIO_PROPERTY
 class TERRAIN_AUDIO;
 
 
-class TERRAIN_AUDIO_DATA_BASE : public COMPONENT_DATA
+class TERRAIN_AUDIO_DATA_BASE : public ComponentData
 {
 public:
     char name[256] = "";
@@ -25,8 +25,8 @@ class TERRAIN_AUDIO_DATA_EMITTER : public TERRAIN_AUDIO_DATA_BASE
 {
 public:
     int mesh_index{ -1 };
-    std::shared_ptr<AUDIO_DATA>audio_data{};
-    TERRAIN_AUDIO_DATA_EMITTER() { audio_data = std::make_shared<AUDIO_DATA>(); };
+    std::shared_ptr<AudioData>audio_data{};
+    TERRAIN_AUDIO_DATA_EMITTER() { audio_data = std::make_shared<AudioData>(); };
     template <class T>
     void serialize(T& t)
     {
@@ -47,7 +47,7 @@ public:
 };
 
 
-class TERRAIN_AUDIO_DATA : public COMPONENT_DATA
+class TERRAIN_AUDIO_DATA : public ComponentData
 {
 public:
 
@@ -58,7 +58,7 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), class_type, property_data);
+        t(cereal::base_class<ComponentData>(this), class_type, property_data);
     }
 };
 
@@ -66,7 +66,7 @@ public:
 
 
 
-class TERRAIN_AUDIO : public COMPONENT
+class TERRAIN_AUDIO : public Component
 {
     struct AUDIO_BUFFER
     {
@@ -78,7 +78,7 @@ class TERRAIN_AUDIO : public COMPONENT
     std::vector<AUDIO_BUFFER>buffers;
 public:
     TERRAIN_AUDIO() {};
-    TERRAIN_AUDIO(GAMEOBJECT* g, COMPONENT_DATA* d);
+    TERRAIN_AUDIO(GameObject* g, ComponentData* d);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (OBB_COLLIDER_DATA) </para>

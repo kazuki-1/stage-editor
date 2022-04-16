@@ -1,40 +1,40 @@
-#include "SCENEMANAGER.h"
-#include "SCENE_UI.h"
-#include "SCENE_DEMO.h"
+#include "SceneManager.h"
+#include "SceneUI.h"
+#include "SceneDemo.h"
 
 
 
-/*--------------------------------------------------SCENEMANAGER Initialize()-------------------------------------*/
+/*--------------------------------------------------SceneManager Initialize()-------------------------------------*/
 
-HRESULT SCENEMANAGER::Initialize()
+HRESULT SceneManager::Initialize()
 {
-    Insert(ScenesEnum::Scene_UI, std::make_shared<SCENE_UI>());
-    Insert(ScenesEnum::Scene_Demo, std::make_shared<SCENE_DEMO>());
+    Insert(ScenesEnum::Scene_UI, std::make_shared<SceneUI>());
+    Insert(ScenesEnum::Scene_Demo, std::make_shared<SceneDemo>());
     ChangeScene(ScenesEnum::Scene_UI);
     return S_OK;
 }
 
-/*--------------------------------------------------SCENEMANAGER Execute()-------------------------------------*/
+/*--------------------------------------------------SceneManager Execute()-------------------------------------*/
 
-void SCENEMANAGER::Execute()
+void SceneManager::Execute()
 {
     if (!cur_Scene)
         return;
     cur_Scene->Execute();
 }
 
-/*--------------------------------------------------SCENEMANAGER Render()-------------------------------------*/
+/*--------------------------------------------------SceneManager Render()-------------------------------------*/
 
-void SCENEMANAGER::Render()
+void SceneManager::Render()
 {
     if (!cur_Scene)
         return;
     cur_Scene->Render();
 }
 
-/*--------------------------------------------------SCENEMANAGER Finalize()-------------------------------------*/
+/*--------------------------------------------------SceneManager Finalize()-------------------------------------*/
 
-void SCENEMANAGER::Finalize()
+void SceneManager::Finalize()
 {
     if (!cur_Scene)
         return;
@@ -42,9 +42,9 @@ void SCENEMANAGER::Finalize()
     cur_Scene = nullptr;
 }
 
-/*--------------------------------------------------SCENEMANAGER ChangeScene()-------------------------------------*/
+/*--------------------------------------------------SceneManager ChangeScene()-------------------------------------*/
 
-void SCENEMANAGER::ChangeScene(ScenesEnum name)
+void SceneManager::ChangeScene(ScenesEnum name)
 {
     if (cur_Scene)
         Finalize();
@@ -53,45 +53,45 @@ void SCENEMANAGER::ChangeScene(ScenesEnum name)
     current_Enum = name;
 }
 
-/*--------------------------------------------------SCENEMANAGER Insert()-------------------------------------*/
+/*--------------------------------------------------SceneManager Insert()-------------------------------------*/
 
-void SCENEMANAGER::Insert(ScenesEnum name, std::shared_ptr<SCENE>s)
+void SceneManager::Insert(ScenesEnum name, std::shared_ptr<Scene>s)
 {
     scenes.emplace(name, s);
 }
 
-/*--------------------------------------------------SCENEMANAGER Play()-------------------------------------*/
+/*--------------------------------------------------SceneManager Play()-------------------------------------*/
 /// <summary>
 /// Transition into SceneDemo
 /// </summary>
-void SCENEMANAGER::Play()
+void SceneManager::Play()
 {
     // Changes the scene if in UI
     if (current_Enum == ScenesEnum::Scene_UI)
         ChangeScene(ScenesEnum::Scene_Demo);
 
     // Resumes the scene if demo scene is paused
-    if (current_Enum == ScenesEnum::Scene_Demo && ((SCENE_DEMO*)cur_Scene.get())->GetState() == false)
+    if (current_Enum == ScenesEnum::Scene_Demo && ((SceneDemo*)cur_Scene.get())->GetState() == false)
     {
-        ((SCENE_DEMO*)cur_Scene.get())->Resume();
+        ((SceneDemo*)cur_Scene.get())->Resume();
     }
 }
 
-/*--------------------------------------------------SCENEMANAGER Pause()-------------------------------------*/
+/*--------------------------------------------------SceneManager Pause()-------------------------------------*/
 /// <summary>
 /// Pauses the demo scene
 /// </summary>
-void SCENEMANAGER::Pause()
+void SceneManager::Pause()
 {
-    if (current_Enum == ScenesEnum::Scene_Demo && ((SCENE_DEMO*)cur_Scene.get())->GetState() == true)
-        ((SCENE_DEMO*)cur_Scene.get())->Pause();
+    if (current_Enum == ScenesEnum::Scene_Demo && ((SceneDemo*)cur_Scene.get())->GetState() == true)
+        ((SceneDemo*)cur_Scene.get())->Pause();
 }
 
-/*--------------------------------------------------SCENEMANAGER Stop()-------------------------------------*/
+/*--------------------------------------------------SceneManager Stop()-------------------------------------*/
 /// <summary>
 /// Stops the demo scene and transition back into SceneUI
 /// </summary>
-void SCENEMANAGER::Stop()
+void SceneManager::Stop()
 {
     if (current_Enum == ScenesEnum::Scene_Demo)
         ChangeScene(ScenesEnum::Scene_UI);
@@ -100,19 +100,19 @@ void SCENEMANAGER::Stop()
 
 
 
-/*--------------------------------------------------SCENEMANAGER Retrieve()-------------------------------------*/
+/*--------------------------------------------------SceneManager Retrieve()-------------------------------------*/
 
-std::shared_ptr<SCENE>SCENEMANAGER::Retrieve(ScenesEnum name)
+std::shared_ptr<Scene>SceneManager::Retrieve(ScenesEnum name)
 {
     return scenes.find(name)->second;
 }
 
-/*--------------------------------------------------SCENEMANAGER CurrentSceneEnum()-------------------------------------*/
+/*--------------------------------------------------SceneManager CurrentSceneEnum()-------------------------------------*/
 /// <summary>
 /// Returns the enum of this current scene
 /// </summary>
 /// <returns></returns>
-ScenesEnum SCENEMANAGER::CurrentSceneEnum()
+ScenesEnum SceneManager::CurrentSceneEnum()
 {
     return current_Enum;
 }

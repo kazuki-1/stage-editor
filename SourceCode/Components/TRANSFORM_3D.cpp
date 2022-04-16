@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "TRANSFORM_3D.h"
 
 /*----------------------------------------------------------------------------------------------------------------*/
@@ -16,7 +16,7 @@ TRANSFORM_3D_DATA::TRANSFORM_3D_DATA()
 /*----------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------TRANSFORM_3D Constructor-------------------------------------------------*/
 
-TRANSFORM_3D::TRANSFORM_3D(GAMEOBJECT* t, COMPONENT_DATA* data)
+TRANSFORM_3D::TRANSFORM_3D(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<TRANSFORM_3D_DATA*>(data);

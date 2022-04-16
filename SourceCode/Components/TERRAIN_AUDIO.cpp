@@ -20,7 +20,7 @@ TERRAIN_AUDIO_DATA::TERRAIN_AUDIO_DATA()
 /*-----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------TERRAIN_AUDIO Constructor------------------------------------------------*/
 
-TERRAIN_AUDIO::TERRAIN_AUDIO(GAMEOBJECT* g, COMPONENT_DATA* d)
+TERRAIN_AUDIO::TERRAIN_AUDIO(GameObject* g, ComponentData* d)
 {
     data = static_cast<TERRAIN_AUDIO_DATA*>(d);
     parent = g;

@@ -17,7 +17,7 @@ SPOTLIGHT_DATA::SPOTLIGHT_DATA()
 /*----------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------SPOTLIGHT Constructor----------------------------------------------------*/
 
-SPOTLIGHT::SPOTLIGHT(GAMEOBJECT* t, COMPONENT_DATA* data)
+SPOTLIGHT::SPOTLIGHT(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<SPOTLIGHT_DATA*>(data);

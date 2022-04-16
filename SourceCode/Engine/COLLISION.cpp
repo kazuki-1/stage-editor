@@ -1,8 +1,8 @@
 #include "COLLISION.h"
-#include "../Components/Base Classes/COMPONENT_DATA.h"
+#include "../Components/Base Classes/ComponentData.h"
 #include "../Components/OBB_COLLIDER.h"
 #include "../Components/SPHERE_COLLIDER.h"
-#include "../Components/CAPSULE_COLLIDER.h"
+#include "../Components/CapsuleCollider.h"
 #include "../Components/MESH.h"
 #include "../Components/TRANSFORM_3D.h"
 using namespace COLLIDERS;
@@ -117,6 +117,8 @@ void COLLIDERS::AxisCasting(Vector3 oriMin, Vector3 oriMax, Vector3 tarMin, Vect
     tar_z1 = Front.Dot(tarMin);
     tar_z2 = Front.Dot(tarMax);
 
+
+    // Perform Comparison on each axis
     if (ori_x1 > tar_x2 || ori_x2 < tar_x1)
         return;
     if (ori_y1 > tar_y2 || ori_y2 < tar_y1)
@@ -498,7 +500,7 @@ void SPHERE::SetRadius(float rad)
 
 /*-----------------------------------------------------SPHERE SetData()--------------------------------------------------------------*/
 
-void SPHERE::SetData(COMPONENT_DATA* data)
+void SPHERE::SetData(ComponentData* data)
 {
     SPHERE_COLLIDER_DATA* d{ CastData<SPHERE_COLLIDER_DATA>(data) };
     SetCenter(d->center);
@@ -667,7 +669,7 @@ void OBB::SetMax(Vector3 max)
 
 /*-----------------------------------------------------OBB SetData()--------------------------------------------------------------*/\
 
-void OBB::SetData(COMPONENT_DATA* d)
+void OBB::SetData(ComponentData* d)
 {
     OBB_COLLIDER_DATA* od{ static_cast<OBB_COLLIDER_DATA*>(d) };
     SetMin(od->min);
@@ -887,9 +889,9 @@ void CAPSULE::SetHeight(float h)
 
 /*-----------------------------------------------------CAPSULE SetData()--------------------------------------------------------------*/
 
-void CAPSULE::SetData(COMPONENT_DATA* d)
+void CAPSULE::SetData(ComponentData* d)
 {
-    CAPSULE_COLLIDER_DATA* cd = (static_cast<CAPSULE_COLLIDER_DATA*>(d));
+    CapsuleCollider_Data* cd = (static_cast<CapsuleCollider_Data*>(d));
     SetRadius(cd->radius);
 }
 

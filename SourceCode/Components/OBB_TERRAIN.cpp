@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT_CREATOR.h"
+#include "Base Classes/ComponentCreator.h"
 #include "OBB_TERRAIN.h"
 #include "OBB_COLLIDER.h"
 #include "TRANSFORM_3D.h"
@@ -15,7 +15,7 @@
 OBB_TERRAIN_DATA::OBB_TERRAIN_DATA()
 {
     type = COMPONENT_TYPE::OBB_TERRAIN;
-    audioData = std::dynamic_pointer_cast<AUDIO_DATA>(INSTANTIATE(COMPONENT_TYPE::AUDIO));
+    audioData = std::dynamic_pointer_cast<AudioData>(INSTANTIATE(COMPONENT_TYPE::AUDIO));
     colliderData = std::dynamic_pointer_cast<OBB_COLLIDER_DATA>(INSTANTIATE(COMPONENT_TYPE::OBB_COL));
 }
 
@@ -25,7 +25,7 @@ OBB_TERRAIN_DATA::OBB_TERRAIN_DATA()
 /*----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------OBB_TERRAIN CONSTRUCTOR-------------------------------------------------*/
 
-OBB_TERRAIN::OBB_TERRAIN(GAMEOBJECT* g, COMPONENT_DATA* d)
+OBB_TERRAIN::OBB_TERRAIN(GameObject* g, ComponentData* d)
 {
     data = static_cast<OBB_TERRAIN_DATA*>(d);
     parent = g;

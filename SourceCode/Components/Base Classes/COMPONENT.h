@@ -4,14 +4,14 @@
 #include "../../Engine/COLLISION.h"
 #include "../../Engine/Sprite.h"
 #include "../../Engine/DEBUG_PRIMITIVE.h"
-#include "COMPONENT_DATA.h"
+#include "ComponentData.h"
 #include "EFFECTS.h"
 #include "../../Engine/Audio.h"
 #include "../../Engine/IMGUI.h"
 #include "../../GAMEOBJECT.h"
 
 using namespace Math;
-class GAMEOBJECT;
+class GameObject;
 class DEBUG_MANAGER;
 class PLAYER_CONTROLLER;
 
@@ -20,13 +20,13 @@ class PLAYER_CONTROLLER;
 /// <summary>
 /// Base class for components
 /// </summary>
-class COMPONENT
+class Component
 {
 protected:
-    GAMEOBJECT* parent{};
+    GameObject* parent{};
 public:
-    COMPONENT() {};
-    COMPONENT(GAMEOBJECT* t, std::shared_ptr<COMPONENT_DATA>data) {};
+    Component() {};
+    Component(GameObject* t, std::shared_ptr<ComponentData>data) {};
     /// <summary>
     /// <para> Virtual Function. Called when component is created </para>
     /// <para> 仮想関数。生成時に呼び出せます</para>
@@ -53,7 +53,7 @@ public:
     /// <para> このコンポネントの親となるゲームオブジェクトを戻る　</para>
     /// </summary>
     /// <returns></returns> 
-    GAMEOBJECT* Parent() { return parent; };
+    GameObject* Parent() { return parent; };
 
     /// <summary>
     /// Returns a component of the type specified from the GameObject. Returns nullptr if said component does not exist
@@ -75,16 +75,16 @@ public:
 /// <summary>
 /// Base Audio Component. Should only be used when creating a new audio component and nothing else.
 /// </summary>
-class BASE_AUDIO_COMPONENT : public COMPONENT
+class BASE_AUDIO_COMPONENT : public Component
 {
 protected:
     std::shared_ptr<AUDIO>audio;
-    //AUDIO_DATA* data;
+    //AudioData* data;
 public:
     BASE_AUDIO_COMPONENT() {};
-    BASE_AUDIO_COMPONENT(GAMEOBJECT* g, COMPONENT_DATA* d) {};
+    BASE_AUDIO_COMPONENT(GameObject* g, ComponentData* d) {};
     std::shared_ptr<AUDIO>Audio() { return audio; }
-    //AUDIO_DATA* Data() { return data; }
+    //AudioData* Data() { return data; }
     //std::wstring FilePath() { return data->file_path; }
     //bool LoopFlag() { return data->loopFlag; }
     //float Volume() { return data->volume; }
@@ -93,10 +93,10 @@ public:
 /// <para> Base class for characters such as Player and Enemy. </para>
 /// <para> プレイヤーやエネミーのようなキャラクターの基礎クラス</para>
 /// </summary>
-class BASE_CHARACTER_COMPONENT : public COMPONENT
+class BaseCharacterComponent : public Component
 {
 protected:
-    //CHARACTER_DATA* data;
+    //CharacterData* data;
     virtual void UpdateRotation() {};
     virtual void AnimationSettings() {};
     virtual void Hit() {};
@@ -106,11 +106,11 @@ protected:
 /// <summary>
 /// Base collider component. Should only used when creating a new collider component and nothing else
 /// </summary>
-class BASE_COLLIDER_COMPONENT : public COMPONENT
+class BaseColliderComponent : public Component
 {
 public:
     virtual std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider() { return 0; }
-    virtual bool Collide(GAMEOBJECT* target) { return false; };
+    virtual bool Collide(GameObject* target) { return false; };
     virtual bool Collide(Vector3 p) { return false; }
     virtual void Execute(XMMATRIX transform) {};
     virtual Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) { return {}; }

@@ -1,4 +1,4 @@
-#include "DATAMANAGER.h"
+#include "DataManager.h"
 #include "../../GAMEOBJECT.h"
 #include <filesystem>
 #include <fstream>
@@ -6,16 +6,16 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------DATAMANGER Class---------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------DATAMANAGER Load()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager Load()-------------------------------------------------------------------*/
 
-void DATAMANAGER::Load(std::string n)
+void DataManager::Load(std::string n)
 {
     // Check current dataset to see if empty
     // Clear if empty
     if (dataset.size() > 0)
         dataset.clear();
-    if (GAMEOBJECT_MANAGER::Instance()->GameObjects().size() >= 0)
-        GAMEOBJECT_MANAGER::Instance()->Clear();
+    if (GameObjectManager::Instance()->GetGameObjects().size() >= 0)
+        GameObjectManager::Instance()->Clear();
 
     // Prepare file path
     std::filesystem::path path(n);
@@ -29,21 +29,21 @@ void DATAMANAGER::Load(std::string n)
     InsertAndInitialize();
 }
 
-/*--------------------------------------------------DATAMANAGER InsertAndInitialize()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager InsertAndInitialize()-------------------------------------------------------------------*/
 
-void DATAMANAGER::InsertAndInitialize()
+void DataManager::InsertAndInitialize()
 {
-    GAMEOBJECT_MANAGER::Instance()->GameObjects().clear();
+    GameObjectManager::Instance()->GetGameObjects().clear();
     for (auto& d : dataset)
     {
-        //GAMEOBJECT_MANAGER::Instance()->Insert(d->Name(), d);
-        GAMEOBJECT_MANAGER::Instance()->Insert(d->Name(), d);
+        //GameObjectManager::Instance()->Insert(d->Name(), d);
+        GameObjectManager::Instance()->Insert(d->Name(), d);
     }
 }
 
-/*--------------------------------------------------DATAMANAGER OutputFile()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager OutputFile()-------------------------------------------------------------------*/
 
-void DATAMANAGER::OutputFile(std::string output_path)
+void DataManager::OutputFile(std::string output_path)
 {
     // Prepare file path
     std::filesystem::path path(output_path);
@@ -58,23 +58,23 @@ void DATAMANAGER::OutputFile(std::string output_path)
     ofs.close();
 }
 
-/*--------------------------------------------------DATAMANAGER Dataset()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager Dataset()-------------------------------------------------------------------*/
 
-std::vector<std::shared_ptr<OBJECT_DATA>>DATAMANAGER::Dataset()
+std::vector<std::shared_ptr<OBJECT_DATA>>DataManager::Dataset()
 {
     return dataset;
 }
 
-/*--------------------------------------------------DATAMANAGER Insert()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager Insert()-------------------------------------------------------------------*/
 
-void DATAMANAGER::Insert(std::shared_ptr<OBJECT_DATA>d)
+void DataManager::Insert(std::shared_ptr<OBJECT_DATA>d)
 {
     dataset.push_back(d);
 }
 
-/*--------------------------------------------------DATAMANAGER Remove()-------------------------------------------------------------------*/
+/*--------------------------------------------------DataManager Remove()-------------------------------------------------------------------*/
 
-void DATAMANAGER::Remove(std::shared_ptr<OBJECT_DATA>target)
+void DataManager::Remove(std::shared_ptr<OBJECT_DATA>target)
 {
     int ind{};
     for (auto& d : dataset)

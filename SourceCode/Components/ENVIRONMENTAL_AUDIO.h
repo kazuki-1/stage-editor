@@ -1,5 +1,5 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
 class ENVIRONMENTAL_AUDIO;
 class TRANSFORM_3D_DATA;
@@ -13,7 +13,7 @@ class LOCALIZED_COLLIDER_DATA
     LOCALIZED_COLLIDER* parent{};
 public:
     std::shared_ptr<TRANSFORM_3D_DATA>transform;
-    std::shared_ptr<COMPONENT_DATA>collider_data;
+    std::shared_ptr<ComponentData>collider_data;
     // Minimum distance to play max volume
     // 最大音量を出力する最短距離
     float minimum_distance{};
@@ -26,7 +26,7 @@ public:
     /// <param name="t3d"> : TRANSFORD_3D_DATA</param>
     /// <param name="cd"> : collider Data</param>
     /// <returns></returns>
-    HRESULT Initialize(std::shared_ptr<COMPONENT_DATA>t3d, std::shared_ptr<COMPONENT_DATA>cd);
+    HRESULT Initialize(std::shared_ptr<ComponentData>t3d, std::shared_ptr<ComponentData>cd);
     template <class T>
     void serialize(T& t)
     {
@@ -39,7 +39,7 @@ public:
 /// </summary>
 class LOCALIZED_COLLIDER
 {
-    std::shared_ptr<BASE_COLLIDER_COMPONENT>collider;
+    std::shared_ptr<BaseColliderComponent>collider;
     std::shared_ptr<TRANSFORM_3D>transform;
     LOCALIZED_COLLIDER_DATA* data;
     ENVIRONMENTAL_AUDIO* parent;
@@ -54,7 +54,7 @@ public:
     /// <para> Use this when creating a localized collider</para>
     /// <para> LOCALIZED_COLLIDERを生成時に呼び出す</para>
     /// </summary>
-    LOCALIZED_COLLIDER(GAMEOBJECT* g, LOCALIZED_COLLIDER_DATA* data);
+    LOCALIZED_COLLIDER(GameObject* g, LOCALIZED_COLLIDER_DATA* data);
     /// <summary>
     /// <para> Called when created from data </para>
     /// <para> データから生成時に呼び出す </para>
@@ -77,7 +77,7 @@ public:
     /// </summary>
     void UI();
 
-    std::shared_ptr<BASE_COLLIDER_COMPONENT>Collider();
+    std::shared_ptr<BaseColliderComponent>Collider();
     std::shared_ptr<TRANSFORM_3D>Transform();
 
     LOCALIZED_COLLIDER_DATA* Data();
@@ -88,7 +88,7 @@ public:
 
 
 
-class ENVIRONMENTAL_AUDIO_DATA : public AUDIO_DATA
+class ENVIRONMENTAL_AUDIO_DATA : public AudioData
 {
 
 public:
@@ -99,7 +99,7 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<AUDIO_DATA>(this), collider_dataset);
+        t(cereal::base_class<AudioData>(this), collider_dataset);
     }
 };
 class ENVIRONMENTAL_AUDIO : public BASE_AUDIO_COMPONENT
@@ -117,7 +117,7 @@ class ENVIRONMENTAL_AUDIO : public BASE_AUDIO_COMPONENT
     friend LOCALIZED_COLLIDER;
 public:
     ENVIRONMENTAL_AUDIO() {};
-    ENVIRONMENTAL_AUDIO(GAMEOBJECT* t, COMPONENT_DATA* d);
+    ENVIRONMENTAL_AUDIO(GameObject* t, ComponentData* d);
     /// <summary>
     /// <para> Called when created from data </para>
     /// <para> データから生成時に呼び出す </para>

@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class EFFECT_DATA : public COMPONENT_DATA
+class EFFECT_DATA : public ComponentData
 {
 public:
     std::string effect_path;
@@ -18,12 +18,12 @@ public:
 
 };
 
-class EFFECT : public COMPONENT
+class EFFECT : public Component
 {
     //    std::shared_ptr<FX>fx;
     EFFECT_DATA* data;
 public:
-    EFFECT(GAMEOBJECT* g, COMPONENT_DATA* d);
+    EFFECT(GameObject* g, ComponentData* d);
     //~EFFECT();
     //HRESULT Initialize() override;
     //void Execute() override;

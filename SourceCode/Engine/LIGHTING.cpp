@@ -1,7 +1,7 @@
 #include "LIGHTING.h"
 #include "IMGUI.h"
-#include "../Components/Base Classes/COMPONENT.h"
-#include "../Components/DIRECTIONAL_LIGHT.h"
+#include "../Components/Base Classes/Component.h"
+#include "../Components/DirectionalLight.h"
 #include "../Components/POINT_LIGHT.h"
 #include "../Components/SPOTLIGHT.h"
 #include <filesystem>
@@ -60,7 +60,7 @@ void LIGHTING::SetType(L_TYPE t)
 {
 	type = t;
 }
-void LIGHTING::WriteToData(DIRECTIONAL_LIGHT* d)
+void LIGHTING::WriteToData(DirectionalLight* d)
 {
 	direction = { d->Direction().x, d->Direction().y, d->Direction().z };
 	colour = d->Colour();

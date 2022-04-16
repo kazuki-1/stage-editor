@@ -9,9 +9,9 @@ using namespace Math;
 using namespace DirectX;
 //using namespace Math;
 class MESH;
-class COMPONENT_DATA;
+class ComponentData;
 class OBB_COLLIDER_DATA;
-class CAPSULE_COLLIDER_DATA;
+class CapsuleCollider_Data;
 
 namespace COLLIDERS
 {
@@ -85,7 +85,7 @@ namespace COLLIDERS
         /// <param name="name"> : Name of bone</param>
         /// <param name="m"> : Pointer of model</param>
         virtual void FitToBone(std::string name, MODEL* m);
-        virtual void SetData(COMPONENT_DATA* data) {}
+        virtual void SetData(ComponentData* data) {}
         /// <summary>
         /// Offsets the collider 
         /// </summary>
@@ -111,7 +111,7 @@ namespace COLLIDERS
         /// </summary>
         /// <returns></returns>
         template <class T>
-        T* CastData(COMPONENT_DATA* d)
+        T* CastData(ComponentData* d)
         {
             T* t = dynamic_cast<T*>(d);
             return t;
@@ -169,7 +169,7 @@ namespace COLLIDERS
 
         void SetCenter(Vector3 v);
         void SetRadius(float rad);
-        void SetData(COMPONENT_DATA* data) override;
+        void SetData(ComponentData* data) override;
 
     };
 
@@ -207,7 +207,7 @@ namespace COLLIDERS
 
         void SetMin(Vector3 min);
         void SetMax(Vector3 max);
-        void SetData(COMPONENT_DATA* d)override;
+        void SetData(ComponentData* d)override;
 
         std::vector<Vector3>Points();
         Vector3 Rotation();
@@ -269,7 +269,7 @@ namespace COLLIDERS
         void SetCenter(Vector3 c);
         void SetRadius(float r);
         void SetHeight(float h);
-        void SetData(COMPONENT_DATA* d) override;
+        void SetData(ComponentData* d) override;
     };
 
 #pragma endregion

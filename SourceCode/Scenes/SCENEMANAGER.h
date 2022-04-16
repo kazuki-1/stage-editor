@@ -16,10 +16,10 @@ enum class ScenesEnum
 
 
 
-class SCENEMANAGER : public Singleton<SCENEMANAGER>
+class SceneManager : public Singleton<SceneManager>
 {
-    std::map<ScenesEnum, std::shared_ptr<SCENE>>scenes;
-    std::shared_ptr<SCENE> cur_Scene;
+    std::map<ScenesEnum, std::shared_ptr<Scene>>scenes;
+    std::shared_ptr<Scene> cur_Scene;
     ScenesEnum current_Enum;
 public:
     /// <summary>
@@ -50,7 +50,7 @@ public:
     /// </summary>
     /// <param name="name"></param>
     /// <param name="s"></param>
-    void Insert(ScenesEnum name, std::shared_ptr<SCENE>s);
+    void Insert(ScenesEnum name, std::shared_ptr<Scene>s);
     /// <summary>
     /// Transition into SceneDemo
     /// </summary>
@@ -68,7 +68,7 @@ public:
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    std::shared_ptr<SCENE>Retrieve(ScenesEnum name);
+    std::shared_ptr<Scene>Retrieve(ScenesEnum name);
     /// <summary>
     /// Returns the enum of this current scene
     /// </summary>

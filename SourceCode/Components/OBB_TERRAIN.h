@@ -1,14 +1,14 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 class OBB_COLLIDER;
 
 
 
 // UNUSED
-class OBB_TERRAIN_DATA : public COMPONENT_DATA
+class OBB_TERRAIN_DATA : public ComponentData
 {
 public:
-    std::shared_ptr<AUDIO_DATA>audioData;
+    std::shared_ptr<AudioData>audioData;
     std::shared_ptr<OBB_COLLIDER_DATA>colliderData;
     OBB_TERRAIN_DATA();
     bool overlap;
@@ -17,12 +17,12 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), audioData, colliderData, overlap, triggerAudio);
+        t(cereal::base_class<ComponentData>(this), audioData, colliderData, overlap, triggerAudio);
     }
 };
 
 // UNUSED
-class OBB_TERRAIN : public COMPONENT
+class OBB_TERRAIN : public Component
 {
     std::shared_ptr<OBB_COLLIDER>collider;
     std::shared_ptr<AUDIO>audio;
@@ -31,7 +31,7 @@ class OBB_TERRAIN : public COMPONENT
 
 public:
     OBB_TERRAIN() {};
-    OBB_TERRAIN(GAMEOBJECT* g, COMPONENT_DATA* d);
+    OBB_TERRAIN(GameObject* g, ComponentData* d);
 
 
 

@@ -4,9 +4,9 @@
 #include <sstream>
 /// <summary>
 /// Performance Counter class. You can retrieve average frame time and the frames per second of the applcation
-/// Singleton class. Access with PERFORMANCE_COUNTER::Instance()
+/// Singleton class. Access with PerformanceCounter::Instance()
 /// </summary>
-class PERFORMANCE_COUNTER : public Singleton<PERFORMANCE_COUNTER>
+class PerformanceCounter : public Singleton<PerformanceCounter>
 {
     LARGE_INTEGER start, end, freq;
     int fps;

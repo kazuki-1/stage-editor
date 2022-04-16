@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class SPRITE_2D_DATA : public COMPONENT_DATA
+class SPRITE_2D_DATA : public ComponentData
 {
 public:
     std::wstring image_path{};
@@ -16,17 +16,17 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), image_path, image_name, size, uvPosition, uvSize, pivot, colour);
+        t(cereal::base_class<ComponentData>(this), image_path, image_name, size, uvPosition, uvSize, pivot, colour);
     }
 };
 
-class SPRITE_2D : public COMPONENT
+class SPRITE_2D : public Component
 {
     std::shared_ptr<SPRITE>sprite;
     SPRITE_2D_DATA* data;
 public:
     SPRITE_2D() {};
-    SPRITE_2D(GAMEOBJECT* t, COMPONENT_DATA* data);
+    SPRITE_2D(GameObject* t, ComponentData* data);
 
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (SPHERE_COLLIDER_DATA) </para>

@@ -1,12 +1,12 @@
 #pragma once
-#include "GAMEOBJECT.h"
-class GAMEOBJECT;
+#include "GameObject.h"
+class GameObject;
 class OBJECT_DATA;
-class GAMEOBJECT_2D : public GAMEOBJECT
+class GameObject_2D : public GameObject
 {
 
 public:
-    GAMEOBJECT_2D(std::shared_ptr<OBJECT_DATA>d);
+    GameObject_2D(std::shared_ptr<OBJECT_DATA>d);
     HRESULT Initialize() override;
     void Execute() override;
     void ExecuteUI() override;

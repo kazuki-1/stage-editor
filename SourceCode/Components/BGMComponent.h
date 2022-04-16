@@ -1,29 +1,29 @@
 #pragma once
-#include "./Base Classes/COMPONENT.h"
+#include "./Base Classes/Component.h"
 class OBB_COLLIDER;
 class OBB_COLLIDER_DATA;
-class BGM_DATA : public AUDIO_DATA
+class BGMComponent_Data : public AudioData
 {
 public:
-    BGM_DATA() { type = COMPONENT_TYPE::BGM; };
-    std::vector<std::shared_ptr<AUDIO_DATA>>dataset;
+    BGMComponent_Data() { type = COMPONENT_TYPE::BGM; };
+    std::vector<std::shared_ptr<AudioData>>dataset;
     std::shared_ptr<OBB_COLLIDER_DATA>collider_data;
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<AUDIO_DATA>(this), dataset, collider_data);
+        t(cereal::base_class<AudioData>(this), dataset, collider_data);
     }
 };
 
 
-class BGM : public BASE_AUDIO_COMPONENT
+class BGMComponent : public BASE_AUDIO_COMPONENT
 {
     std::vector<std::shared_ptr<AUDIO>>audioList;
     std::shared_ptr<OBB_COLLIDER>collider;
-    BGM_DATA* data;
+    BGMComponent_Data* data;
 public:
-    BGM() {};
-    BGM(GAMEOBJECT* t, COMPONENT_DATA* d);
+    BGMComponent() {};
+    BGMComponent(GameObject* t, ComponentData* d);
     HRESULT Initialize() override;
     void Execute() override;
     void Render() override;
@@ -31,4 +31,4 @@ public:
     COMPONENT_TYPE GetComponentType() override;
 };
 
-CEREAL_REGISTER_TYPE(BGM_DATA)
+CEREAL_REGISTER_TYPE(BGMComponent_Data)

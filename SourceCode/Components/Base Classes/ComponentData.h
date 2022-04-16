@@ -29,14 +29,14 @@ enum class COMPONENT_TYPE
     DIRECTIONAL_LIGHT
 };
 
-class COMPONENT_DATA
+class ComponentData
 {
 public:
     int id{};
     COMPONENT_TYPE type;
 
-    COMPONENT_DATA() { type = COMPONENT_TYPE::BASE; }
-    virtual ~COMPONENT_DATA() {}
+    ComponentData() { type = COMPONENT_TYPE::BASE; }
+    virtual ~ComponentData() {}
     template <class T>
     void serialize(T& t)
     {
@@ -45,34 +45,34 @@ public:
 
 };
 
-class AUDIO_DATA : public COMPONENT_DATA
+class AudioData : public ComponentData
 {
 public:
-    AUDIO_DATA() { type = COMPONENT_TYPE::AUDIO; }
+    AudioData() { type = COMPONENT_TYPE::AUDIO; }
     char name[256] = "Audio";
     std::wstring file_path{};
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), name, file_path);
+        t(cereal::base_class<ComponentData>(this), name, file_path);
     }
 };
 
-class CHARACTER_DATA : public COMPONENT_DATA
+class CharacterData : public ComponentData
 {
 public:
-    CHARACTER_DATA() { type = COMPONENT_TYPE::CHARACTER; }
+    CharacterData() { type = COMPONENT_TYPE::CHARACTER; }
     char name[256] = "";
 
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), name);
+        t(cereal::base_class<ComponentData>(this), name);
     }
 };
 
 
-//class CYLINDER_COLLIDER_DATA : public COMPONENT_DATA
+//class CYLINDER_COLLIDER_DATA : public ComponentData
 //{
 //public:
 //    char name[256] = "";
@@ -98,5 +98,5 @@ public:
 
 
 
-CEREAL_REGISTER_TYPE(CHARACTER_DATA)
-CEREAL_REGISTER_TYPE(AUDIO_DATA)
+CEREAL_REGISTER_TYPE(CharacterData)
+CEREAL_REGISTER_TYPE(AudioData)

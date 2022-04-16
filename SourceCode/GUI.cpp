@@ -3,12 +3,12 @@
 #include "Engine/LIGHTING.h"
 #include "Engine/DEBUG_MANAGER.h"
 #include "STAGE_UI.h"
-#include "Components/Base Classes/COMPONENT_CREATOR.h"
+#include "Components/Base Classes/ComponentCreator.h"
 
 void GUI::Initialize()
 {
 
-    COMPONENT_CREATOR::Instance()->Initialize();
+    ComponentCreator::Instance()->Initialize();
     DEBUG_MANAGER::Instance()->Initialize();
 }
 

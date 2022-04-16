@@ -18,7 +18,7 @@ public:
     void MouseSelect();
     void MoveToTarget();
     void PlayUI();
-    void RemoveGameObject(GAMEOBJECT* g);
+    void RemoveGameObject(GameObject* g);
     template <class T>
     void serialize(T& t)
     {

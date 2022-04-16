@@ -18,7 +18,7 @@ SPRITE_2D_DATA::SPRITE_2D_DATA()
 /*---------------------------------------SPRITE_2D Constructor----------------------------------------------------*/
 
 
-SPRITE_2D::SPRITE_2D(GAMEOBJECT* t, COMPONENT_DATA* data)
+SPRITE_2D::SPRITE_2D(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<SPRITE_2D_DATA*>(data);

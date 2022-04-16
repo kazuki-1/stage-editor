@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class OBB_COLLIDER_DATA : public COMPONENT_DATA
+class OBB_COLLIDER_DATA : public ComponentData
 {
 public:
     char name[256] = "";
@@ -14,19 +14,19 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), name, bone_name, min, max);
+        t(cereal::base_class<ComponentData>(this), name, bone_name, min, max);
     }
 };
 
 
-class OBB_COLLIDER : public BASE_COLLIDER_COMPONENT
+class OBB_COLLIDER : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::OBB>collider;
     std::shared_ptr<DYNAMIC_CUBE>cube;
     OBB_COLLIDER_DATA* data;
 public:
     OBB_COLLIDER() {};
-    OBB_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data);
+    OBB_COLLIDER(GameObject* t, ComponentData* data);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (OBB_COLLIDER_DATA) </para>
@@ -62,7 +62,7 @@ public:
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>
     /// </summary>
-    bool Collide(GAMEOBJECT* target) override;
+    bool Collide(GameObject* target) override;
     /// <summary>
     /// <para> Perform collision check based on coordinates </para>
     /// <para> 座標点を基づいて当たり判定を計算 </para>
@@ -101,4 +101,4 @@ public:
 };
 
 CEREAL_REGISTER_TYPE(OBB_COLLIDER_DATA)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(COMPONENT_DATA, OBB_COLLIDER_DATA)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ComponentData, OBB_COLLIDER_DATA)

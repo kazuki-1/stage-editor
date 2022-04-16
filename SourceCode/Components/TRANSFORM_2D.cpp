@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "TRANSFORM_2D.h"
 
 
@@ -18,7 +18,7 @@ TRANSFORM_2D_DATA::TRANSFORM_2D_DATA()
 /*----------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------TRANSFORM_2D Constructor-------------------------------------------------*/
 
-TRANSFORM_2D::TRANSFORM_2D(GAMEOBJECT* t, COMPONENT_DATA* data)
+TRANSFORM_2D::TRANSFORM_2D(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<TRANSFORM_2D_DATA*>(data);

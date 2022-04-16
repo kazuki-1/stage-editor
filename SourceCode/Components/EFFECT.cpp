@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "EFFECT.h"
 
 EFFECT_DATA::EFFECT_DATA()
@@ -6,7 +6,7 @@ EFFECT_DATA::EFFECT_DATA()
     type = COMPONENT_TYPE::EFFECT;
 }
 
-EFFECT::EFFECT(GAMEOBJECT* g, COMPONENT_DATA* d)
+EFFECT::EFFECT(GameObject* g, ComponentData* d)
 {
     parent = g;
     data = static_cast<EFFECT_DATA*>(d);

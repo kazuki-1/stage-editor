@@ -1,7 +1,7 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class TRANSFORM_2D_DATA : public COMPONENT_DATA
+class TRANSFORM_2D_DATA : public ComponentData
 {
 public:
     Vector2 position;
@@ -11,20 +11,20 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this), position, rotation);
+        t(cereal::base_class<ComponentData>(this), position, rotation);
     }
 };
 
 
 /// <summary>
-/// Class to manage the transform of a 2D gameobject. 2D GameObjects will generally have one when created
+/// Class to manage the transform of a 2D gameobject. 2D GetGameObjects will generally have one when created
 /// </summary>
-class TRANSFORM_2D : public COMPONENT
+class TRANSFORM_2D : public Component
 {
     TRANSFORM_2D_DATA* data;
 public:
     TRANSFORM_2D() {};
-    TRANSFORM_2D(GAMEOBJECT* t, COMPONENT_DATA* data);
+    TRANSFORM_2D(GameObject* t, ComponentData* data);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (SPHERE_COLLIDER_DATA) </para>
     /// <para>コンポネント生成時呼び出せます。対応したコンポネントデータを用いてこのコンポネントを初期化する（SPHERE_COLLIDER_DATA）</para>

@@ -1,24 +1,24 @@
-#include "./Base Classes/COMPONENT.h"
+#include "./Base Classes/Component.h"
 #include "../ENGINE/Audio.h"
-#include "./Base Classes/COMPONENT_CREATOR.h"
+#include "./Base Classes/ComponentCreator.h"
 #include "OBB_COLLIDER.h"
 #include "TRANSFORM_3D.h"
-#include "BGM.h"
+#include "BGMComponent.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------BGM Class------------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent Class------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------BGM Constructor------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent Constructor------------------------------------------------------*/
 
-BGM::BGM(GAMEOBJECT* t, COMPONENT_DATA* data)
+BGMComponent::BGMComponent(GameObject* t, ComponentData* data)
 {
     parent = t;
-    this->data = static_cast<BGM_DATA*>(data);
+    this->data = static_cast<BGMComponent_Data*>(data);
 }
 
-/*-------------------------------------------------------------BGM Initialize()------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent Initialize()------------------------------------------------------*/
 
-HRESULT BGM::Initialize()
+HRESULT BGMComponent::Initialize()
 {
     //audio = AUDIOENGINE::Instance()->Retrieve(data->name);
     for (auto& d : data->dataset)
@@ -33,31 +33,31 @@ HRESULT BGM::Initialize()
     return S_OK;
 }
 
-/*-------------------------------------------------------------BGM Execute()------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent Execute()------------------------------------------------------*/
 
-void BGM::Execute()
+void BGMComponent::Execute()
 {
     if (collider)
         collider->Execute(GetComponent<TRANSFORM_3D>()->TransformMatrix());
 }
 
-/*-------------------------------------------------------------BGM Render()------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent Render()------------------------------------------------------*/
 
-void BGM::Render()
+void BGMComponent::Render()
 {
     if (collider)
         collider->Render();
 }
 
-/*-------------------------------------------------------------BGM UI()------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent UI()------------------------------------------------------*/
 
-void BGM::UI()
+void BGMComponent::UI()
 {
     if (ImGui::TreeNode("BGM"))
     {
         if (ImGui::Button("Add BGM"))
         {
-            data->dataset.push_back(std::dynamic_pointer_cast<AUDIO_DATA>(INSTANTIATE(COMPONENT_TYPE::AUDIO)));
+            data->dataset.push_back(std::dynamic_pointer_cast<AudioData>(INSTANTIATE(COMPONENT_TYPE::AUDIO)));
             
         }
         static int ind{-1};
@@ -137,9 +137,9 @@ void BGM::UI()
 
 }
 
-/*-------------------------------------------------------------BGM GetComponentType()------------------------------------------------------*/
+/*-------------------------------------------------------------BGMComponent GetComponentType()------------------------------------------------------*/
 
-COMPONENT_TYPE BGM::GetComponentType()
+COMPONENT_TYPE BGMComponent::GetComponentType()
 {
     return data->type;
 }

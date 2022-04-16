@@ -5,7 +5,7 @@
 #include <d3d11.h>
 using namespace Math;
 
-class GAMEOBJECT;
+class GameObject;
 class TRANSFORM_3D;
 /// <summary>
 /// Use this to call out the translation arrow, rotation circles and the scaling scalars
@@ -14,7 +14,7 @@ class DEBUG_MANAGER : public Singleton<DEBUG_MANAGER>
 {
     //XMMATRIX target;
     //TRANSFORM_3D* target;
-    GAMEOBJECT* target;
+    GameObject* target;
     bool hasTarget;
     std::shared_ptr<DEBUG_ARROWS>arrows;
     std::shared_ptr<DEBUG_DISCS>discs;
@@ -27,7 +27,7 @@ public:
     void Execute();
     void Render();
     //void SetTarget(TRANSFORM_3D* t);
-    void SetTarget(GAMEOBJECT* g);
+    void SetTarget(GameObject* g);
     void ClearTarget();
     void MouseControl();
     bool HasTarget() { return hasTarget; }

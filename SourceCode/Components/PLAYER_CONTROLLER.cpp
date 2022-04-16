@@ -6,10 +6,10 @@
 #include "MESH.h"
 #include "MESH_COLLIDER.h"
 #include "ENVIRONMENTAL_AUDIO.h"
-#include "CAPSULE_COLLIDER.h"
+#include "CapsuleCollider.h"
 #include "TERRAIN_AUDIO.h"
 #include "NPCDialogue.h"
-#include "../DialogueManager.h"
+#include "../DialogueController.h"
 #define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;
 std::vector<Vector3>receivers;
@@ -19,7 +19,7 @@ std::vector<Vector3>receivers;
 /*--------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------PLAYER_CONTROLLER Constructor-------------------------------------------------*/
 
-PLAYER_CONTROLLER::PLAYER_CONTROLLER(GAMEOBJECT* g, COMPONENT_DATA* d)
+PLAYER_CONTROLLER::PLAYER_CONTROLLER(GameObject* g, ComponentData* d)
 {
     parent = g;
     data = static_cast<PLAYER_CONTROLLER_DATA*>(d);
@@ -119,8 +119,8 @@ void PLAYER_CONTROLLER::JumpInput()
 void PLAYER_CONTROLLER::SoundCollision()
 {
     TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
-    CAPSULE_COLLIDER* capsule = GetComponent<CAPSULE_COLLIDER>();
-    for (auto& g : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    CapsuleCollider* capsule = GetComponent<CapsuleCollider>();
+    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
     {
         bool no_sound_comp{};
         ENVIRONMENTAL_AUDIO* audio = g.second->GetComponent<ENVIRONMENTAL_AUDIO>();
@@ -282,8 +282,8 @@ void PLAYER_CONTROLLER::TerrainAudioCollision()
         return;
 
     // Check other gameObjects for terrain audio component
-    std::vector<GAMEOBJECT*>emitters;
-    for (auto& g : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    std::vector<GameObject*>emitters;
+    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
     {
         if (g.second.get() == parent)
             continue;
@@ -476,8 +476,8 @@ void PLAYER_CONTROLLER::NPCDialogueTrigger()
 {
     if (inDialogue)
         return;
-    std::vector<GAMEOBJECT*>npcs;
-    for (auto& g : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    std::vector<GameObject*>npcs;
+    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
     {
         if (g.second->GetComponent<NPCDialogue>())
             npcs.push_back(g.second.get());

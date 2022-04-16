@@ -1,8 +1,8 @@
 #pragma once
-#include "SCENE.h"
+#include "Scene.h"
 
 
-class SCENE_UI : public SCENE
+class SceneUI : public Scene
 {
     HRESULT Initialize() override;
     void Execute() override;

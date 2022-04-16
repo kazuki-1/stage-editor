@@ -1,5 +1,5 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
 enum class NPC_Type
 {
@@ -7,7 +7,7 @@ enum class NPC_Type
 	Key_Npc
 };
 
-class NPCDialogue_Data : public COMPONENT_DATA
+class NPCDialogue_Data : public ComponentData
 {
 public:
 	std::vector<std::list<std::string>>dialogue_list;
@@ -17,17 +17,17 @@ public:
 	template <class T>
 	void serialize(T& t)
 	{
-		t(cereal::base_class<COMPONENT_DATA>(this), dialogue_list, npc_type);
+		t(cereal::base_class<ComponentData>(this), dialogue_list, npc_type);
 	}
 };
 
-class NPCDialogue : public COMPONENT
+class NPCDialogue : public Component
 {
 	NPCDialogue_Data* data;
 	bool triggered;
 	void GetDialogue();
 public:
-	NPCDialogue(GAMEOBJECT* p, COMPONENT_DATA* d);
+	NPCDialogue(GameObject* p, ComponentData* d);
 	HRESULT Initialize() override;
 	void Execute() override;
 	void Render() override;

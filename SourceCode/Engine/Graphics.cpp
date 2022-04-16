@@ -61,7 +61,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     TextManager::Instance()->Initialize();
 
     // Initialzes the scene manager by inserting used scenes into the map
-    SCENEMANAGER::Instance()->Initialize();
+    SceneManager::Instance()->Initialize();
 
     // Initializes the white board below
     stage = std::make_shared<MODEL>();
@@ -80,7 +80,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 bool Graphics::Frame()
 {
 
-    SCENEMANAGER::Instance()->Execute();
+    SceneManager::Instance()->Execute();
     stage->UpdateTransform();
 
     //if (INPUTMANAGER::Instance()->Keyboard()->Triggered('L'))
@@ -151,7 +151,7 @@ bool Graphics::Render()
 
 
     Camera::Instance()->Render();
-    SCENEMANAGER::Instance()->Render();
+    SceneManager::Instance()->Render();
     LIGHTINGMANAGER::Instance()->RenderDebug();
 #pragma endregion
 

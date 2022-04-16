@@ -4,15 +4,15 @@
 #include "Engine/DROPMANAGER.h"
 #include "Engine/IMGUI.h"
 #include "Engine/DEBUG_MANAGER.h"
-#include "GAMEOBJECT.h"
-#include "Components/Base Classes/DATAMANAGER.h"
+#include "GameObject.h"
+#include "Components/Base Classes/DataManager.h"
 #include "Components/TRANSFORM_3D.h"
 #include "Components/MESH.h"
 #include "Scenes/SCENEMANAGER.h"
 #include "Engine/Text.h"
 static int cur{};
-std::shared_ptr<GAMEOBJECT>selected_model;
-std::shared_ptr<GAMEOBJECT>selected_item;
+std::shared_ptr<GameObject>selected_model;
+std::shared_ptr<GameObject>selected_item;
 std::string load_file_path;
 std::string output;
 char input_test[256] = { "" };
@@ -56,13 +56,13 @@ void STAGE_UI::RenderUI()
             {
                 if (ImGui::Selectable(s.c_str()))
                 {
-                    DATAMANAGER::Instance()->Insert(std::make_shared<OBJECT_DATA>(full));
+                    DataManager::Instance()->Insert(std::make_shared<OBJECT_DATA>(full));
                     if (ind)
                     {
-                        GAMEOBJECT_MANAGER::Instance()->Insert2D(DATAMANAGER::Instance()->Dataset().back()->Name(), DATAMANAGER::Instance()->Dataset().back());
+                        GameObjectManager::Instance()->Insert2D(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
                     }
                     else
-                        GAMEOBJECT_MANAGER::Instance()->Insert(DATAMANAGER::Instance()->Dataset().back()->Name(), DATAMANAGER::Instance()->Dataset().back());
+                        GameObjectManager::Instance()->Insert(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
                     popupCheck = false;
                     ++id;
                     break;
@@ -87,7 +87,7 @@ void STAGE_UI::RenderUI()
 
 
 
-    static std::shared_ptr<GAMEOBJECT>last_item = selected_item;
+    static std::shared_ptr<GameObject>last_item = selected_item;
     // Resets static variables
     if (last_item != selected_item)
     {
@@ -147,7 +147,7 @@ void STAGE_UI::SceneUI()
             if (browser->HasSelected())
             {
                 std::string file_path = browser->GetSelected().string();
-                DATAMANAGER::Instance()->Load(file_path);
+                DataManager::Instance()->Load(file_path);
                 browser->Close();
             }
         }
@@ -164,7 +164,7 @@ void STAGE_UI::SceneUI()
             if (creator->HasSelected())
             {
                 std::string file_path = creator->GetSelected().string();
-                DATAMANAGER::Instance()->OutputFile(file_path);
+                DataManager::Instance()->OutputFile(file_path);
                 creator->Close();
             }
         }
@@ -187,15 +187,15 @@ void STAGE_UI::HierarchyUI()
     // UI containing the gameObjects
     if (ImGui::Begin("GameObjects"))
     {
-        if (GAMEOBJECT_MANAGER::Instance()->GameObjects().size() > 0)
+        if (GameObjectManager::Instance()->GetGameObjects().size() > 0)
         {
             ImGui::ListBoxHeader("GameObjects", { 250, 600 });
 
-            static std::string selected{ GAMEOBJECT_MANAGER::Instance()->GameObjects().begin()->second->Data()->Name() };
+            static std::string selected{ GameObjectManager::Instance()->GetGameObjects().begin()->second->Data()->Name() };
 
-            for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+            for (auto& o : GameObjectManager::Instance()->GetGameObjects())
             {
-                bool select{ selected == GAMEOBJECT_MANAGER::Instance()->GameObjects().begin()->second->Data()->Name() };
+                bool select{ selected == GameObjectManager::Instance()->GetGameObjects().begin()->second->Data()->Name() };
                 if (selected_item == o.second)
                     o.second->Activate();
                 else
@@ -209,8 +209,8 @@ void STAGE_UI::HierarchyUI()
             if ((ImGui::Button("Remove Item") || INPUTMANAGER::Instance()->Keyboard()->Triggered(VK_DELETE)) && selected_item)
             {
                 std::shared_ptr<OBJECT_DATA>cur_Data = selected_item->Data();
-                GAMEOBJECT_MANAGER::Instance()->Remove(selected_item);
-                DATAMANAGER::Instance()->Remove(cur_Data);
+                GameObjectManager::Instance()->Remove(selected_item);
+                DataManager::Instance()->Remove(cur_Data);
                 selected_item = {};
             }
         }
@@ -226,7 +226,7 @@ void STAGE_UI::HierarchyUI()
 void STAGE_UI::Render()
 {
     // Rendering everything in the scene
-    for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    for (auto& o : GameObjectManager::Instance()->GetGameObjects())
     {
         o.second->ExecuteUI();
         //o.second->RenderUI();
@@ -262,7 +262,7 @@ void STAGE_UI::OutputFile(std::string file_name)
 void STAGE_UI::MouseSelect()
 {
     // Perform ray casting on the mouse and select the object 
-    if (DATAMANAGER::Instance()->Dataset().size() < 1)
+    if (DataManager::Instance()->Dataset().size() < 1)
         return;
     if (!INPUTMANAGER::Instance()->Keyboard()->Held(VK_CONTROL))
     {
@@ -276,7 +276,7 @@ void STAGE_UI::MouseSelect()
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
     XMVECTOR Near, Far;
     float min_dist{ FLT_MAX };
-    for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    for (auto& o : GameObjectManager::Instance()->GetGameObjects())
     {
         if (!o.second->GetComponent<MESH>())
             continue;
@@ -313,7 +313,7 @@ void STAGE_UI::MouseSelect()
             }
         }
     }
-    for (auto& o : GAMEOBJECT_MANAGER::Instance()->GameObjects())
+    for (auto& o : GameObjectManager::Instance()->GetGameObjects())
     {
         if (selected_model == o.second)
         {
@@ -339,17 +339,17 @@ void STAGE_UI::PlayUI()
     ImGui::Begin("Control");
     if (ImGui::Button("Play"))
     {
-        SCENEMANAGER::Instance()->Play();
+        SceneManager::Instance()->Play();
     }
     ImGui::SameLine();
     if (ImGui::Button("Pause"))
     {
-        SCENEMANAGER::Instance()->Pause();
+        SceneManager::Instance()->Pause();
     }
     ImGui::SameLine();
     if (ImGui::Button("Stop"))
     {
-        SCENEMANAGER::Instance()->Stop();
+        SceneManager::Instance()->Stop();
     }
     ImGui::End();
 
@@ -357,6 +357,6 @@ void STAGE_UI::PlayUI()
 
 /*--------------------------------------------------------STAGE_UI RemoveGameObject()--------------------------------------------------------------------*/
 
-void STAGE_UI::RemoveGameObject(GAMEOBJECT* g)
+void STAGE_UI::RemoveGameObject(GameObject* g)
 {
 }

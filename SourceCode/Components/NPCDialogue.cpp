@@ -1,5 +1,5 @@
 #include "NPCDialogue.h"
-#include "../DialogueManager.h"
+#include "../DialogueController.h"
 std::string npc_types[] = { "Normal Npc", "Key Npc"};
 
 
@@ -18,7 +18,7 @@ NPCDialogue_Data::NPCDialogue_Data()
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------NPCDialogue Constructor---------------------------------------------------------------------------*/
 
-NPCDialogue::NPCDialogue(GAMEOBJECT* p, COMPONENT_DATA* data)
+NPCDialogue::NPCDialogue(GameObject* p, ComponentData* data)
 {
 	parent = p;
 	this->data = static_cast<NPCDialogue_Data*>(data);

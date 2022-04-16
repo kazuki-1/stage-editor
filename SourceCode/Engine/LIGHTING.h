@@ -10,7 +10,7 @@
 using namespace Math;
 static std::string input{ "" };
 static std::string output_file{ "" }, input_file{ "" };
-class DIRECTIONAL_LIGHT;
+class DirectionalLight;
 class POINT_LIGHT;
 class SPOTLIGHT;
 
@@ -103,7 +103,7 @@ public:
 		};
 
 	}
-	void WriteToData(DIRECTIONAL_LIGHT* d);
+	void WriteToData(DirectionalLight* d);
 	void WriteToData(POINT_LIGHT* p);
 	void WriteToData(SPOTLIGHT* s);
 	L_TYPE Type();

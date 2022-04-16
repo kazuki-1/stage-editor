@@ -1,9 +1,9 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
-class DIRECTIONAL_LIGHT_DATA : public COMPONENT_DATA
+#include "Base Classes/Component.h"
+class DirectionalLight_Data : public ComponentData
 {
 public:
-    DIRECTIONAL_LIGHT_DATA();
+    DirectionalLight_Data();
     Vector3 direction{};
     Vector4 colour{};
     template <class T>
@@ -14,12 +14,12 @@ public:
 };
 
 
-class DIRECTIONAL_LIGHT : public COMPONENT
+class DirectionalLight : public Component
 {
     std::shared_ptr<LIGHTING>light;
-    DIRECTIONAL_LIGHT_DATA* data;
+    DirectionalLight_Data* data;
 public:
-    DIRECTIONAL_LIGHT(GAMEOBJECT* t, COMPONENT_DATA* data);
+    DirectionalLight(GameObject* t, ComponentData* data);
 
     HRESULT Initialize() override;
     void Execute() override;
@@ -32,4 +32,4 @@ public:
 
 };
 
-CEREAL_REGISTER_TYPE(DIRECTIONAL_LIGHT_DATA)
+CEREAL_REGISTER_TYPE(DirectionalLight_Data)

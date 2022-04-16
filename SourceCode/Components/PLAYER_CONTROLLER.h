@@ -1,5 +1,5 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
 enum class PLAYER_ANIM
 {
@@ -12,19 +12,19 @@ enum class PLAYER_ANIM
 };
 
 
-class PLAYER_CONTROLLER_DATA : public CHARACTER_DATA
+class PLAYER_CONTROLLER_DATA : public CharacterData
 {
 public:
     PLAYER_CONTROLLER_DATA() { type = COMPONENT_TYPE::PLAYER_CONTROLLER; }
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<CHARACTER_DATA>(this));
+        t(cereal::base_class<CharacterData>(this));
     }
 };
 
 
-class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
+class PLAYER_CONTROLLER : public BaseCharacterComponent
 {
     PLAYER_CONTROLLER_DATA* data;
 
@@ -76,7 +76,7 @@ class PLAYER_CONTROLLER : public BASE_CHARACTER_COMPONENT
 
     bool inDialogue{};
 public:
-    PLAYER_CONTROLLER(GAMEOBJECT* g, COMPONENT_DATA* d);
+    PLAYER_CONTROLLER(GameObject* g, ComponentData* d);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (OBB_COLLIDER_DATA) </para>

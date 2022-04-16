@@ -2,9 +2,9 @@
 #include <vector>
 #include <memory>
 //#include "COLLIDERS.h"
-#include "Components/Base Classes/COMPONENT_DATA.h"
-class GAMEOBJECT;
-class GAMEOBJECT_2D;
+#include "Components/Base Classes/ComponentData.h"
+class GameObject;
+class GameObject_2D;
 enum class OBJECT_TYPE
 {
     WALL, FLOOR, BACKDROP, PLAYER, ENEMY
@@ -12,13 +12,13 @@ enum class OBJECT_TYPE
 class OBJECT_DATA
 {
     std::string name;
-    std::vector<std::shared_ptr<COMPONENT_DATA>>dataset;
-    friend class GAMEOBJECT;
-    friend class GAMEOBJECT_2D;
+    std::vector<std::shared_ptr<ComponentData>>dataset;
+    friend class GameObject;
+    friend class GameObject_2D;
 public:
     OBJECT_DATA() {};
     OBJECT_DATA(std::string n) : name(n) {};
-    std::vector<std::shared_ptr<COMPONENT_DATA>>Dataset() { return dataset; }
+    std::vector<std::shared_ptr<ComponentData>>Dataset() { return dataset; }
     const std::string& Name() { return name; }
     template <class T>
     void Create()
@@ -54,7 +54,7 @@ public:
         t(name, dataset);
     }
 
-    int DataIndex(std::shared_ptr<COMPONENT_DATA>target)
+    int DataIndex(std::shared_ptr<ComponentData>target)
     {
         int ind{};
         for (auto& d : dataset)
@@ -64,7 +64,7 @@ public:
             ++ind;
         }
     }
-    void Remove(std::shared_ptr<COMPONENT_DATA>target)
+    void Remove(std::shared_ptr<ComponentData>target)
     {
         dataset.erase(dataset.begin() + DataIndex(target));
     }

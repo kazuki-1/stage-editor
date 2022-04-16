@@ -1,6 +1,6 @@
 #include "../Engine/LIGHTING.h"
 #include "../GAMEOBJECT.h"
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "TRANSFORM_3D.h"
 #include "POINT_LIGHT.h"
 
@@ -20,7 +20,7 @@ POINT_LIGHT_DATA::POINT_LIGHT_DATA()
 /*---------------------------------------POINT_LIGHT Constructor--------------------------------------------------*/
 
 
-POINT_LIGHT::POINT_LIGHT(GAMEOBJECT* t, COMPONENT_DATA* data)
+POINT_LIGHT::POINT_LIGHT(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<POINT_LIGHT_DATA*>(data);

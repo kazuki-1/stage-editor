@@ -1,4 +1,4 @@
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 #include "OBB_COLLIDER.h"
 #include "TRANSFORM_3D.h"
 #include "MESH.h"
@@ -23,7 +23,7 @@ OBB_COLLIDER_DATA::OBB_COLLIDER_DATA()
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------OBB_COLLIDER Constructor--------------------------------------------*/
 
-OBB_COLLIDER::OBB_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data)
+OBB_COLLIDER::OBB_COLLIDER(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<OBB_COLLIDER_DATA*>(data);
@@ -179,7 +179,7 @@ Vector3 OBB_COLLIDER::DistanceToPlayer(PLAYER_CONTROLLER* target)
 /// <para> Calculates the distance to the player </para>
 /// <para> プレイヤーとの距離を計算する </para>
 /// </summary>
-bool OBB_COLLIDER::Collide(GAMEOBJECT* target)
+bool OBB_COLLIDER::Collide(GameObject* target)
 {
     OBB_COLLIDER* other = target->GetComponent<OBB_COLLIDER>();
     if (other)

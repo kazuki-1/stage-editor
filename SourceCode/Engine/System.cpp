@@ -6,8 +6,8 @@
 
 
 
-#define BeginQuery PERFORMANCE_COUNTER::Instance()->BeginQuery
-#define EndQuery PERFORMANCE_COUNTER::Instance()->EndQuery
+#define BeginQuery PerformanceCounter::Instance()->BeginQuery
+#define EndQuery PerformanceCounter::Instance()->EndQuery
 bool FullScreen{};
 bool vSync{ false };
 const float SCREEN_DEPTH{ 1000.0f };
@@ -76,7 +76,7 @@ bool System::Frame()
     BeginQuery();
     result = Graphics::Instance()->Frame();
     EndQuery();
-    SetWindowTextA(hwnd, PERFORMANCE_COUNTER::Instance()->Results().str().c_str());
+    SetWindowTextA(hwnd, PerformanceCounter::Instance()->Results().str().c_str());
     if (!result)
         return false;
     return true;

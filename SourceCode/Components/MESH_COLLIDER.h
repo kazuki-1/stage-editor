@@ -1,19 +1,19 @@
 #pragma once
-#include "Base Classes/COMPONENT.h"
+#include "Base Classes/Component.h"
 
-class MESH_COLLIDER_DATA : public COMPONENT_DATA
+class MESH_COLLIDER_DATA : public ComponentData
 {
 public:
     MESH_COLLIDER_DATA() { type = COMPONENT_TYPE::MESH_COL; }
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<COMPONENT_DATA>(this));
+        t(cereal::base_class<ComponentData>(this));
     }
 };
 
 
-class MESH_COLLIDER : public COMPONENT
+class MESH_COLLIDER : public Component
 {
     MESH_COLLIDER_DATA* data;
 
@@ -21,7 +21,7 @@ public:
     // Check last state and gives true on moment of collision
     bool trigger;
     MESH_COLLIDER() {};
-    MESH_COLLIDER(GAMEOBJECT* t, COMPONENT_DATA* data);
+    MESH_COLLIDER(GameObject* t, ComponentData* data);
 
     /// <summary>
     /// <para> Called when created from data </para>
