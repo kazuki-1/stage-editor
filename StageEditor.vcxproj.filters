@@ -147,14 +147,14 @@
     <Filter Include="Components\Transform 3D">
       <UniqueIdentifier>{600a9837-6df4-4982-8aba-e6121110ed22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\NPC Dialogue">
-      <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\DialogueManager">
       <UniqueIdentifier>{1c211116-b97e-4698-aa8a-5bf62992261b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\GameObject">
       <UniqueIdentifier>{530aa874-d386-42aa-bcdf-3d02ceb806a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Dialogue">
+      <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -353,8 +353,8 @@
     <ClCompile Include="SourceCode\Components\Transform3D.cpp">
       <Filter>Components\Transform 3D</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\NPCDialogue.cpp">
-      <Filter>Components\NPC Dialogue</Filter>
+    <ClCompile Include="SourceCode\Components\Dialogue.cpp">
+      <Filter>Components\Dialogue</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\DialogueController.cpp">
       <Filter>Source Files\DialogueManager</Filter>
@@ -601,8 +601,8 @@
     <ClInclude Include="SourceCode\Components\Transform3D.h">
       <Filter>Components\Transform 3D</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\NPCDialogue.h">
-      <Filter>Components\NPC Dialogue</Filter>
+    <ClInclude Include="SourceCode\Components\Dialogue.h">
+      <Filter>Components\Dialogue</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\DialogueController.h">
       <Filter>Source Files\DialogueManager</Filter>

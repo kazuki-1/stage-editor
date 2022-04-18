@@ -8,7 +8,7 @@
 #include "EnvironmentalAudio.h"
 #include "CapsuleCollider.h"
 #include "TerrainAudio.h"
-#include "NPCDialogue.h"
+#include "Dialogue.h"
 #include "../DialogueController.h"
 #define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;

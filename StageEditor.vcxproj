@@ -39,7 +39,7 @@
     <ClCompile Include="SourceCode\Components\EnvironmentalAudio.cpp" />
     <ClCompile Include="SourceCode\Components\Mesh.cpp" />
     <ClCompile Include="SourceCode\Components\MeshCollider.cpp" />
-    <ClCompile Include="SourceCode\Components\NPCDialogue.cpp" />
+    <ClCompile Include="SourceCode\Components\Dialogue.cpp" />
     <ClCompile Include="SourceCode\Components\OBBCollider.cpp" />
     <ClCompile Include="SourceCode\Components\OBBTerrain.cpp" />
     <ClCompile Include="SourceCode\Components\PlayerController.cpp" />
@@ -115,7 +115,7 @@
     <ClInclude Include="SourceCode\Components\EnvironmentalAudio.h" />
     <ClInclude Include="SourceCode\Components\Mesh.h" />
     <ClInclude Include="SourceCode\Components\MeshCollider.h" />
-    <ClInclude Include="SourceCode\Components\NPCDialogue.h" />
+    <ClInclude Include="SourceCode\Components\Dialogue.h" />
     <ClInclude Include="SourceCode\Components\OBBCollider.h" />
     <ClInclude Include="SourceCode\Components\OBBTerrain.h" />
     <ClInclude Include="SourceCode\Components\PlayerController.h" />

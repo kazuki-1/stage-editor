@@ -122,18 +122,6 @@ void AudioController::DebugUI()
             StopDucking();
 
         play ? Resume() : Pause();
-        //int ind{};
-        //for (auto& b : audioMap)
-        //{
-        //    std::string s{ "BGM " };
-        //    s += std::to_string(ind);
-        //    if (ImGui::TreeNode(s.c_str()))
-        //    {
-        //        b.second->stateMachine->DebugUI();
-        //        ImGui::TreePop();
-        //    }
-        //    ++ind;
-        //}
         ImGui::End();
     }
 

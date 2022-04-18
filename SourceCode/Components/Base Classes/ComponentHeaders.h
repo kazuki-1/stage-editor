@@ -18,4 +18,4 @@
 #include "../MeshCollider.h"
 #include "../OBBTerrain.h"
 #include "../TerrainAudio.h"
-#include "../NPCDialogue.h"
+#include "../Dialogue.h"

@@ -7,13 +7,13 @@ enum class NPC_Type
 	Key_Npc
 };
 
-class NPCDialogue_Data : public ComponentData
+class Dialogue_Data : public ComponentData
 {
 public:
 	std::vector<std::list<std::string>>dialogue_list;
 	NPC_Type npc_type{ NPC_Type::Normal_Npc };
 
-	NPCDialogue_Data();
+	Dialogue_Data();
 	template <class T>
 	void serialize(T& t)
 	{
@@ -23,7 +23,7 @@ public:
 
 class Dialogue_Component : public Component
 {
-	NPCDialogue_Data* data;
+	Dialogue_Data* data;
 	bool triggered;
 	void GetDialogue();
 public:
@@ -34,8 +34,8 @@ public:
 	void UI() override;
 	void Trigger();
 
-	NPCDialogue_Data* GetData();
+	Dialogue_Data* GetData();
 };
 
 
-CEREAL_REGISTER_TYPE(NPCDialogue_Data)
+CEREAL_REGISTER_TYPE(Dialogue_Data)

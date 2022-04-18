@@ -1,14 +1,14 @@
-#include "NPCDialogue.h"
+#include "Dialogue.h"
 #include "../DialogueController.h"
 std::string npc_types[] = { "Normal Npc", "Key Npc"};
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------NPCDialogue_Data Class-----------------------------------------------------------------------------*/
+/*--------------------------------------------------------Dialogue_Data Class-----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------NPCDialogue_Data Contructor------------------------------------------------------------------------*/
+/*--------------------------------------------------------Dialogue_Data Contructor------------------------------------------------------------------------*/
 
-NPCDialogue_Data::NPCDialogue_Data()
+Dialogue_Data::Dialogue_Data()
 {
 	type = COMPONENT_TYPE::NPC_DIALOGUE;
 }
@@ -21,7 +21,7 @@ NPCDialogue_Data::NPCDialogue_Data()
 Dialogue_Component::Dialogue_Component(GameObject* p, ComponentData* data)
 {
 	parent = p;
-	this->data = static_cast<NPCDialogue_Data*>(data);
+	this->data = static_cast<Dialogue_Data*>(data);
 
 }
 
@@ -125,7 +125,7 @@ void Dialogue_Component::Trigger()
 
 /*--------------------------------------------------------Dialogue_Component GetData()-------------------------------------------------*/
 
-NPCDialogue_Data* Dialogue_Component::GetData()
+Dialogue_Data* Dialogue_Component::GetData()
 {
 	return data;
 }
