@@ -1,67 +1,67 @@
 #include "../Engine/LIGHTING.h"
 #include "../GAMEOBJECT.h"
-#include "SPOTLIGHT.h"
+#include "SpotLight.h"
 
 /*----------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------SPOTLIGHT_DATA Class-----------------------------------------------------*/
+/*---------------------------------------SpotLight_Data Class-----------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------SPOTLIGHT_DATA Constructor-----------------------------------------------*/
+/*---------------------------------------SpotLight_Data Constructor-----------------------------------------------*/
 
-SPOTLIGHT_DATA::SPOTLIGHT_DATA()
+SpotLight_Data::SpotLight_Data()
 {
     type = COMPONENT_TYPE::SPOTLIGHT;
 }
 
 /*----------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------SPOTLIGHT Class----------------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Class----------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------SPOTLIGHT Constructor----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Constructor----------------------------------------------------*/
 
-SPOTLIGHT::SPOTLIGHT(GameObject* t, ComponentData* data)
+SpotLight_Component::SpotLight_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
-    this->data = static_cast<SPOTLIGHT_DATA*>(data);
+    this->data = static_cast<SpotLight_Data*>(data);
 }
 
-/*---------------------------------------SPOTLIGHT Initialize()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Initialize()----------------------------------------------------*/
 /// <summary>
-/// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
-/// <para> 生成時に呼び出す。対象のデータを使って初期化する (OBB_COLLIDER_DATA) </para>
+/// <para>Called when component is created. Initializes the component with the component data of its matching type (SpotLight_Data)</para>
+/// <para> 生成時に呼び出す。対象のデータを使って初期化する (SpotLight_Data) </para>
 /// </summary>
 /// <returns></returns>
-HRESULT SPOTLIGHT::Initialize()
+HRESULT SpotLight_Component::Initialize()
 {
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::SPOT);
-    LIGHTINGMANAGER::Instance()->Insert(Parent()->Data()->Name(), light);
+    LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
     return S_OK;
 }
 
-/*---------------------------------------SPOTLIGHT Execute()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void SPOTLIGHT::Execute()
+void SpotLight_Component::Execute()
 {
 
 }
 
-/*---------------------------------------SPOTLIGHT Render()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Render()----------------------------------------------------*/
 /// <summary>
 /// <para> Called after Execute() to perform any render functions </para>
 /// <para> Execute()後にレンダー関数を実行するように毎フレームに呼び出す </para>
 /// </summary>
-void SPOTLIGHT::Render()
+void SpotLight_Component::Render()
 {
     light->WriteToData(this);
 }
 
-/*---------------------------------------SPOTLIGHT UI()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component UI()----------------------------------------------------*/
 /// <summary>
 /// <para> Renders the UI for this component </para>
 /// <para> UIを描画 </para>
 /// </summary>
-void SPOTLIGHT::UI()
+void SpotLight_Component::UI()
 {
     if (ImGui::TreeNode("Spotlight"))
     {
@@ -76,51 +76,51 @@ void SPOTLIGHT::UI()
 
 }
 
-/*---------------------------------------SPOTLIGHT Direction()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Direction()----------------------------------------------------*/
 
-Vector3 SPOTLIGHT::Direction()
+Vector3 SpotLight_Component::Direction()
 {
     return data->direction;
 }
 
-/*---------------------------------------SPOTLIGHT Position()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Position()----------------------------------------------------*/
 
-Vector3 SPOTLIGHT::Position()
+Vector3 SpotLight_Component::Position()
 {
     return data->position;
 }
 
-/*---------------------------------------SPOTLIGHT Colour()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Colour()----------------------------------------------------*/
 
-Vector4 SPOTLIGHT::Colour()
+Vector4 SpotLight_Component::Colour()
 {
     return data->colour;
 }
 
-/*---------------------------------------SPOTLIGHT Range()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component Range()----------------------------------------------------*/
 
-float SPOTLIGHT::Range()
+float SpotLight_Component::Range()
 {
     return data->range;
 }
 
-/*---------------------------------------SPOTLIGHT InnerCorner()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component InnerCorner()----------------------------------------------------*/
 
-float SPOTLIGHT::InnerCorner()
+float SpotLight_Component::InnerCorner()
 {
     return data->innerCorner;
 }
 
-/*---------------------------------------SPOTLIGHT OuterCorner()----------------------------------------------------*/
+/*---------------------------------------SpotLight_Component OuterCorner()----------------------------------------------------*/
 
-float SPOTLIGHT::OuterCorner()
+float SpotLight_Component::OuterCorner()
 {
     return data->outerCorner;
 }
 
-/*----------------------------------------------------------SPOTLIGHT GetComponentType()-----------------------------------------------------------*/
+/*----------------------------------------------------------SpotLight_Component GetComponentType()-----------------------------------------------------------*/
 
-COMPONENT_TYPE SPOTLIGHT::GetComponentType()
+COMPONENT_TYPE SpotLight_Component::GetComponentType()
 {
     return data->type;
 }

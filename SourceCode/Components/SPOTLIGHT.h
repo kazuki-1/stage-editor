@@ -1,10 +1,10 @@
 #pragma once
 #include "Base Classes/Component.h"
 
-class SPOTLIGHT_DATA : public ComponentData
+class SpotLight_Data : public ComponentData
 {
 public:
-    SPOTLIGHT_DATA();
+    SpotLight_Data();
     Vector3 position{};
     Vector3 direction{};
     Vector4 colour{};
@@ -20,16 +20,16 @@ public:
 };
 
 
-class SPOTLIGHT : public Component
+class SpotLight_Component : public Component
 {
     std::shared_ptr<LIGHTING>light;
-    SPOTLIGHT_DATA* data;
+    SpotLight_Data* data;
 public:
-    SPOTLIGHT(GameObject* t, ComponentData* data);
+    SpotLight_Component(GameObject* t, ComponentData* data);
 
 
     /// <summary>
-    /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
+    /// <para>Called when component is created. Initializes the component with the component data of its matching type (SpotLight_Data)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (OBB_COLLIDER_DATA) </para>
     /// </summary>
     /// <returns></returns>
@@ -59,4 +59,4 @@ public:
     COMPONENT_TYPE GetComponentType() override;
 };
 
-CEREAL_REGISTER_TYPE(SPOTLIGHT_DATA)
+CEREAL_REGISTER_TYPE(SpotLight_Data)

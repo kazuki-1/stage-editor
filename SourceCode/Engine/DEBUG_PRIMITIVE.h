@@ -11,7 +11,7 @@ using namespace Math;
 class SHADERS;
 class MODEL;
 class OBJECT;
-class DEBUG_MANAGER;
+class DebugController;
 class DEBUG_PRIMITIVE
 {
 protected:
@@ -63,7 +63,7 @@ class DEBUG_ARROWS : public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
     Vector3 position, rotation;
-    friend class DEBUG_MANAGER;
+    friend class DebugController;
 public:
     DEBUG_ARROWS() {};
     void Initialize();
@@ -81,7 +81,7 @@ class DEBUG_SCALARS: public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
     Vector3 position, rotation;
-    friend class DEBUG_MANAGER;
+    friend class DebugController;
 public:
     DEBUG_SCALARS() {};
     void Initialize();
@@ -99,7 +99,7 @@ class DEBUG_DISCS : public DEBUG_PRIMITIVE
     std::shared_ptr<MODEL>zAxis;
     XMMATRIX target{ };
     Vector3 position, rotation;
-    friend class DEBUG_MANAGER;
+    friend class DebugController;
 public:
     DEBUG_DISCS() {};
     void Initialize();

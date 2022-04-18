@@ -9,7 +9,7 @@ void GUI::Initialize()
 {
 
     ComponentCreator::Instance()->Initialize();
-    DEBUG_MANAGER::Instance()->Initialize();
+    DebugController::Instance()->Initialize();
 }
 
 
@@ -17,7 +17,7 @@ void GUI::Initialize()
 void GUI::Execute()
 {
     IMGUI::Instance()->Execute();
-    LIGHTINGMANAGER::Instance()->RenderUI();
+    LightingManager::Instance()->RenderUI();
     STAGE_UI::Instance()->RenderUI();
 }
 

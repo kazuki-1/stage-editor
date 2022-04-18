@@ -1,7 +1,7 @@
 #pragma once
 #include "Base Classes/Component.h"
 
-class MESH_DATA : public ComponentData
+class Mesh_Data : public ComponentData
 {
 public:
     std::string model_path{};
@@ -9,7 +9,7 @@ public:
     int animationTake{};
     bool playAnimationFlag{ true };
 
-    MESH_DATA();
+    Mesh_Data();
     template <class T>
     void serialize(T& t)
     {
@@ -18,16 +18,16 @@ public:
 
 };
 
-class MESH : public Component
+class Mesh_Component : public Component
 {
     std::shared_ptr<MODEL>model{};
-    MESH_DATA* data;
+    Mesh_Data* data;
 public:
-    MESH() {};
-    MESH(GameObject* t, ComponentData* data);
+    Mesh_Component() {};
+    Mesh_Component(GameObject* t, ComponentData* data);
     /// <summary>
-    /// <para>Called when component is created. Initializes the component with the component data of its matching type (MESH_DATA)</para>
-    /// <para> 生成時に呼び出す。対象のデータを使って初期化する (MESH_DATA) </para>
+    /// <para>Called when component is created. Initializes the component with the component data of its matching type (Mesh_Data)</para>
+    /// <para> 生成時に呼び出す。対象のデータを使って初期化する (Mesh_Data) </para>
     /// </summary>
     /// <returns></returns>
     HRESULT Initialize() override;
@@ -75,17 +75,17 @@ public:
     /// Returns the Data class of this class
     /// </summary>
     /// <returns></returns>
-    MESH_DATA* Data();
+    Mesh_Data* Data();
     /// <summary>
     /// <para> Retrieves the world transform for the bone </para>
     /// <para> 求められているボーンのワールド行列を返す </para>
     /// </summary>
     /// <returns></returns>
     XMMATRIX GetBoneTransform(std::string name);
-
+    COMPONENT_TYPE GetComponentType() override;
 
 
 
 };
 
-CEREAL_REGISTER_TYPE(MESH_DATA)
+CEREAL_REGISTER_TYPE(Mesh_Data)

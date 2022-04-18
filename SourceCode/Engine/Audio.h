@@ -11,9 +11,9 @@
 using namespace Microsoft::WRL;
 class AUDIO;
 /// <summary>
-/// Use this to create an AUDIO object by calling AUDIOENGINE::Instance()->Insert(std::string name, std::wstring file_path)
+/// Use this to create an AUDIO object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
 /// </summary>
-class AUDIOENGINE : public Singleton<AUDIOENGINE>
+class AudioEngine : public Singleton<AudioEngine>
 {
 
     ComPtr<IXAudio2>xAudio;

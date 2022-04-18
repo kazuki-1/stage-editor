@@ -18,7 +18,7 @@ HRESULT SceneUI::Initialize()
 {
     DataManager::Instance()->InsertAndInitialize();
     ComponentCreator::Instance()->Initialize();
-    DEBUG_MANAGER::Instance()->Initialize();
+    DebugController::Instance()->Initialize();
     TextManager::Instance()->SetCurrentFont("Font1");
     return S_OK;
 
@@ -29,7 +29,7 @@ HRESULT SceneUI::Initialize()
 void SceneUI::Execute()
 {
     IMGUI::Instance()->Execute();
-    LIGHTINGMANAGER::Instance()->RenderUI();
+    LightingManager::Instance()->RenderUI();
     STAGE_UI::Instance()->RenderUI();
 
 }

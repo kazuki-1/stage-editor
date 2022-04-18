@@ -1,8 +1,8 @@
 #include "./Base Classes/Component.h"
-#include "./CAMERA_COMPONENT.h"
+#include "./Camera_Component.h"
 
 
-CAMERA::CAMERA(GameObject* g, ComponentData* d)
+Camera_Component::Camera_Component(GameObject* g, ComponentData* d)
 {
 
 }

@@ -62,7 +62,7 @@ SHADERS::SHADERS(std::wstring shader_path, ID3D11Device* dv, D3D11_INPUT_ELEMENT
 
 }
 
-HRESULT SHADERMANAGER::Insert(std::wstring shader_path, D3D11_INPUT_ELEMENT_DESC* ied, UINT ied_count)
+HRESULT ShaderManager::Insert(std::wstring shader_path, D3D11_INPUT_ELEMENT_DESC* ied, UINT ied_count)
 {
     std::shared_ptr<SHADERS>s = std::make_shared<SHADERS>(shader_path, DirectX11::Instance()->Device(), ied, ied_count);
     std::filesystem::path path(shader_path);
@@ -73,7 +73,7 @@ HRESULT SHADERMANAGER::Insert(std::wstring shader_path, D3D11_INPUT_ELEMENT_DESC
     shaders.insert({ name, s });
     return s ? S_OK : E_FAIL;
 }
-HRESULT SHADERMANAGER::Initialize()
+HRESULT ShaderManager::Initialize()
 {
     D3D11_INPUT_ELEMENT_DESC ied[] =
     {
@@ -125,11 +125,11 @@ HRESULT SHADERMANAGER::Initialize()
     Insert(L"Shaders/OutlineShader.fx", ied_p, ied_p_size);
     return S_OK;
 }
-void SHADERMANAGER::Clear()
+void ShaderManager::Clear()
 {
     shaders.clear();
 }
-std::shared_ptr<SHADERS>SHADERMANAGER::Retrieve(std::wstring name)
+std::shared_ptr<SHADERS>ShaderManager::Retrieve(std::wstring name)
 {
     for (auto& s : shaders) {
         if (name == s.first)
@@ -139,7 +139,7 @@ std::shared_ptr<SHADERS>SHADERMANAGER::Retrieve(std::wstring name)
     assert(!"No Shader Found!");
     return 0;
 }
-std::map<std::wstring, std::shared_ptr<SHADERS>>SHADERMANAGER::Shaders()
+std::map<std::wstring, std::shared_ptr<SHADERS>>ShaderManager::Shaders()
 {
     return shaders;
 }

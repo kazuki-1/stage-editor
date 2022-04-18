@@ -2,8 +2,8 @@
 #include "IMGUI.h"
 #include "../Components/Base Classes/Component.h"
 #include "../Components/DirectionalLight.h"
-#include "../Components/POINT_LIGHT.h"
-#include "../Components/SPOTLIGHT.h"
+#include "../Components/PointLight.h"
+#include "../Components/SpotLight.h"
 #include <filesystem>
 #pragma region LIGHTING
 
@@ -60,18 +60,18 @@ void LIGHTING::SetType(L_TYPE t)
 {
 	type = t;
 }
-void LIGHTING::WriteToData(DirectionalLight* d)
+void LIGHTING::WriteToData(DirectionalLight_Component* d)
 {
 	direction = { d->Direction().x, d->Direction().y, d->Direction().z };
 	colour = d->Colour();
 }
-void LIGHTING::WriteToData(POINT_LIGHT* p)
+void LIGHTING::WriteToData(PointLight_Component* p)
 {
 	position = { p->Position().x, p->Position().y, p->Position().z };
 	colour = p->Colour();
 	range = p->Range();
 }
-void LIGHTING::WriteToData(SPOTLIGHT* s)
+void LIGHTING::WriteToData(SpotLight_Component* s)
 {
 	position = { s->Position().x, s->Position().y, s->Position().z };
 	direction = { s->Direction().x, s->Direction().y, s->Direction().z };
@@ -118,11 +118,11 @@ float LIGHTING::Outer()
 #pragma endregion
 #pragma region LIGHTINGMANAGER
 
-void LIGHTINGMANAGER::Insert(std::string n, std::shared_ptr<LIGHTING> l)
+void LightingManager::Insert(std::string n, std::shared_ptr<LIGHTING> l)
 {
 	dataset.insert(std::make_pair(n, l));
 }
-void LIGHTINGMANAGER::Remove(std::string n)
+void LightingManager::Remove(std::string n)
 {
 	for (auto d = dataset.begin(); d != dataset.end(); ++d)
 	{
@@ -130,12 +130,12 @@ void LIGHTINGMANAGER::Remove(std::string n)
 			dataset.erase(d);
 	}
 }
-void LIGHTINGMANAGER::Create(std::string n, LIGHTING::L_TYPE t)
+void LightingManager::Create(std::string n, LIGHTING::L_TYPE t)
 {
 	std::shared_ptr<LIGHTING>l = std::make_shared<LIGHTING>(t);
 	Insert(n, l);
 }
-void LIGHTINGMANAGER::RenderUI()
+void LightingManager::RenderUI()
 {
 	ImGui::Begin("Stage Settings");
 	//ImGui::SetWindowSize({ 300, 900 });
@@ -225,7 +225,7 @@ void LIGHTINGMANAGER::RenderUI()
 
 		ImGui::End();
 }
-void LIGHTINGMANAGER::OutputFile(std::string f)
+void LightingManager::OutputFile(std::string f)
 {
 	std::filesystem::path path(f);
 	if (!std::filesystem::exists(path))
@@ -234,7 +234,7 @@ void LIGHTINGMANAGER::OutputFile(std::string f)
 	cereal::BinaryOutputArchive output(ofs);
 	output(dataset);
 }
-void LIGHTINGMANAGER::ReadFromFile(std::string f)
+void LightingManager::ReadFromFile(std::string f)
 {
 	std::filesystem::path path(f);
 	if (!std::filesystem::exists(path))
@@ -244,12 +244,12 @@ void LIGHTINGMANAGER::ReadFromFile(std::string f)
 	in(dataset);
 
 }
-void LIGHTINGMANAGER::RenderDebug()
+void LightingManager::RenderDebug()
 {
 	//for (auto& d : dataset)
 	//	d.second->RenderDebug();
 }
-std::string LIGHTINGMANAGER::Name(std::shared_ptr<LIGHTING>d)
+std::string LightingManager::Name(std::shared_ptr<LIGHTING>d)
 {
 	for (auto& dt : dataset)
 		if (dt.second == d)
@@ -257,7 +257,7 @@ std::string LIGHTINGMANAGER::Name(std::shared_ptr<LIGHTING>d)
 	assert(!"No such light");
 	return "";
 }
-std::shared_ptr<LIGHTING> LIGHTINGMANAGER::Retrieve(std::string n)
+std::shared_ptr<LIGHTING> LightingManager::Retrieve(std::string n)
 {
 	return dataset.find(n)->second;
 }

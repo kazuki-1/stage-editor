@@ -14,12 +14,12 @@ public:
 };
 
 
-class DirectionalLight : public Component
+class DirectionalLight_Component : public Component
 {
     std::shared_ptr<LIGHTING>light;
     DirectionalLight_Data* data;
 public:
-    DirectionalLight(GameObject* t, ComponentData* data);
+    DirectionalLight_Component(GameObject* t, ComponentData* data);
 
     HRESULT Initialize() override;
     void Execute() override;

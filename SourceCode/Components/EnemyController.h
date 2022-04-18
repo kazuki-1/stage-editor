@@ -14,11 +14,11 @@ public:
 
 
 
-class EnemyController : public BaseCharacterComponent
+class EnemyController_Component : public BaseCharacterComponent
 {   
     EnemyController_Data* data;
 public:
-    EnemyController(GameObject* g, ComponentData* d);
+    EnemyController_Component(GameObject* g, ComponentData* d);
     HRESULT Initialize() override;
     void Execute() override;
     void UI() override;

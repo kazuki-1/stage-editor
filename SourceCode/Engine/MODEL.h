@@ -52,7 +52,7 @@ public:
 #pragma region MAIN FUNCTIONS
 
     /// <summary>
-    /// Initializes the Model Resource by attempting to retrieve Resource from RESOURCEMANAGER
+    /// Initializes the Model Resource by attempting to retrieve Resource from ModelResourceManager
     /// Also Creates a vector of the names of Animation to use when rendering
     /// </summary>
     /// <returns></returns>

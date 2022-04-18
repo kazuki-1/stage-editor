@@ -1,10 +1,10 @@
 #include "COLLISION.h"
 #include "../Components/Base Classes/ComponentData.h"
-#include "../Components/OBB_COLLIDER.h"
-#include "../Components/SPHERE_COLLIDER.h"
+#include "../Components/OBBCollider.h"
+#include "../Components/SphereCollider.h"
 #include "../Components/CapsuleCollider.h"
-#include "../Components/MESH.h"
-#include "../Components/TRANSFORM_3D.h"
+#include "../Components/Mesh.h"
+#include "../Components/Transform3D.h"
 using namespace COLLIDERS;
 
 /*---------------------------------------------------PointLineClosest()---------------------------------------------------*/
@@ -502,7 +502,7 @@ void SPHERE::SetRadius(float rad)
 
 void SPHERE::SetData(ComponentData* data)
 {
-    SPHERE_COLLIDER_DATA* d{ CastData<SPHERE_COLLIDER_DATA>(data) };
+    SphereCollider_Data* d{ CastData<SphereCollider_Data>(data) };
     SetCenter(d->center);
     SetRadius(d->radius);
 }
@@ -671,7 +671,7 @@ void OBB::SetMax(Vector3 max)
 
 void OBB::SetData(ComponentData* d)
 {
-    OBB_COLLIDER_DATA* od{ static_cast<OBB_COLLIDER_DATA*>(d) };
+    OBBCollider_Data* od{ static_cast<OBBCollider_Data*>(d) };
     SetMin(od->min);
     SetMax(od->max);
 }
@@ -909,7 +909,7 @@ void CAPSULE::SetData(ComponentData* d)
 /// </summary>
 /// <param name="name"> : Name of model</param>
 /// <param name="m"> : Model pointer</param>
-void RAYCAST_MANAGER::Insert(MESH* m)
+void RAYCAST_MANAGER::Insert(Mesh_Component* m)
 {
     meshes.push_back(m);
 }
@@ -933,12 +933,12 @@ void RAYCAST_MANAGER::Finalize()
 /// <param name="direction_vector"> : Direction of movement</param>
 /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RAYCASTDATA& rcd)
 {
     bool output{};
     for (auto& m : meshes)
     {
-        Vector3 target{ m->Parent()->GetComponent<TRANSFORM_3D>()->Translation() };
+        Vector3 target{ m->Parent()->GetComponent<Transform3D_Component>()->Translation() };
         //if ((target - startOfRay).Length() > 0.3f)
         //    continue;
         if (m == cur_mesh)
@@ -952,7 +952,7 @@ bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, MESH* cur_me
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
 {
     bool output{};
     for (auto& m : meshes)
@@ -969,7 +969,7 @@ bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, MESH* target
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-void RAYCAST_MANAGER::GetListOfCollided(MESH* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd)
+void RAYCAST_MANAGER::GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd)
 {
     for (auto& m : meshes)
     {
@@ -983,7 +983,7 @@ void RAYCAST_MANAGER::GetListOfCollided(MESH* cur_Mesh, Vector3 startOfRay, Vect
 
 /*-----------------------------------------------------RAYCAST_MANAGER ModelMap()--------------------------------------------------------------*/
 
-std::vector<MESH*>RAYCAST_MANAGER::Meshes()
+std::vector<Mesh_Component*>RAYCAST_MANAGER::Meshes()
 {
     return meshes;
 }

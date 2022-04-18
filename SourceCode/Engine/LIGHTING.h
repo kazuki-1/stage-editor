@@ -10,9 +10,9 @@
 using namespace Math;
 static std::string input{ "" };
 static std::string output_file{ "" }, input_file{ "" };
-class DirectionalLight;
-class POINT_LIGHT;
-class SPOTLIGHT;
+class DirectionalLight_Component;
+class PointLight_Component;
+class SpotLight_Component;
 
 
 
@@ -74,7 +74,7 @@ private:
 	 float outer{};
 	//std::shared_ptr<LIGHT_DATA_BASE>data;
 
-	friend class LIGHTINGMANAGER;
+	friend class LightingManager;
 public:
 	LIGHTING() {}
 	LIGHTING(L_TYPE t);
@@ -103,9 +103,9 @@ public:
 		};
 
 	}
-	void WriteToData(DirectionalLight* d);
-	void WriteToData(POINT_LIGHT* p);
-	void WriteToData(SPOTLIGHT* s);
+	void WriteToData(DirectionalLight_Component* d);
+	void WriteToData(PointLight_Component* p);
+	void WriteToData(SpotLight_Component* s);
 	L_TYPE Type();
 	Vector3 Direction();
 	Vector3 Position();
@@ -135,7 +135,7 @@ public:
 };
 
 
-class LIGHTINGMANAGER : public Singleton<LIGHTINGMANAGER>
+class LightingManager : public Singleton<LightingManager>
 {
 	std::map<std::string, std::shared_ptr<LIGHTING>>dataset;
 public:

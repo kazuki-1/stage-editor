@@ -1,38 +1,38 @@
 #include "Base Classes/Component.h"
-#include "MESH.h"
-#include "TRANSFORM_3D.h"
+#include "Mesh.h"
+#include "Transform3D.h"
 
 namespace FS = std::filesystem;
 
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------MESH_DATA Class-----------------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Data Class-----------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------MESH_DATA Constructor-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Data Constructor-----------------------------------------------------------*/
 
-MESH_DATA::MESH_DATA()
+Mesh_Data::Mesh_Data()
 {
     type = COMPONENT_TYPE::MESH;
 }
 
 
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------MESH Class-----------------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Class-----------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------MESH Constructor-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Constructor-----------------------------------------------------------*/
 
-MESH::MESH(GameObject* t, ComponentData* data)
+Mesh_Component::Mesh_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
-    this->data = static_cast<MESH_DATA*>(data);
+    this->data = static_cast<Mesh_Data*>(data);
 }
 
-/*----------------------------------------------------------MESH Initialize()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Initialize()-----------------------------------------------------------*/
 /// <summary>
 /// <para>Called when component is created. Initializes the component with the component data of its matching type (CapsuleCollider_Data)</para>
 /// <para> 生成時に呼び出す。対象のデータを使って初期化する (CAPSULE COLLIDER DATA) </para>
 /// </summary>
 /// <returns></returns>
-HRESULT MESH::Initialize()
+HRESULT Mesh_Component::Initialize()
 {
     if (data->model_path != "")
     {
@@ -44,14 +44,14 @@ HRESULT MESH::Initialize()
     return S_OK;
 }
 
-/*----------------------------------------------------------MESH Execute()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Execute()-----------------------------------------------------------*/
 /// <summary>
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void MESH::Execute()
+void Mesh_Component::Execute()
 {
-    TRANSFORM_3D* transform = GetComponent<TRANSFORM_3D>();
+    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     if (!model)
         return;
 
@@ -59,24 +59,24 @@ void MESH::Execute()
     model->UpdateTransform();
 }
 
-/*----------------------------------------------------------MESH Render()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Render()-----------------------------------------------------------*/
 /// <summary>
 /// <para> Called after Execute() to perform any render functions </para>
 /// <para> Execute()後にレンダー関数を実行するように毎フレームに呼び出す </para>
 /// </summary>
-void MESH::Render()
+void Mesh_Component::Render()
 {
     if (!model)
         return;
     model->Render();
 }
 
-/*----------------------------------------------------------MESH UI()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component UI()-----------------------------------------------------------*/
 /// <summary>
 /// <para> Renders the UI for this component </para>
 /// <para> UIを描画 </para>
 /// </summary>
-void MESH::UI()
+void Mesh_Component::UI()
 {
     if (ImGui::TreeNode("Mesh"))
     {
@@ -120,75 +120,75 @@ void MESH::UI()
     }
 }
 
-/*----------------------------------------------------------MESH ModelPath()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component ModelPath()-----------------------------------------------------------*/
 /// <summary>
 /// Returns the path of the model loaded
 /// </summary>
 /// <returns></returns>
-const std::string& MESH::ModelPath()
+const std::string& Mesh_Component::ModelPath()
 {
     return data->model_path;
 }
 
-/*----------------------------------------------------------MESH ModelName()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component ModelName()-----------------------------------------------------------*/
 /// <summary>
 /// Returns the name of the model loaded
 /// </summary>
 /// <returns></returns>
-const std::string& MESH::ModelName()
+const std::string& Mesh_Component::ModelName()
 {
     return data->model_name;
 }
 
-/*----------------------------------------------------------MESH AnimationTake()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component AnimationTake()-----------------------------------------------------------*/
 /// <summary>
 /// Returns the index of animation played
 /// </summary>
 /// <returns></returns>
-int MESH::AnimationTake()
+int Mesh_Component::AnimationTake()
 {
     return data->animationTake;
 }
 
-/*----------------------------------------------------------MESH PlayAnimationFlag()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component PlayAnimationFlag()-----------------------------------------------------------*/
 /// <summary>
 /// Returns true if model is set to play animation
 /// </summary>
 /// <returns></returns>
-bool MESH::PlayAnimationFlag()
+bool Mesh_Component::PlayAnimationFlag()
 {
     return data->playAnimationFlag;
 }
 
-/*----------------------------------------------------------MESH Model()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Model()-----------------------------------------------------------*/
 /// <summary>
 /// Returns the Model class of this component
 /// </summary>
 /// <returns></returns>
-std::shared_ptr<MODEL>MESH::Model()
+std::shared_ptr<MODEL>Mesh_Component::Model()
 {
     return model;
 }
 
-/*----------------------------------------------------------MESH Data()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component Data()-----------------------------------------------------------*/
 /// <summary>
 /// Returns the Data class of this class
 /// </summary>
 /// <returns></returns>
-MESH_DATA* MESH::Data()
+Mesh_Data* Mesh_Component::Data()
 {
     return data;
 }
 
-/*----------------------------------------------------------MESH GetBoneTransform()-----------------------------------------------------------*/
+/*----------------------------------------------------------Mesh_Component GetBoneTransform()-----------------------------------------------------------*/
 /// <summary>
 /// <para> Retrieves the world transform for the bone </para>
 /// <para> 求められているボーンのワールド行列を返す </para>
 /// </summary>
 /// <returns></returns>
-XMMATRIX MESH::GetBoneTransform(std::string name)
+XMMATRIX Mesh_Component::GetBoneTransform(std::string name)
 {
-    TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
+    Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
 
 
     int64_t index{ -1 };
@@ -221,4 +221,11 @@ XMMATRIX MESH::GetBoneTransform(std::string name)
     bone *= XMLoadFloat4x4(&temp);
     bone *= global;
     return bone;
+}
+
+/*----------------------------------------------------------Mesh_Component GetComponentType()-----------------------------------------------------------*/
+
+COMPONENT_TYPE Mesh_Component::GetComponentType()
+{
+    return data->type;
 }

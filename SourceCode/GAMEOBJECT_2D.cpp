@@ -1,7 +1,7 @@
 #include "GameObject_2D.h"
 //#include "GameObject.h"
-#include "Components\TRANSFORM_2D.h"
-#include "Components\TRANSFORM_3D.h"
+#include "Components\Transform2D.h"
+#include "Components\Transform3D.h"
 
 /*--------------------------------GameObject_2D Constructor()----------------------------------*/
 
@@ -19,7 +19,7 @@ HRESULT GameObject_2D::Initialize()
 {
     if (data->Dataset().size() <= 0)
     {
-        __InternalAddComponent(COMPONENT_TYPE::TRANSFORM_2D);
+        __InternalAddComponent(COMPONENT_TYPE::Transform2D_Component);
         __InternalAddComponent(COMPONENT_TYPE::SPRITE_2D);
     }
 
@@ -36,12 +36,12 @@ void GameObject_2D::Execute()
 {
     for (auto& c : components)
     {
-        if(dynamic_cast<TRANSFORM_2D*>(c.get()))
+        if(dynamic_cast<Transform2D_Component*>(c.get()))
             continue;
         c->Execute();
             
     }
-    GetComponent<TRANSFORM_2D>()->Execute();
+    GetComponent<Transform2D_Component>()->Execute();
 }
 
 /*--------------------------------GameObject_2D ExecuteUI()----------------------------------*/
@@ -57,11 +57,11 @@ void GameObject_2D::Render()
 {
     for(auto& c : components)
     {
-        if (dynamic_cast<TRANSFORM_2D*>(c.get()))
+        if (dynamic_cast<Transform2D_Component*>(c.get()))
             continue;
         c->Render();
     }
-    GetComponent<TRANSFORM_2D>()->Execute();
+    GetComponent<Transform2D_Component>()->Execute();
 }
 
 /*--------------------------------GameObject_2D RenderUI()----------------------------------*/

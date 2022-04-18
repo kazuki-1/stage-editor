@@ -4,9 +4,9 @@
 #include "Engine/Input.h"
 #include "Components/Base Classes/ComponentCreator.h"
 #include "Components/Base Classes/Component.h"
-#include "Components/TRANSFORM_3D.h"
-#include "Components/MESH.h"
-#include "Components/PLAYER_CONTROLLER.h"
+#include "Components/Transform3D.h"
+#include "Components/Mesh.h"
+#include "Components/PlayerController.h"
 std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGMComponent", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "NPC Dialogue", "Sprite 2D"};
 bool popup{};
 //int selected_comp{};
@@ -29,7 +29,7 @@ GameObject::GameObject(std::shared_ptr<OBJECT_DATA>d)
 HRESULT GameObject::Initialize()
 {
     if (data->Dataset().size() <= 0)
-        __InternalAddComponent(COMPONENT_TYPE::TRANSFORM_3D);
+        __InternalAddComponent(COMPONENT_TYPE::Transform3D_Component);
     else
     {
         for (auto& d : data->Dataset())
@@ -44,14 +44,14 @@ HRESULT GameObject::Initialize()
 
 void GameObject::Execute()
 {
-    //if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
+    //if (DROPMANAGER::Instance()->Loaded() && GetComponent<Mesh_Component>() == nullptr)
     //{
     //    std::filesystem::path path(DROPMANAGER::Instance()->Path());
 
     //    if (path.extension() == ".mrs")
     //    {
-    //        AddComponent(COMPONENT_TYPE::MESH);
-    //        MESH* m{ GetComponent<MESH>() };
+    //        AddComponent(COMPONENT_TYPE::Mesh_Component);
+    //        Mesh_Component* m{ GetComponent<Mesh_Component>() };
     //        m->Data()->model_path = path.string();
     //        std::string directory{ "./Data/Model/" };
     //        std::filesystem::path path(m->Data()->model_path);
@@ -62,30 +62,30 @@ void GameObject::Execute()
     //        m->Data()->model_path = directory;
     //        m->Data()->model_name = name.string();
 
-    //        GetComponent<MESH>()->Initialize();
+    //        GetComponent<Mesh_Component>()->Initialize();
     //    }
     //}
 
     for (auto& c : components) {
-        if (dynamic_cast<TRANSFORM_3D*>(c.get()))
+        if (dynamic_cast<Transform3D_Component*>(c.get()))
             continue;
         c->Execute();
     }
-    GetComponent<TRANSFORM_3D>()->Execute();
+    GetComponent<Transform3D_Component>()->Execute();
 
 }
 
 /*--------------------------------GameObject ExecuteUI()----------------------------------*/
 void GameObject::ExecuteUI()
 {
-    if (DROPMANAGER::Instance()->Loaded() && GetComponent<MESH>() == nullptr)
+    if (DROPMANAGER::Instance()->Loaded() && GetComponent<Mesh_Component>() == nullptr)
     {
         std::filesystem::path path(DROPMANAGER::Instance()->Path());
 
         if (path.extension() == ".mrs")
         {
             AddComponent(COMPONENT_TYPE::MESH);
-            MESH* m{ GetComponent<MESH>() };
+            Mesh_Component* m{ GetComponent<Mesh_Component>() };
             m->Data()->model_path = path.string();
             std::string directory{ "./Data/Model/" };
             std::filesystem::path path(m->Data()->model_path);
@@ -96,21 +96,20 @@ void GameObject::ExecuteUI()
             m->Data()->model_path = directory;
             m->Data()->model_name = name.string();
 
-            GetComponent<MESH>()->Initialize();
+            GetComponent<Mesh_Component>()->Initialize();
         }
     }
 
     for (auto& c : components) {
-        if (dynamic_cast<TRANSFORM_3D*>(c.get()))
+        if (dynamic_cast<Transform3D_Component*>(c.get()))
             continue;
-        if (dynamic_cast<PLAYER_CONTROLLER*>(c.get()))
+        if (dynamic_cast<PlayerController_Component*>(c.get()))
             continue;
         c->Execute();
     }
-    GetComponent<TRANSFORM_3D>()->ExecuteUI();
+    GetComponent<Transform3D_Component>()->ExecuteUI();
 
 }
-
 
 /*--------------------------------GameObject Render()----------------------------------*/
 
@@ -118,11 +117,11 @@ void GameObject::Render()
 {
     for (auto& c : components)
     {
-        if (dynamic_cast<TRANSFORM_3D*>(c.get()))
+        if (dynamic_cast<Transform3D_Component*>(c.get()))
             continue;
         c->Render();
     }
-    GetComponent<TRANSFORM_3D>()->Render();
+    GetComponent<Transform3D_Component>()->Render();
 }
 
 /*--------------------------------GameObject RenderUI()----------------------------------*/
@@ -168,7 +167,7 @@ void GameObject::RenderUI()
     for (auto& c : components)
     {
         c->UI();
-        if(dynamic_cast<TRANSFORM_3D*>(c.get()) != 0)
+        if(dynamic_cast<Transform3D_Component*>(c.get()) != 0)
             continue;
         std::string string{ "Remove " + COMP_TYPE[(int)c->GetComponentType()] };
         if (ImGui::Button(string.c_str()))

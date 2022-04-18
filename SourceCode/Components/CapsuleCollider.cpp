@@ -1,7 +1,7 @@
 #include "CapsuleCollider.h"
-#include "MESH.h"
-#include "TRANSFORM_3D.h"
-#include "PLAYER_CONTROLLER.h"
+#include "Mesh.h"
+#include "Transform3D.h"
+#include "PlayerController.h"
 int selected_mesh_c{};
 int selected_bone_c{};
 
@@ -20,7 +20,7 @@ CapsuleCollider_Data::CapsuleCollider_Data()
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------CAPSULE COLLIDER Constructor-----------------------------------------------*/
 
-CapsuleCollider::CapsuleCollider(GameObject* t, ComponentData* data)
+CapsuleCollider_Component::CapsuleCollider_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<CapsuleCollider_Data*>(data);
@@ -32,7 +32,7 @@ CapsuleCollider::CapsuleCollider(GameObject* t, ComponentData* data)
 /// <para> 生成時に呼び出す。対象のデータを使って初期化する (CAPSULE COLLIDER DATA) </para>
 /// </summary>
 /// <returns></returns>
-HRESULT CapsuleCollider::Initialize()
+HRESULT CapsuleCollider_Component::Initialize()
 {
     // Creates a collider and its debug primitive using the data
     collider = std::make_shared<COLLIDERS::CAPSULE>(data->center, data->radius, data->height);
@@ -50,10 +50,10 @@ HRESULT CapsuleCollider::Initialize()
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void CapsuleCollider::Execute()
+void CapsuleCollider_Component::Execute()
 {
     // Updates the properties of the collider
-    TRANSFORM_3D* transform{ GetComponent<TRANSFORM_3D>() };
+    Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
     XMMATRIX world{ XMMatrixIdentity() };
     if (data->bone_name == "")
     {
@@ -65,7 +65,7 @@ void CapsuleCollider::Execute()
     else
     {
         // If attached to bone
-        collider->FitToBone(data->bone_name, GetComponent<MESH>()->Model().get());
+        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
         //capsule->Execute(collider->WorldMatrix());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
@@ -75,7 +75,7 @@ void CapsuleCollider::Execute()
 /// <para> Called each frame </para>
 /// <para> 毎フレームに呼び出す </para>
 /// </summary>
-void CapsuleCollider::Execute(XMMATRIX transform)
+void CapsuleCollider_Component::Execute(XMMATRIX transform)
 {
     // Updates the properties of the collider
     XMMATRIX world{ XMMatrixIdentity() };
@@ -89,7 +89,7 @@ void CapsuleCollider::Execute(XMMATRIX transform)
     else
     {
         // If attached to bone
-        collider->FitToBone(data->bone_name, GetComponent<MESH>()->Model().get());
+        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
     capsule->UpdateVertices(data->radius, data->height, &world);
@@ -101,7 +101,7 @@ void CapsuleCollider::Execute(XMMATRIX transform)
 /// <para> Called after Execute() to perform any render functions </para>
 /// <para> Execute()後にレンダー関数を実行するように毎フレームに呼び出す </para>
 /// </summary>
-void CapsuleCollider::Render()
+void CapsuleCollider_Component::Render()
 {
     if (collider) {
         collider->Render();
@@ -115,7 +115,7 @@ void CapsuleCollider::Render()
 /// <para> Renders the UI for this component </para>
 /// <para> UIを描画 </para>
 /// </summary>
-void CapsuleCollider::UI()
+void CapsuleCollider_Component::UI()
 {
     if (!collider)
         collider = std::make_shared<COLLIDERS::CAPSULE>(data->center, data->height, data->radius);
@@ -135,9 +135,9 @@ void CapsuleCollider::UI()
             collider->RotateCollider(ToRadians(data->rotation));
         }
 
-        if (GetComponent<MESH>() != nullptr && GetComponent<MESH>()->Model() != nullptr)
+        if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
         {
-            MODEL_RESOURCES& mr{ *GetComponent<MESH>()->Model().get()->Resource().get() };
+            MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };
             if (ImGui::BeginCombo("Meshes", mr.Meshes[selected_mesh_c].Name.c_str()))
             {
                 int ind{};
@@ -179,9 +179,9 @@ void CapsuleCollider::UI()
 /// <para> プレイヤーとの距離を計算する </para>    
 /// </summary>
 /// <returns></returns>
-Vector3 CapsuleCollider::DistanceToPlayer(PLAYER_CONTROLLER* target)
+Vector3 CapsuleCollider_Component::DistanceToPlayer(PlayerController_Component* target)
 {
-    Vector3 player_position = target->GetComponent<TRANSFORM_3D>()->Translation();
+    Vector3 player_position = target->GetComponent<Transform3D_Component>()->Translation();
     return COLLIDERS::PointLineClosest(player_position, collider.get());
 }
 
@@ -190,9 +190,9 @@ Vector3 CapsuleCollider::DistanceToPlayer(PLAYER_CONTROLLER* target)
 /// <para> Perform collision check to the target gameObject </para>
 /// <para> ゲームオブジェクトに当たり判定を計算 </para>
 /// </summary
-bool CapsuleCollider::Collide(GameObject* target)
+bool CapsuleCollider_Component::Collide(GameObject* target)
 {
-    CapsuleCollider* other = target->GetComponent<CapsuleCollider>();
+    CapsuleCollider_Component* other = target->GetComponent<CapsuleCollider_Component>();
     if (other)
     {
         return collider->Collide(other->Collider().get());
@@ -204,7 +204,7 @@ bool CapsuleCollider::Collide(GameObject* target)
 /// <para> 座標点を基づいて当たり判定を計算 </para>
 /// </summary>
 /// <returns></returns>
-bool CapsuleCollider::Collide(Vector3 p)
+bool CapsuleCollider_Component::Collide(Vector3 p)
 {
     return collider->Collide(p);
 }
@@ -214,7 +214,7 @@ bool CapsuleCollider::Collide(Vector3 p)
 /// Returns the name of the bone the collider is attached to
 /// </summary>
 /// <returns></returns>
-const std::string& CapsuleCollider::BoneName()
+const std::string& CapsuleCollider_Component::BoneName()
 {
     return data->bone_name;
 }
@@ -224,7 +224,7 @@ const std::string& CapsuleCollider::BoneName()
 /// Returns the name of the collider
 /// </summary>
 /// <returns></returns>
-const std::string& CapsuleCollider::ColliderName()
+const std::string& CapsuleCollider_Component::ColliderName()
 {
     return std::string(data->name);
 }
@@ -234,7 +234,7 @@ const std::string& CapsuleCollider::ColliderName()
 /// Returns the center point of the collider
 /// </summary>
 /// <returns></returns>
-const Vector3 CapsuleCollider::Center()
+const Vector3 CapsuleCollider_Component::Center()
 {
     return data->center;
 }
@@ -244,7 +244,7 @@ const Vector3 CapsuleCollider::Center()
 /// Returns the radius of the collider
 /// </summary>
 /// <returns></returns>
-const float CapsuleCollider::Radius()
+const float CapsuleCollider_Component::Radius()
 {
     return data->radius;
 }
@@ -254,7 +254,7 @@ const float CapsuleCollider::Radius()
 /// Returns the height of the collider
 /// </summary>
 /// <returns></returns>
-const float CapsuleCollider::Height()
+const float CapsuleCollider_Component::Height()
 {
     return data->height;
 }
@@ -264,21 +264,21 @@ const float CapsuleCollider::Height()
 /// Returns the data class that stores all the data used in this component
 /// </summary>
 /// <returns></returns>
-CapsuleCollider_Data* CapsuleCollider::Data()
+CapsuleCollider_Data* CapsuleCollider_Component::Data()
 {
     return data;
 }
 
 /*----------------------------------------------CAPSULE COLLIDER Collider()------------------------------------------*/
 
-std::shared_ptr<COLLIDERS::COLLIDER_BASE>CapsuleCollider::Collider()
+std::shared_ptr<COLLIDERS::COLLIDER_BASE>CapsuleCollider_Component::Collider()
 {
     return collider;
 }
 
 /*----------------------------------------------CAPSULE COLLIDER GetComponentType()------------------------------------------*/
 
-COMPONENT_TYPE CapsuleCollider::GetComponentType()
+COMPONENT_TYPE CapsuleCollider_Component::GetComponentType()
 {
     return data->type;
 }

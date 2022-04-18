@@ -1,6 +1,6 @@
 #include "DEBUG_MANAGER.h"
 #include "../Components/Base Classes/Component.h"
-#include "../Components/TRANSFORM_3D.h"
+#include "../Components/Transform3D.h"
 #include "../GAMEOBJECT_2D.h"
 #include "IMGUI.h"
 #include "Input.h"
@@ -9,7 +9,7 @@ bool scaling{}, moving{ true }, rotating{};
 bool start;
 Vector2 clicked_pos, movement;
 
-HRESULT DEBUG_MANAGER::Initialize()
+HRESULT DebugController::Initialize()
 {
     arrows = std::make_shared<DEBUG_ARROWS>();
     scalars = std::make_shared<DEBUG_SCALARS>();
@@ -20,13 +20,13 @@ HRESULT DEBUG_MANAGER::Initialize()
     return S_OK;
 
 }
-void DEBUG_MANAGER::Execute()
+void DebugController::Execute()
 {
     if (!hasTarget)
         return;
     if (dynamic_cast<GameObject_2D*>(target))
         return;
-    TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
+    Transform3D_Component* target = this->target->GetComponent<Transform3D_Component>();
     arrows->SetTarget(target->Translation(), target->Rotation());
     scalars->SetTarget(target->Translation(), target->Rotation());
     discs->SetTarget(target->Translation(), target->Rotation());
@@ -68,7 +68,7 @@ void DEBUG_MANAGER::Execute()
     }
 
 }
-void DEBUG_MANAGER::Render()
+void DebugController::Render()
 {
     if (!hasTarget)
         return;
@@ -80,17 +80,17 @@ void DEBUG_MANAGER::Render()
         arrows->Render();
 
 }
-void DEBUG_MANAGER::SetTarget(GameObject* g)
+void DebugController::SetTarget(GameObject* g)
 {
     target = g;
     hasTarget = true;
 }
-void DEBUG_MANAGER::ClearTarget()
+void DebugController::ClearTarget()
 {
     target = {};
     hasTarget = false;
 }
-void DEBUG_MANAGER::MouseControl()
+void DebugController::MouseControl()
 {
     Vector2 pos;
     INPUTMANAGER::MOUSE* m{ INPUTMANAGER::Instance()->Mouse().get() };
@@ -125,7 +125,7 @@ void DEBUG_MANAGER::MouseControl()
 bool x{}, y{}, z{};
 
 
-void DEBUG_MANAGER::TranslateArrows()
+void DebugController::TranslateArrows()
 {
     INPUTMANAGER* in{ INPUTMANAGER::Instance() };
     Vector2 movement{};
@@ -135,7 +135,7 @@ void DEBUG_MANAGER::TranslateArrows()
  
     if (dynamic_cast<GameObject_2D*>(target))
         return;
-    TRANSFORM_3D* target = this->target->GetComponent<TRANSFORM_3D>();
+    Transform3D_Component* target = this->target->GetComponent<Transform3D_Component>();
 
 
     Vector3 horizontol, vertical, forward;

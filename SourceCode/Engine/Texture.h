@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <assert.h>
+#include "DirectX11.h"
 using namespace Microsoft::WRL;
 class TEXTURE
 {
@@ -32,6 +33,11 @@ public:
             assert(!"Failed to create Empty Texture");
 
 
+    }
+    TEXTURE(UINT colour_code)
+    {
+        HRESULT hr{ GenerateEmptyTexture(DirectX11::Instance()->Device(), colour_code, 16) };
+        assert(hr == S_OK);
     }
     HRESULT Load(const wchar_t* tex_path, ID3D11Device* dv)
     {

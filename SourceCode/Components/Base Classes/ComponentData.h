@@ -14,7 +14,7 @@ enum class COMPONENT_TYPE
     SPOTLIGHT,
     BGM, 
     ENV_AUDIO, 
-    TERRAIN_AUDIO, 
+    TerrainAudio_Component, 
     PLAYER_CONTROLLER,
     ENEMY_CONTROLLER, 
     NPC_DIALOGUE,
@@ -24,8 +24,8 @@ enum class COMPONENT_TYPE
     AUDIO,                  // Base class
     OBB_TERRAIN,            // Unused 
     CHARACTER,              // Base Class
-    TRANSFORM_2D,           
-    TRANSFORM_3D, 
+    Transform2D_Component,           
+    Transform3D_Component, 
     DIRECTIONAL_LIGHT
 };
 

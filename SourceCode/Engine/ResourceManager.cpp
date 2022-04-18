@@ -2,7 +2,7 @@
 #include "MODEL.h"
 
 
-std::shared_ptr<MODEL_RESOURCES> RESOURCEMANAGER::Load(std::string model_path)
+std::shared_ptr<MODEL_RESOURCES> ModelResourceManager::Load(std::string model_path)
 {
     for (auto& a : ResourceMap)
     {
@@ -20,7 +20,7 @@ std::shared_ptr<MODEL_RESOURCES> RESOURCEMANAGER::Load(std::string model_path)
 }
 
 
-std::shared_ptr<MODEL_RESOURCES>RESOURCEMANAGER::Generate(std::string model_path)
+std::shared_ptr<MODEL_RESOURCES>ModelResourceManager::Generate(std::string model_path)
 {
     std::shared_ptr<MODEL_RESOURCES>m = std::make_shared<MODEL_RESOURCES>(DirectX11::Instance()->Device(), model_path);
     if (!m)
@@ -30,7 +30,7 @@ std::shared_ptr<MODEL_RESOURCES>RESOURCEMANAGER::Generate(std::string model_path
 }
 
 
-HRESULT RESOURCEMANAGER::Recreate(MODEL* m, std::string new_file_name)
+HRESULT ModelResourceManager::Recreate(MODEL* m, std::string new_file_name)
 {
     std::filesystem::path path{ new_file_name };
     path.replace_extension(".mrs");

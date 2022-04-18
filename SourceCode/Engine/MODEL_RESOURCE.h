@@ -7,7 +7,7 @@
 #include <cereal\types\unordered_map.hpp>
 #include <cereal/types/vector.hpp>
 #include "DXMath.h"
-#include "TEXTURE_MANAGER.h"
+#include "TextureManager.h"
 
 static const int MAX_BONES{ 256 };
 static const int BONE_INFL{ 4 };

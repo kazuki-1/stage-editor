@@ -55,11 +55,11 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
 
 
-    // Look for existing texture in TEXTURE_MANAGER and create new if non-existant
+    // Look for existing texture in TextureManager and create new if non-existant
     // TEXTURE_MANAGERの中から既存のテキスチャを探す。なければ新規生成
-    texture = TEXTURE_MANAGER::Instance()->Retrieve(img_path);
+    texture = TextureManager::Instance()->Retrieve(img_path);
 
-    // Insert shader from SHADERMANAGER and create new if non-existant
+    // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
     InsertShader(L"Shader_2d.fx");
 
@@ -121,11 +121,11 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 
 
 
-    // Look for existing texture in TEXTURE_MANAGER and create new if non-existant
+    // Look for existing texture in TextureManager and create new if non-existant
     // TEXTURE_MANAGERの中から既存のテキスチャを探す。なければ新規生成
-    texture = TEXTURE_MANAGER::Instance()->Retrieve(img_path);
+    texture = TextureManager::Instance()->Retrieve(img_path);
 
-    // Insert shader from SHADERMANAGER and create new if non-existant
+    // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
     InsertShader(L"Shader_2d.fx");
 
@@ -213,7 +213,7 @@ void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSiz
     {
         
         s.second->SetShaders(dc);
-        dc->OMSetBlendState(BLENDMODE::Instance()->Get().Get(), 0, 0xffffffff);
+        dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xffffffff);
         dc->IASetVertexBuffers(0, 1, dxVertexBuffer.GetAddressOf(), &stride, &offset);
         dc->IASetIndexBuffer(dxIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
         dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

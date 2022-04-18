@@ -9,11 +9,14 @@
 #include "../../Engine/Audio.h"
 #include "../../Engine/IMGUI.h"
 #include "../../GAMEOBJECT.h"
-
 using namespace Math;
 class GameObject;
-class DEBUG_MANAGER;
-class PLAYER_CONTROLLER;
+class DebugController;
+class PlayerController_Component;
+
+
+
+
 
 #pragma region BASE_COMPONENT
 
@@ -113,7 +116,7 @@ public:
     virtual bool Collide(GameObject* target) { return false; };
     virtual bool Collide(Vector3 p) { return false; }
     virtual void Execute(XMMATRIX transform) {};
-    virtual Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) { return {}; }
+    virtual Vector3 DistanceToPlayer(PlayerController_Component* target) { return {}; }
 };
 
 

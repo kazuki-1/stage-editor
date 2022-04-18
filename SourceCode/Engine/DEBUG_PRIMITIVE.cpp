@@ -104,6 +104,12 @@ void DEBUG_ARROWS::Initialize()
     yAxis->Resource()->InsertShader(L"Base3DShader.fx");
     zAxis->Resource()->InsertShader(L"Base3DShader.fx");
 
+    xAxis->Resource()->RemoveShader(L"PhongShader.fx");
+    yAxis->Resource()->RemoveShader(L"PhongShader.fx");
+    zAxis->Resource()->RemoveShader(L"PhongShader.fx");
+
+
+
 }
 void DEBUG_ARROWS::Execute()
 {
@@ -391,7 +397,7 @@ HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = SHADERMANAGER::Instance()->Retrieve(L"DebugShader.fx");
+    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
 
     return hr;
 
@@ -410,7 +416,7 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
     shader->SetShaders(dc);
     dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-    dc->OMSetBlendState(BLENDMODE::Instance()->Get().Get(), 0, 0xFFFFFFFF);
+    dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xFFFFFFFF);
     CBUFFER_M data;
     data.colour = colour;
     Vector4 q{};
@@ -475,7 +481,7 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = SHADERMANAGER::Instance()->Retrieve(L"DebugShader.fx");
+    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
 
 
 
@@ -571,7 +577,7 @@ DYNAMIC_SPHERE::DYNAMIC_SPHERE(int v_count, float rad) : vertices_count(v_count)
 //    vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 //    vbd.ByteWidth = sizeof(CBUFFER_M);
 //    hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-//    shader = SHADERMANAGER::Instance()->Retrieve(L"DebugShader.fx");
+//    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
 //
 //    return hr;
 //}

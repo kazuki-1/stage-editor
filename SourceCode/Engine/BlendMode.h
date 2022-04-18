@@ -6,14 +6,14 @@
 using namespace Microsoft::WRL;
 
 
-class BLENDMODE
+class BlendModeManager
 {
-    BLENDMODE() {};
+    BlendModeManager() {};
 public:
 
-    static BLENDMODE* Instance()
+    static BlendModeManager* Instance()
     {
-        static BLENDMODE bm;
+        static BlendModeManager bm;
         return &bm;
     }
     ComPtr<ID3D11BlendState>dxBlendState;

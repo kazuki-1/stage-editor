@@ -6,8 +6,8 @@
 #include "Engine/DEBUG_MANAGER.h"
 #include "GameObject.h"
 #include "Components/Base Classes/DataManager.h"
-#include "Components/TRANSFORM_3D.h"
-#include "Components/MESH.h"
+#include "Components/Transform3D.h"
+#include "Components/Mesh.h"
 #include "Scenes/SCENEMANAGER.h"
 #include "Engine/Text.h"
 static int cur{};
@@ -80,7 +80,7 @@ void STAGE_UI::RenderUI()
         if (!selected_item)
             Camera::Instance()->ResetToTarget({ 0, 0, 0 });
         else
-            Camera::Instance()->ResetToTarget(selected_item->GetComponent<TRANSFORM_3D>()->Translation());
+            Camera::Instance()->ResetToTarget(selected_item->GetComponent<Transform3D_Component>()->Translation());
     }
 
 
@@ -112,7 +112,7 @@ void STAGE_UI::GameObjectWindow()
     // Render individual gameObject windows
     if (!selected_item)
         return;
-    DEBUG_MANAGER::Instance()->SetTarget(selected_item.get());
+    DebugController::Instance()->SetTarget(selected_item.get());
 
     ImGui::Begin("Details");
     ImGui::SetWindowSize({ 400, 900 });
@@ -176,7 +176,7 @@ void STAGE_UI::SceneUI()
     }
 
     if (!selected_item)
-        DEBUG_MANAGER::Instance()->ClearTarget();
+        DebugController::Instance()->ClearTarget();
 
 }
 
@@ -237,8 +237,8 @@ void STAGE_UI::Render()
         TextManager::Instance()->PrintOutSequence("The monkey throws the apple", { 0, 0 }, { 1, 1 });
 
     //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
-    DEBUG_MANAGER::Instance()->Execute();
-    DEBUG_MANAGER::Instance()->Render();
+    DebugController::Instance()->Execute();
+    DebugController::Instance()->Render();
 
 }
 
@@ -278,12 +278,12 @@ void STAGE_UI::MouseSelect()
     float min_dist{ FLT_MAX };
     for (auto& o : GameObjectManager::Instance()->GetGameObjects())
     {
-        if (!o.second->GetComponent<MESH>())
+        if (!o.second->GetComponent<Mesh_Component>())
             continue;
         cur_pos.z = 0;
-        Near = XMVector3Unproject(cur_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), o.second->GetComponent<TRANSFORM_3D>()->TransformMatrix());
+        Near = XMVector3Unproject(cur_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), o.second->GetComponent<Transform3D_Component>()->TransformMatrix());
         cur_pos.z = 1.0f;
-        Far = XMVector3Unproject(cur_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), o.second->GetComponent<TRANSFORM_3D>()->TransformMatrix());
+        Far = XMVector3Unproject(cur_pos.XMV(), vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height, vp.MinDepth, vp.MaxDepth, DirectX11::Instance()->ProjectionMatrix(), Camera::Instance()->ViewMatrix(), o.second->GetComponent<Transform3D_Component>()->TransformMatrix());
 
         Vector3 N, F;
         N.Load(Near);
@@ -292,14 +292,14 @@ void STAGE_UI::MouseSelect()
 
 
         COLLIDERS::RAYCASTDATA rcd{};
-        Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<TRANSFORM_3D>()->Translation() };
+        Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<Transform3D_Component>()->Translation() };
         Vector3 dist = tar - cam;
         float f_dist{ dist.Length() };
 
 
         if (INPUTMANAGER::Instance()->Mouse()->LButton().Triggered())
         {
-            if (COLLIDERS::RayCast(N, F, o.second->GetComponent<MESH>()->Model().get(), rcd))
+            if (COLLIDERS::RayCast(N, F, o.second->GetComponent<Mesh_Component>()->Model().get(), rcd))
             {
                 if (f_dist > min_dist)
                     continue;

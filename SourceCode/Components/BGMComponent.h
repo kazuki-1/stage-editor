@@ -1,13 +1,13 @@
 #pragma once
 #include "./Base Classes/Component.h"
-class OBB_COLLIDER;
-class OBB_COLLIDER_DATA;
+class OBBCollider_Component;
+class OBBCollider_Data;
 class BGMComponent_Data : public AudioData
 {
 public:
     BGMComponent_Data() { type = COMPONENT_TYPE::BGM; };
     std::vector<std::shared_ptr<AudioData>>dataset;
-    std::shared_ptr<OBB_COLLIDER_DATA>collider_data;
+    std::shared_ptr<OBBCollider_Data>collider_data;
     template <class T>
     void serialize(T& t)
     {
@@ -16,14 +16,14 @@ public:
 };
 
 
-class BGMComponent : public BASE_AUDIO_COMPONENT
+class BGM_Component : public BASE_AUDIO_COMPONENT
 {
     std::vector<std::shared_ptr<AUDIO>>audioList;
-    std::shared_ptr<OBB_COLLIDER>collider;
+    std::shared_ptr<OBBCollider_Component>collider;
     BGMComponent_Data* data;
 public:
-    BGMComponent() {};
-    BGMComponent(GameObject* t, ComponentData* d);
+    BGM_Component() {};
+    BGM_Component(GameObject* t, ComponentData* d);
     HRESULT Initialize() override;
     void Execute() override;
     void Render() override;

@@ -1,57 +1,57 @@
 #include "./Base Classes/Component.h"
 #include "../ENGINE/Audio.h"
 #include "./Base Classes/ComponentCreator.h"
-#include "OBB_COLLIDER.h"
-#include "TRANSFORM_3D.h"
+#include "OBBCollider.h"
+#include "Transform3D.h"
 #include "BGMComponent.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------BGMComponent Class------------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component Class------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------BGMComponent Constructor------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component Constructor------------------------------------------------------*/
 
-BGMComponent::BGMComponent(GameObject* t, ComponentData* data)
+BGM_Component::BGM_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<BGMComponent_Data*>(data);
 }
 
-/*-------------------------------------------------------------BGMComponent Initialize()------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component Initialize()------------------------------------------------------*/
 
-HRESULT BGMComponent::Initialize()
+HRESULT BGM_Component::Initialize()
 {
-    //audio = AUDIOENGINE::Instance()->Retrieve(data->name);
+    //audio = AudioEngine::Instance()->Retrieve(data->name);
     for (auto& d : data->dataset)
     {
-        AUDIOENGINE::Instance()->Insert(d->name, d->file_path);
+        AudioEngine::Instance()->Insert(d->name, d->file_path);
     }
     if (data->collider_data)
     {
-        collider = std::dynamic_pointer_cast<OBB_COLLIDER>(INSTANTIATE(parent, data->collider_data));
+        collider = std::dynamic_pointer_cast<OBBCollider_Component>(INSTANTIATE(parent, data->collider_data));
         collider->Initialize();
     }
     return S_OK;
 }
 
-/*-------------------------------------------------------------BGMComponent Execute()------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component Execute()------------------------------------------------------*/
 
-void BGMComponent::Execute()
+void BGM_Component::Execute()
 {
     if (collider)
-        collider->Execute(GetComponent<TRANSFORM_3D>()->TransformMatrix());
+        collider->Execute(GetComponent<Transform3D_Component>()->TransformMatrix());
 }
 
-/*-------------------------------------------------------------BGMComponent Render()------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component Render()------------------------------------------------------*/
 
-void BGMComponent::Render()
+void BGM_Component::Render()
 {
     if (collider)
         collider->Render();
 }
 
-/*-------------------------------------------------------------BGMComponent UI()------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component UI()------------------------------------------------------*/
 
-void BGMComponent::UI()
+void BGM_Component::UI()
 {
     if (ImGui::TreeNode("BGM"))
     {
@@ -97,9 +97,9 @@ void BGMComponent::UI()
                     std::filesystem::path path(data->dataset[ind]->file_path);
                     std::filesystem::path name(path.filename());
                     std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
-                    AUDIOENGINE::Instance()->Insert(data->name, full_path);
+                    AudioEngine::Instance()->Insert(data->name, full_path);
                     data->dataset[ind]->file_path = full_path;
-                    audioList.push_back(AUDIOENGINE::Instance()->Retrieve(data->name));
+                    audioList.push_back(AudioEngine::Instance()->Retrieve(data->name));
                     int index{};
                     name.replace_extension("");
                     for (auto& c : name.string())
@@ -123,8 +123,8 @@ void BGMComponent::UI()
         }
         if (ImGui::Button("Create Area of effect"))
         {
-            data->collider_data = std::dynamic_pointer_cast<OBB_COLLIDER_DATA>(INSTANTIATE(COMPONENT_TYPE::OBB_COL));
-            collider = std::dynamic_pointer_cast<OBB_COLLIDER>(INSTANTIATE(parent, data->collider_data));
+            data->collider_data = std::dynamic_pointer_cast<OBBCollider_Data>(INSTANTIATE(COMPONENT_TYPE::OBB_COL));
+            collider = std::dynamic_pointer_cast<OBBCollider_Component>(INSTANTIATE(parent, data->collider_data));
             collider->Initialize();
         }
         if (collider)
@@ -137,9 +137,9 @@ void BGMComponent::UI()
 
 }
 
-/*-------------------------------------------------------------BGMComponent GetComponentType()------------------------------------------------------*/
+/*-------------------------------------------------------------BGM_Component GetComponentType()------------------------------------------------------*/
 
-COMPONENT_TYPE BGMComponent::GetComponentType()
+COMPONENT_TYPE BGM_Component::GetComponentType()
 {
     return data->type;
 }

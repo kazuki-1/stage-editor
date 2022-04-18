@@ -18,9 +18,8 @@ std::shared_ptr<MODEL>stage;
 HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 {
 
-#pragma region SETTING INITIALIZATION
 
-
+    // DirectX Initialzation
     DirectX11* DX = DirectX11::Instance();
     if (FAILED(DirectX11::Instance()->Initialize(Width, Height, true, hwnd, false, 10000.0f, 0.001f)))
         assert(!"Failed to Initilize DirectX11 Class");
@@ -33,15 +32,14 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     if (FAILED(hr))
         assert(!"Failed to create constant buffer");
 
-#pragma endregion
     // Perform shader initialization by inserting used shaders into the map
-    SHADERMANAGER::Instance()->Initialize();
+    ShaderManager::Instance()->Initialize();
 
     // Create a default blend mode for use
-    BLENDMODE::Instance()->Create(BLENDMODE::BLEND_MODE::ALPHA, DirectX11::Instance()->Device());
+    BlendModeManager::Instance()->Create(BlendModeManager::BLEND_MODE::ALPHA, DirectX11::Instance()->Device());
 
     // Initializes anything needed by XAudio2
-    AUDIOENGINE::Instance()->Initialize();
+    AudioEngine::Instance()->Initialize();
 
     // Perform Camera Initialization 
     Camera::Instance()->Initialize({ 0, 0, 1 }, { 0, 0, 0 });
@@ -55,13 +53,15 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     data->SetDirection({ 0, -1, 1 });
     data->SetColour({ 1.0f, 1.0f, 1.0f, 1.0f });
 
-    LIGHTINGMANAGER::Instance()->Insert("Default", data);
+    LightingManager::Instance()->Insert("Default", data);
 
     // Initialzes the text manager by inserting used fonts into the map
     TextManager::Instance()->Initialize();
 
     // Initialzes the scene manager by inserting used scenes into the map
     SceneManager::Instance()->Initialize();
+
+
 
     // Initializes the white board below
     stage = std::make_shared<MODEL>();
@@ -84,7 +84,7 @@ bool Graphics::Frame()
     stage->UpdateTransform();
 
     //if (INPUTMANAGER::Instance()->Keyboard()->Triggered('L'))
-    //    AUDIOENGINE::Instance()->Retrieve("Test2")->Play();
+    //    AudioEngine::Instance()->Retrieve("Test2")->Play();
 
 
 #pragma region CALLS RENDER (DO NOT PUT FUNCTIONS BELOW HERE)
@@ -121,9 +121,9 @@ bool Graphics::Render()
     data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
 
     // Write lighting properties into the constant buffer
-    LIGHTINGMANAGER::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&data.directional);
+    LightingManager::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&data.directional);
     int p_LightCount{}, s_LightCount{};
-    for (auto& d : LIGHTINGMANAGER::Instance()->Dataset())
+    for (auto& d : LightingManager::Instance()->Dataset())
     {
         switch (d.second->Type())
         {
@@ -152,7 +152,7 @@ bool Graphics::Render()
 
     Camera::Instance()->Render();
     SceneManager::Instance()->Render();
-    LIGHTINGMANAGER::Instance()->RenderDebug();
+    LightingManager::Instance()->RenderDebug();
 #pragma endregion
 
     INPUTMANAGER::Instance()->Execute();

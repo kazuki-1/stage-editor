@@ -8,9 +8,9 @@ using namespace Math;
 
 using namespace DirectX;
 //using namespace Math;
-class MESH;
+class Mesh_Component;
 class ComponentData;
-class OBB_COLLIDER_DATA;
+class OBBCollider_Data;
 class CapsuleCollider_Data;
 
 namespace COLLIDERS
@@ -276,11 +276,11 @@ namespace COLLIDERS
 #pragma region RAYCAST_MANAGER
 
     /// <summary>
-    /// MESH_COLLIDER models are inserted here.
+    /// MeshCollider_Component models are inserted here.
     /// </summary>
     class RAYCAST_MANAGER : public Singleton<RAYCAST_MANAGER>
     {
-        std::vector<MESH*>meshes;
+        std::vector<Mesh_Component*>meshes;
     public:
         /// <summary>
         /// <para> Inserts the model into the map and allow it to perform collision check </para>
@@ -288,7 +288,7 @@ namespace COLLIDERS
         /// </summary>
         /// <param name="name"> : Name of model</param>
         /// <param name="m"> : Model pointer</param>
-        void Insert(MESH* m);
+        void Insert(Mesh_Component* m);
         /// <summary>
         /// Called at the end of the program or when switching scenes
         /// </summary>
@@ -302,8 +302,8 @@ namespace COLLIDERS
         /// <param name="cur_mesh"> : Pointer of current mesh component. Collision check will not be performed onto this mesh</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        bool Collide(Vector3 startOfRay, Vector3 endOfRay, MESH* cur_mesh, RAYCASTDATA& rcd);
-        bool Collide(Vector3 startofRay, Vector3 endOfRay, MESH* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
+        bool Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RAYCASTDATA& rcd);
+        bool Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
         /// <summary>
         /// <para> Performs ray cast on all models in the vector and returns a list of collided model and collision data </para>
         /// <para> モデルリストのすべてのモデルをレイーキャスト当たり判定を計算し、あたったモデルのリストを返す </para>
@@ -313,8 +313,8 @@ namespace COLLIDERS
         /// <param name="direction_vector"> : Direction of movement</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        void GetListOfCollided(MESH* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd);
-        std::vector<MESH*>Meshes();
+        void GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd);
+        std::vector<Mesh_Component*>Meshes();
 
 
     };

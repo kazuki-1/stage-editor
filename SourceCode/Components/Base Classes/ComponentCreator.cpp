@@ -6,77 +6,77 @@
 
 #pragma region Component Constructors
 
-std::shared_ptr<TRANSFORM_3D> __TRANSFORM_3D(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Transform3D_Component> __TRANSFORM_3D(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<TRANSFORM_3D>(g, d.get());
+    return std::make_shared<Transform3D_Component>(g, d.get());
 }
-std::shared_ptr<TRANSFORM_2D> __TRANSFORM_2D(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Transform2D_Component> __TRANSFORM_2D(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<TRANSFORM_2D>(g, d.get());
+    return std::make_shared<Transform2D_Component>(g, d.get());
 }
-std::shared_ptr<SPHERE_COLLIDER>__SPHERE_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<SphereCollider_Component>__SPHERE_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<SPHERE_COLLIDER>(g, d.get());
+    return std::make_shared<SphereCollider_Component>(g, d.get());
 }
-std::shared_ptr<CapsuleCollider>__CAPSULE_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<CapsuleCollider_Component>__CAPSULE_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<CapsuleCollider>(g, d.get());
+    return std::make_shared<CapsuleCollider_Component>(g, d.get());
 }
-std::shared_ptr<OBB_COLLIDER> __OBB_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<OBBCollider_Component> __OBB_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<OBB_COLLIDER>(g, d.get());
+    return std::make_shared<OBBCollider_Component>(g, d.get());
 }
-std::shared_ptr<MESH_COLLIDER>__MESH_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<MeshCollider_Component>__MESH_COLLIDER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<MESH_COLLIDER>(g, d.get());
+    return std::make_shared<MeshCollider_Component>(g, d.get());
 }
-std::shared_ptr<MESH> __MESH(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Mesh_Component> __MESH(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<MESH>(g, d.get());
+    return std::make_shared<Mesh_Component>(g, d.get());
 }
-std::shared_ptr<SPRITE_2D> __SPRITE_2D(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Sprite2D_Component> __SPRITE_2D(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<SPRITE_2D>(g, d.get());
+    return std::make_shared<Sprite2D_Component>(g, d.get());
 }
-std::shared_ptr<POINT_LIGHT> __POINT_LIGHT(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<PointLight_Component> __POINT_LIGHT(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<POINT_LIGHT>(g, d.get());
+    return std::make_shared<PointLight_Component>(g, d.get());
 }
-std::shared_ptr<SPOTLIGHT> __SPOTLIGHT(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<SpotLight_Component> __SPOTLIGHT(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<SPOTLIGHT>(g, d.get());
+    return std::make_shared<SpotLight_Component>(g, d.get());
 }
-std::shared_ptr<BGMComponent>__BGM(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<BGM_Component>__BGM(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<BGMComponent>(g, d.get());
+    return std::make_shared<BGM_Component>(g, d.get());
 }
-std::shared_ptr<ENVIRONMENTAL_AUDIO>__ENVIRONMENTAL_AUDIO(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<EnvironmentalAudio_Component>__ENVIRONMENTAL_AUDIO(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<ENVIRONMENTAL_AUDIO>(g, d.get());
+    return std::make_shared<EnvironmentalAudio_Component>(g, d.get());
 }
-std::shared_ptr<TERRAIN_AUDIO>__TERRAIN_AUDIO(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<TerrainAudio_Component>__TERRAIN_AUDIO(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<TERRAIN_AUDIO>(g, d.get());
+    return std::make_shared<TerrainAudio_Component>(g, d.get());
 }
-std::shared_ptr<OBB_TERRAIN>__OBB_TERRAIN(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<OBBTerrain_Component>__OBB_TERRAIN(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<OBB_TERRAIN>(g, d.get());
+    return std::make_shared<OBBTerrain_Component>(g, d.get());
 }
-std::shared_ptr<EFFECT>__EFFECT(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Effect_Component>__EFFECT(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<EFFECT>(g, d.get());
+    return std::make_shared<Effect_Component>(g, d.get());
 }
-std::shared_ptr<EnemyController>__ENEMY_CONTROLLER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<EnemyController_Component>__ENEMY_CONTROLLER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<EnemyController>(g, d.get());
+    return std::make_shared<EnemyController_Component>(g, d.get());
 }
-std::shared_ptr<PLAYER_CONTROLLER>__PLAYER_CONTROLLER(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<PlayerController_Component>__PLAYER_CONTROLLER(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<PLAYER_CONTROLLER>(g, d.get());
+    return std::make_shared<PlayerController_Component>(g, d.get());
 }
-std::shared_ptr<NPCDialogue>__NPCDialogue(GameObject* g, std::shared_ptr<ComponentData>d)
+std::shared_ptr<Dialogue_Component>__NPCDialogue(GameObject* g, std::shared_ptr<ComponentData>d)
 {
-    return std::make_shared<NPCDialogue>(g, d.get());
+    return std::make_shared<Dialogue_Component>(g, d.get());
 }
 std::shared_ptr<Component>__COMPONENT(GameObject* g, std::shared_ptr<ComponentData>d)
 {
@@ -88,77 +88,77 @@ std::shared_ptr<Component>__COMPONENT(GameObject* g, std::shared_ptr<ComponentDa
 
 #pragma region Component Data Constructors
 
-std::shared_ptr<TRANSFORM_3D_DATA>__TRANSFORM_3D_DATA()
+std::shared_ptr<Transform3D_Data>__TRANSFORM_3D_DATA()
 {
-    return std::make_shared<TRANSFORM_3D_DATA>();
+    return std::make_shared<Transform3D_Data>();
 }
-std::shared_ptr<TRANSFORM_2D_DATA>__TRANSFORM_2D_DATA()
+std::shared_ptr<Transform2D_Data>__TRANSFORM_2D_DATA()
 {
-    return std::make_shared<TRANSFORM_2D_DATA>();
+    return std::make_shared<Transform2D_Data>();
 }
-std::shared_ptr<SPHERE_COLLIDER_DATA>__SPHERE_COLLIDER_DATA()
+std::shared_ptr<SphereCollider_Data>__SPHERE_COLLIDER_DATA()
 {
-    return std::make_shared<SPHERE_COLLIDER_DATA>();
+    return std::make_shared<SphereCollider_Data>();
 }
 std::shared_ptr<CapsuleCollider_Data>__CAPSULE_COLLIDER_DATA()
 {
     return std::make_shared<CapsuleCollider_Data>();
 }
-std::shared_ptr<OBB_COLLIDER_DATA>__OBB_COLLIDER_DATA()
+std::shared_ptr<OBBCollider_Data>__OBB_COLLIDER_DATA()
 {
-    return std::make_shared<OBB_COLLIDER_DATA>();
+    return std::make_shared<OBBCollider_Data>();
 }
-std::shared_ptr<MESH_COLLIDER_DATA>__MESH_COLLIDER_DATA()
+std::shared_ptr<MeshCollider_Data>__MESH_COLLIDER_DATA()
 {
-    return std::make_shared<MESH_COLLIDER_DATA>();
+    return std::make_shared<MeshCollider_Data>();
 }
-std::shared_ptr<MESH_DATA>__MESH_DATA()
+std::shared_ptr<Mesh_Data>__MESH_DATA()
 {
-    return std::make_shared<MESH_DATA>();
+    return std::make_shared<Mesh_Data>();
 }
-std::shared_ptr<SPRITE_2D_DATA>__SPRITE_2D_DATA()
+std::shared_ptr<Sprite2D_Data>__SPRITE_2D_DATA()
 {
-    return std::make_shared<SPRITE_2D_DATA>();
+    return std::make_shared<Sprite2D_Data>();
 }
-std::shared_ptr<POINT_LIGHT_DATA>__POINT_LIGHT_DATA()
+std::shared_ptr<PointLight_Data>__POINT_LIGHT_DATA()
 {
-    return std::make_shared<POINT_LIGHT_DATA>();
+    return std::make_shared<PointLight_Data>();
 }
-std::shared_ptr<SPOTLIGHT_DATA>__SPOTLIGHT_DATA()
+std::shared_ptr<SpotLight_Data>__SPOTLIGHT_DATA()
 {
-    return std::make_shared<SPOTLIGHT_DATA>();
+    return std::make_shared<SpotLight_Data>();
 }
 std::shared_ptr<AudioData>__AUDIO_DATA()
 {
     return std::make_shared<AudioData>();
 }
-std::shared_ptr<ENVIRONMENTAL_AUDIO_DATA>__ENVIRONMENTAL_AUDIO_DATA()
+std::shared_ptr<EnvironmentalAudio_Data>__ENVIRONMENTAL_AUDIO_DATA()
 {
-    return std::make_shared<ENVIRONMENTAL_AUDIO_DATA>();
+    return std::make_shared<EnvironmentalAudio_Data>();
 }
-std::shared_ptr<TERRAIN_AUDIO_DATA>__TERRAIN_AUDIO_DATA()
+std::shared_ptr<TerrainAudio_Data>__TERRAIN_AUDIO_DATA()
 {
-    return std::make_shared<TERRAIN_AUDIO_DATA>();
+    return std::make_shared<TerrainAudio_Data>();
 }
-std::shared_ptr<OBB_TERRAIN_DATA>__OBB_TERRAIN_DATA()
+std::shared_ptr<OBBTerrain_Data>__OBB_TERRAIN_DATA()
 {
-    return std::make_shared<OBB_TERRAIN_DATA>();
+    return std::make_shared<OBBTerrain_Data>();
 }
 std::shared_ptr<BGMComponent_Data>__BGM_DATA()
 {
     return std::make_shared<BGMComponent_Data>();
 }
-std::shared_ptr<EFFECT_DATA>__EFFECT_DATA()
+std::shared_ptr<Effect_Data>__EFFECT_DATA()
 {
-    return std::make_shared<EFFECT_DATA>();
+    return std::make_shared<Effect_Data>();
 }
 std::shared_ptr<CharacterData>__CHARACTER_DATA()
 {
     return std::make_shared<CharacterData>();
 }
-std::shared_ptr<PLAYER_CONTROLLER_DATA>__PLAYER_CONTROLLER_DATA()
+std::shared_ptr<PlayerController_Data>__PLAYER_CONTROLLER_DATA()
 {
-    return std::make_shared<PLAYER_CONTROLLER_DATA>();
+    return std::make_shared<PlayerController_Data>();
 }
 std::shared_ptr<EnemyController_Data>__ENEMY_CONTROLLER_DATA()
 {
@@ -185,14 +185,14 @@ void ComponentCreator::Initialize()
 
 #pragma region Component Data Registering
 
-    RegisterData(COMPONENT_TYPE::TRANSFORM_3D, __TRANSFORM_3D_DATA);
-    RegisterData(COMPONENT_TYPE::TRANSFORM_2D, __TRANSFORM_2D_DATA);
+    RegisterData(COMPONENT_TYPE::Transform3D_Component, __TRANSFORM_3D_DATA);
+    RegisterData(COMPONENT_TYPE::Transform2D_Component, __TRANSFORM_2D_DATA);
     RegisterData(COMPONENT_TYPE::SPHERE_COL, __SPHERE_COLLIDER_DATA);
     RegisterData(COMPONENT_TYPE::CAPSULE_COL, __CAPSULE_COLLIDER_DATA);
     RegisterData(COMPONENT_TYPE::OBB_COL, __OBB_COLLIDER_DATA);
     RegisterData(COMPONENT_TYPE::MESH_COL, __MESH_COLLIDER_DATA);
     RegisterData(COMPONENT_TYPE::MESH, __MESH_DATA);
-    RegisterData(COMPONENT_TYPE::TERRAIN_AUDIO, __TERRAIN_AUDIO_DATA);
+    RegisterData(COMPONENT_TYPE::TerrainAudio_Component, __TERRAIN_AUDIO_DATA);
     RegisterData(COMPONENT_TYPE::OBB_TERRAIN, __OBB_TERRAIN_DATA);
     RegisterData(COMPONENT_TYPE::SPRITE_2D, __SPRITE_2D_DATA);
     RegisterData(COMPONENT_TYPE::POINT_LIGHT, __POINT_LIGHT_DATA);
@@ -209,15 +209,15 @@ void ComponentCreator::Initialize()
 
 #pragma region Component Registering
 
-    RegisterComponent(COMPONENT_TYPE::TRANSFORM_3D, __TRANSFORM_3D);
-    RegisterComponent(COMPONENT_TYPE::TRANSFORM_2D, __TRANSFORM_2D);
+    RegisterComponent(COMPONENT_TYPE::Transform3D_Component, __TRANSFORM_3D);
+    RegisterComponent(COMPONENT_TYPE::Transform2D_Component, __TRANSFORM_2D);
     RegisterComponent(COMPONENT_TYPE::SPHERE_COL, __SPHERE_COLLIDER);
     RegisterComponent(COMPONENT_TYPE::CAPSULE_COL, __CAPSULE_COLLIDER);
     RegisterComponent(COMPONENT_TYPE::OBB_COL, __OBB_COLLIDER);
     RegisterComponent(COMPONENT_TYPE::MESH_COL, __MESH_COLLIDER);
     RegisterComponent(COMPONENT_TYPE::MESH, __MESH);
     RegisterComponent(COMPONENT_TYPE::SPRITE_2D, __SPRITE_2D);
-    RegisterComponent(COMPONENT_TYPE::TERRAIN_AUDIO, __TERRAIN_AUDIO);
+    RegisterComponent(COMPONENT_TYPE::TerrainAudio_Component, __TERRAIN_AUDIO);
     RegisterComponent(COMPONENT_TYPE::OBB_TERRAIN, __OBB_TERRAIN);
     RegisterComponent(COMPONENT_TYPE::POINT_LIGHT, __POINT_LIGHT);
     RegisterComponent(COMPONENT_TYPE::SPOTLIGHT, __SPOTLIGHT);

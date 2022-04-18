@@ -23,13 +23,27 @@ protected:
         shaders.clear();    
     }
 public:
+    /// <summary>
+    /// Insert the shader to be used on the model
+    /// </summary>
+    /// <param name="shader_name"></param>
+    /// <returns></returns>
     HRESULT InsertShader(std::wstring shader_name)
     {
-        shaders.emplace(shader_name, SHADERMANAGER::Instance()->Retrieve(shader_name));
+        shaders.emplace(shader_name, ShaderManager::Instance()->Retrieve(shader_name));
         return shaders.find(shader_name)->second ? S_OK : E_INVALIDARG;
+    }
+    /// <summary>
+    /// Removes the shader from the model
+    /// </summary>
+    /// <param name="shader_name"></param>
+    /// <returns></returns>
+    void RemoveShader(std::wstring shader_name)
+    {
+        shaders.erase(shader_name);
     }
     //HRESULT SetShaderAt(std::wstring shader_name, int index = 0)
     //{
-    //    shaders[index] = SHADERMANAGER::Instance()->Retrieve(shader_name);
+    //    shaders[index] = ShaderManager::Instance()->Retrieve(shader_name);
     //}
 };

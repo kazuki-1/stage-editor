@@ -3,7 +3,7 @@
 
 HRESULT MODEL::Initialize(std::string model_path)
 {
-    resource = RESOURCEMANAGER::Instance()->Load(model_path);
+    resource = ModelResourceManager::Instance()->Load(model_path);
     if (!resource)
         return E_FAIL;
     animationTakes.resize(resource->Animations.size());
@@ -23,7 +23,6 @@ HRESULT MODEL::Initialize(std::string model_path)
 
     }
     cur_AnimationTake = 0;
-
 
     return S_OK;
 }

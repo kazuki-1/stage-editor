@@ -15,44 +15,44 @@ DirectionalLight_Data::DirectionalLight_Data()
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------------DirectionalLight Class---------------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Class---------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------------DirectionalLight Constructor---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Constructor---------------------------------------------------------------*/
 
-DirectionalLight::DirectionalLight(GameObject* t, ComponentData* data)
+DirectionalLight_Component::DirectionalLight_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<DirectionalLight_Data*>(data);
 
 }
 
-/*---------------------------------------------------DirectionalLight Initialize()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Initialize()---------------------------------------------------------------*/
 
-HRESULT DirectionalLight::Initialize()
+HRESULT DirectionalLight_Component::Initialize()
 {
     
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
-    LIGHTINGMANAGER::Instance()->Insert(Parent()->Data()->Name(), light);
+    LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
     return S_OK;
 }
 
-/*---------------------------------------------------DirectionalLight Execute()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Execute()---------------------------------------------------------------*/
 
-void DirectionalLight::Execute()
+void DirectionalLight_Component::Execute()
 {
 
 }
 
-/*---------------------------------------------------DirectionalLight Render()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Render()---------------------------------------------------------------*/
 
-void DirectionalLight::Render()
+void DirectionalLight_Component::Render()
 {
     light->WriteToData(this);
 }
 
-/*---------------------------------------------------DirectionalLight UI()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component UI()---------------------------------------------------------------*/
 
-void DirectionalLight::UI()
+void DirectionalLight_Component::UI()
 {
     if (ImGui::TreeNode("Directional Light"))
     {
@@ -62,23 +62,23 @@ void DirectionalLight::UI()
     }
 }
 
-/*---------------------------------------------------DirectionalLight Direction()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Direction()---------------------------------------------------------------*/
 
-Vector3 DirectionalLight::Direction()
+Vector3 DirectionalLight_Component::Direction()
 {
     return data->direction;
 }
 
-/*---------------------------------------------------DirectionalLight Colour()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component Colour()---------------------------------------------------------------*/
 
-Vector4 DirectionalLight::Colour()
+Vector4 DirectionalLight_Component::Colour()
 {
     return data->colour;
 }
 
-/*---------------------------------------------------DirectionalLight GetComponentType()---------------------------------------------------------------*/
+/*---------------------------------------------------DirectionalLight_Component GetComponentType()---------------------------------------------------------------*/
 
-COMPONENT_TYPE DirectionalLight::GetComponentType()
+COMPONENT_TYPE DirectionalLight_Component::GetComponentType()
 {
     return data->type;
 }

@@ -21,13 +21,13 @@ public:
 	}
 };
 
-class NPCDialogue : public Component
+class Dialogue_Component : public Component
 {
 	NPCDialogue_Data* data;
 	bool triggered;
 	void GetDialogue();
 public:
-	NPCDialogue(GameObject* p, ComponentData* d);
+	Dialogue_Component(GameObject* p, ComponentData* d);
 	HRESULT Initialize() override;
 	void Execute() override;
 	void Render() override;

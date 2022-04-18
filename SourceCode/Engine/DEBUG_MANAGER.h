@@ -6,14 +6,14 @@
 using namespace Math;
 
 class GameObject;
-class TRANSFORM_3D;
+class Transform3D_Component;
 /// <summary>
 /// Use this to call out the translation arrow, rotation circles and the scaling scalars
 /// </summary>
-class DEBUG_MANAGER : public Singleton<DEBUG_MANAGER>
+class DebugController : public Singleton<DebugController>
 {
     //XMMATRIX target;
-    //TRANSFORM_3D* target;
+    //Transform3D_Component* target;
     GameObject* target;
     bool hasTarget;
     std::shared_ptr<DEBUG_ARROWS>arrows;
@@ -26,7 +26,7 @@ public:
     HRESULT Initialize();
     void Execute();
     void Render();
-    //void SetTarget(TRANSFORM_3D* t);
+    //void SetTarget(Transform3D_Component* t);
     void SetTarget(GameObject* g);
     void ClearTarget();
     void MouseControl();

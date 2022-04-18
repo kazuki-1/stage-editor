@@ -272,7 +272,7 @@
     <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp">
       <Filter>Engine\Rasterizer Manager</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Engine\TEXTURE_MANAGER.cpp">
+    <ClCompile Include="SourceCode\Engine\TextureManager.cpp">
       <Filter>Engine\Resource Manager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
@@ -299,7 +299,7 @@
     <ClCompile Include="SourceCode\Components\BGMComponent.cpp">
       <Filter>Components\BGM</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\CAMERA_COMPONENT.cpp">
+    <ClCompile Include="SourceCode\Components\Camera_Component.cpp">
       <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\CapsuleCollider.cpp">
@@ -308,49 +308,49 @@
     <ClCompile Include="SourceCode\Components\DirectionalLight.cpp">
       <Filter>Components\Directional Light</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\EFFECT.cpp">
+    <ClCompile Include="SourceCode\Components\Effect_Component.cpp">
       <Filter>Components\Unused Components\Effect</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\EnemyController.cpp">
       <Filter>Components\Enemy Controller</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.cpp">
+    <ClCompile Include="SourceCode\Components\EnvironmentalAudio.cpp">
       <Filter>Components\Environmental Audio</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\MESH.cpp">
+    <ClCompile Include="SourceCode\Components\Mesh.cpp">
       <Filter>Components\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\MESH_COLLIDER.cpp">
+    <ClCompile Include="SourceCode\Components\MeshCollider.cpp">
       <Filter>Components\Mesh Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\OBB_COLLIDER.cpp">
+    <ClCompile Include="SourceCode\Components\OBBCollider.cpp">
       <Filter>Components\OBB Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\OBB_TERRAIN.cpp">
+    <ClCompile Include="SourceCode\Components\OBBTerrain.cpp">
       <Filter>Components\Unused Components\OBB Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\PLAYER_CONTROLLER.cpp">
+    <ClCompile Include="SourceCode\Components\PlayerController.cpp">
       <Filter>Components\Player Controller</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\POINT_LIGHT.cpp">
+    <ClCompile Include="SourceCode\Components\PointLight.cpp">
       <Filter>Components\Point Light</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SPHERE_COLLIDER.cpp">
+    <ClCompile Include="SourceCode\Components\SphereCollider.cpp">
       <Filter>Components\Sphere Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SPOTLIGHT.cpp">
+    <ClCompile Include="SourceCode\Components\SpotLight.cpp">
       <Filter>Components\Spotlight</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\SPRITE_2D.cpp">
+    <ClCompile Include="SourceCode\Components\Sprite2D.cpp">
       <Filter>Components\Sprite 2D</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\TERRAIN_AUDIO.cpp">
+    <ClCompile Include="SourceCode\Components\TerrainAudio.cpp">
       <Filter>Components\Terrain Audio</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\TRANSFORM_2D.cpp">
+    <ClCompile Include="SourceCode\Components\Transform2D.cpp">
       <Filter>Components\Transform 2D</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Components\TRANSFORM_3D.cpp">
+    <ClCompile Include="SourceCode\Components\Transform3D.cpp">
       <Filter>Components\Transform 3D</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Components\NPCDialogue.cpp">
@@ -523,7 +523,7 @@
     <ClInclude Include="SourceCode\Engine\RASTERIZER.h">
       <Filter>Engine\Rasterizer Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Engine\TEXTURE_MANAGER.h">
+    <ClInclude Include="SourceCode\Engine\TextureManager.h">
       <Filter>Engine\Resource Manager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\ResourceManager.h">
@@ -547,7 +547,7 @@
     <ClInclude Include="SourceCode\Components\BGMComponent.h">
       <Filter>Components\BGM</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\CAMERA_COMPONENT.h">
+    <ClInclude Include="SourceCode\Components\Camera_Component.h">
       <Filter>Components\Unused Components\CAMERA_COMPONENT</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\CapsuleCollider.h">
@@ -556,49 +556,49 @@
     <ClInclude Include="SourceCode\Components\DirectionalLight.h">
       <Filter>Components\Directional Light</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\EFFECT.h">
+    <ClInclude Include="SourceCode\Components\Effect_Component.h">
       <Filter>Components\Unused Components\Effect</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\EnemyController.h">
       <Filter>Components\Enemy Controller</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\ENVIRONMENTAL_AUDIO.h">
+    <ClInclude Include="SourceCode\Components\EnvironmentalAudio.h">
       <Filter>Components\Environmental Audio</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\MESH.h">
+    <ClInclude Include="SourceCode\Components\Mesh.h">
       <Filter>Components\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\MESH_COLLIDER.h">
+    <ClInclude Include="SourceCode\Components\MeshCollider.h">
       <Filter>Components\Mesh Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\OBB_COLLIDER.h">
+    <ClInclude Include="SourceCode\Components\OBBCollider.h">
       <Filter>Components\OBB Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\OBB_TERRAIN.h">
+    <ClInclude Include="SourceCode\Components\OBBTerrain.h">
       <Filter>Components\Unused Components\OBB Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\PLAYER_CONTROLLER.h">
+    <ClInclude Include="SourceCode\Components\PlayerController.h">
       <Filter>Components\Player Controller</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\POINT_LIGHT.h">
+    <ClInclude Include="SourceCode\Components\PointLight.h">
       <Filter>Components\Point Light</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\SPHERE_COLLIDER.h">
+    <ClInclude Include="SourceCode\Components\SphereCollider.h">
       <Filter>Components\Sphere Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\SPOTLIGHT.h">
+    <ClInclude Include="SourceCode\Components\SpotLight.h">
       <Filter>Components\Spotlight</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\SPRITE_2D.h">
+    <ClInclude Include="SourceCode\Components\Sprite2D.h">
       <Filter>Components\Sprite 2D</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\TERRAIN_AUDIO.h">
+    <ClInclude Include="SourceCode\Components\TerrainAudio.h">
       <Filter>Components\Terrain Audio</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\TRANSFORM_2D.h">
+    <ClInclude Include="SourceCode\Components\Transform2D.h">
       <Filter>Components\Transform 2D</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Components\TRANSFORM_3D.h">
+    <ClInclude Include="SourceCode\Components\Transform3D.h">
       <Filter>Components\Transform 3D</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Components\NPCDialogue.h">

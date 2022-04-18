@@ -1,6 +1,6 @@
 #include "BlendMode.h"
 
-HRESULT BLENDMODE::Create(BLEND_MODE m, ID3D11Device* dv) 
+HRESULT BlendModeManager::Create(BLEND_MODE m, ID3D11Device* dv) 
 {
     D3D11_BLEND_DESC bld{};
     bld.AlphaToCoverageEnable = true;

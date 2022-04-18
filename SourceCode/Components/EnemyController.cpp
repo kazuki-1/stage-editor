@@ -1,34 +1,34 @@
 #include "EnemyController.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------------EnemyController Class---------------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component Class---------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------------EnemyController Constructor---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component Constructor---------------------------------------------------------------*/
 
 
-EnemyController::EnemyController(GameObject* g, ComponentData* d)
+EnemyController_Component::EnemyController_Component(GameObject* g, ComponentData* d)
 {
     parent = g;
     data = static_cast<EnemyController_Data*>(d);
 }
 
-/*---------------------------------------------------EnemyController Initialize()---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component Initialize()---------------------------------------------------------------*/
 
-HRESULT EnemyController::Initialize()
+HRESULT EnemyController_Component::Initialize()
 {
     return S_OK;
 }
 
-/*---------------------------------------------------EnemyController Execute()---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component Execute()---------------------------------------------------------------*/
 
-void EnemyController::Execute()
+void EnemyController_Component::Execute()
 {
 
 }
 
-/*---------------------------------------------------EnemyController UI()---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component UI()---------------------------------------------------------------*/
 
-void EnemyController::UI()
+void EnemyController_Component::UI()
 {
     if (ImGui::TreeNode("Player Controller"))
     {
@@ -37,16 +37,16 @@ void EnemyController::UI()
     }
 }
 
-/*---------------------------------------------------EnemyController Render()---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component Render()---------------------------------------------------------------*/
 
-void EnemyController::Render()
+void EnemyController_Component::Render()
 {
 
 }
 
-/*---------------------------------------------------EnemyController GetComponentType()---------------------------------------------------------------*/
+/*---------------------------------------------------EnemyController_Component GetComponentType()---------------------------------------------------------------*/
 
-COMPONENT_TYPE EnemyController::GetComponentType()
+COMPONENT_TYPE EnemyController_Component::GetComponentType()
 {
     return data->type;
 }

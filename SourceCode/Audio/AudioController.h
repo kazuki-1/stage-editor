@@ -37,11 +37,11 @@ public:
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
-    /// <para> Insert the audio and bind it to the state. The audio is retrieved from AUDIOENGINE, so perform AUDIOENGINE::Insert() before doing this </para>
+    /// <para> Insert the audio and bind it to the state. The audio is retrieved from AudioEngine, so perform AudioEngine::Insert() before doing this </para>
     /// <para> AUDIOENGINEマップからAUDIOを検索して、stateにバインドする </para>
     /// </summary>
     /// <param name="state"> : The audio will be binded to this state</param>
-    /// <param name="name"> : Name of audio. Will be retrieved from AUDIOENGINE</param>
+    /// <param name="name"> : Name of audio. Will be retrieved from AudioEngine</param>
     void Insert(AudioStates state, std::string name);
     /// <summary>
     /// <para> Called every frame. Performs fadeIn and fadeOut effects of current and next bgm</para>

@@ -2,7 +2,7 @@
 //#include "AUDIOSTATE_BASE.h"
 #include "../Engine/Audio.h"
 #include "../Engine/IMGUI.h"
-#define AUDIOS AUDIOENGINE::Instance()->Audios()
+#define AUDIOS AudioEngine::Instance()->Audios()
 #define TRANSITION_TIME 1.0f
 #define TRANSITION_THRESHOLD 0.2f
 
@@ -23,10 +23,10 @@ int index{};
 /// <returns></returns>
 HRESULT AudioController::Initialize()
 {
-    audioMap.insert(std::make_pair(AudioStates::State_Idle, AUDIOENGINE::Instance()->Retrieve("Idle")));
-    audioMap.insert(std::make_pair(AudioStates::State_Tension, AUDIOENGINE::Instance()->Retrieve("Tension")));
-    audioMap.insert(std::make_pair(AudioStates::State_Climax, AUDIOENGINE::Instance()->Retrieve("Climax")));
-    audioMap.insert(std::make_pair(AudioStates::State_Cooldown, AUDIOENGINE::Instance()->Retrieve("Cooldown")));
+    audioMap.insert(std::make_pair(AudioStates::State_Idle, AudioEngine::Instance()->Retrieve("Idle")));
+    audioMap.insert(std::make_pair(AudioStates::State_Tension, AudioEngine::Instance()->Retrieve("Tension")));
+    audioMap.insert(std::make_pair(AudioStates::State_Climax, AudioEngine::Instance()->Retrieve("Climax")));
+    audioMap.insert(std::make_pair(AudioStates::State_Cooldown, AudioEngine::Instance()->Retrieve("Cooldown")));
     cur_BGM = audioMap.find(AudioStates::State_Idle)->second;
     Enter();
     return S_OK;
@@ -39,7 +39,7 @@ HRESULT AudioController::Initialize()
 /// </summary>
 void AudioController::Execute()
 {
-    AUDIOENGINE::Instance()->Execute();
+    AudioEngine::Instance()->Execute();
     if (isDucking)
     {
         for (auto& audio : AUDIOS)

@@ -20,14 +20,14 @@ public:
     }
 };
 
-class CapsuleCollider : public BaseColliderComponent
+class CapsuleCollider_Component : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::CAPSULE>collider;
     std::shared_ptr<DYNAMIC_CAPSULE>capsule;
     CapsuleCollider_Data* data;
 public:
-    CapsuleCollider() {};
-    CapsuleCollider(GameObject* t, ComponentData* d);
+    CapsuleCollider_Component() {};
+    CapsuleCollider_Component(GameObject* t, ComponentData* d);
     /// <summary>
     /// <para>Called when component is created. Initializes the component with the component data of its matching type (CapsuleCollider_Data)</para>
     /// <para> 生成時に呼び出す。対象のデータを使って初期化する (CAPSULE COLLIDER DATA) </para>
@@ -59,7 +59,7 @@ public:
     /// <para> プレイヤーとの距離を計算する </para>    
     /// </summary>
     /// <returns></returns>
-    Vector3 DistanceToPlayer(PLAYER_CONTROLLER* target) override;
+    Vector3 DistanceToPlayer(PlayerController_Component* target) override;
     /// <summary>
     /// <para> Perform collision check to the target gameObject </para>
     /// <para> ゲームオブジェクトに当たり判定を計算 </para>

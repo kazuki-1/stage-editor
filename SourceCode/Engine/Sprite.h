@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "Texture.h"
-#include "TEXTURE_MANAGER.h"
+#include "TextureManager.h"
 #include "OBJECT.h"
 using namespace Microsoft::WRL;
 
