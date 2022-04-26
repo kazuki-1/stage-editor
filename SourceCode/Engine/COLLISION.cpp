@@ -224,23 +224,18 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
     bool hit{};
     MODEL_RESOURCES* resources{ m->Resource().get()};
     MODEL_RESOURCES::ANIMATION::KEYFRAME& current_Keyframe{ resources->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame()) };
-    for (auto& mesh : m->Resource()->Meshes)
+    int current_mesh_index{};
+    for (auto& mesh : resources->Meshes)
     {
-        // Check if current target
-        //    bool onTarget{};
-        //    //if (mesh_index != -1)
-        //    //{
-        //    //    if (mesh_index != cur_index)
-        //    //    {
-        //    //        ++cur_index;
-        //    //        continue;
-        //    //    }
-        //    //    else
-        //    //        onTarget = true;
-        //    //}
-
-        //    //if (!onTarget && mesh_index != -1)
-        //    //    continue;
+        //Check if current target
+            if (mesh_index != -1)
+            {
+                if (mesh_index != current_mesh_index)
+                {
+                    ++current_mesh_index;
+                    continue;
+                }
+            }
 
         // MODEL_RESOURCES::ANIMATION::KEYFRAME::NODE current_node = current_Keyframe.Nodes.at(mesh.n_Index);
         // XMMATRIX node_Transform{ XMLoadFloat4x4 (&current_node.g_Transform) };
@@ -1268,7 +1263,7 @@ bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Compone
     {
         if (m != target_mesh)
             continue;
-        output = RayCast(startofRay, endOfRay, m->Model().get(), rcd);
+        output = RayCast(startofRay, endOfRay, m->Model().get(), rcd, target_mesh_index);
         if (output)
             break;
     }

@@ -24,13 +24,24 @@ public:
 class TerrainAudio_Data_Emitter : public TerrainAudio_Data_Base
 {
 public:
-    int mesh_index{ -1 };
-    std::shared_ptr<AudioData>audio_data{};
-    TerrainAudio_Data_Emitter() { audio_data = std::make_shared<AudioData>(); };
+    struct DataStruct {
+
+        int mesh_index{ -1 };
+        std::shared_ptr<AudioData>audio_data{};
+
+        DataStruct() { audio_data = std::make_shared<AudioData>(); }
+        template <class T>
+        void serialize(T& t)
+        {
+            t(mesh_index, audio_data);
+        }
+    };
+    std::vector<std::shared_ptr<DataStruct>>dataset;
+    TerrainAudio_Data_Emitter() {};
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<TerrainAudio_Data_Base>(this), mesh_index, audio_data);
+        t(cereal::base_class<TerrainAudio_Data_Base>(this), dataset);
     }
 };
 

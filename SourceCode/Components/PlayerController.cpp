@@ -347,32 +347,37 @@ void PlayerController_Component::TerrainAudioCollision()
     {
         TerrainAudio_Component* emitter{ e->GetComponent<TerrainAudio_Component>() };
         Mesh_Component* emitter_mesh{ e->GetComponent<Mesh_Component>() };
-        for (int ind = 0; ind < 2; ++ind)
+        TerrainAudio_Data_Emitter* data{ (TerrainAudio_Data_Emitter*)(emitter->Data()->property_data.get()) };
+
+        for (auto& entity : data->dataset)
         {
-            // Ducking function
-            for (auto& b : emitter->Buffers())
+            for (int ind = 0; ind < receivers.size(); ++ind)
             {
-                if (b.buffer->IsDucking())
-                    b.buffer->SetVolume(0.3f);
+                // Ducking function
+                for (auto& b : emitter->Buffers())
+                {
+                    if (b.buffer->IsDucking())
+                        b.buffer->SetVolume(0.3f);
+                }
+
+                // Prepare parameters for rayCasting
+                Vector3 start{ receivers[ind] };
+                Vector3 end{ start };
+
+                // Offsets the start and end vectors for error compensation
+                end.y += 0.009f;
+                start.y += 0.1f;
+                COLLIDERS::RAYCASTDATA rcd{};
+                bool collided{ RAYCAST(start, end, emitter_mesh, entity->mesh_index, rcd) };
+
+                // Only triggers the sound effect upon triggering the collider
+                bool triggered{};
+                if (collided && statuses[ind] != collided)
+                    triggered = true;
+                statuses[ind] = collided;
+                if (triggered)
+                    emitter->Play();
             }
-
-            // Prepare parameters for rayCasting
-            Vector3 start{ receivers[ind] };
-            Vector3 end{ start };
-
-            // Offsets the start and end vectors for error compensation
-            end.y += 0.009f;
-            start.y += 0.1f;
-            COLLIDERS::RAYCASTDATA rcd{};
-            bool collided{ RAYCAST(start, end, emitter_mesh, ((TerrainAudio_Data_Emitter*)emitter->Data())->mesh_index, rcd) };
-
-            // Only triggers the sound effect upon triggering the collider
-            bool triggered{};
-            if (collided && statuses[ind] != collided)
-                triggered = true;
-            statuses[ind] = collided;
-            if (triggered)
-                emitter->Play();
         }
     }
 }
