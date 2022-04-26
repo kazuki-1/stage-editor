@@ -41,7 +41,7 @@ HRESULT CapsuleCollider_Component::Initialize()
     collider->SetRadius(data->radius);
     collider->SetHeight(data->height);
     collider->OffsetCollider(data->center);
-    collider->RotateCollider(ToRadians(data->rotation));
+    collider->RotateCollider(Vector3::ToRadians(data->rotation));
     return collider ? S_OK : E_FAIL;
 }
 
@@ -132,7 +132,7 @@ void CapsuleCollider_Component::UI()
             collider->SetRadius(data->radius);
             collider->SetHeight(data->height);
             collider->OffsetCollider(data->center);
-            collider->RotateCollider(ToRadians(data->rotation));
+            collider->RotateCollider(Vector3::ToRadians(data->rotation));
         }
 
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)

@@ -24,7 +24,7 @@ class CapsuleCollider_Component : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::CAPSULE>collider;
     std::shared_ptr<DYNAMIC_CAPSULE>capsule;
-    CapsuleCollider_Data* data;
+    CapsuleCollider_Data* data{};
 public:
     CapsuleCollider_Component() {};
     CapsuleCollider_Component(GameObject* t, ComponentData* d);

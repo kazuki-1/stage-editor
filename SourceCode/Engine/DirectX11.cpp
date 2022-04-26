@@ -136,6 +136,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     hr = dxDevice->CreateDepthStencilView(dxDepthStencilBuffer.Get(), &dsvd, dxDepthStencilView.GetAddressOf());
     dxDeviceContext->OMSetRenderTargets(1, dxRenderTargetView.GetAddressOf(), dxDepthStencilView.Get());
 
+
     // D3D11 Rasterizer Desc
     D3D11_RASTERIZER_DESC drd{};
     drd.AntialiasedLineEnable = false;
@@ -149,14 +150,14 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     drd.ScissorEnable = false;
     drd.SlopeScaledDepthBias = 0.0f;
 
-    RASTERIZERMANAGER::Instance()->Add("3D", dxDevice.Get(), drd);
+    RasterizerManager::Instance()->Add("3D", dxDevice.Get(), drd);
 
 
     drd.CullMode = D3D11_CULL_NONE;
-    RASTERIZERMANAGER::Instance()->Add("2D", dxDevice.Get(), drd);
+    RasterizerManager::Instance()->Add("2D", dxDevice.Get(), drd);
 
     drd.FillMode = D3D11_FILL_WIREFRAME;
-    RASTERIZERMANAGER::Instance()->Add("Wireframe", dxDevice.Get(), drd);
+    RasterizerManager::Instance()->Add("Wireframe", dxDevice.Get(), drd);
     
     // hr = dxDevice->CreateRasterizerState(&drd, dxRasterizerState.GetAddressOf());
     // if (FAILED(hr))

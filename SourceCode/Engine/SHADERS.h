@@ -8,6 +8,7 @@
 #include <filesystem>
 class SHADERS
 {
+protected:
     ComPtr<ID3D11PixelShader>dxPixelShader;
     ComPtr<ID3D11VertexShader>dxVertexShader;
     ComPtr<ID3D11InputLayout>dxInputLayout;
@@ -33,6 +34,8 @@ public:
         return dxInputLayout;
     }
     SHADERS(std::wstring shader_path, ID3D11Device* dv, D3D11_INPUT_ELEMENT_DESC* ied, UINT ied_count);
+
+
     void SetShaders(ID3D11DeviceContext* dc)
     {
         dc->VSSetShader(dxVertexShader.Get(), 0, 0);
@@ -40,7 +43,10 @@ public:
         dc->IASetInputLayout(dxInputLayout.Get());
         dc->PSSetSamplers(0, 1, dxSamplerState.GetAddressOf());
     }
+    virtual void Execute() {};
+
 };
+
 
 class ShaderManager : public Singleton<ShaderManager>
 {

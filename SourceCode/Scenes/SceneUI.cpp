@@ -16,10 +16,14 @@
 
 HRESULT SceneUI::Initialize()
 {
-    DataManager::Instance()->InsertAndInitialize();
-    ComponentCreator::Instance()->Initialize();
-    DebugController::Instance()->Initialize();
-    TextManager::Instance()->SetCurrentFont("Font1");
+
+    // Loads pre existing data if it exists
+    std::string cur_scene_path{ DataManager::Instance()->GetCurrentScenePath() };
+    if (cur_scene_path == "")
+        DataManager::Instance()->InsertAndInitialize();
+    else
+        DataManager::Instance()->Load(cur_scene_path);
+
     return S_OK;
 
 }

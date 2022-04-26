@@ -21,7 +21,7 @@ public:
 /// </summary>
 class Transform2D_Component : public Component
 {
-    Transform2D_Data* data;
+    Transform2D_Data* data{};
 public:
     Transform2D_Component() {};
     Transform2D_Component(GameObject* t, ComponentData* data);

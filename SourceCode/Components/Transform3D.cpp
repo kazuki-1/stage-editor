@@ -1,4 +1,5 @@
 #include "Base Classes/Component.h"
+
 #include "Transform3D.h"
 
 /*----------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +32,7 @@ Transform3D_Component::Transform3D_Component(GameObject* t, ComponentData* data)
 /// <returns></returns>
 HRESULT Transform3D_Component::Initialize()
 {
-    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(ToRadians(data->rotation).XMV()));
+    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV()));
     // scale = data->scale;
     // translation = data->translation;
     return S_OK;
@@ -44,7 +45,7 @@ HRESULT Transform3D_Component::Initialize()
 /// </summary>
 void Transform3D_Component::Execute()
 {
-     data->translation += velocity;
+    data->translation += velocity;
     velocity *= 0.9f;
     if (velocity.Length() < 0.01f)
         velocity = {};
@@ -71,7 +72,7 @@ void Transform3D_Component::ExecuteUI()
 {
     XMMATRIX S, R, T;
     S = XMMatrixScalingFromVector(data->scale.XMV());
-    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(ToRadians(data->rotation).XMV()) );
+    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV()) );
     R = XMMatrixRotationQuaternion(quaternion.XMV());
     T = XMMatrixTranslationFromVector(data->translation.XMV());
     XMStoreFloat4x4(&transform, S * R * T);
@@ -165,7 +166,7 @@ XMFLOAT4X4 Transform3D_Component::Transform()
 XMMATRIX Transform3D_Component::TransformMatrix()
 {
     Vector4 q{};
-    Vector3 r{ ToRadians(data->rotation) };
+    Vector3 r{ Vector3::ToRadians(data->rotation) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
     return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
 }

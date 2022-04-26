@@ -3,7 +3,7 @@
 #include "Singleton.h"
 #include <DirectXMath.h>
 #include <Windows.h>
-#include "DXMath.h"
+#include "Math.h"
 #include <d3d11.h>
 using namespace DirectX;
 using namespace Math;
@@ -135,9 +135,9 @@ public:
 };
 
 
-namespace KEYS
+namespace InputController
 {
-	enum MBS
+	enum class MBS
 	{
 		LB, RB, MB
 	};
@@ -145,47 +145,51 @@ namespace KEYS
 	{
 		return INPUTMANAGER::Instance()->Keyboard()->Held(key);
 	}
+	inline bool Triggered(unsigned int key)
+	{
+		return INPUTMANAGER::Instance()->Keyboard()->Triggered(key);
+	}
 	inline bool Released(unsigned int key)
 	{
 		INPUTMANAGER::Instance()->Keyboard()->Released(key);
 	}
-	inline bool Clicked(MBS mb)
+	inline bool Clicked(MBS mouseButton)
 	{
-		switch (mb)
+		switch (mouseButton)
 		{
-		case LB:
+		case MBS::LB:
 			return INPUTMANAGER::Instance()->Mouse()->LButton().Held();
-		case RB:
+		case MBS::RB:
 			return INPUTMANAGER::Instance()->Mouse()->RButton().Held();
-		case MB:
+		case MBS::MB:
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Held();
 
 		}
 		return false;
 	}
-	inline bool Triggered(MBS mb)
+	inline bool Triggered(MBS mouseButton)
 	{
-		switch (mb)
+		switch (mouseButton)
 		{
-		case LB:
+		case MBS::LB:
 			return INPUTMANAGER::Instance()->Mouse()->LButton().Triggered();
-		case RB:
+		case MBS::RB:
 			return INPUTMANAGER::Instance()->Mouse()->RButton().Triggered();
-		case MB:
+		case MBS::MB:
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Triggered();
 
 		}
 		return false;
 	}
-	inline bool Released(MBS mb)
+	inline bool Released(MBS mouseButton)
 	{
-		switch (mb)
+		switch (mouseButton)
 		{
-		case LB:
+		case MBS::LB:
 			return INPUTMANAGER::Instance()->Mouse()->LButton().Released();
-		case RB:
+		case MBS::RB:
 			return INPUTMANAGER::Instance()->Mouse()->RButton().Released();
-		case MB:
+		case MBS::MB:
 			return INPUTMANAGER::Instance()->Mouse()->MButton().Released();
 
 		}

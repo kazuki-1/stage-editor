@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-#include "DXMath.h"
+#include "Math.h"
 #include <DirectXMath.h>
 using namespace DirectX;
 using namespace Math;

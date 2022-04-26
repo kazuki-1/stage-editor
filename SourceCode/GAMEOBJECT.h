@@ -1,7 +1,6 @@
 #pragma once
 #include "MODEL.h"
 #include "Engine/Singleton.h"
-#include "Engine/DXMath.h"
 #include "OBJECT_DATA.h"
 //#include "COLLIDERS.h"
 //#include "Component.h"

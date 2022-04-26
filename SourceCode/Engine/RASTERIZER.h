@@ -18,7 +18,7 @@ public:
     std::string Name();
 };
 
-class RASTERIZERMANAGER : public Singleton<RASTERIZERMANAGER>
+class RasterizerManager : public Singleton<RasterizerManager>
 {
     std::map < std::string, std::shared_ptr<RASTERIZER>>rasterizers;
 

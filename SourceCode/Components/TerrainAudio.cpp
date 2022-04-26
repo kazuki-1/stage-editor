@@ -137,26 +137,62 @@ void TerrainAudio_Component::UI()
         {
             if (ImGui::TreeNode("Emitter Properties"))
             {
-
+                ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
+                static bool fileOpenTA{};
+                static std::string previewTA{};
 
                 TerrainAudio_Data_Emitter* current = static_cast<TerrainAudio_Data_Emitter*>(data->property_data.get());
                 ImGui::InputText("Terrain name", current->name, 256);
                 ImGui::Text(std::to_string(current->mesh_index).c_str());
                 ImGui::InputText("Audio Name", current->audio_data->name, 256);
-                IMGUI::Instance()->InputText("Audio File", &current->audio_data->file_path);
+                ImGui::Text(previewTA.c_str());
 
-                MODEL_RESOURCES* mr{ mesh->Model()->Resource().get() };
-                ImGui::ListBoxHeader("Materials");
-                static int sel{ -1 };
-                for (auto& m : mr->Materials)
+                if (ImGui::Button("Load Audio"))
                 {
-                    if (ImGui::Selectable(m.second.name.c_str()))
+                    browser->Open();
+                    browser->SetTitle("Open audio file");
+                    browser->SetTypeFilters({ ".wav", ".*"});
+                    fileOpenTA = true;
+                }
+                if (fileOpenTA)
+                {
+                    browser->Display();
+                    if (browser->HasSelected())
                     {
-                        sel = (int)m.first;
-                        break;
+                        current->audio_data->file_path = browser->GetSelected().wstring();
+                        fileOpenTA = false;
+
+
+                        std::filesystem::path path(current->audio_data->file_path);
+                        std::filesystem::path name(path.filename());
+                        std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
+                        AudioEngine::Instance()->Insert(current->name, full_path);
+                        current->audio_data->file_path = full_path;
+                        for (auto& c : current->audio_data->file_path)
+                        {
+                            previewTA.push_back(c);
+                        }
+
+                        browser->Close();
                     }
                 }
-                ImGui::ListBoxFooter();
+
+                MODEL_RESOURCES* mr{ mesh->Model()->Resource().get() };
+                static int sel{ 0 };
+                int ind{};
+                if (ImGui::BeginCombo("Meshes", mr->Meshes[sel].Name.c_str()))
+                {
+                    for (auto& mesh : mr->Meshes)
+                    {
+                        if (ImGui::Selectable(mesh.Name.c_str()))
+                        {
+                            sel = ind;
+                            break;
+                        }
+                        ++ind;
+                    }
+                    ImGui::EndCombo();
+                }
                 if (ImGui::Button("Set Parameters"))
                 {
                     current->mesh_index = sel;

@@ -53,7 +53,7 @@ DEBUG_CYLINDER::DEBUG_CYLINDER(float r) : radius(r)
 #pragma endregion
 #pragma region DEBUG_SPHERE
 
-DEBUG_SPHERE::DEBUG_SPHERE()
+Sphere_Debug::Sphere_Debug()
 {
     model = std::make_shared<MODEL>();
     model->Initialize("./Data/Model/Debug Primitives/sphere.mrs");
@@ -62,7 +62,7 @@ DEBUG_SPHERE::DEBUG_SPHERE()
     model->SetScale(scale);
     model->SetTake(0);
 }
-DEBUG_SPHERE::DEBUG_SPHERE(float r) : radius(r)
+Sphere_Debug::Sphere_Debug(float r) : radius(r)
 {
     model = std::make_shared<MODEL>();
     model->Initialize("./Data/Model/Debug Primitives/sphere.mrs");
@@ -71,6 +71,11 @@ DEBUG_SPHERE::DEBUG_SPHERE(float r) : radius(r)
     model->SetScale(scale);
     model->SetTake(0);
 
+}
+
+void Sphere_Debug::SetRadius(float r)
+{
+    radius = r;
 }
 
 #pragma endregion
@@ -632,6 +637,11 @@ void DYNAMIC_SPHERE::UpdateVertices(float rad, XMMATRIX* target)
     dc->Unmap(vertexBuffer.Get(), 0);
 
 
+}
+
+void DYNAMIC_SPHERE::SetRadius(float r)
+{
+    radius = r;
 }
 
 #pragma endregion

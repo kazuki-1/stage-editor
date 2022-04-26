@@ -21,7 +21,7 @@ public:
 class Mesh_Component : public Component
 {
     std::shared_ptr<MODEL>model{};
-    Mesh_Data* data;
+    Mesh_Data* data{};
 public:
     Mesh_Component() {};
     Mesh_Component(GameObject* t, ComponentData* data);

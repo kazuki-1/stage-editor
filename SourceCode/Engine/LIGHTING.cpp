@@ -11,7 +11,7 @@ LIGHTING::LIGHTING(L_TYPE t) : type(t)
 {
 	if (type == L_TYPE::DIRECTIONAL)
 		return;
-	d_Primitive = std::make_shared<DEBUG_SPHERE>();
+	d_Primitive = std::make_shared<Sphere_Debug>();
 
 }
 
@@ -69,6 +69,7 @@ void LIGHTING::WriteToData(PointLight_Component* p)
 {
 	position = { p->Position().x, p->Position().y, p->Position().z };
 	colour = p->Colour();
+	intensity = p->GetIntensity();
 	range = p->Range();
 }
 void LIGHTING::WriteToData(SpotLight_Component* s)

@@ -56,7 +56,7 @@ void DialogueController::Render()
 
 	
 	TextManager::Instance()->PrintOut(dialogue_list.front(), properties.position + Vector2(50.0f, 50.0f), { 0.7f, 0.7f });
-	if (KEYS::Triggered(KEYS::MBS::LB))
+	if (InputController::Triggered(InputController::MBS::LB))
 		dialogue_list.pop_front();
 
 }

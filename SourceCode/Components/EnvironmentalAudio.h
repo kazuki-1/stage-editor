@@ -95,11 +95,12 @@ public:
     // For storing each collider data for exporting purposes
     // エキスパート用のコライダーデータを格納するため
     std::vector<std::shared_ptr<LocalizedCollider_Data>>collider_dataset;
+    float maximum_volume{ 1.0f };
     EnvironmentalAudio_Data() { type = COMPONENT_TYPE::ENV_AUDIO; };
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<AudioData>(this), collider_dataset);
+        t(cereal::base_class<AudioData>(this), collider_dataset, maximum_volume);
     }
 };
 class EnvironmentalAudio_Component : public BASE_AUDIO_COMPONENT
@@ -107,7 +108,7 @@ class EnvironmentalAudio_Component : public BASE_AUDIO_COMPONENT
     // We are using the collider component instead of the code based component for convenience
     // 便利さを優先するためコードベースコライダーではなくコンポネントベースのコライダーを使う
     std::vector < std::shared_ptr<LocalizedCollider_SubComponent>>colliders;
-    EnvironmentalAudio_Data* data;
+    EnvironmentalAudio_Data* data{};
 
     /// <summary>
     /// <para> Creates a localized collider and insert it into the dataset </para>
@@ -142,6 +143,7 @@ public:
 
     COMPONENT_TYPE GetComponentType() override;
     std::vector<std::shared_ptr<LocalizedCollider_SubComponent>>Colliders();
+    EnvironmentalAudio_Data* GetData();
 
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "Base Classes/Component.h"
-
+#include "../Engine/DEBUG_PRIMITIVE.h"
 class PointLight_Data : public ComponentData
 {
 public:
@@ -8,7 +8,8 @@ public:
     Vector3 position{};
     Vector4 colour{};
     float range{};
-    Vector3 placeholder{};
+    float intensity{};
+    Vector2 placeholder{};
     template <class T>
     void serialize(T& t)
     {
@@ -21,6 +22,7 @@ class PointLight_Component : public Component
 {
     std::shared_ptr<LIGHTING>light;
     PointLight_Data* data;
+    std::shared_ptr<DYNAMIC_SPHERE>sphere;
 public:
     PointLight_Component(GameObject* t, ComponentData* data);
 
@@ -49,6 +51,7 @@ public:
     Vector3 Position();
     Vector4 Colour();
     float Range();
+    float GetIntensity();
     COMPONENT_TYPE GetComponentType() override;
 };
 

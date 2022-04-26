@@ -20,7 +20,7 @@ class BGM_Component : public BASE_AUDIO_COMPONENT
 {
     std::vector<std::shared_ptr<AUDIO>>audioList;
     std::shared_ptr<OBBCollider_Component>collider;
-    BGMComponent_Data* data;
+    BGMComponent_Data* data{};
 public:
     BGM_Component() {};
     BGM_Component(GameObject* t, ComponentData* d);

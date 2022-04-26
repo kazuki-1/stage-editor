@@ -80,22 +80,39 @@ void Mesh_Component::UI()
 {
     if (ImGui::TreeNode("Mesh"))
     {
+        ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
+        bool isEmpty{};
+        static bool fileOpenM{};
+
+
+
         IMGUI::Instance()->InputText("Model Path", &data->model_path);
         if (ImGui::Button("Load Model"))
         {
-            std::string directory{ "./Data/Model/" };
-            FS::path path(data->model_path);
-            FS::path name(path.filename().string());
-            std::string full_name{ name.string() };
-            name.replace_extension("");
-            directory += name.string() + "/" + full_name;
-            data->model_path = directory;
-            data->model_name = name.string();
+            if (data->model_path == "")
+            {
+                browser->Open();
+                browser->SetTitle("Open Model");
+                browser->SetTypeFilters({ ".mrs", ".*" });
+                isEmpty = fileOpenM = true;
+            }
+            if (!isEmpty)
+            {
+                std::string directory{ "./Data/Model/" };
+                FS::path path(data->model_path);
+                FS::path name(path.filename().string());
+                std::string full_name{ name.string() };
+                name.replace_extension("");
+                directory += name.string() + "/" + full_name;
+                data->model_path = directory;
+                data->model_name = name.string();
 
-            model = std::make_shared<MODEL>();
+                model = std::make_shared<MODEL>();
 
-            model->Initialize(data->model_path);
+                model->Initialize(data->model_path);
+            }
         }
+        IMGUI::Instance()->DisplayBrowser(&data->model_path, &fileOpenM);
         if (!model)
         {
             ImGui::TreePop();

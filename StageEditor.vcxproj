@@ -70,6 +70,7 @@
     <ClCompile Include="SourceCode\Engine\Input.cpp" />
     <ClCompile Include="SourceCode\Engine\LIGHTING.cpp" />
     <ClCompile Include="SourceCode\Engine\Main.cpp" />
+    <ClCompile Include="SourceCode\Engine\Math.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp" />
     <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp" />
@@ -141,7 +142,7 @@
     <ClInclude Include="SourceCode\Engine\DEBUG_PRIMITIVE.h" />
     <ClInclude Include="SourceCode\Engine\DirectX11.h" />
     <ClInclude Include="SourceCode\Engine\DROPMANAGER.h" />
-    <ClInclude Include="SourceCode\Engine\DXMath.h" />
+    <ClInclude Include="SourceCode\Engine\Math.h" />
     <ClInclude Include="SourceCode\Engine\EFFECTS.h" />
     <ClInclude Include="SourceCode\Engine\Graphics.h" />
     <ClInclude Include="SourceCode\Engine\IMGUI.h" />

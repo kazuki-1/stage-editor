@@ -35,7 +35,7 @@ PointLight_Component::PointLight_Component(GameObject* t, ComponentData* data)
 HRESULT PointLight_Component::Initialize()
 {
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::POINT);
-
+    sphere = std::make_shared<DYNAMIC_SPHERE>();
     LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
     return S_OK;
 }
@@ -47,7 +47,10 @@ HRESULT PointLight_Component::Initialize()
 /// </summary>
 void PointLight_Component::Execute()
 {
-    data->position = GetComponent<Transform3D_Component>()->Translation();
+    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
+    data->position = transform->Translation();
+    XMMATRIX m{ transform->TransformMatrix() };
+    sphere->UpdateVertices(data->range, &m);
 }
 
 /*---------------------------------------PointLight_Component Render()--------------------------------------------------*/
@@ -58,6 +61,7 @@ void PointLight_Component::Execute()
 void PointLight_Component::Render()
 {
     light->WriteToData(this);
+    sphere->Render();
 }
 
 /*---------------------------------------PointLight_Component UI()--------------------------------------------------*/
@@ -71,6 +75,7 @@ void PointLight_Component::UI()
     {
         ImGui::ColorEdit4("Colour", &data->colour.x);
         ImGui::DragFloat("Range", &data->range);
+        ImGui::DragFloat("Intensity", &data->intensity, 0.5f, 0.0f);
         ImGui::TreePop();
     }
 
@@ -95,6 +100,13 @@ Vector4 PointLight_Component::Colour()
 float PointLight_Component::Range()
 {
     return data->range;
+}
+
+/*---------------------------------------PointLight_Component GetIntensity()--------------------------------------------------*/
+
+float PointLight_Component::GetIntensity()
+{
+    return data->intensity;
 }
 
 /*----------------------------------------------------------PointLight_Component GetComponentType()-----------------------------------------------------------*/

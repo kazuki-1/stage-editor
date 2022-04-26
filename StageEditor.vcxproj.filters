@@ -156,6 +156,9 @@
     <Filter Include="Components\Dialogue">
       <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Math">
+      <UniqueIdentifier>{d0e1859b-c692-44da-ad1e-1b3bbcb4b550}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -365,6 +368,9 @@
     <ClCompile Include="SourceCode\GameObject_2D.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Math.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -431,9 +437,6 @@
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Texture.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\DXMath.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Graphics.h">
@@ -612,6 +615,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\GameObject_2D.h">
       <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Math.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

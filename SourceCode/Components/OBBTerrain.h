@@ -26,7 +26,7 @@ class OBBTerrain_Component : public Component
 {
     std::shared_ptr<OBBCollider_Component>collider;
     std::shared_ptr<AUDIO>audio;
-    OBBTerrain_Data* data;
+    OBBTerrain_Data* data{};
 
 
 public:

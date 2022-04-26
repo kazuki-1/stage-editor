@@ -1,6 +1,6 @@
 #pragma once
 #include "DEBUG_PRIMITIVE.h"
-#include "DXMath.h"
+
 #include "Singleton.h"
 #include <d3d11.h>
 using namespace Math;

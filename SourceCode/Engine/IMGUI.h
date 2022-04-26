@@ -131,24 +131,32 @@ public:
     }
 
     // Display file browser, output string
-    void DisplayBrowser(std::string* output_string)
+    void DisplayBrowser(std::string* output_string, bool* openFlag)
     {
-        fileBrowser.Display();
-        if (fileBrowser.HasSelected())
+        if (openFlag)
         {
-            *output_string = fileBrowser.GetSelected().string();
-            fileBrowser.Close();
+            fileBrowser.Display();
+            if (fileBrowser.HasSelected())
+            {
+                *output_string = fileBrowser.GetSelected().string();
+                fileBrowser.Close();
+                *openFlag = false;
+            }
         }
     }
 
     // Display file browser, output wstring
-    void DisplayBrowser(std::wstring* output_string)
+    void DisplayBrowser(std::wstring* output_string, bool* openFlag)
     {
-        fileBrowser.Display();
-        if (fileBrowser.HasSelected())
+        if (openFlag)
         {
-            *output_string = fileBrowser.GetSelected().wstring();
-            fileBrowser.Close();
+            fileBrowser.Display();
+            if (fileBrowser.HasSelected())
+            {
+                *output_string = fileBrowser.GetSelected().wstring();
+                fileBrowser.Close();
+                *openFlag = false;
+            }
         }
     }
 

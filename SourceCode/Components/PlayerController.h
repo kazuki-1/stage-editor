@@ -123,8 +123,12 @@ public:
     /// <para> 回転を更新</para>
     /// </summary>
     void UpdateRotation() override;
-
+    /// <summary>
+    /// <para> Triggers dialogue interacted with a NPC </para>
+    /// <para> 近くにあるNPCを会話を行う </para>
+    /// </summary>
     void NPCDialogueTrigger();
+    COMPONENT_TYPE GetComponentType() override;
 };
 
 CEREAL_REGISTER_TYPE(PlayerController_Data)

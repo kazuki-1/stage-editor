@@ -16,7 +16,7 @@ enum class AudioStates
 
 
 
-
+/*----------------------------------------------AudioController Class------------------------------------------------------*/
 
 
 class AudioController : public Singleton<AudioController>
@@ -95,3 +95,12 @@ public:
     /// <returns></returns>
     bool IsDucking();
 };
+
+/*---------------------------------------------------------StageBGM class-----------------------------------*/
+
+//class StageBGM
+//{
+//    std::map<
+//};
+//
+//

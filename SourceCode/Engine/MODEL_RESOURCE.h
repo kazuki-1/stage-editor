@@ -6,7 +6,7 @@
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\unordered_map.hpp>
 #include <cereal/types/vector.hpp>
-#include "DXMath.h"
+#include "Math.h"
 #include "TextureManager.h"
 
 static const int MAX_BONES{ 256 };
@@ -140,6 +140,11 @@ public:
         Vector4 outline_colour{};
         float outline_size{ 0.1f };
         Vector3 placeholder;
+    };
+    struct UVSCROLL_CONSTANT_BUFFER
+    {
+        Vector2 scrollVal;
+        Vector2 placeholder;
     };
 #pragma region STRUCTS
 
@@ -403,18 +408,13 @@ public:
     ComPtr<ID3D11Buffer>meshConstantBuffer;
     ComPtr<ID3D11Buffer>subsetConstantBuffer;
     ComPtr<ID3D11Buffer>outlineConstantBuffer;
+    ComPtr<ID3D11Buffer>uvScrollConstantBuffer;
     std::vector<MESH>Meshes;
     std::vector<ANIMATION>Animations;
     //std::vector<NODE>Nodes;
     std::unordered_map<uint64_t, MATERIAL>Materials;
-
-#pragma region PROPERTY RETRIEVAL FUNCTION HEADERS
-    //void RetrieveMeshes(FbxScene* scene);
-    //void RetrieveMaterials(FbxScene* scene);
-    //void RetrieveInfleunces(FbxMesh* m, std::vector<std::vector<BONE_INFLUENCE>>& bi);
-    //void RetrieveSkeleton(FbxMesh* m, SKELETON& s);
-    //void RetrieveAnimations(FbxScene* s, float samplingRate = 0);
-#pragma endregion
+    Vector2 scroll{};
+    bool performUVScroll{};
 
     MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool Triangulate = true);
     void CreateBuffers(ID3D11Device* dv, const char* model_path);

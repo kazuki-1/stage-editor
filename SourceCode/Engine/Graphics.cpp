@@ -12,6 +12,8 @@
 #include "Text.h"
 #include "../GUI.h"
 #include "../Scenes/SCENEMANAGER.h"
+#include "DEBUG_MANAGER.h"
+#include "../Components/Base Classes/ComponentCreator.h"
 using namespace DirectX;
 std::shared_ptr<MODEL>stage;
 
@@ -21,7 +23,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     // DirectX Initialzation
     DirectX11* DX = DirectX11::Instance();
-    if (FAILED(DirectX11::Instance()->Initialize(Width, Height, true, hwnd, false, 10000.0f, 0.001f)))
+    if (FAILED(DirectX11::Instance()->Initialize(Width, Height, true, hwnd, false, 1000.0f, 0.01f)))
         assert(!"Failed to Initilize DirectX11 Class");
 
     D3D11_BUFFER_DESC cbd{};
@@ -57,9 +59,17 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     // Initialzes the text manager by inserting used fonts into the map
     TextManager::Instance()->Initialize();
+    TextManager::Instance()->SetCurrentFont("Font1");
 
-    // Initialzes the scene manager by inserting used scenes into the map
+    // Initializes the scene manager by inserting used scenes into the map
     SceneManager::Instance()->Initialize();
+
+    // Initializes the component creator by inserting used component constructors into the map
+    ComponentCreator::Instance()->Initialize();
+
+    // Debug primitive initialization
+    DebugController::Instance()->Initialize();
+
 
 
 
@@ -102,7 +112,7 @@ bool Graphics::Render()
 {
     // Prepares the viewport
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-    DirectX11::Instance()->Begin({ .2f, .2f, .2f, 1.0f });
+    DirectX11::Instance()->Begin({ .0f, .0f, .0f, 1.0f });
     
     // Perform execution of camera
     Camera::Instance()->Execute();

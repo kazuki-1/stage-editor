@@ -13,6 +13,9 @@
 #define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;
 std::vector<Vector3>receivers;
+Vector3 normal_test{}, pos_test{};
+std::shared_ptr<DYNAMIC_SPHERE>sphere;
+
 
 /*--------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------PlayerController_Component Class-------------------------------------------------------*/
@@ -77,7 +80,7 @@ void PlayerController_Component::RotationInput()
 
     Vector3 d_Front{ 0, 0, 1 }, d_Right{ 1, 0, 0 };
     Vector3 input{ ax.x, 0, ax.y };
-    float t_Angle{ Math::GetDirection(d_Front, input) };
+    float t_Angle{ Vector3::GetAngle(d_Front, input) };
     if (d_Right.Dot(input) < 0)
         t_Angle *= -1;
     float new_Angle = y_ax + t_Angle;
@@ -118,11 +121,11 @@ void PlayerController_Component::JumpInput()
 /// </summary>
 void PlayerController_Component::SoundCollision()
 {
+    // Retrieve the components for use
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    CapsuleCollider_Component* capsule = GetComponent<CapsuleCollider_Component>();
     for (auto& g : GameObjectManager::Instance()->GetGameObjects())
     {
-        bool no_sound_comp{};
+        // Attempt to retrieve existing EnvironmentalAudio_Component
         EnvironmentalAudio_Component* audio = g.second->GetComponent<EnvironmentalAudio_Component>();
         if (!audio)
             continue;
@@ -132,15 +135,21 @@ void PlayerController_Component::SoundCollision()
         {
             if (c->Collider()->Collide(transform->Translation()))
             {
+                
                 if (!audio->Audio()->IsPlaying())
-                {
                     audio->Audio()->Play();
-                }
+
+                // Calculate the distance between the player character and the sound source
                 Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
                 closest_dist -= transform->Translation();
                 float length{ closest_dist.Length() };
                 length = max(c->Data()->minimum_distance, length);
+
+                // Adjusts the volume according to the distance
                 float volume = 1.0f - (length / c->Collider()->Collider()->Size());
+                volume = min(volume, audio->GetData()->maximum_volume);
+
+                // Audio ducking function
                 if (audio->Audio()->IsDucking())
                     volume = min(volume, 0.3f);
                 audio->Audio()->SourceVoice()->SetVolume(volume);
@@ -192,8 +201,9 @@ void PlayerController_Component::GroundCollision()
     Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
     Vector3 start, end;
     start = transform->Translation();
+    start.y += 1.001f;
     end = transform->Translation();
-    end.y += transform->Velocity().y;
+    end.y += transform->Velocity().y ;
 
     COLLIDERS::RAYCASTDATA rcd{};
     static bool last_state{};
@@ -210,6 +220,8 @@ void PlayerController_Component::GroundCollision()
     if (collided)
     {
         Vector3 normal, position;
+        normal_test = rcd.normal;
+        pos_test = rcd.position;
         normal = rcd.normal;
         transform->SetTranslation(rcd.position);
         Vector3 velocity;
@@ -217,6 +229,12 @@ void PlayerController_Component::GroundCollision()
         velocity.y = 0;
         transform->SetVelocity(velocity);
 
+
+        XMMATRIX test{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(rcd.position.XMV()) };
+        sphere->UpdateVertices(0.1f,&test );
+
+    } else {
+        int i = 0;
     }
 
 }
@@ -236,8 +254,15 @@ void PlayerController_Component::WallCollision()
     // Prepare parameters for rayCasting
     Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
     Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
+
+    Vector2 velocity{ transform->Velocity().x, transform->Velocity().z };
+
+    if (velocity.Length() <  0.01f)
+        return;
+
     Vector3 start, end;
     start = transform->Translation();
+
     end = transform->Translation();
     end.x += transform->Velocity().x;
     end.z += transform->Velocity().z;
@@ -257,8 +282,8 @@ void PlayerController_Component::WallCollision()
     {
         Vector3 normal, position;
         normal = rcd.normal;
-        rcd.position += normal * 0.5f;
-        transform->SetTranslation(rcd.position);
+        //rcd.position ;
+        transform->SetTranslation(rcd.position + normal * 0.2f);
         Vector3 velocity;
         velocity = transform->Velocity();
         velocity.y = 0;
@@ -324,16 +349,24 @@ void PlayerController_Component::TerrainAudioCollision()
         Mesh_Component* emitter_mesh{ e->GetComponent<Mesh_Component>() };
         for (int ind = 0; ind < 2; ++ind)
         {
+            // Ducking function
             for (auto& b : emitter->Buffers())
             {
                 if (b.buffer->IsDucking())
                     b.buffer->SetVolume(0.3f);
             }
+
+            // Prepare parameters for rayCasting
             Vector3 start{ receivers[ind] };
             Vector3 end{ start };
-            end.y -= 0.005f;
+
+            // Offsets the start and end vectors for error compensation
+            end.y += 0.009f;
+            start.y += 0.1f;
             COLLIDERS::RAYCASTDATA rcd{};
             bool collided{ RAYCAST(start, end, emitter_mesh, ((TerrainAudio_Data_Emitter*)emitter->Data())->mesh_index, rcd) };
+
+            // Only triggers the sound effect upon triggering the collider
             bool triggered{};
             if (collided && statuses[ind] != collided)
                 triggered = true;
@@ -352,6 +385,9 @@ void PlayerController_Component::TerrainAudioCollision()
 /// <returns></returns>
 HRESULT PlayerController_Component::Initialize()
 {
+
+    sphere = std::make_shared<DYNAMIC_SPHERE>();
+
     return S_OK;
 
 }
@@ -383,6 +419,8 @@ void PlayerController_Component::Execute()
     AnimationSettings();
     NPCDialogueTrigger();
 
+
+
 }
 
 /*--------------------------------------------------------PlayerController_Component Render()-------------------------------------------------*/
@@ -395,6 +433,12 @@ void PlayerController_Component::Render()
     Vector3 velocity, position;
     velocity = GetComponent<Transform3D_Component>()->Velocity();
     position = GetComponent<Transform3D_Component>()->Translation();
+    ImGui::Begin("Collision normal");
+    ImGui::DragFloat3("Position", &pos_test.x);
+    ImGui::DragFloat3("Normal", &normal_test.x);
+    ImGui::End();
+
+    sphere->Render();
 }
 
 /*--------------------------------------------------------PlayerController_Component UI()-------------------------------------------------*/
@@ -407,6 +451,7 @@ void PlayerController_Component::UI()
     if (ImGui::TreeNode("Player Controller"))
     {
         ImGui::InputText("Name : ", data->name, 256);
+
         ImGui::TreePop();
     }
 }
@@ -489,10 +534,10 @@ void PlayerController_Component::NPCDialogueTrigger()
         Vector3 target_pos{ npc->GetComponent<Transform3D_Component>()->Translation() };
 
         Vector3 distance = Vector3::Distance(player_pos, target_pos);
-        Vector3 n_TargetPos{target_pos.Normalized()}, n_PlayerPos{player_pos.Normalized()};
-        float angle_diff = Math::GetAngle(n_PlayerPos, n_TargetPos);
-        float length{ Length(distance) };
-        if (angle_diff < ToRadians(90) && Length(distance) < 10.0f)
+        Vector3 n_TargetPos{Vector3::Normalize(target_pos)}, n_PlayerPos{Vector3::Normalize(player_pos)};
+        float angle_diff = Vector3::GetAngle(n_PlayerPos, n_TargetPos);
+        float length{ Vector3::Length(distance) };
+        if (angle_diff < ToRadians(90) && length < 10.0f)
         {
             if (INPUTMANAGER::Instance()->Keyboard()->Triggered('F'))
             {
@@ -504,4 +549,11 @@ void PlayerController_Component::NPCDialogueTrigger()
     }
 
 
+}
+
+/*--------------------------------------------------------PlayerController_Component GetComponentType()-------------------------------------------------*/
+
+COMPONENT_TYPE PlayerController_Component::GetComponentType()
+{
+    return data->type;
 }

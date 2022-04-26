@@ -21,6 +21,8 @@ std::shared_ptr<TEXTURE>TextureManager::Insert(std::wstring file_path)
         entity = std::make_shared<TEXTURE>(DirectX11::Instance()->Device());
         textureMap.emplace(file_path, entity);
     }
+    entity = std::make_shared<TEXTURE>(file_path, DirectX11::Instance()->Device());
+    textureMap.emplace(file_path, entity);
 
 
 
@@ -65,7 +67,7 @@ std::shared_ptr<TEXTURE>TextureManager::Retrieve(std::wstring file_path)
             if (t.second.expired())
             {
                 textureMap.erase(file_path);
-                continue;
+                break;
             }
             return t.second.lock();
         }

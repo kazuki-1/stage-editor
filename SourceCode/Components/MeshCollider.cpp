@@ -9,7 +9,7 @@
 MeshCollider_Component::MeshCollider_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
-    data = static_cast<MeshCollider_Data*>(data);
+    this->data = static_cast<MeshCollider_Data*>(data);
 }
 
 /*----------------------------------------------MeshCollider_Component Initialize()------------------------------------------------------*/
@@ -87,4 +87,11 @@ void MeshCollider_Component::NotTriggered()
 bool MeshCollider_Component::OnTrigger()
 {
     return trigger;
+}
+
+/*----------------------------------------------MeshCollider_Component GetComponentType()------------------------------------------------------*/
+
+COMPONENT_TYPE MeshCollider_Component::GetComponentType()
+{
+    return data->type;
 }

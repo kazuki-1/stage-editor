@@ -39,7 +39,8 @@ struct PLIGHT_DATA
     float4 position;
     float4 colour;
     float range;
-    float3 temp;
+    float intensity;
+    float2 temp;
 };
 struct SLIGHT_DATA
 {
@@ -99,9 +100,13 @@ cbuffer CBUFFER_OUTLINE : register(b2)
 {
     float4 outline_colour;
     float outline_size;
-    float3 placeholder;
+    float3 placeholder0;
 }
-
+cbuffer CBUFFER_UVSCROLL : register(b3)
+{
+    float2 scrollVal;
+    float2 placeholder1;
+}
 
 
 VS_OUT VS_MAIN(VS_IN vin)
@@ -128,7 +133,7 @@ VS_OUT VS_MAIN(VS_IN vin)
     //vout.normal = mul(float4(vout.normal.xyz, 0.0f), view_proj).xyz;
     vout.tangent = normalize(vout.tangent).xyz;
     vout.normal = normalize(vout.normal).xyz;
-    vout.uv = vin.uv;
+    vout.uv = vin.uv + scrollVal;
     vout.colour = colour;
     vout.binormal = cross(vout.tangent, vout.normal);
     return vout;
@@ -173,8 +178,8 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
         weaken = clamp(weaken, 0.0f, 1.0f);
         weaken *= weaken;
         float3 pl_Norm = normalize(lightVector);
-        PointDiffuse += CalculateLambertDiffuse(N, pl_Norm, pointlights[a].colour.rgb, kd.rgb) * weaken;
-        PointSpecular += CalculatePhongSpecular(N, pl_Norm, pointlights[a].colour.rgb, E, shineFactor, ks.rgb) * weaken;
+        PointDiffuse += CalculateLambertDiffuse(N, pl_Norm, pointlights[a].colour.rgb, kd.rgb) * weaken * pointlights[a].intensity;
+        PointSpecular += CalculatePhongSpecular(N, pl_Norm, pointlights[a].colour.rgb, E, shineFactor, ks.rgb) * weaken * pointlights[a].intensity;
     }
 
     float3 SpotDiffuse = { 0, 0, 0 };

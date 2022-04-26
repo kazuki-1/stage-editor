@@ -1,6 +1,11 @@
 #include "MODEL.h"
 #include "RASTERIZER.h"
 
+/*----------------------------------------------------------------------------------------------*/
+/*--------------------------------MODEL Class---------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------*/
+/*--------------------------------MODEL Initialize()--------------------------------------------*/
+
 HRESULT MODEL::Initialize(std::string model_path)
 {
     resource = ModelResourceManager::Instance()->Load(model_path);
@@ -27,6 +32,8 @@ HRESULT MODEL::Initialize(std::string model_path)
     return S_OK;
 }
 
+/*--------------------------------MODEL UpdateTransform()--------------------------------------------*/
+
 void MODEL::UpdateTransform()
 {
     XMMATRIX S, R, T;
@@ -38,6 +45,8 @@ void MODEL::UpdateTransform()
     m_Transform = S * R * T;
     XMStoreFloat4x4(&transform, m_Transform);
 }
+
+/*--------------------------------MODEL Render()--------------------------------------------*/
 
 void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 {
@@ -112,40 +121,64 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 
 
 }
+
+/*--------------------------------MODEL RenderWireframe()--------------------------------------------*/
+
 void MODEL::RenderWireframe(Vector4 colour)
 {
     Vector3 old_scale{ scale };
     SetScale(scale * 1.01f);
     UpdateTransform();
-    DirectX11::Instance()->DeviceContext()->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("Wireframe")->Rasterizer().Get());
+    DirectX11::Instance()->DeviceContext()->RSSetState(RasterizerManager::Instance()->Retrieve("Wireframe")->Rasterizer().Get());
     Render(0.0f, colour.XMF4());
     SetScale(old_scale);
 
 }
+
+/*--------------------------------MODEL ResetTimer()--------------------------------------------*/
+
 void MODEL::ResetTimer()
 {
     cur_AnimTimer = 0;
 }
+
+/*--------------------------------MODEL FinishedAnim()--------------------------------------------*/
+
 bool MODEL::FinishedAnim()
 {
     return cur_Keyframe >= Resource()->Animations.at(cur_AnimationTake).Keyframes.size() - 1;
 }
+
+/*--------------------------------MODEL InAnim()--------------------------------------------*/
+
 bool MODEL::InAnim(int start, int end)
 {
     return cur_Keyframe >= start && cur_Keyframe <= end;
 }
+
+/*--------------------------------MODEL PauseAnim()--------------------------------------------*/
+
 void MODEL::PauseAnim()
 {
     animPaused = true;
 }
+
+/*--------------------------------MODEL ResumeAnim()--------------------------------------------*/
+
 void MODEL::ResumeAnim()
 {
     animPaused = false;
 }
+
+/*--------------------------------MODEL SetTranslation()--------------------------------------------*/
+
 void MODEL::SetTranslation(Vector3 t)
 {
     translation = t;
 }
+
+/*--------------------------------MODEL SetRotation()--------------------------------------------*/
+
 //void MODEL::SetQuaternion(VECTOR4 q)
 //{
 //    quaternion = q;
@@ -154,14 +187,20 @@ void MODEL::SetRotation(Vector3 r)
 {
     rotation = r;
 }
+
+/*--------------------------------MODEL SetScale()--------------------------------------------*/
+
 void MODEL::SetScale(Vector3 s)
 {
     scale = s;
 }
+
+/*--------------------------------MODEL SetTransformation()--------------------------------------------*/
+
 void MODEL::SetTransformation(Vector3 s, Vector3 r, Vector3 t)
 {
     scale = s;
-    rotation = ToRadians(r);
+    rotation = Vector3::ToRadians(r);
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
     translation = t;
 }
@@ -177,35 +216,59 @@ void MODEL::SetTransformation(Vector3 s, Vector4 q, Vector3 t)
 //    quaternion = q;
 //    translation = t.XMF3();
 //}
+
+/*--------------------------------MODEL OffsetTransformation()--------------------------------------------*/
+
 void MODEL::OffsetTransform(XMMATRIX mat)
 {
     XMMATRIX cur{ XMLoadFloat4x4(&transform) };
     XMStoreFloat4x4(&transform, cur * mat);
 }
+
+/*--------------------------------MODEL SetTake()--------------------------------------------*/
+
 void MODEL::SetTake(int take)
 {
     next_AnimationTake = take;
 }
+
+/*--------------------------------MODEL SetFrame()--------------------------------------------*/
+
 void MODEL::SetFrame(int frame)
 {
     cur_Keyframe = frame;
 }
+
+/*--------------------------------MODEL CurrentTake()--------------------------------------------*/
+
 int MODEL::CurrentTake()
 {
     return cur_AnimationTake;
 }
+
+/*--------------------------------MODEL CurrentFrame()--------------------------------------------*/
+
 int MODEL::CurrentFrame()
 {
     return cur_Keyframe;
 }
+
+/*--------------------------------MODEL Scale()--------------------------------------------*/
+
 Vector3 MODEL::Scale()
 {
     return scale;
 }
+
+/*--------------------------------MODEL Rotation()--------------------------------------------*/
+
 Vector3 MODEL::Rotation()
 {
     return rotation;
 }
+
+/*--------------------------------MODEL Translation()--------------------------------------------*/
+
 Vector3 MODEL::Translation()
 {
     return translation;
@@ -214,10 +277,16 @@ Vector3 MODEL::Translation()
 //{
 //    return quaternion;
 //}
+
+/*--------------------------------MODEL Transform()--------------------------------------------*/
+
 XMFLOAT4X4 MODEL::Transform()
 {
     return transform;
 }
+
+/*--------------------------------MODEL TransformMatrix()--------------------------------------------*/
+
 XMMATRIX MODEL::TransformMatrix()
 {
     //return XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslation(translation.x, translation.y, translation.z);
@@ -227,36 +296,57 @@ XMMATRIX MODEL::TransformMatrix()
 
     return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
 }
+
+/*--------------------------------MODEL AnimationTakes()--------------------------------------------*/
+
 std::vector<std::string>MODEL::AnimationTakes()
 {
     return animationTakes;
 }
+
+/*--------------------------------MODEL Resource()--------------------------------------------*/
+
 std::shared_ptr<MODEL_RESOURCES>MODEL::Resource()
 {
     return resource;
 }
+
+/*--------------------------------MODEL GetBB()--------------------------------------------*/
+
 std::vector<std::shared_ptr<MODEL::BOUNDING_BOX>>MODEL::GetBB()
 {
     return Boxes;
 }
+
+/*--------------------------------MODEL Right()--------------------------------------------*/
+
 Vector3 MODEL::Right()
 {
     Vector3 temp;
     temp.Load(TransformMatrix().r[0]);
     return temp;
 }
+
+/*--------------------------------MODEL Up()--------------------------------------------*/
+
 Vector3 MODEL::Up()
 {
     Vector3 temp;
     temp.Load(TransformMatrix().r[1]);
     return temp;
 }
+
+/*--------------------------------MODEL Forward()--------------------------------------------*/
+
 Vector3 MODEL::Forward()
 {
     Vector3 temp;
     temp.Load(TransformMatrix().r[2]);
     return temp;
 }
+
+/*--------------------------------MODEL RetrieveAxises()--------------------------------------------*/
+
 void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
 {
     UpdateTransform();
@@ -280,4 +370,18 @@ void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
         *f = t;
     }
 
+}
+
+/*--------------------------------MODEL PerformUVScrolling()--------------------------------------------*/
+
+void MODEL::PerformUVScrolling()
+{
+    resource->performUVScroll = true;
+}
+
+/*--------------------------------MODEL StopUVScrolling()--------------------------------------------*/
+
+void MODEL::StopUVScrolling()
+{
+    resource->performUVScroll = false;
 }

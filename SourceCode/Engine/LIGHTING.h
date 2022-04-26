@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-#include "DXMath.h"
+#include "Math.h"
 #include "CerealHeaders.h"
 #include <map>
 #include <fstream>
@@ -34,7 +34,8 @@ struct PLIGHT_DATA
 	Vector4 position{};
 	Vector4 colour{};
 	float range{};
-	Vector3 temp{};
+	float intensity{};
+	Vector2 temp{};
 };
 
 struct SLIGHT_DATA
@@ -69,6 +70,7 @@ private:
 	 Vector3 direction{};
 	 Vector3 position{};
 	 Vector4 colour{};
+	 float intensity{};
 	 float range{};
 	 float inner{};
 	 float outer{};
@@ -90,6 +92,7 @@ public:
 		case L_TYPE::POINT:
 			((PLIGHT_DATA*)t)->position = { position.x, position.y, position.z, 0 };
 			((PLIGHT_DATA*)t)->colour = colour;
+			((PLIGHT_DATA*)t)->intensity = intensity;
 			((PLIGHT_DATA*)t)->range = range;
 			break;
 		case L_TYPE::SPOT:

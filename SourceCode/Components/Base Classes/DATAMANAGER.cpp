@@ -22,7 +22,7 @@ void DataManager::Load(std::string n)
     if (!std::filesystem::exists(n))
         assert(!"No file found");
 
-    std::ifstream ifs(path, std::ios::in | std::ios::binary);
+    std::ifstream ifs(path, std::ios::in | std::ios::binary);   
     cereal::BinaryInputArchive bin(ifs);
     bin(dataset);
     ifs.close();
@@ -39,6 +39,13 @@ void DataManager::InsertAndInitialize()
         //GameObjectManager::Instance()->Insert(d->Name(), d);
         GameObjectManager::Instance()->Insert(d->Name(), d);
     }
+}
+
+/*--------------------------------------------------DataManager InsertAndInitialize()-------------------------------------------------------------------*/
+
+void DataManager::Finalize()
+{
+    dataset.clear();
 }
 
 /*--------------------------------------------------DataManager OutputFile()-------------------------------------------------------------------*/
@@ -65,6 +72,14 @@ std::vector<std::shared_ptr<OBJECT_DATA>>DataManager::Dataset()
     return dataset;
 }
 
+/*--------------------------------------------------DataManager GetCurrentScenePath()-------------------------------------------------------------------*/
+
+std::string DataManager::GetCurrentScenePath()
+{
+    return file_path;
+}
+
+
 /*--------------------------------------------------DataManager Insert()-------------------------------------------------------------------*/
 
 void DataManager::Insert(std::shared_ptr<OBJECT_DATA>d)
@@ -86,4 +101,11 @@ void DataManager::Remove(std::shared_ptr<OBJECT_DATA>target)
         }
         ++ind;
     }
+}
+
+/*--------------------------------------------------DataManager SetFilePath()-------------------------------------------------------------------*/
+
+void DataManager::SetFilePath(std::string path)
+{
+    file_path = path;
 }

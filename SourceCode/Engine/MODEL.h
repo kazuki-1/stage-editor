@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 #include "DirectX11.h"
 #include "../../External/ImGui/imgui.h"
-#include "DXMath.h"
+#include "Math.h"
 #define FRAMETIME 0.0166f
 using namespace Math;
 typedef MODEL_RESOURCES::ANIMATION AN;
@@ -184,11 +184,11 @@ public:
     /// <returns></returns>
     Vector3 Forward();
     /// <summary>
-/// Retrieve the axises in XMFLOAT3 form
-/// </summary>
-/// <param name="r"> : The Right axis will be stored here</param>
-/// <param name="u"> : The Up axis will be stored here</param>
-/// <param name="f"> : The Forward axis will be stored here</param>
+    /// Retrieve the axises in XMFLOAT3 form
+    /// </summary>
+    /// <param name="r"> : The Right axis will be stored here</param>
+    /// <param name="u"> : The Up axis will be stored here</param>
+    /// <param name="f"> : The Forward axis will be stored here</param>
     void RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f);
     /// <summary>
     /// Retrieves the next animation take
@@ -196,10 +196,18 @@ public:
     /// <returns></returns>
     int NextTake() { return next_AnimationTake; }
     /// <summary>
-    /// Retrueves the next animation keyframe
+    /// Retrieves the next animation keyframe
     /// </summary>
     /// <returns></returns>
     int NextFrame() { return next_Keyframe; }
+    /// <summary>
+    /// Activates the flag that allows uvScrolling to be performed 
+    /// </summary>
+    void PerformUVScrolling();
+    /// <summary>
+    /// Stops the UV scrolling performed on this model
+    /// </summary>
+    void StopUVScrolling();
 
 #pragma endregion
 

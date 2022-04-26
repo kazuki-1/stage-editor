@@ -4,7 +4,7 @@
 #include <wrl.h>
 #include <d3d11.h>
 //#include "SHADERS.h"
-#include "DXMath.h"
+#include "Math.h"
 
 using namespace Microsoft::WRL;
 using namespace Math;
@@ -48,12 +48,13 @@ public:
     DEBUG_CYLINDER(float r);
 };
 
-class DEBUG_SPHERE : public DEBUG_PRIMITIVE
+class Sphere_Debug : public DEBUG_PRIMITIVE
 {
     float radius;
 public:
-    DEBUG_SPHERE();
-    DEBUG_SPHERE(float r);
+    Sphere_Debug();
+    Sphere_Debug(float r);
+    void SetRadius(float r);
 };
 
 class DEBUG_ARROWS : public DEBUG_PRIMITIVE
@@ -182,6 +183,7 @@ public:
     /// </summary>
     /// <param name="radius"> : User declared radius. Will be written to the radius within the class</param>
     void UpdateVertices(float radius, XMMATRIX* target = nullptr);
+    void SetRadius(float r);
 };
 
 class DYNAMIC_CYLINDER : public DYNAMIC_DEBUG_PRIMITIVE

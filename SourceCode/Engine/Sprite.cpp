@@ -139,7 +139,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSize, Vector2 pivot, Vector4 colour, float angle)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
-    dc->RSSetState(RASTERIZERMANAGER::Instance()->Retrieve("2D")->Rasterizer().Get());
+    dc->RSSetState(RasterizerManager::Instance()->Retrieve("2D")->Rasterizer().Get());
 
     D3D11_TEXTURE2D_DESC t2d{};
     texture->QueryTextureDesc(&t2d);

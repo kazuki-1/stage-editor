@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include "Sprite.h"
-#include "DXMath.h"
+#include "Math.h"
 using namespace Math;
 class TextManager;
 class TextTexture
@@ -47,7 +47,7 @@ class TextManager : public Singleton<TextManager>
 {
 	friend class TextTexture;
 	std::map<std::string, std::unique_ptr<TextTexture>>fonts;
-	TextTexture* current_font;
+	TextTexture* current_font{};
 	/// <summary>
 	/// Inserts the TextTexture into the manager
 	/// </summary>

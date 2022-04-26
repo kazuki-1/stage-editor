@@ -21,7 +21,7 @@ class SphereCollider_Component : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::SPHERE>collider;
     std::shared_ptr<DYNAMIC_SPHERE>sphere;
-    SphereCollider_Data* data;
+    SphereCollider_Data* data{};
 public:
     SphereCollider_Component() {};
     /// <summary>

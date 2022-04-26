@@ -22,23 +22,23 @@ std::string RASTERIZER::Name()
 }
 
 
-void RASTERIZERMANAGER::Add(std::string name, ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
+void RasterizerManager::Add(std::string name, ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
 {
     std::shared_ptr<RASTERIZER>temp = std::make_shared<RASTERIZER>(dv, drd);
     rasterizers.insert(std::make_pair(name, temp));
 }
 
-std::shared_ptr<RASTERIZER>RASTERIZERMANAGER::Retrieve(std::string name)
+std::shared_ptr<RASTERIZER>RasterizerManager::Retrieve(std::string name)
 {
     return rasterizers.find(name)->second;
 }
 
-void RASTERIZERMANAGER::Remove(std::string name)
+void RasterizerManager::Remove(std::string name)
 {
     rasterizers.erase(name);
 }
 
-std::map<std::string, std::shared_ptr<RASTERIZER>>RASTERIZERMANAGER::Rasterizers()
+std::map<std::string, std::shared_ptr<RASTERIZER>>RasterizerManager::Rasterizers()
 {
     return rasterizers;
 }

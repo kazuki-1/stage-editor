@@ -245,18 +245,45 @@ void EnvironmentalAudio_Component::UI()
 {
     if (ImGui::TreeNode("Environmental Audio"))
     {
+        ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
+        static bool fileOpenEA{};
+        static std::string preview{ "" };
         ImGui::InputText("Audio name", data->name, 256);
-        IMGUI::Instance()->InputText("Audio File Path", &data->file_path);
+        ImGui::Text((char*)(preview.c_str()));
         if (ImGui::Button("Load Audio"))
         {
-            //data->name += "##" + std::to_string(data->id);
-            std::filesystem::path path(data->file_path);
-            std::filesystem::path name(path.filename());
-            std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
-            AudioEngine::Instance()->Insert(data->name, full_path);
-            data->file_path = full_path;
-            audio = AudioEngine::Instance()->Retrieve(data->name);
+            browser->Open();
+            browser->SetTitle("Open Audio");
+            browser->SetTypeFilters({ ".wav", ".*" });
+            fileOpenEA = true;
+
         }
+         if (fileOpenEA)
+         {
+             browser->Display();
+             if (browser->HasSelected())
+             {
+                 data->file_path = browser->GetSelected().wstring();
+                 fileOpenEA = false;
+
+
+                 std::filesystem::path path(data->file_path);
+                 std::filesystem::path name(path.filename());
+                 std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
+                 AudioEngine::Instance()->Insert(data->name, full_path);
+                 data->file_path = full_path;
+                 audio = AudioEngine::Instance()->Retrieve(data->name);
+                 for (auto& c : data->file_path)
+                 {
+                     preview.push_back(c);
+                 }
+
+                 browser->Close();
+             }
+         }
+
+         ImGui::DragFloat("Maximum volume", &data->maximum_volume, 0.05f, 0.0f, 1.0f);
+
         if (ImGui::Button("Play"))
             audio->Play();
         else if (ImGui::Button("Stop") && audio->IsPlaying())
@@ -336,6 +363,14 @@ std::vector<std::shared_ptr<LocalizedCollider_SubComponent>>EnvironmentalAudio_C
 {
     return colliders;
 }
+
+/*--------------------------------------------EnvironmentalAudio_Component GetData()--------------------------------------------------*/
+
+EnvironmentalAudio_Data* EnvironmentalAudio_Component::GetData()
+{
+    return data;
+}
+
 
 /*--------------------------------------------EnvironmentalAudio_Component GetComponentType()--------------------------------------------------*/
 COMPONENT_TYPE EnvironmentalAudio_Component::GetComponentType()

@@ -2,7 +2,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include "MODEL.h"
-#include "DXMath.h"
+#include "Math.h"
 #include "CerealHeaders.h"
 using namespace Math;
 
@@ -44,7 +44,7 @@ namespace COLLIDERS
         bool isActive{ true };
         Vector3 offset;
         Vector3 rotation;
-        XMMATRIX world;
+        XMMATRIX world{XMMatrixIdentity()};
         XMMATRIX bone_World{ XMMatrixIdentity() };
     public:
         COLLIDER_BASE() {};

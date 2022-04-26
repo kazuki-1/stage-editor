@@ -1,7 +1,7 @@
 #pragma once
-#include "../../Engine/DXMath.h"
-using namespace Math;
-
+//using namespace Math;
+#include <string>
+#include "../../Engine/CerealHeaders.h"
 enum class COMPONENT_TYPE
 {
     BASE = -1,

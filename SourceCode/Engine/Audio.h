@@ -17,7 +17,7 @@ class AudioEngine : public Singleton<AudioEngine>
 {
 
     ComPtr<IXAudio2>xAudio;
-    IXAudio2MasteringVoice* masteringVoice;
+    IXAudio2MasteringVoice* masteringVoice{};
     //IXAudio2SourceVoice* SourceVoice;
     std::map<std::string, std::shared_ptr<AUDIO>>audios;
 

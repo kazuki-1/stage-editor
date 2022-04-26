@@ -15,11 +15,11 @@ public:
 
 class MeshCollider_Component : public Component
 {
-    MeshCollider_Data* data;
+    MeshCollider_Data* data{};
 
 public:
     // Check last state and gives true on moment of collision
-    bool trigger;
+    bool trigger{};
     MeshCollider_Component() {};
     MeshCollider_Component(GameObject* t, ComponentData* data);
 
@@ -60,6 +60,7 @@ public:
     /// </summary>
     /// <returns></returns>
     bool OnTrigger();
+    COMPONENT_TYPE GetComponentType() override;
 };
 
 

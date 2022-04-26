@@ -23,7 +23,7 @@ class OBBCollider_Component : public BaseColliderComponent
 {
     std::shared_ptr<COLLIDERS::OBB>collider;
     std::shared_ptr<DYNAMIC_CUBE>cube;
-    OBBCollider_Data* data;
+    OBBCollider_Data* data{};
 public:
     OBBCollider_Component() {};
     OBBCollider_Component(GameObject* t, ComponentData* data);

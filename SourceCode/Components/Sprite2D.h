@@ -23,7 +23,7 @@ public:
 class Sprite2D_Component : public Component
 {
     std::shared_ptr<SPRITE>sprite;
-    Sprite2D_Data* data;
+    Sprite2D_Data* data{};
 public:
     Sprite2D_Component() {};
     Sprite2D_Component(GameObject* t, ComponentData* data);

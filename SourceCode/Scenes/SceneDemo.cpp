@@ -41,11 +41,13 @@ void SceneDemo::Render()
 
 /*--------------------------------------------------SceneDemo Finalize()-------------------------------------*/
 
-//void SceneDemo::Finalize()
-//{
-//    GAMEOBJECTS->Finalize();
-//}
-//
+void SceneDemo::Finalize()
+{
+    GAMEOBJECTS->Finalize();
+    DataManager::Instance()->Finalize();
+
+}
+
 /*--------------------------------------------------SceneDemo Pause()-------------------------------------*/
 
 void SceneDemo::Pause()
