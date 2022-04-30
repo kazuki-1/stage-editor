@@ -56,7 +56,7 @@ public:
     /// <para> このコンポネントの親となるゲームオブジェクトを戻る　</para>
     /// </summary>
     /// <returns></returns> 
-    GameObject* Parent() { return parent; };
+    GameObject* GetParent() { return parent; };
 
     /// <summary>
     /// Returns a component of the type specified from the GameObject. Returns nullptr if said component does not exist

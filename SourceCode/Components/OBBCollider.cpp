@@ -50,7 +50,7 @@ HRESULT OBBCollider_Component::Initialize()
 void OBBCollider_Component::Execute()
 {
     Transform3D_Component* m{ GetComponent<Transform3D_Component>() };
-    cube->SetTarget(m->Translation());
+    cube->SetTarget(m->GetTranslation());
     if (data->bone_name == "") {
         collider->Execute(m->TransformMatrix());
         cube->Execute(m->TransformMatrix());
@@ -169,7 +169,7 @@ void OBBCollider_Component::UI()
 /// </summary>
 Vector3 OBBCollider_Component::DistanceToPlayer(PlayerController_Component* target)
 {
-    Vector3 player_position = target->GetComponent<Transform3D_Component>()->Translation();
+    Vector3 player_position = target->GetComponent<Transform3D_Component>()->GetTranslation();
     return collider->Center() - player_position;
 
 }

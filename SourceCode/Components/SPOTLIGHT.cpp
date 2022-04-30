@@ -32,7 +32,7 @@ SpotLight_Component::SpotLight_Component(GameObject* t, ComponentData* data)
 HRESULT SpotLight_Component::Initialize()
 {
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::SPOT);
-    LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
+    LightingManager::Instance()->Insert(GetParent()->Data()->Name(), light);
     return S_OK;
 }
 

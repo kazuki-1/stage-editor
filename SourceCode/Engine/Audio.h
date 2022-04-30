@@ -21,7 +21,7 @@ class AudioEngine : public Singleton<AudioEngine>
     //IXAudio2SourceVoice* SourceVoice;
     std::map<std::string, std::shared_ptr<AUDIO>>audios;
 
-    WAVEFORMATEXTENSIBLE format;
+    //WAVEFORMATEXTENSIBLE format;
 
 public:
     /// <summary>

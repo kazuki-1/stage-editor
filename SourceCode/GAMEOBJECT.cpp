@@ -7,7 +7,35 @@
 #include "Components/Transform3D.h"
 #include "Components/Mesh.h"
 #include "Components/PlayerController.h"
-std::string COMP_TYPE[] = { "Mesh", "Sphere Collider", "Capsule Collider", "OBB Collider", "Mesh Collider", "Point Light", "Spotlight", "BGMComponent", "Environmental Audio", "Terrain Audio", "Player Controller", "Enemy Controller", "NPC Dialogue", "Sprite 2D"};
+#include "Components/TerrainAudio.h"
+
+std::string COMP_TYPE[] = {
+    "BGM Component",
+    "Capsule Collider",
+    "Enemy Controller",
+    "Environmental Audio",
+    "Mesh Component",
+    "Mesh Collider",
+    "Dialogue Component",
+    "OBB Collider",
+    "Player Controller",
+    "Point Light",
+    "Sphere Collider",
+    "Spotlight",
+    "Sprite 2D",
+    "Terrain Audio "
+};
+
+
+
+
+
+
+
+
+
+
+
 bool popup{};
 //int selected_comp{};
 
@@ -104,6 +132,8 @@ void GameObject::ExecuteUI()
         if (dynamic_cast<Transform3D_Component*>(c.get()))
             continue;
         if (dynamic_cast<PlayerController_Component*>(c.get()))
+            continue;
+        if(dynamic_cast<TerrainAudio_Component*>(c.get()))
             continue;
         c->Execute();
     }

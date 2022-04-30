@@ -19,7 +19,11 @@ class MeshCollider_Component : public Component
 
 public:
     // Check last state and gives true on moment of collision
+    bool last_state{};
+
     bool trigger{};
+    bool enteredHorizontal{};
+    bool enteredVertical{};
     MeshCollider_Component() {};
     MeshCollider_Component(GameObject* t, ComponentData* data);
 
@@ -48,18 +52,18 @@ public:
     /// <para> Sets the trigger state to true,</para>
     /// <para> トリガーステートをTrueに設定する </para>
     /// </summary>
-    void Triggered();
+    bool Triggered();
     /// <summary>
     /// <para> Sets the trigger state to false,</para>
     /// <para> トリガーステートをfalseに設定する </para>
     /// </summary>
-    void NotTriggered();
+    bool CollidedHorizontal();
     /// <summary>
     /// <para> Returns the boolean member trigger </para>
     /// <para> triggerメンバーを返す </para>
     /// </summary>
     /// <returns></returns>
-    bool OnTrigger();
+    bool CollidedVertical();
     COMPONENT_TYPE GetComponentType() override;
 };
 

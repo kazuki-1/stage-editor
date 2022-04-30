@@ -48,22 +48,18 @@ namespace AUDIO_STATES
         AudioStateMachine(AUDIO* p) : parent(p) {};
         /// <summary>
         /// <para> Called when AudioStateMachine is initialized </para>
-        /// <para> •π•∆©`•»•ﬁ•∑•Û§¨…˙≥…ïr§À∫Ù§”≥ˆ§π </para>
         /// </summary>
         void Initialize();
         /// <summary>
         /// <para> Called to transition to a different state </para>
-        /// <para> •π•∆©`•»§Úﬂw“∆§π§ÅE°</para>
         /// </summary>
         void Transition(AudioStateEnum next_state);
         /// <summary>
         /// <para> Called every frame to perform any functions </para>
-        /// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
         /// </summary>
         void Execute();
         /// <summary>
         /// <para> Perform fade to the specified volume in the specified time</para>
-        /// <para> ÷∏∂®§µ§ÅEø“Ù¡ø§Ú÷∏∂®§µ§ÅEøïrÈg§À•’•ß©`•… </para>
         /// </summary>
         /// <param name="fade_time"> : Fade will be done in this. Unit is second</param>
         /// <param name="fade_vol"> : Fade volume target</param>
@@ -75,7 +71,6 @@ namespace AUDIO_STATES
         void FadeOut(float fade_time = 1.0f);
         /// <summary>
         /// <para> Returns the current audioStateEnum</para>
-        /// <para> ¨F‘⁄§Œ•π•∆©`•»Enum§Ú∑µ§π </para>
         /// </summary>
         /// <returns></returns>
         AudioStateEnum CurrentState();

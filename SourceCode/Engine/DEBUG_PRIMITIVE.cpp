@@ -243,11 +243,11 @@ void DEBUG_SCALARS::Execute()
 void DEBUG_SCALARS::Execute(XMMATRIX mat)
 {
     //VECTOR3 x;
-    //x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), *target) });
+    //x.Load({ XMVector3TransformCoord(xAxis->GetTranslation().XMV(), *target) });
     //VECTOR3 y;
-    //y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), *target) });
+    //y.Load({ XMVector3TransformCoord(yAxis->GetTranslation().XMV(), *target) });
     //VECTOR3 z;
-    //z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), *target) });
+    //z.Load({ XMVector3TransformCoord(zAxis->GetTranslation().XMV(), *target) });
 
     //xAxis->SetTranslation(x);
     //yAxis->SetTranslation(y);
@@ -345,11 +345,11 @@ void DEBUG_DISCS::Execute()
 void DEBUG_DISCS::Execute(XMMATRIX mat)
 {
     //VECTOR3 x;
-    //x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), *target) });
+    //x.Load({ XMVector3TransformCoord(xAxis->GetTranslation().XMV(), *target) });
     //VECTOR3 y;
-    //y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), *target) });
+    //y.Load({ XMVector3TransformCoord(yAxis->GetTranslation().XMV(), *target) });
     //VECTOR3 z;
-    //z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), *target) });
+    //z.Load({ XMVector3TransformCoord(zAxis->GetTranslation().XMV(), *target) });
 
     //xAxis->SetTranslation(x);
     //yAxis->SetTranslation(y);

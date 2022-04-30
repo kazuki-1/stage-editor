@@ -27,9 +27,9 @@ void DebugController::Execute()
     if (dynamic_cast<GameObject_2D*>(target))
         return;
     Transform3D_Component* target = this->target->GetComponent<Transform3D_Component>();
-    arrows->SetTarget(target->Translation(), target->Rotation());
-    scalars->SetTarget(target->Translation(), target->Rotation());
-    discs->SetTarget(target->Translation(), target->Rotation());
+    arrows->SetTarget(target->GetTranslation(), target->Rotation());
+    scalars->SetTarget(target->GetTranslation(), target->Rotation());
+    discs->SetTarget(target->GetTranslation(), target->Rotation());
     arrows->Execute();
     scalars->Execute();
     discs->Execute();

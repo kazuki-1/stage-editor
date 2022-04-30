@@ -5,6 +5,7 @@
 #include "../Components/CapsuleCollider.h"
 #include "../Components/Mesh.h"
 #include "../Components/Transform3D.h"
+//#define MathLib
 using namespace COLLIDERS;
 #define Vertex MODEL_RESOURCES::VERTEX
 /*---------------------------------------------------PointLineClosest()---------------------------------------------------*/
@@ -199,7 +200,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 
 
 }
-
+#define MathLib
 /*---------------------------------------------------RayCast()---------------------------------------------------*/
 /// <summary>
 /// <para> Perform Raycasting </para>
@@ -222,42 +223,36 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 
 
     bool hit{};
-    MODEL_RESOURCES* resources{ m->Resource().get()};
+    std::shared_ptr<MODEL_RESOURCES>resources{ m->Resource()};
     MODEL_RESOURCES::ANIMATION::KEYFRAME& current_Keyframe{ resources->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame()) };
     int current_mesh_index{};
     for (auto& mesh : resources->Meshes)
     {
         //Check if current target
-            if (mesh_index != -1)
-            {
-                if (mesh_index != current_mesh_index)
-                {
-                    ++current_mesh_index;
-                    continue;
-                }
-            }
-
-        // MODEL_RESOURCES::ANIMATION::KEYFRAME::NODE current_node = current_Keyframe.Nodes.at(mesh.n_Index);
-        // XMMATRIX node_Transform{ XMLoadFloat4x4 (&current_node.g_Transform) };
-        // node_Transform *= world_Transform;
-        // //node_Transform *= m->TransformMatrix()/* * XMLoadFloat4x4(&m->Resource()->Axises.AxisCoords)*/;
-        // XMMATRIX inverse_node_transform = XMMatrixInverse(nullptr, node_Transform);
-        // 
-        // Vector3 local_Start{ worldStart }, local_End{ worldEnd };
-         XMMATRIX world_Transform = m->TransformMatrix();
+            //if (mesh_index != -1)
+            //{
+            //    if (mesh_index != current_mesh_index)
+            //    {
+            //        ++current_mesh_index;
+            //        continue;
+            //    }
+            //}
+        XMMATRIX world_Transform = m->TransformMatrix();
         Vector3 vector{ worldEnd - worldStart };
         Vector3 direction = Vector3::Normalize(vector);
         float minimum_Length{ vector.Length() };
 
         std::vector<MODEL_RESOURCES::VERTEX>& vertices{ mesh.Vertices };
         const std::vector<int>indices{ mesh.Indices };
-        int material_index{ -1 };
+        int collided_mesh_index{ -1 };
         Vector3 intersection_point, intersection_normal;
         for (auto& subset : mesh.Subsets)
         {
+            if (collided_mesh_index == mesh_index && mesh_index != -1)
+                break;
+
             for (int index = 0; index < subset.indices.size(); index += 3)
             {
-
                 // Forming a triangle
                 const Vertex& a = { vertices.at(subset.indices[index]) };
                 const Vertex& b = { vertices.at(subset.indices[index + 1]) };
@@ -279,7 +274,6 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 
                 // Getting the normal of the triangle
                 Vector3 normal = Vector3::Cross(AB, BC);
-                //normal.Normalize();
 
                 // Checking if the projected vector is in front or behind triangle
                 float dot = Vector3::Dot(direction, normal);
@@ -292,14 +286,6 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
                 if (distance_to_contact < 0 || distance_to_contact > minimum_Length)
                     continue;
                 Vector3 intersection = vector * distance_to_contact + worldStart;
-
-
-
-                //Vector3 distance = A - local_Start;
-                //float length_before_contact = Vector3::Dot(normal, distance) / dot;
-                //if (length_before_contact > minimum_Length || length_before_contact < 0)
-                //    continue;
-                //Vector3 intersection = local_Start + (direction * length_before_contact);
 
                 // Perform dot check to see if point is on the triangle;
                 Vector3 IA{ intersection - A };
@@ -328,14 +314,12 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 
                 intersection_point = intersection;
                 intersection_normal = normal;
-                material_index = subset.m_UID;
-
+                collided_mesh_index = current_mesh_index;
 
 
             }
         }
-
-        if (material_index >= 0)
+        if (collided_mesh_index >= 0)
         {
             Vector3 world_CrossVector;
             world_CrossVector = intersection_point - worldStart;
@@ -345,21 +329,14 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
             if (hr.distance > distance_float)
             {
                 hr.distance = distance_float;
-                hr.m_Index = material_index;
-                hr.position = intersection_point;
-
-
-                // Vector3 world_Normal;
-                // world_Normal.Load(XMVector3TransformNormal(intersection_normal.XMV(), node_Transform));
-                // world_Normal.Normalize();
-                
-                
+                hr.m_Index = collided_mesh_index;
+                hr.position = intersection_point;                
                 hr.normal = Vector3::Normalize(intersection_normal);
                 hit = true;
             }
 
         }
-
+        ++current_mesh_index;
     }
     return hit;
 #pragma endregion
@@ -1242,7 +1219,7 @@ bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Compone
     bool output{};
     for (auto& m : meshes)
     {
-        Vector3 target{ m->Parent()->GetComponent<Transform3D_Component>()->Translation() };
+        Vector3 target{ m->GetParent()->GetComponent<Transform3D_Component>()->GetTranslation() };
         //if ((target - startOfRay).Length() > 0.3f)
         //    continue;
         if (m == cur_mesh)
@@ -1280,7 +1257,7 @@ void RAYCAST_MANAGER::GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startO
         RAYCASTDATA& cur_rcd{ rcd.emplace_back() };
         if (RayCast(startOfRay, directionVector, m->Model().get(), cur_rcd))
         {
-            cur_rcd.model_name = m->Parent()->Data()->Name();
+            cur_rcd.model_name = m->GetParent()->Data()->Name();
         }
     }
 }

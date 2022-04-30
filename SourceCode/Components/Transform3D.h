@@ -72,12 +72,12 @@ public:
     /// Returns the translation
     /// </summary>
     /// <returns></returns>
-    Vector3 Translation();
+    Vector3 GetTranslation();
     /// <summary>
     /// Returns the velocity
     /// </summary>
     /// <returns></returns>
-    Vector3 Velocity();
+    Vector3 GetVelocity();
     /// <summary>
     /// <para> Returns the transformation matrix in a XMFLOAT4X4 form </para>
     /// <para> •ÏŠ·s—ñ‚ğXMFLOAT4X4‚ÌŒ`‚Å–ß‚é</para>

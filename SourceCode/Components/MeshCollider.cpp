@@ -1,5 +1,6 @@
 #include "MeshCollider.h"
 #include "../Engine/COLLISION.h"
+#include "Transform3D.h"
 #include "Mesh.h"
 /*----------------------------------------------MeshCollider_Component Class----------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------*/
@@ -36,6 +37,39 @@ HRESULT MeshCollider_Component::Initialize()
 void MeshCollider_Component::Execute()
 {
 
+#ifdef CHECK_VALUE
+
+    // Parameter preparation
+    Mesh_Component* mesh = GetComponent<Mesh_Component>();
+    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
+
+    Vector3 next_vertical, next_horizontal, current_position;
+
+    current_position = transform->GetTranslation();
+    next_vertical = current_position;
+    next_vertical.y += transform->GetVelocity().y;
+    next_horizontal = current_position;
+    next_horizontal.x += transform->GetVelocity().x;
+    next_horizontal.z += transform->GetVelocity().z;
+
+    if (!mesh)
+        return;
+    COLLIDERS::RAYCASTDATA hori{}, verti{};;
+
+    // Check horizontol
+    enteredHorizontal = RAYCAST(current_position, next_horizontal, mesh, verti);
+
+    // Check vertical
+    enteredVertical = RAYCAST(current_position, next_vertical, mesh, verti);
+
+    if ((last_state ^ enteredHorizontal || last_state ^ enteredVertical) && !last_state)
+        trigger = true;
+    else
+        trigger = false;
+    last_state = enteredHorizontal ? enteredHorizontal : enteredVertical ? enteredVertical : false;
+
+#endif
+
 }
 
 /*----------------------------------------------MeshCollider_Component Render()------------------------------------------------------*/
@@ -63,9 +97,9 @@ void MeshCollider_Component::UI()
 /// <para> Sets the trigger state to true,</para>
 /// <para> トリガーステートをTrueに設定する </para>
 /// </summary>
-void MeshCollider_Component::Triggered()
+bool MeshCollider_Component::Triggered()
 {
-    trigger = true;
+    return trigger;
 }
 
 /*----------------------------------------------MeshCollider_Component NotTriggered()------------------------------------------------------*/
@@ -73,9 +107,9 @@ void MeshCollider_Component::Triggered()
 /// <para> Sets the trigger state to false,</para>
 /// <para> トリガーステートをfalseに設定する </para>
 /// </summary>
-void MeshCollider_Component::NotTriggered()
+bool MeshCollider_Component::CollidedHorizontal()
 {
-    trigger = false;
+    return enteredHorizontal;
 }
 
 /*----------------------------------------------MeshCollider_Component OnTrigger()------------------------------------------------------*/
@@ -84,9 +118,9 @@ void MeshCollider_Component::NotTriggered()
 /// <para> triggerメンバーを返す </para>
 /// </summary>
 /// <returns></returns>
-bool MeshCollider_Component::OnTrigger()
+bool MeshCollider_Component::CollidedVertical()
 {
-    return trigger;
+    return enteredVertical;
 }
 
 /*----------------------------------------------MeshCollider_Component GetComponentType()------------------------------------------------------*/

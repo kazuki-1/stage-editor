@@ -32,7 +32,7 @@ HRESULT DirectionalLight_Component::Initialize()
 {
     
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
-    LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
+    LightingManager::Instance()->Insert(GetParent()->Data()->Name(), light);
     return S_OK;
 }
 

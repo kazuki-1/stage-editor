@@ -77,7 +77,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     stage = std::make_shared<MODEL>();
     stage->Initialize("./Data/Model/stage.mrs");
     stage->SetTake(0);
-    stage->SetScale({ 20, 20, 20});
+    stage->SetScale({ 20, 1, 20});
     stage->SetTranslation({ 0, -20, 0 });
 
 

@@ -142,7 +142,7 @@ void AudioController::Enter()
 {
     //cur_BGM->Play();
     cur_BGM->GetStateMachine()->Initialize();
-    cur_BGM->FadeIn(1.0f);
+    //cur_BGM->FadeIn(1.0f);
 }
 
 /*---------------------------------------------------AUDIO STATE MACHINE Exit()------------------------------------------------*/

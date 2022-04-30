@@ -225,8 +225,8 @@ namespace COLLIDERS
     {
         Vector3 top, bottom;
         Vector3 center;
-        float height;
-        float radius;
+        float height{};
+        float radius{};
     public:
         CYLINDER();
         CYLINDER(Vector3 tp, Vector3 bot, float rad);
@@ -365,3 +365,5 @@ namespace COLLIDERS
     bool RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index = -1);
 
 }
+
+#define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide

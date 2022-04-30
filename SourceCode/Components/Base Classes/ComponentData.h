@@ -5,20 +5,35 @@
 enum class COMPONENT_TYPE
 {
     BASE = -1,
-    MESH, 
-    SPHERE_COL,
-    CAPSULE_COL,
-    OBB_COL, 
-    MESH_COL, 
-    POINT_LIGHT, 
-    SPOTLIGHT,
     BGM, 
-    ENV_AUDIO, 
-    TerrainAudio_Component, 
-    PLAYER_CONTROLLER,
+    CAPSULE_COL,
     ENEMY_CONTROLLER, 
+    ENV_AUDIO, 
+    MESH, 
+    MESH_COL, 
     NPC_DIALOGUE,
+    OBB_COL, 
+    PLAYER_CONTROLLER,
+    POINT_LIGHT, 
+    SPHERE_COL,
+    SPOTLIGHT,
     SPRITE_2D,
+    TerrainAudio_Component, 
+
+    // MESH, 
+    // SPHERE_COL,
+    // CAPSULE_COL,
+    // OBB_COL, 
+    // MESH_COL, 
+    // POINT_LIGHT, 
+    // SPOTLIGHT,
+    // BGM, 
+    // ENV_AUDIO, 
+    // TerrainAudio_Component, 
+    // PLAYER_CONTROLLER,
+    // ENEMY_CONTROLLER, 
+    // NPC_DIALOGUE,
+    // SPRITE_2D,
     EFFECT,                 // Unused
     CAMERA,                 // Unused
     AUDIO,                  // Base class
@@ -49,7 +64,7 @@ class AudioData : public ComponentData
 {
 public:
     AudioData() { type = COMPONENT_TYPE::AUDIO; }
-    char name[256] = "Audio";
+    char name[256] = "";
     std::wstring file_path{};
     template <class T>
     void serialize(T& t)

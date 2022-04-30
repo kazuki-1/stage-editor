@@ -1,13 +1,13 @@
 #pragma once
 #include "Base Classes/Component.h"
 
+class TerrainAudio_Component;
 enum class TerrainAudio_Property
 {
     MIN = -1,
     EMITTER,
     RECEIVER
 };
-class TerrainAudio_Component;
 
 
 class TerrainAudio_Data_Base : public ComponentData
@@ -24,24 +24,13 @@ public:
 class TerrainAudio_Data_Emitter : public TerrainAudio_Data_Base
 {
 public:
-    struct DataStruct {
-
-        int mesh_index{ -1 };
-        std::shared_ptr<AudioData>audio_data{};
-
-        DataStruct() { audio_data = std::make_shared<AudioData>(); }
-        template <class T>
-        void serialize(T& t)
-        {
-            t(mesh_index, audio_data);
-        }
-    };
-    std::vector<std::shared_ptr<DataStruct>>dataset;
-    TerrainAudio_Data_Emitter() {};
+    int mesh_index{ -1 };
+    std::shared_ptr<AudioData>audio_data;
+    TerrainAudio_Data_Emitter() { audio_data = std::make_shared<AudioData>(); };
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<TerrainAudio_Data_Base>(this), dataset);
+        t(cereal::base_class<TerrainAudio_Data_Base>(this), mesh_index, audio_data);
     }
 };
 
@@ -73,20 +62,49 @@ public:
     }
 };
 
-
-
-
-
-class TerrainAudio_Component : public Component
+class TerrainAudio_Internal_Base
 {
+    friend class TerrainAudio_Component;
+};
+
+
+class TerrainAudio_Emitter : public TerrainAudio_Internal_Base
+{
+    friend class TerrainAudio_Component;
     struct AUDIO_BUFFER
     {
         std::shared_ptr<AUDIO>buffer;
         bool state{};
         int timer{};
     };
-    TerrainAudio_Data* data{};
     std::vector<AUDIO_BUFFER>buffers;
+
+};
+
+
+class TerrainAudio_Receiver : public TerrainAudio_Internal_Base
+{
+    friend class TerrainAudio_Component;
+    struct Parameter
+    {
+        int collided_mesh_index{ -1 };
+        int previous_collided_mesh_index{ -1 };
+        bool status;
+    };
+    std::vector<Parameter>parameters{};
+    std::vector<TerrainAudio_Component*>list_of_emitters;
+};
+
+class TerrainAudio_Component : public Component
+{
+    friend class TerrainAudio_Emitter;
+    friend class TerrainAudio_Receiver;
+
+    void ExecuteEmitter();
+    void ExecuteReceiver();
+
+    TerrainAudio_Data* data{};
+    std::shared_ptr<TerrainAudio_Internal_Base> parameters;
 public:
     TerrainAudio_Component() {};
     TerrainAudio_Component(GameObject* g, ComponentData* d);
@@ -116,9 +134,14 @@ public:
     /// <para> バッファーの中にプレイしてないサウンドを探しプレイする</para>
     /// </summary>
     void Play();
+
+
+
+
+
     TerrainAudio_Data* Data();
     TerrainAudio_Property Property();
-    std::vector<AUDIO_BUFFER>Buffers();
+    //std::vector<AUDIO_BUFFER>Buffers();
     COMPONENT_TYPE GetComponentType() override;
 };
 

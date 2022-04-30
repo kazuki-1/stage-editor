@@ -80,7 +80,7 @@ void STAGE_UI::RenderUI()
         if (!selected_item)
             Camera::Instance()->ResetToTarget({ 0, 0, 0 });
         else
-            Camera::Instance()->ResetToTarget(selected_item->GetComponent<Transform3D_Component>()->Translation());
+            Camera::Instance()->ResetToTarget(selected_item->GetComponent<Transform3D_Component>()->GetTranslation());
     }
 
 
@@ -121,7 +121,7 @@ void STAGE_UI::GameObjectWindow()
 }
 
 /*--------------------------------------------------------STAGE_UI SceneUI()--------------------------------------------------------------------*/
-bool text_test{};
+//bool text_test{};
 void STAGE_UI::SceneUI()
 {
     // Data saving and loading
@@ -171,8 +171,8 @@ void STAGE_UI::SceneUI()
         }
 
 
-        if (ImGui::Button("Create text"))
-            text_test = text_test ? false : true;
+        //if (ImGui::Button("Create text"))
+        //    text_test = text_test ? false : true;
         ImGui::End();
     }
 
@@ -234,8 +234,6 @@ void STAGE_UI::Render()
         o.second->Render();
     }
 
-    if(text_test)
-        TextManager::Instance()->PrintOutSequence("The monkey throws the apple", { 0, 0 }, { 1, 1 });
 
     //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
     DebugController::Instance()->Execute();
@@ -293,7 +291,7 @@ void STAGE_UI::MouseSelect()
 
 
         COLLIDERS::RAYCASTDATA rcd{};
-        Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<Transform3D_Component>()->Translation() };
+        Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<Transform3D_Component>()->GetTranslation() };
         Vector3 dist = tar - cam;
         float f_dist{ dist.Length() };
 

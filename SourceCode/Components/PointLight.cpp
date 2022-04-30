@@ -36,7 +36,7 @@ HRESULT PointLight_Component::Initialize()
 {
     light = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::POINT);
     sphere = std::make_shared<DYNAMIC_SPHERE>();
-    LightingManager::Instance()->Insert(Parent()->Data()->Name(), light);
+    LightingManager::Instance()->Insert(GetParent()->Data()->Name(), light);
     return S_OK;
 }
 
@@ -48,7 +48,7 @@ HRESULT PointLight_Component::Initialize()
 void PointLight_Component::Execute()
 {
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    data->position = transform->Translation();
+    data->position = transform->GetTranslation();
     XMMATRIX m{ transform->TransformMatrix() };
     sphere->UpdateVertices(data->range, &m);
 }

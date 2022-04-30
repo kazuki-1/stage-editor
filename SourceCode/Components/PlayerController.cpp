@@ -10,11 +10,9 @@
 #include "TerrainAudio.h"
 #include "Dialogue.h"
 #include "../DialogueController.h"
-#define RAYCAST COLLIDERS::RAYCAST_MANAGER::Instance()->Collide
 std::vector<bool>statuses;
 std::vector<Vector3>receivers;
-Vector3 normal_test{}, pos_test{};
-std::shared_ptr<DYNAMIC_SPHERE>sphere;
+//std::shared_ptr<DYNAMIC_SPHERE>sphere;
 
 
 /*--------------------------------------------------------------------------------------------------------------------------------------*/
@@ -104,8 +102,8 @@ void PlayerController_Component::JumpInput()
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     if (INPUTMANAGER::Instance()->Keyboard()->Triggered(VK_SPACE))
     {
-        Vector3 velocity{ transform->Velocity() };
-        Vector3 position{ transform->Translation() };
+        Vector3 velocity{ transform->GetVelocity() };
+        Vector3 position{ transform->GetTranslation() };
         velocity.y += 5.0f;
         position.y += 0.3f;
         transform->SetTranslation(position);
@@ -133,7 +131,7 @@ void PlayerController_Component::SoundCollision()
         bool collided{};
         for (auto& c : audio->Colliders())
         {
-            if (c->Collider()->Collide(transform->Translation()))
+            if (c->Collider()->Collide(transform->GetTranslation()))
             {
                 
                 if (!audio->Audio()->IsPlaying())
@@ -141,7 +139,7 @@ void PlayerController_Component::SoundCollision()
 
                 // Calculate the distance between the player character and the sound source
                 Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
-                closest_dist -= transform->Translation();
+                closest_dist -= transform->GetTranslation();
                 float length{ closest_dist.Length() };
                 length = max(c->Data()->minimum_distance, length);
 
@@ -178,7 +176,7 @@ void PlayerController_Component::VelocityControl()
 void PlayerController_Component::GravityControl()
 {
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    Vector3 velocity = transform->Velocity();
+    Vector3 velocity = transform->GetVelocity();
     velocity.y -= 0.1f;
     velocity.y = min(velocity.y, 15.0f);
     transform->SetVelocity(velocity);
@@ -200,38 +198,29 @@ void PlayerController_Component::GroundCollision()
     Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
     Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
     Vector3 start, end;
-    start = transform->Translation();
+    start = transform->GetTranslation();
     start.y += 1.001f;
-    end = transform->Translation();
-    end.y += transform->Velocity().y ;
+    end = transform->GetTranslation();
+    end.y += transform->GetVelocity().y ;
 
     COLLIDERS::RAYCASTDATA rcd{};
-    static bool last_state{};
     bool collided{ COLLIDERS::RAYCAST_MANAGER::Instance()->Collide(start, end, mesh, rcd) };
 
-    // Update trigger state of mesh collider
-    if (last_state != collided && collided == true)
-        collider->Triggered();
-    else
-        collider->NotTriggered();
-    last_state = collided;
 
     // Offsets position when collided
     if (collided)
     {
         Vector3 normal, position;
-        normal_test = rcd.normal;
-        pos_test = rcd.position;
         normal = rcd.normal;
         transform->SetTranslation(rcd.position);
         Vector3 velocity;
-        velocity = transform->Velocity();
+        velocity = transform->GetVelocity();
         velocity.y = 0;
         transform->SetVelocity(velocity);
 
 
-        XMMATRIX test{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(rcd.position.XMV()) };
-        sphere->UpdateVertices(0.1f,&test );
+        //XMMATRIX test{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(rcd.position.XMV()) };
+        //sphere->UpdateVertices(0.1f,&test );
 
     } else {
         int i = 0;
@@ -255,27 +244,20 @@ void PlayerController_Component::WallCollision()
     Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
     Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
 
-    Vector2 velocity{ transform->Velocity().x, transform->Velocity().z };
+    Vector2 velocity{ transform->GetVelocity().x, transform->GetVelocity().z };
 
     if (velocity.Length() <  0.01f)
         return;
 
     Vector3 start, end;
-    start = transform->Translation();
-
-    end = transform->Translation();
-    end.x += transform->Velocity().x;
-    end.z += transform->Velocity().z;
+    start = transform->GetTranslation();
+    end = transform->GetTranslation();
+    end.x += transform->GetVelocity().x;
+    end.z += transform->GetVelocity().z;
     COLLIDERS::RAYCASTDATA rcd{};
-    static bool last_state{};
     bool collided{ COLLIDERS::RAYCAST_MANAGER::Instance()->Collide(start, end, mesh, rcd) };
 
     // Update trigger state of mesh collider
-    if (last_state != collided && collided == true)
-        collider->Triggered();
-    else
-        collider->NotTriggered();
-    last_state = collided;
 
     // Offsets position when collided
     if (collided)
@@ -285,7 +267,7 @@ void PlayerController_Component::WallCollision()
         //rcd.position ;
         transform->SetTranslation(rcd.position + normal * 0.2f);
         Vector3 velocity;
-        velocity = transform->Velocity();
+        velocity = transform->GetVelocity();
         velocity.y = 0;
         transform->SetVelocity(velocity);
 
@@ -302,84 +284,78 @@ void PlayerController_Component::WallCollision()
 void PlayerController_Component::TerrainAudioCollision()
 {
     // Check current gameObject for terrain audio component
-    TerrainAudio_Component* receiver{ GetComponent<TerrainAudio_Component>() };
-    if (!receiver || receiver->Property() != TerrainAudio_Property::RECEIVER)
-        return;
+    //TerrainAudio_Component* receiver{ GetComponent<TerrainAudio_Component>() };
+    //if (!receiver || receiver->Property() != TerrainAudio_Property::RECEIVER)
+    //    return;
 
-    // Check other gameObjects for terrain audio component
-    std::vector<GameObject*>emitters;
-    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
-    {
-        if (g.second.get() == parent)
-            continue;
-        if (g.second->GetComponent<TerrainAudio_Component>() != nullptr
-            && g.second->GetComponent<TerrainAudio_Component>()->Data()->class_type == TerrainAudio_Property::EMITTER)
-            emitters.push_back(g.second.get());
+    //// Check other gameObjects for terrain audio component
+    //std::vector<GameObject*>emitters;
+    //for (auto& g : GameObjectManager::Instance()->GetGameObjects())
+    //{
+    //    if (g.second.get() == parent)
+    //        continue;
+    //    if (g.second->GetComponent<TerrainAudio_Component>() != nullptr
+    //        && g.second->GetComponent<TerrainAudio_Component>()->Data()->class_type == TerrainAudio_Property::EMITTER)
+    //        emitters.push_back(g.second.get());
 
-    }
+    //}
 
-    // Prepare coordinates of collision
-    TerrainAudio_Data_Receiver* rec{ (TerrainAudio_Data_Receiver*)receiver->Data()->property_data.get() };
-    receivers.resize(rec->receiver_bones.size());
+    //// Prepare coordinates of collision
+    //TerrainAudio_Data_Receiver* rec{ (TerrainAudio_Data_Receiver*)receiver->Data()->property_data.get() };
+    //receivers.resize(rec->receiver_bones.size());
 
-    Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
-    for (auto& names : ((TerrainAudio_Data_Receiver*)(receiver->Data()->property_data.get()))->receiver_bones)
-    {
-    }
-    int index{};
-    for (auto& v : receivers)
-    {
-        XMMATRIX bone_transform = mesh->GetBoneTransform(rec->receiver_bones[index]);
-        XMVECTOR s, r, t;
-        XMMatrixDecompose(&s, &r, &t, bone_transform);
-        v.Load(t);
-        ++index;
-    }
+    //Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
+    //int index{};
+    //for (auto& v : receivers)
+    //{
+    //    XMMATRIX bone_transform = mesh->GetBoneTransform(rec->receiver_bones[index]);
+    //    XMVECTOR s, r, t;
+    //    XMMatrixDecompose(&s, &r, &t, bone_transform);
+    //    v.Load(t);
+    //    ++index;
+    //}
 
-    // Prepare a buffer to check collider state
-    if (statuses.size() < 1)
-        statuses.resize(receivers.size());
+    //// Prepare a buffer to check collider state
 
-    MeshCollider_Component* collider = GetComponent<MeshCollider_Component>();
 
-    // Perform rayCast on receivers
-    for (auto& e : emitters)
-    {
-        TerrainAudio_Component* emitter{ e->GetComponent<TerrainAudio_Component>() };
-        Mesh_Component* emitter_mesh{ e->GetComponent<Mesh_Component>() };
-        TerrainAudio_Data_Emitter* data{ (TerrainAudio_Data_Emitter*)(emitter->Data()->property_data.get()) };
+    //// Perform rayCast on receivers
+    //for (auto& e : emitters)
+    //{
+    //    std::vector<TerrainAudio_Component*>emitters = e->GetListOfComponent<TerrainAudio_Component>();
+    //    for (auto& entity : emitters)
+    //    {
+    //        //TerrainAudio_Component* emitter{ entity->GetComponent<TerrainAudio_Component>() };
+    //        Mesh_Component* emitter_mesh{ entity->GetComponent<Mesh_Component>() };
+    //        for (int ind = 0; ind < receivers.size(); ++ind)
+    //        {
+    //            // Ducking function
+    //            for (auto& b : entity->Buffers())
+    //            {
+    //                if (b.buffer->IsDucking())
+    //                    b.buffer->SetVolume(0.3f);
+    //            }
 
-        for (auto& entity : data->dataset)
-        {
-            for (int ind = 0; ind < receivers.size(); ++ind)
-            {
-                // Ducking function
-                for (auto& b : emitter->Buffers())
-                {
-                    if (b.buffer->IsDucking())
-                        b.buffer->SetVolume(0.3f);
-                }
+    //            // Prepare parameters for rayCasting
+    //            Vector3 start{ receivers[ind] };
+    //            Vector3 end{ start };
+    //            TerrainAudio_Data_Emitter* data{ (TerrainAudio_Data_Emitter*)(entity->Data()->property_data.get()) };
 
-                // Prepare parameters for rayCasting
-                Vector3 start{ receivers[ind] };
-                Vector3 end{ start };
+    //            // Offsets the start and end vectors for error compensation
+    //            end.y -= 0.009f;
+    //            start.y += 0.1f;
+    //            COLLIDERS::RAYCASTDATA rcd{};
+    //            bool collided{ RAYCAST(start, end, emitter_mesh, data->dataset[0]->mesh_index, rcd)};
 
-                // Offsets the start and end vectors for error compensation
-                end.y += 0.009f;
-                start.y += 0.1f;
-                COLLIDERS::RAYCASTDATA rcd{};
-                bool collided{ RAYCAST(start, end, emitter_mesh, entity->mesh_index, rcd) };
-
-                // Only triggers the sound effect upon triggering the collider
-                bool triggered{};
-                if (collided && statuses[ind] != collided)
-                    triggered = true;
-                statuses[ind] = collided;
-                if (triggered)
-                    emitter->Play();
-            }
-        }
-    }
+    //            // Only triggers the sound effect upon triggering the collider
+    //            bool triggered{};
+    //            if (collided && statuses[ind] != collided)
+    //                triggered = true;
+    //            statuses[ind] = collided;
+    //            if (triggered)
+    //                entity->Play();
+    //        }
+    //    }
+    //}
 }
 
 /*--------------------------------------------------------PlayerController_Component Initialize()-------------------------------------------------*/
@@ -391,7 +367,7 @@ void PlayerController_Component::TerrainAudioCollision()
 HRESULT PlayerController_Component::Initialize()
 {
 
-    sphere = std::make_shared<DYNAMIC_SPHERE>();
+    //sphere = std::make_shared<DYNAMIC_SPHERE>();
 
     return S_OK;
 
@@ -404,7 +380,7 @@ HRESULT PlayerController_Component::Initialize()
 /// </summary>
 void PlayerController_Component::Execute()
 {
-    Vector3 position = GetComponent<Transform3D_Component>()->Translation();
+    Vector3 position = GetComponent<Transform3D_Component>()->GetTranslation();
     position.y += 5.0f;
     Camera::Instance()->SetTarget(position);
     inDialogue = DialogueController::Instance()->GetStatus();
@@ -420,7 +396,7 @@ void PlayerController_Component::Execute()
     GroundCollision();
     WallCollision();
     VelocityControl();
-    TerrainAudioCollision();
+    //TerrainAudioCollision();
     AnimationSettings();
     NPCDialogueTrigger();
 
@@ -435,15 +411,6 @@ void PlayerController_Component::Execute()
 /// </summary>
 void PlayerController_Component::Render()
 {
-    Vector3 velocity, position;
-    velocity = GetComponent<Transform3D_Component>()->Velocity();
-    position = GetComponent<Transform3D_Component>()->Translation();
-    ImGui::Begin("Collision normal");
-    ImGui::DragFloat3("Position", &pos_test.x);
-    ImGui::DragFloat3("Normal", &normal_test.x);
-    ImGui::End();
-
-    sphere->Render();
 }
 
 /*--------------------------------------------------------PlayerController_Component UI()-------------------------------------------------*/
@@ -480,9 +447,8 @@ void PlayerController_Component::AnimationSettings()
 {
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     Mesh_Component* mesh = GetComponent<Mesh_Component>();
-    Vector3 velocity = transform->Velocity();
+    Vector3 velocity = transform->GetVelocity();
     velocity.y = 0;
-    INPUTMANAGER::KEYBOARD* kb{ INPUTMANAGER::Instance()->Keyboard().get() };
     if (velocity.Length() >= 0.05f)
         mesh->Model()->SetTake((int)PlayerAnim::Walking);
     else
@@ -533,10 +499,10 @@ void PlayerController_Component::NPCDialogueTrigger()
             npcs.push_back(g.second.get());
     }
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    Vector3 player_pos = transform->Translation();
+    Vector3 player_pos = transform->GetTranslation();
     for (auto npc : npcs)
     {
-        Vector3 target_pos{ npc->GetComponent<Transform3D_Component>()->Translation() };
+        Vector3 target_pos{ npc->GetComponent<Transform3D_Component>()->GetTranslation() };
 
         Vector3 distance = Vector3::Distance(player_pos, target_pos);
         Vector3 n_TargetPos{Vector3::Normalize(target_pos)}, n_PlayerPos{Vector3::Normalize(player_pos)};

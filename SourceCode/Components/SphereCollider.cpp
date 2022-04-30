@@ -162,7 +162,7 @@ void SphereCollider_Component::UI()
 /// </summary>
 Vector3 SphereCollider_Component::DistanceToPlayer(PlayerController_Component* target)
 {
-    Vector3 player_position = target->GetComponent<Transform3D_Component>()->Translation();
+    Vector3 player_position = target->GetComponent<Transform3D_Component>()->GetTranslation();
     return collider->Center() - player_position;
 }
 

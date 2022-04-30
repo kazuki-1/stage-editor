@@ -55,7 +55,7 @@ void Mesh_Component::Execute()
     if (!model)
         return;
 
-    model->SetTransformation(transform->Scale(), transform->Quaternion(), transform->Translation());
+    model->SetTransformation(transform->Scale(), transform->Quaternion(), transform->GetTranslation());
     model->UpdateTransform();
 }
 

@@ -126,22 +126,22 @@ Vector3 Transform3D_Component::Rotation()
     return data->rotation;
 }
 
-/*---------------------------------------Transform3D_Component Translation-------------------------------------------------*/
+/*---------------------------------------Transform3D_Component GetTranslation-------------------------------------------------*/
 /// <summary>
 /// Returns the translation
 /// </summary>
 /// <returns></returns>
-Vector3 Transform3D_Component::Translation()
+Vector3 Transform3D_Component::GetTranslation()
 {
     return data->translation;
 }
 
-/*---------------------------------------Transform3D_Component Velocity()-------------------------------------------------*/
+/*---------------------------------------Transform3D_Component GetVelocity()-------------------------------------------------*/
 /// <summary>
 /// Returns the velocity
 /// </summary>
 /// <returns></returns>
-Vector3 Transform3D_Component::Velocity()
+Vector3 Transform3D_Component::GetVelocity()
 {
     return velocity;
 }

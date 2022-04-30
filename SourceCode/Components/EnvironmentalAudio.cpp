@@ -100,7 +100,7 @@ HRESULT LocalizedCollider_SubComponent::Initialize()
 void LocalizedCollider_SubComponent::Execute()
 {
     transform->Execute();
-    XMMATRIX world_transform{ transform->TransformMatrix() * collider->Parent()->GetComponent<Transform3D_Component>()->TransformMatrix() };
+    XMMATRIX world_transform{ transform->TransformMatrix() * collider->GetParent()->GetComponent<Transform3D_Component>()->TransformMatrix() };
     collider->Execute(world_transform);
 }
 
@@ -247,7 +247,13 @@ void EnvironmentalAudio_Component::UI()
     {
         ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
         static bool fileOpenEA{};
-        static std::string preview{ "" };
+        std::string preview{ "" };
+        if (data->file_path.size() > 0) {
+            for (auto& c : data->file_path)
+            {
+                preview.push_back(c);
+            }
+        }
         ImGui::InputText("Audio name", data->name, 256);
         ImGui::Text((char*)(preview.c_str()));
         if (ImGui::Button("Load Audio"))

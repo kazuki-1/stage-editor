@@ -67,8 +67,19 @@ public:
     void Deactivate();
     virtual void AddComponent(COMPONENT_TYPE t);
     void RemoveComponent(int id);
-
-    
+    //template <class T>
+    //std::vector<T*>GetListOfComponent()
+    //{
+    //    std::vector<T*>output;
+    //    for (auto& c : components)
+    //    {
+    //        T* t= dynamic_cast<T*>(c.get());
+    //        if (t)
+    //            output.push_back(t);
+    //    }
+    //    return output;
+    //}
+    //
     template <class T>
     T* GetComponent(int id = 0)
     {
@@ -82,6 +93,19 @@ public:
                 ++ind;
         }
         return nullptr;
+    }
+
+    template <class T>
+    std::vector<T*>GetListOfComponents()
+    {
+        std::vector<T*>output{};
+        for (auto& c : components)
+        {
+            T* t = dynamic_cast<T*>(c.get());
+            if (t)
+                output.push_back(t);
+        }
+        return output;
     }
     std::vector<std::shared_ptr<Component>>Components();
     std::shared_ptr<OBJECT_DATA>Data();
