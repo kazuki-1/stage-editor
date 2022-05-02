@@ -17,7 +17,6 @@ std::string load_file_path;
 std::string output;
 char input_test[256] = { "" };
 std::string gameObjectTypes[] = { "GameObject", "GameObject2D" };
-std::shared_ptr<SPRITE>sprite;
 
 
 
@@ -30,13 +29,10 @@ void STAGE_UI::RenderUI()
 {
     static bool popupCheck{ false };
     static int id{ 1 };
-    static std::string input_name{};
 
     // GameObject creation
     const std::string ID{ "##" + std::to_string(id) };
     ImGui::Begin("Create GameObject");
-    ImGui::InputText("Name", input_test, 256);
-    std::string empty{ "" };
     if (ImGui::Button("Create GameObject"))
     {
         popupCheck = true;
@@ -44,12 +40,40 @@ void STAGE_UI::RenderUI()
     if (popupCheck)
     {
         ImGui::OpenPopup("Create GameObject");
+        //if (ImGui::BeginCombo("Create Gameobject", gameObjectTypes[0].c_str()))
+        //{
+        //    int index{};
+        //    for (auto& type : gameObjectTypes)
+        //    {
+        //        if (ImGui::Selectable(type.c_str()))
+        //        {
+        //            // Create new dataset
+        //            DataManager::Instance()->Insert(std::make_shared<OBJECT_DATA>("GameObject"));
+        //
+        //            // Creates 2D or 3D gameObject
+        //            if (!index)
+        //                GameObjectManager::Instance()->Insert(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
+        //            else
+        //                GameObjectManager::Instance()->Insert2D(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
+        //
+        //            popupCheck = false;
+        //            ImGui::EndPopup();
+        //        }
+        //
+        //        ++index;
+        //    }
+        //
+        //
+        //
+        //    ImGui::EndCombo();
+        //}
+        
+
+
         if (ImGui::BeginPopup("Create GameObject"))
         {
             ImGui::ListBoxHeader("GameObject Type");
-            std::string path{ input_name + ID };
-            std::string full = input_test;
-            full += ID;
+            std::string full = "GameObject";
             int ind{};
             // Create GameObject or GameObject 2D
             for (auto& s : gameObjectTypes)
@@ -57,6 +81,7 @@ void STAGE_UI::RenderUI()
                 if (ImGui::Selectable(s.c_str()))
                 {
                     DataManager::Instance()->Insert(std::make_shared<OBJECT_DATA>(full));
+                    
                     if (ind)
                     {
                         GameObjectManager::Instance()->Insert2D(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
@@ -71,7 +96,7 @@ void STAGE_UI::RenderUI()
             }
             ImGui::ListBoxFooter();
             ImGui::EndPopup();
-
+        
         }
     }
     // Reset Camera to object, does not work with GameObject 2D

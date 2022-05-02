@@ -5,6 +5,7 @@
 #include "Components/Base Classes/ComponentData.h"
 class GameObject;
 class GameObject_2D;
+class DataManager;
 enum class OBJECT_TYPE
 {
     WALL, FLOOR, BACKDROP, PLAYER, ENEMY
@@ -13,6 +14,9 @@ class OBJECT_DATA
 {
     std::string name;
     std::vector<std::shared_ptr<ComponentData>>dataset;
+
+    int id{};
+    friend class DataManager;
     friend class GameObject;
     friend class GameObject_2D;
 public:
@@ -48,12 +52,6 @@ public:
         return nullptr;
     }
 
-    template <class T>
-    void serialize(T& t)
-    {
-        t(name, dataset);
-    }
-
     int DataIndex(std::shared_ptr<ComponentData>target)
     {
         int ind{};
@@ -71,6 +69,13 @@ public:
     void Remove(int ind)
     {
         dataset.erase(dataset.begin() + ind);
+    }
+
+
+    template <class T>
+    void serialize(T& t)
+    {
+        t(name, dataset, id);
     }
 
 

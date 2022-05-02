@@ -78,7 +78,8 @@ void Mesh_Component::Render()
 /// </summary>
 void Mesh_Component::UI()
 {
-    if (ImGui::TreeNode("Mesh"))
+    std::string header{ "Mesh ##" + std::to_string(data->id) };
+    if (ImGui::TreeNode(header.c_str()))
     {
         ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
         bool isEmpty{};

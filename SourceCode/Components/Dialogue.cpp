@@ -101,15 +101,25 @@ void Dialogue_Component::UI()
 				}
 				ImGui::EndCombo();
 			}
-			for (auto& d : data->dialogue_list.at(index))
+
+			ImGui::Separator();
+			ImGui::ListBoxHeader("Dialogue list");
+
+
+			for (auto& d : data->dialogue_list[index])
 				ImGui::Text(d.c_str());
 
-
+			ImGui::ListBoxFooter();
+			ImGui::Separator();
 
 			ImGui::InputText("Text", text, 256);
 			if (ImGui::Button("Insert Dialogue"))
 				data->dialogue_list.at(index).push_back(std::string(text));
-
+			if (ImGui::Button("Pop front"))
+				data->dialogue_list.at(index).pop_front();
+			ImGui::SameLine();
+			if (ImGui::Button("Pop back"))
+				data->dialogue_list.at(index).pop_back();
 
 		}
 		ImGui::TreePop();

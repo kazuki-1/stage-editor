@@ -46,7 +46,7 @@ void PlayerController_Component::MovementInput()
     Vector2 limit{ -20.0f, 20.0f };
     if (k_Axis.x || k_Axis.y)
         move += 0.005f;
-    move = Math::Clamp(move, 0, 0.2f);
+    move = Math::Clamp(move, 0, 1.0f);
     fabs(move) < 0.0001f ? move = 0 : move = move;
     Vector3 f;
     f = GetComponent<Transform3D_Component>()->Forward();
@@ -55,6 +55,8 @@ void PlayerController_Component::MovementInput()
     Vector3 output{};
     output.x = (f * move).x;
     output.z = (f * move).z;
+    Vector3 velocity = transform->GetVelocity();
+    output.y = velocity.y;
     transform->SetVelocity(output);
 }
 
@@ -131,7 +133,8 @@ void PlayerController_Component::SoundCollision()
         bool collided{};
         for (auto& c : audio->Colliders())
         {
-            if (c->Collider()->Collide(transform->GetTranslation()))
+            collided = c->Collider()->Collide(transform->GetTranslation());
+            if (collided)
             {
                 
                 if (!audio->Audio()->IsPlaying())
@@ -149,15 +152,18 @@ void PlayerController_Component::SoundCollision()
 
                 // Audio ducking function
                 if (audio->Audio()->IsDucking())
-                    volume = min(volume, 0.3f);
-                audio->Audio()->SourceVoice()->SetVolume(volume);
-                collided = true;
+                    audio->Audio()->FadeTo(0.1f, 0.5f);
+                else
+                {
+                    audio->Audio()->SetVolume(volume);
+                    audio->Audio()->SourceVoice()->SetVolume(volume);
+                    collided = true;
+                }
                 break;
             }
-        }
-        if (!collided)
-        {
-            audio->Audio()->Stop();
+            else
+                audio->Audio()->Stop();
+
         }
     }
 }
@@ -275,89 +281,6 @@ void PlayerController_Component::WallCollision()
 
 }
 
-/*--------------------------------------------------------PlayerController_Component TerrainAudioCollision()-------------------------------------------------*/
-/// <summary>
-/// <para> Performs collision check for TerrainAudio_Component component </para>
-/// <para> TERRAIN_AUDIOコンポネントの当たり判定を計算する </para>
-/// </summary>
-/// 
-void PlayerController_Component::TerrainAudioCollision()
-{
-    // Check current gameObject for terrain audio component
-    //TerrainAudio_Component* receiver{ GetComponent<TerrainAudio_Component>() };
-    //if (!receiver || receiver->Property() != TerrainAudio_Property::RECEIVER)
-    //    return;
-
-    //// Check other gameObjects for terrain audio component
-    //std::vector<GameObject*>emitters;
-    //for (auto& g : GameObjectManager::Instance()->GetGameObjects())
-    //{
-    //    if (g.second.get() == parent)
-    //        continue;
-    //    if (g.second->GetComponent<TerrainAudio_Component>() != nullptr
-    //        && g.second->GetComponent<TerrainAudio_Component>()->Data()->class_type == TerrainAudio_Property::EMITTER)
-    //        emitters.push_back(g.second.get());
-
-    //}
-
-    //// Prepare coordinates of collision
-    //TerrainAudio_Data_Receiver* rec{ (TerrainAudio_Data_Receiver*)receiver->Data()->property_data.get() };
-    //receivers.resize(rec->receiver_bones.size());
-
-    //Mesh_Component* mesh{ GetComponent<Mesh_Component>() };
-    //int index{};
-    //for (auto& v : receivers)
-    //{
-    //    XMMATRIX bone_transform = mesh->GetBoneTransform(rec->receiver_bones[index]);
-    //    XMVECTOR s, r, t;
-    //    XMMatrixDecompose(&s, &r, &t, bone_transform);
-    //    v.Load(t);
-    //    ++index;
-    //}
-
-    //// Prepare a buffer to check collider state
-
-
-    //// Perform rayCast on receivers
-    //for (auto& e : emitters)
-    //{
-    //    std::vector<TerrainAudio_Component*>emitters = e->GetListOfComponent<TerrainAudio_Component>();
-    //    for (auto& entity : emitters)
-    //    {
-    //        //TerrainAudio_Component* emitter{ entity->GetComponent<TerrainAudio_Component>() };
-    //        Mesh_Component* emitter_mesh{ entity->GetComponent<Mesh_Component>() };
-    //        for (int ind = 0; ind < receivers.size(); ++ind)
-    //        {
-    //            // Ducking function
-    //            for (auto& b : entity->Buffers())
-    //            {
-    //                if (b.buffer->IsDucking())
-    //                    b.buffer->SetVolume(0.3f);
-    //            }
-
-    //            // Prepare parameters for rayCasting
-    //            Vector3 start{ receivers[ind] };
-    //            Vector3 end{ start };
-    //            TerrainAudio_Data_Emitter* data{ (TerrainAudio_Data_Emitter*)(entity->Data()->property_data.get()) };
-
-    //            // Offsets the start and end vectors for error compensation
-    //            end.y -= 0.009f;
-    //            start.y += 0.1f;
-    //            COLLIDERS::RAYCASTDATA rcd{};
-    //            bool collided{ RAYCAST(start, end, emitter_mesh, data->dataset[0]->mesh_index, rcd)};
-
-    //            // Only triggers the sound effect upon triggering the collider
-    //            bool triggered{};
-    //            if (collided && statuses[ind] != collided)
-    //                triggered = true;
-    //            statuses[ind] = collided;
-    //            if (triggered)
-    //                entity->Play();
-    //        }
-    //    }
-    //}
-}
-
 /*--------------------------------------------------------PlayerController_Component Initialize()-------------------------------------------------*/
 /// <summary>
 /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
@@ -385,20 +308,19 @@ void PlayerController_Component::Execute()
     Camera::Instance()->SetTarget(position);
     inDialogue = DialogueController::Instance()->GetStatus();
 
-    if (inDialogue)
-        return;
 
-    MovementInput();
-    RotationInput();
     JumpInput();
     SoundCollision();
     GravityControl();
     GroundCollision();
     WallCollision();
     VelocityControl();
-    //TerrainAudioCollision();
     AnimationSettings();
     NPCDialogueTrigger();
+    if (inDialogue)
+        return;
+    MovementInput();
+    RotationInput();
 
 
 

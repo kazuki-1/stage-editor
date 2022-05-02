@@ -1,6 +1,8 @@
 #include "DialogueController.h"
 #include "Engine/Text.h"
 #include "Engine/Input.h"
+#include "Engine/Audio.h"
+#include "Audio/AudioController.h"
 /*----------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------DialogueController Class------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -34,6 +36,7 @@ void DialogueController::Initialize(std::wstring textbox_path, Vector2 textbox_p
 /// <param name="dialogue"> : Dialogue list to be rendered</param>
 void DialogueController::TriggerDialogue(std::list<std::string> dialogue)
 {
+	AudioController::Instance()->PerformDucking();
 	dialogue_list = dialogue;
 	triggered = true;
 }
@@ -50,6 +53,7 @@ void DialogueController::Render()
 
 	if (dialogue_list.size() < 1)
 	{
+		AudioController::Instance()->StopDucking();
 		triggered = false;
 		return;
 	}

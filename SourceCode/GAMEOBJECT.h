@@ -1,11 +1,9 @@
 #pragma once
-#include "MODEL.h"
 #include "Engine/Singleton.h"
 #include "OBJECT_DATA.h"
-//#include "COLLIDERS.h"
-//#include "Component.h"
-class Component;
+#include <d3d11.h>
 
+class Component;
 class GameObject
 {
 protected:
@@ -107,6 +105,7 @@ public:
         }
         return output;
     }
+
     std::vector<std::shared_ptr<Component>>Components();
     std::shared_ptr<OBJECT_DATA>Data();
 };
@@ -161,7 +160,22 @@ public:
     /// Called at the end of program to finalize the manager
     /// </summary>
     void Finalize();
-
+    ///// <summary>
+    ///// Search the gameObject map for gameObjects with the specified component
+    ///// </summary>
+    ///// <returns></returns>
+    //template <class T>
+    //std::vector<GameObject*>GetGameObjectWithComponent()
+    //{
+    //    std::vector<GameObject*>output;
+    //    for (auto& g : gameObjects)
+    //    {
+    //        if (g.second->GetComponent<T>() != nullptr)
+    //            output.push_back(g.second.get());
+    //    }
+    //    return output;
+    //}
+    std::shared_ptr<GameObject>GetPlayer();
 };
 
 

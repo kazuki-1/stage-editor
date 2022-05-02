@@ -11,6 +11,9 @@ class DataManager : public Singleton<DataManager>
 {
     std::vector<std::shared_ptr<OBJECT_DATA>>dataset;
     std::string file_path;
+
+
+    friend class OBJECT_DATA;
 public:
     void Insert(std::shared_ptr<OBJECT_DATA>d);
     void Load(std::string file_path);

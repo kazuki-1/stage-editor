@@ -325,10 +325,12 @@ void AUDIO::SetBuffer(XAUDIO2_BUFFER buffer)
 /*---------------------------------------------AUDIO PerformDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> Performs ducking and fades the volume to 0.3f</para>
-/// <para>•¿•√•≠•Û•∞§Ú––§§°¢“Ù¡ø§Ú£∞£Æ£≥§À’{’˚§π§ÅE</para>
 /// </summary>
 void AUDIO::PerformDucking(float fade_vol)
 {
+    // Exits if not playing or is already ducking
+    if (!isPlaying)
+        return;
     if (isDucking)
         return;
     volume_before_ducking = volume;

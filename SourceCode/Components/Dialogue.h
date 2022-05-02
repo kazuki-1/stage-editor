@@ -24,7 +24,6 @@ public:
 class Dialogue_Component : public Component
 {
 	Dialogue_Data* data;
-	bool triggered;
 	void GetDialogue();
 public:
 	Dialogue_Component(GameObject* p, ComponentData* d);

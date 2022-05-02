@@ -68,11 +68,6 @@ class PlayerController_Component : public BaseCharacterComponent
     /// <para> 他のモデルが衝突によって加速度の調整を行う </para>
     /// </summary>
     void WallCollision();
-    /// <summary>
-    /// <para> Performs collision check for TerrainAudio_Component component </para>
-    /// <para> TERRAIN_AUDIOコンポネントの当たり判定を計算する </para>
-    /// </summary>
-    void TerrainAudioCollision();
 
     bool inDialogue{};
 public:

@@ -255,6 +255,7 @@ void GameObject::__InternalAddComponent(COMPONENT_TYPE t, std::shared_ptr<Compon
 void GameObject::AddComponent(COMPONENT_TYPE t)
 {
     data->dataset.push_back(ComponentCreator::Instance()->Instantiate(t));
+
     components.push_back(INSTANTIATE(this, data->dataset.back()));
     components.back()->Initialize();
 
@@ -411,5 +412,19 @@ void GameObjectManager::Finalize()
 {
     gameObjects.clear();
 }
+
+/*--------------------------------GameObjectManager GetPlayer()----------------------------------*/
+
+std::shared_ptr<GameObject>GameObjectManager::GetPlayer()
+{
+    for (auto& g : gameObjects)
+    {
+        if (g.second->GetComponent<PlayerController_Component>() != nullptr)
+            return g.second;
+    }
+    return nullptr;
+}
+
+
 
 #pragma endregion

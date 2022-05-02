@@ -1,7 +1,9 @@
 #include "DataManager.h"
 #include "../../GAMEOBJECT.h"
+#include <assert.h>
 #include <filesystem>
 #include <fstream>
+int cur_id{};
 
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------DATAMANGER Class---------------------------------------------------------------------*/
@@ -84,7 +86,10 @@ std::string DataManager::GetCurrentScenePath()
 
 void DataManager::Insert(std::shared_ptr<OBJECT_DATA>d)
 {
+    d->id = cur_id;
+    d->name += "##" + std::to_string(cur_id);
     dataset.push_back(d);
+    ++cur_id;
 }
 
 /*--------------------------------------------------DataManager Remove()-------------------------------------------------------------------*/

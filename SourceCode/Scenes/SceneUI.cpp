@@ -7,7 +7,7 @@
 #include "../STAGE_UI.h"
 #include "../Components/Base Classes/DataManager.h"
 #include "../Engine/Text.h"
-
+#include "../Engine/Audio.h"
 
 /*---------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------SceneUI Class------------------------------------------------------------------*/
@@ -16,6 +16,13 @@
 
 HRESULT SceneUI::Initialize()
 {
+    // Stops any audio that is playing
+    for (auto& audio : AudioEngine::Instance()->Audios())
+    {
+        if (audio.second->IsPlaying())
+            audio.second->Stop();
+    }
+
 
     // Loads pre existing data if it exists
     std::string cur_scene_path{ DataManager::Instance()->GetCurrentScenePath() };
@@ -33,7 +40,6 @@ HRESULT SceneUI::Initialize()
 void SceneUI::Execute()
 {
     IMGUI::Instance()->Execute();
-    LightingManager::Instance()->RenderUI();
     STAGE_UI::Instance()->RenderUI();
 
 }

@@ -23,6 +23,9 @@ int index{};
 /// <returns></returns>
 HRESULT AudioController::Initialize()
 {
+
+
+
     audioMap.insert(std::make_pair(AudioStates::State_Idle, AudioEngine::Instance()->Retrieve("Idle")));
     audioMap.insert(std::make_pair(AudioStates::State_Tension, AudioEngine::Instance()->Retrieve("Tension")));
     audioMap.insert(std::make_pair(AudioStates::State_Climax, AudioEngine::Instance()->Retrieve("Climax")));
@@ -40,13 +43,15 @@ HRESULT AudioController::Initialize()
 void AudioController::Execute()
 {
     AudioEngine::Instance()->Execute();
+
+    // Audio ducking functions
     if (isDucking)
     {
         for (auto& audio : AUDIOS)
         {
             if (ducking_target && ducking_target == audio.second)
                 continue;
-            audio.second->PerformDucking(0.3f);
+            audio.second->PerformDucking(0.1f);
         }
         return;
     }
@@ -56,20 +61,20 @@ void AudioController::Execute()
             audio.second->StopDucking();
     }
 
-    if (pause)
-        return;
-    //if (!transitioning && cur_BGM->Volume() <= 1.0f)
-    //    cur_BGM->FadeIn(2.0f);
-
+    // Audio transitioning function
     if (transitioning && !isDucking)
     {
+        // Perform fade out of current BGM
         cur_BGM->FadeOut(TRANSITION_TIME);
         next_BGM->SetVolume(0.0f);
+
+        // Perform fade in of next BGM
         next_BGM->Play();
         next_BGM->FadeIn(TRANSITION_TIME);
         transitioning = true;
         if (cur_BGM->Volume() <= TRANSITION_THRESHOLD)
         {
+            // Replace and destroy previous BGM instance
             Exit();
             Enter();
             next_BGM->Stop();
@@ -115,11 +120,11 @@ void AudioController::DebugUI()
             ImGui::TreePop();
         }
         ImGui::Checkbox("Play", &play);
-        ImGui::Checkbox("Perform Ducking", &duck);
-        if (duck)
-            PerformDucking();
-        else
-            StopDucking();
+        //ImGui::Checkbox("Perform Ducking", &duck);
+        //if (duck)
+        //    PerformDucking();
+        //else
+        //    StopDucking();
 
         play ? Resume() : Pause();
         ImGui::End();

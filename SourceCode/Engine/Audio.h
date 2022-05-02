@@ -107,7 +107,6 @@ public:
     void FadeOut(float fade_time);
     /// <summary>
     /// <para> Perform a fade effect to the target volume. CALL BEFORE Play() </para>
-    /// <para> ﾖｸｶｨ､ｵ､・ｿ･ﾜ･・蟀`･爨ﾞ､ﾇ･ﾕ･ｧｩ`･ﾉ･ｨ･ﾕ･ｧ･ｯ･ﾈ､・ｱ､・</para>
     /// </summary>
     /// <param name = "fade_vol"> : Volume to be faded to </param>
     /// <param name="fade_time"> : Time taken for effect to finish</param>
@@ -122,24 +121,20 @@ public:
     void SetBuffer(XAUDIO2_BUFFER buffer);
     /// <summary>
     /// <para> Performs ducking and fades the volume to 0.3f</para>
-    /// <para>･ﾀ･ﾃ･ｭ･ｰ､ﾐ､､｡｢ﾒｿ､ｰ｣ｮ｣ｳ､ﾋﾕ{ﾕ訷ｹ､・</para>
     /// </summary>
     void PerformDucking(float fade_vol);
     /// <summary>
     /// <para> stops the ducking state</para>
-    /// <para> ･ﾀ･ﾃ･ｭ･ｰ､ﾐﾖｹ､ｹ､・/para>
     /// </summary>
     void StopDucking();
     std::wstring FilePath();
     /// <summary>
     /// <para> Called to initialize the object </para>
-    /// <para> ･ｪ･ﾖ･ｸ･ｧ･ｯ･ﾈ､ﾚｻｯ､ｹ､・</para>
     /// </summary>
     /// <returns></returns>
     HRESULT Initialize();
     /// <summary>
     /// <para> Called every frame to perform functions </para>
-    /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
     /// </summary>
     void Execute();
     float Volume();
