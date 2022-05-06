@@ -1,44 +1,97 @@
 #include "RASTERIZER.h"
 #include <assert.h>
-RASTERIZER::RASTERIZER(ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
+#include "DirectX11.h"
+
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------Rasterizer Class----------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------Rasterizer Constructor----------------------------------------------------*/
+
+Rasterizer::Rasterizer(ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
 {
     assert(Initialize(dv, drd) == S_OK);
 }
 
-HRESULT RASTERIZER::Initialize(ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
+
+/*---------------------------------------------------Rasterizer Initialize()----------------------------------------------------*/
+
+HRESULT Rasterizer::Initialize(ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
 {
     return dv->CreateRasterizerState(&drd, rasterizer.GetAddressOf());
 
 }
 
-ComPtr<ID3D11RasterizerState>RASTERIZER::Rasterizer()
+/*---------------------------------------------------Rasterizer GetRasterizer()----------------------------------------------------*/
+
+ComPtr<ID3D11RasterizerState>Rasterizer::GetRasterizer()
 {
     return rasterizer;
 }
 
-std::string RASTERIZER::Name()
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------RasterizerManager Class----------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------RasterizerManager Initialize()---------------------------------------------------*/
+
+
+void RasterizerManager::Initialize()
 {
-    return name;
+    ID3D11Device* dv = DirectX11::Instance()->Device();
+
+
+    D3D11_RASTERIZER_DESC drd{};
+    drd.FrontCounterClockwise = TRUE;
+    drd.CullMode = D3D11_CULL_BACK;
+    drd.DepthBias = 0;
+    drd.DepthBiasClamp = 0.0f;
+    drd.FillMode = D3D11_FILL_SOLID;
+    drd.SlopeScaledDepthBias = 0.0f;
+    Insert(RasterizerTypes::Base_3D, dv, drd);
+
+    drd.MultisampleEnable = drd.DepthClipEnable = true;
+    Insert(RasterizerTypes::Skybox, dv, drd);
+
+    drd.CullMode = D3D11_CULL_NONE;
+    Insert(RasterizerTypes::Base_2D, dv, drd);
+
+    drd.FillMode = D3D11_FILL_WIREFRAME;
+    Insert(RasterizerTypes::Wireframe, dv, drd);
+
+
 }
 
+/*---------------------------------------------------RasterizerManager Insert()----------------------------------------------------*/
 
-void RasterizerManager::Add(std::string name, ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
+void RasterizerManager::Insert(RasterizerTypes type, ID3D11Device* dv, D3D11_RASTERIZER_DESC drd)
 {
-    std::shared_ptr<RASTERIZER>temp = std::make_shared<RASTERIZER>(dv, drd);
-    rasterizers.insert(std::make_pair(name, temp));
+    std::shared_ptr<Rasterizer>temp = std::make_shared<Rasterizer>(dv, drd);
+    rasterizers.insert(std::make_pair(type, temp));
 }
 
-std::shared_ptr<RASTERIZER>RasterizerManager::Retrieve(std::string name)
+/*---------------------------------------------------RasterizerManager Retrieve()---------------------------------------------------*/
+
+std::shared_ptr<Rasterizer>RasterizerManager::Retrieve(RasterizerTypes name)
 {
     return rasterizers.find(name)->second;
 }
 
-void RasterizerManager::Remove(std::string name)
+/*---------------------------------------------------RasterizerManager Remove()---------------------------------------------------*/
+
+void RasterizerManager::Remove(RasterizerTypes name)
 {
     rasterizers.erase(name);
 }
 
-std::map<std::string, std::shared_ptr<RASTERIZER>>RasterizerManager::Rasterizers()
+
+void RasterizerManager::Set(RasterizerTypes type)
+{
+    DirectX11::Instance()->DeviceContext()->RSSetState(rasterizers.find(type)->second->GetRasterizer().Get());
+}
+
+/*---------------------------------------------------RasterizerManager GetRasterizers()---------------------------------------------------*/
+
+std::map<RasterizerTypes, std::shared_ptr<Rasterizer>>RasterizerManager::GetRasterizers()
 {
     return rasterizers;
 }

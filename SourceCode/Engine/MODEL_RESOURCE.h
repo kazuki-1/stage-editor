@@ -425,8 +425,13 @@ public:
     std::vector<ANIMATION>Animations;
     //std::vector<NODE>Nodes;
     std::unordered_map<uint64_t, MATERIAL>Materials;
-    Vector2 scroll{};
-    bool performUVScroll{};
+
+
+
+
+
+
+    MESH_CONSTANT_BUFFER data;
 
     MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool Triangulate = true);
     void CreateBuffers(ID3D11Device* dv, const char* model_path);

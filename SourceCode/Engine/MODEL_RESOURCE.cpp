@@ -1,9 +1,9 @@
-#include "RASTERIZER.h"
+#include "Rasterizer.h"
 #include "MODEL_RESOURCE.h"
 #include <functional>
 #include <sstream>
 #include <filesystem>
-#include "SHADERS.h"
+#include "Shaders/Shader.h"
 #include "BlendMode.h"
 std::wstring texture_names[] = { L"Default_Diffuse", L"Default_Normal", L"Default_Diffuse" , L"Default_Diffuse" };
 
@@ -25,7 +25,7 @@ MODEL_RESOURCES::MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool 
     cereal::BinaryInputArchive in(ifs);
     in(Scenes, Axises, Meshes, Materials, Animations);
     CreateBuffers(dv, model_path.c_str());
-    InsertShader(L"PhongShader.fx");
+    InsertShader(ShaderTypes::PhongShader);
 
 }
 
@@ -164,40 +164,35 @@ void MODEL_RESOURCES::BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYF
 
 void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf)
 {
-    OUTLINE_CONSTANT_BUFFER outlineData{};
-    outlineData.outline_colour = { 1.0f, 1.0f, 1.0f, 1.0f };
-    outlineData.outline_size = 0.01f;
-    dc->RSSetState(RasterizerManager::Instance()->Retrieve("3D")->Rasterizer().Get());
+    //OUTLINE_CONSTANT_BUFFER outlineData{};
+    //outlineData.outline_colour = { 1.0f, 1.0f, 1.0f, 1.0f };
+    //outlineData.outline_size = 0.01f;
+    //dc->RSSetState(RasterizerManager::Instance()->Retrieve(RasterizerTypes::Base_3D)->GetRasterizer().Get());
 
-    if (performUVScroll)
+    //if (performUVScroll)
+    //{
+    //    scroll += {1.0f, 1.0f};
+    //    UVSCROLL_CONSTANT_BUFFER data{};
+    //    data.scrollVal = scroll;
+    //    dc->UpdateSubresource(uvScrollConstantBuffer.Get(), 0, 0, &data, 0, 0);
+    //    
+    //}
+
+
+    for (auto& shader : shaders)
     {
-        scroll += {1.0f, 1.0f};
-        UVSCROLL_CONSTANT_BUFFER data{};
-        data.scrollVal = scroll;
-        dc->UpdateSubresource(uvScrollConstantBuffer.Get(), 0, 0, &data, 0, 0);
-        
-    }
-
-
-    for (auto& s : shaders)
-    {
-        if (s.first == L"OutlineShader.fx")
-            continue;
         for (auto& m : Meshes)
         {
-            dc->RSSetState(RasterizerManager::Instance()->Retrieve("3D")->Rasterizer().Get());
+
+            RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
             dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xFFFFFFFF);
-            s.second->SetShaders(dc);
+            BlendStateManager::Instance()->Set(BlendModes::Alpha);
+            shader.second->SetShaders(dc, this);
             // Updating Object Constant buffers (World and colour)
-            MESH_CONSTANT_BUFFER data{};
-            //const ANIMATION::KEYFRAME::NODE& n{ kf->Nodes.at(0) };
-            //XMMATRIX f_World{ XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world) };
+            //MESH_CONSTANT_BUFFER data{};
             XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
 
             data.colour = colour;               // Incase model has no subsets
-            //ANIMATION::KEYFRAME::NODE node{ kf->Nodes.at(m.n_Index) };
-            //XMStoreFloat4x4(&data.world, XMLoadFloat4x4(&node.g_Transform) * f_World);
 
             const size_t b_Count{ m.Bind_Pose.Bones.size() };
             for (size_t b_Index = 0; b_Index < b_Count; ++b_Index)
@@ -212,13 +207,7 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                     * XMLoadFloat4x4(&bNode.g_Transform)
                     * XMMatrixInverse(nullptr, XMLoadFloat4x4(&m.BaseTransform)));
 
-
-                //XMStoreFloat4x4(&data.b_Transform[b_Index],
-                //    XMLoadFloat4x4(&b.o_Transform) 
-                //    * XMMatrixInverse(nullptr, XMLoadFloat4x4(&m.BaseTransform))
-                //);
             }
-
 
             for (const auto& s : m.Subsets)
             {
@@ -230,8 +219,8 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                 //ms.Textures[0]->SetTexture(dc);
                 XMStoreFloat4(&data.colour, XMLoadFloat4(&colour) * XMLoadFloat4(&ms.Kd));
                 dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
-                dc->UpdateSubresource(outlineConstantBuffer.Get(), 0, 0, &outlineData, 0, 0);
-                
+                shader.second->UpdateConstantBuffer(dc, this);
+
                 std::vector<ID3D11ShaderResourceView*>ts;
                 for (int a = 0; a < 4; ++a)
                 {
@@ -246,9 +235,8 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                     dc->PSSetShaderResources(ind, 1, t->GetSRV().GetAddressOf());
                     ++ind;
                 }
-                ID3D11Buffer* buffers[] = { meshConstantBuffer.Get(), outlineConstantBuffer.Get(), uvScrollConstantBuffer.Get()};
-                dc->VSSetConstantBuffers(1, ARRAYSIZE(buffers), buffers);
-                dc->PSSetConstantBuffers(1, ARRAYSIZE(buffers), buffers);
+
+                shader.second->SetConstantBuffers(dc);
                 dc->DrawIndexed((UINT)(s.indices.size()), 0, 0);
             }
         }

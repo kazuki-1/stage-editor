@@ -96,24 +96,11 @@ cbuffer CBUFFER_M : register(b1)
     float4 colour;
 
 }
-cbuffer CBUFFER_OUTLINE : register(b2)
-{
-    float4 outline_colour;
-    float outline_size;
-    float3 placeholder0;
-}
-cbuffer CBUFFER_UVSCROLL : register(b3)
-{
-    float2 scrollVal;
-    float2 placeholder1;
-}
 
 
 VS_OUT VS_MAIN(VS_IN vin)
 {
     VS_OUT vout;
-    //float sigma = vin.tangent.w;
-    //vin.tangent.w = 0;
 
     float4 n_Pos = { 0,0, 0, 1.0f };
     float4 n_Normal = { 0, 0, 0, 0 };
@@ -129,11 +116,9 @@ VS_OUT VS_MAIN(VS_IN vin)
     vout.position = mul(vout.world_position, view_proj);
     vout.tangent = mul(float4(n_Tangent.xyz, 0.0f), world).xyz;
     vout.normal = mul(float4(n_Normal.xyz, 0.0f), world).xyz;
-    //vout.tangent = mul(float4(vout.tangent.xyz, 0.0f), view_proj).xyz;
-    //vout.normal = mul(float4(vout.normal.xyz, 0.0f), view_proj).xyz;
     vout.tangent = normalize(vout.tangent).xyz;
     vout.normal = normalize(vout.normal).xyz;
-    vout.uv = vin.uv + scrollVal;
+    vout.uv = vin.uv;
     vout.colour = colour;
     vout.binormal = cross(vout.tangent, vout.normal);
     return vout;
@@ -187,7 +172,6 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
     for (int b = 0; b < sLightCount; ++b)
     {
         float3 lightVector = pin.world_position.xyz - spotlights[b].position;
-        //lightVector *= -1;
         float lightLength = length(lightVector);
         if (lightLength > spotlights[b].range)
             continue;
@@ -209,7 +193,6 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
     float4 colour = float4(ambient, diffuseColour.a);
     colour.rgb += diffuseColour.rgb * (DirectionalDiffuse + PointDiffuse + SpotDiffuse);
     colour.rgb += DirectionalSpecular + PointSpecular + SpotSpecular;
-    //colour.rgb += CalculateRimLighting(N, E, L, directional.colour.rgb);
     return colour;
 
 }

@@ -1,7 +1,8 @@
 #include "DEBUG_PRIMITIVE.h"
 #include "MODEL.h"
-#include "SHADERS.h"
-#include "RASTERIZER.h"
+#include "Shaders/Shader.h"
+#include "Rasterizer.h"
+#include "SamplerStateManager.h"
 //#include "OBJECT.h"
 #pragma region DEBUG_PRIMITIVE
 
@@ -105,13 +106,13 @@ void DEBUG_ARROWS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    yAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    zAxis->Resource()->InsertShader(L"Base3DShader.fx");
+    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
 
-    xAxis->Resource()->RemoveShader(L"PhongShader.fx");
-    yAxis->Resource()->RemoveShader(L"PhongShader.fx");
-    zAxis->Resource()->RemoveShader(L"PhongShader.fx");
+    xAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
+    yAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
+    zAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
 
 
 
@@ -199,9 +200,9 @@ void DEBUG_SCALARS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    yAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    zAxis->Resource()->InsertShader(L"Base3DShader.fx");
+    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
 
 }
 void DEBUG_SCALARS::Execute()
@@ -301,9 +302,9 @@ void DEBUG_DISCS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    yAxis->Resource()->InsertShader(L"Base3DShader.fx");
-    zAxis->Resource()->InsertShader(L"Base3DShader.fx");
+    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
 
 }
 void DEBUG_DISCS::Execute()
@@ -402,7 +403,7 @@ HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
+    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D).get();
 
     return hr;
 
@@ -419,9 +420,10 @@ void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
 void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-    shader->SetShaders(dc);
+    shader->SetShaders(dc, nullptr);
+
     dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-    dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xFFFFFFFF);
+    BlendStateManager::Instance()->Set(BlendModes::Alpha);
     CBUFFER_M data;
     data.colour = colour;
     Vector4 q{};
@@ -486,7 +488,7 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
+    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D).get();
 
 
 

@@ -2,7 +2,6 @@
 #include "Input.h"
 #include "DEBUG_PRIMITIVE.h"
 #include "IMGUI.h"
-std::shared_ptr<Sphere_Debug>s;
 
 using namespace DirectX;
 void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
@@ -13,7 +12,6 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
     XMVECTOR UP{ 0.0f, 1.0f, 0.0f, 0.0f };
     viewMatrix = XMMatrixLookAtLH(Eye.XMV(), target.XMV(), UP);
 
-    s = std::make_shared<Sphere_Debug>();
     
 
 
@@ -98,8 +96,6 @@ void Camera::Execute()
     Eye.z = target.z + (f.z * -range);
     
     SetLookAt();
-    s->SetPosition(target);
-    s->Execute();
 
     if (reset)
     {

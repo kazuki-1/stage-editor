@@ -1,4 +1,4 @@
-#include "RASTERIZER.h"
+#include "Rasterizer.h"
 #include "Sprite.h"
 #include "BlendMode.h"
 SPRITE::SPRITE(const wchar_t* img_path)
@@ -61,7 +61,7 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
     // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
-    InsertShader(L"Shader_2d.fx");
+    InsertShader(ShaderTypes::Shader_2D);
 
 
 
@@ -127,7 +127,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 
     // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
-    InsertShader(L"Shader_2d.fx");
+    InsertShader(ShaderTypes::Shader_2D);
 
 
 
@@ -139,7 +139,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSize, Vector2 pivot, Vector4 colour, float angle)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
-    dc->RSSetState(RasterizerManager::Instance()->Retrieve("2D")->Rasterizer().Get());
+    dc->RSSetState(RasterizerManager::Instance()->Retrieve(RasterizerTypes::Base_3D)->GetRasterizer().Get());
 
     D3D11_TEXTURE2D_DESC t2d{};
     texture->QueryTextureDesc(&t2d);
@@ -212,8 +212,10 @@ void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSiz
     for (auto& s : shaders)
     {
         
-        s.second->SetShaders(dc);
-        dc->OMSetBlendState(BlendModeManager::Instance()->Get().Get(), 0, 0xffffffff);
+        s.second->SetShaders(dc, this);
+        s.second->UpdateConstantBuffer(dc, this);
+        s.second->SetConstantBuffers(dc);
+        BlendStateManager::Instance()->Set(BlendModes::Alpha);
         dc->IASetVertexBuffers(0, 1, dxVertexBuffer.GetAddressOf(), &stride, &offset);
         dc->IASetIndexBuffer(dxIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
         dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

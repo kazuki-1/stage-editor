@@ -12,24 +12,27 @@ using namespace DirectX;
 
 
 
-class Graphics
+class Graphics 
 {
     Microsoft::WRL::ComPtr<ID3D11Buffer>dxSceneConstantBuffer;
     bool Render();
 public:
-    Graphics() {}
+    Graphics() {};
     static Graphics* Instance()
     {
         static Graphics g;
         return &g;
     }
+
+
+
     struct SCENE_CONSTANT_DATA
     {
         // View Projection
         XMFLOAT4X4 view_proj{};
         // Camera Position
-        XMFLOAT4 camera_position{};
-        XMFLOAT4 ambientLightColour;
+        Vector4 camera_position{};
+        Vector4 ambientLightColour;
         // Light Data
         DLIGHT_DATA directional;
         PLIGHT_DATA pointlights[PLIGHT_MAX];
@@ -38,7 +41,7 @@ public:
         int sLightCount{};
         Vector2 temp;
     };
-    
+    SCENE_CONSTANT_DATA scene_data;
     HRESULT Initialize(int Width, int Height, HWND hwnd);
     bool Frame();
     void Finalize();

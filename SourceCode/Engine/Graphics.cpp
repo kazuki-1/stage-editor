@@ -10,6 +10,7 @@
 #include "IMGUI.h"
 #include "Audio.h"
 #include "Text.h"
+#include "Shaders/Shader.h"
 #include "../GUI.h"
 #include "../Scenes/SCENEMANAGER.h"
 #include "DEBUG_MANAGER.h"
@@ -38,7 +39,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     ShaderManager::Instance()->Initialize();
 
     // Create a default blend mode for use
-    BlendModeManager::Instance()->Create(BlendModeManager::BLEND_MODE::ALPHA, DirectX11::Instance()->Device());
+    BlendStateManager::Instance()->Initialize();
 
     // Initializes anything needed by XAudio2
     AudioEngine::Instance()->Initialize();
@@ -118,41 +119,41 @@ bool Graphics::Render()
     Camera::Instance()->Execute();
 
     // Scene Constant buffer update (Camera Settings and Light Directions)
-    SCENE_CONSTANT_DATA data;
+    //SCENE_CONSTANT_DATA data;
     XMMATRIX v{ Camera::Instance()->ViewMatrix() }, pr{ DirectX11::Instance()->ProjectionMatrix() };
-    DirectX::XMStoreFloat4x4(&data.view_proj, v * pr);
+    DirectX::XMStoreFloat4x4(&scene_data.view_proj, v * pr);
 
 
     // Camera Position
-    data.camera_position.x = Camera::Instance()->EyePosition().x;
-    data.camera_position.y = Camera::Instance()->EyePosition().y;
-    data.camera_position.z = Camera::Instance()->EyePosition().z;
-    data.camera_position.w = 1;
-    data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
+    scene_data.camera_position.x = Camera::Instance()->EyePosition().x;
+    scene_data.camera_position.y = Camera::Instance()->EyePosition().y;
+    scene_data.camera_position.z = Camera::Instance()->EyePosition().z;
+    scene_data.camera_position.w = 1;
+    scene_data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
 
     // Write lighting properties into the constant buffer
-    LightingManager::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&data.directional);
+    LightingManager::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
     int p_LightCount{}, s_LightCount{};
     for (auto& d : LightingManager::Instance()->Dataset())
     {
         switch (d.second->Type())
         {
         case LIGHTING::L_TYPE::DIRECTIONAL:
-            d.second->WriteBuffer<DLIGHT_DATA>(&data.directional);
+            d.second->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
             break;
         case LIGHTING::L_TYPE::POINT:
-            d.second->WriteBuffer<PLIGHT_DATA>(&data.pointlights[p_LightCount]);
-            ++data.pLightCount;
+            d.second->WriteBuffer<PLIGHT_DATA>(&scene_data.pointlights[p_LightCount]);
+            ++scene_data.pLightCount;
             break;
         case LIGHTING::L_TYPE::SPOT:
-            d.second->WriteBuffer<SLIGHT_DATA>(&data.spotlights[p_LightCount]);
-            ++data.sLightCount;
+            d.second->WriteBuffer<SLIGHT_DATA>(&scene_data.spotlights[p_LightCount]);
+            ++scene_data.sLightCount;
             break;
         }
     }
 
     // Updates the constant buffer and uploads it
-    dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &data, 0, 0);
+    dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &scene_data, 0, 0);
     dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
 

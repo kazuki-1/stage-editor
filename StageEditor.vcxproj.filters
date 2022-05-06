@@ -159,6 +159,21 @@
     <Filter Include="Engine\Math">
       <UniqueIdentifier>{d0e1859b-c692-44da-ad1e-1b3bbcb4b550}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders">
+      <UniqueIdentifier>{b26534f5-9d5c-48ad-8deb-fca3b2a5ea2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\Skybox">
+      <UniqueIdentifier>{3125e65a-c9e2-4074-8dc5-d5e3b4b5146a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Sampler">
+      <UniqueIdentifier>{f4a7f6a2-35df-4b7f-a39c-785e2d8258d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\Phong Shader">
+      <UniqueIdentifier>{8cf2960a-415d-49c6-b3c8-f04bf6d35cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\Base">
+      <UniqueIdentifier>{36f241ee-ceb0-4553-a6ce-da5fd3f2cb86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -272,7 +287,7 @@
     <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp">
       <Filter>Engine\Model</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp">
+    <ClCompile Include="SourceCode\Engine\Rasterizer.cpp">
       <Filter>Engine\Rasterizer Manager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\TextureManager.cpp">
@@ -280,9 +295,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
       <Filter>Engine\Resource Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\SHADERS.cpp">
-      <Filter>Engine\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Sprite.cpp">
       <Filter>Engine\Sprite</Filter>
@@ -370,6 +382,18 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Math.cpp">
       <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp">
+      <Filter>Engine\Shaders\Individual shaders\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\SamplerStateManager.cpp">
+      <Filter>Engine\Sampler</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\Shader.cpp">
+      <Filter>Engine\Shaders\Individual shaders\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\PhongShader.cpp">
+      <Filter>Engine\Shaders\Individual shaders\Phong Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,7 +547,7 @@
     <ClInclude Include="SourceCode\Engine\MODEL_RESOURCE.h">
       <Filter>Engine\Model</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Engine\RASTERIZER.h">
+    <ClInclude Include="SourceCode\Engine\Rasterizer.h">
       <Filter>Engine\Rasterizer Manager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\TextureManager.h">
@@ -531,9 +555,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\ResourceManager.h">
       <Filter>Engine\Resource Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\SHADERS.h">
-      <Filter>Engine\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Sprite.h">
       <Filter>Engine\Sprite</Filter>
@@ -619,12 +640,24 @@
     <ClInclude Include="SourceCode\Engine\Math.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h">
+      <Filter>Engine\Shaders\Individual shaders\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\SamplerStateManager.h">
+      <Filter>Engine\Sampler</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\PhongShader.h">
+      <Filter>Engine\Shaders\Individual shaders\Phong Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\Shader.h">
+      <Filter>Engine\Shaders\Individual shaders\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Shader_2d.fx">
+    <None Include="Shaders\Shader_2D.fx">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Shader_3d.fx">
@@ -637,6 +670,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\OutlineShader.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SkyboxShader.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

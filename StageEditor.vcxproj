@@ -73,9 +73,12 @@
     <ClCompile Include="SourceCode\Engine\Math.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp" />
-    <ClCompile Include="SourceCode\Engine\RASTERIZER.cpp" />
+    <ClCompile Include="SourceCode\Engine\Rasterizer.cpp" />
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp" />
-    <ClCompile Include="SourceCode\Engine\SHADERS.cpp" />
+    <ClCompile Include="SourceCode\Engine\SamplerStateManager.cpp" />
+    <ClCompile Include="SourceCode\Engine\Shaders\PhongShader.cpp" />
+    <ClCompile Include="SourceCode\Engine\Shaders\Shader.cpp" />
+    <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp" />
     <ClCompile Include="SourceCode\Engine\Sprite.cpp" />
     <ClCompile Include="SourceCode\Engine\System.cpp" />
     <ClCompile Include="SourceCode\Engine\Text.cpp" />
@@ -152,9 +155,12 @@
     <ClInclude Include="SourceCode\Engine\MODEL_RESOURCE.h" />
     <ClInclude Include="SourceCode\Engine\OBJECT.h" />
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h" />
-    <ClInclude Include="SourceCode\Engine\RASTERIZER.h" />
+    <ClInclude Include="SourceCode\Engine\Rasterizer.h" />
     <ClInclude Include="SourceCode\Engine\ResourceManager.h" />
-    <ClInclude Include="SourceCode\Engine\SHADERS.h" />
+    <ClInclude Include="SourceCode\Engine\SamplerStateManager.h" />
+    <ClInclude Include="SourceCode\Engine\Shaders\PhongShader.h" />
+    <ClInclude Include="SourceCode\Engine\Shaders\Shader.h" />
+    <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
@@ -178,7 +184,7 @@
     <None Include="Shaders\PhongShader.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\Shader_2d.fx">
+    <None Include="Shaders\Shader_2D.fx">
       <FileType>Document</FileType>
     </None>
     <None Include="Shaders\Shader_3d.fx">
@@ -197,6 +203,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\OutlineShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SkyboxShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

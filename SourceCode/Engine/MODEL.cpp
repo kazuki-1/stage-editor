@@ -1,5 +1,5 @@
 #include "MODEL.h"
-#include "RASTERIZER.h"
+#include "Rasterizer.h"
 
 /*----------------------------------------------------------------------------------------------*/
 /*--------------------------------MODEL Class---------------------------------------------------*/
@@ -129,7 +129,7 @@ void MODEL::RenderWireframe(Vector4 colour)
     Vector3 old_scale{ scale };
     SetScale(scale * 1.01f);
     UpdateTransform();
-    DirectX11::Instance()->DeviceContext()->RSSetState(RasterizerManager::Instance()->Retrieve("Wireframe")->Rasterizer().Get());
+    DirectX11::Instance()->DeviceContext()->RSSetState(RasterizerManager::Instance()->Retrieve(RasterizerTypes::Wireframe)->GetRasterizer().Get());
     Render(0.0f, colour.XMF4());
     SetScale(old_scale);
 
@@ -376,12 +376,12 @@ void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
 
 void MODEL::PerformUVScrolling()
 {
-    resource->performUVScroll = true;
+    //resource->performUVScroll = true;
 }
 
 /*--------------------------------MODEL StopUVScrolling()--------------------------------------------*/
 
 void MODEL::StopUVScrolling()
 {
-    resource->performUVScroll = false;
+    //resource->performUVScroll = false;
 }

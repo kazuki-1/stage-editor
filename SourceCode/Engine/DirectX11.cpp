@@ -1,7 +1,8 @@
 #include "DirectX11.h"
 #include "IMGUI.h"
 #include <string>
-#include "RASTERIZER.h"
+#include "Rasterizer.h"
+#include "SamplerStateManager.h"
 
 DirectX11::~DirectX11()
 {
@@ -137,32 +138,11 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     dxDeviceContext->OMSetRenderTargets(1, dxRenderTargetView.GetAddressOf(), dxDepthStencilView.Get());
 
 
-    // D3D11 Rasterizer Desc
-    D3D11_RASTERIZER_DESC drd{};
-    drd.AntialiasedLineEnable = false;
-    drd.CullMode = D3D11_CULL_BACK;
-    drd.DepthBias = 0;
-    drd.DepthBiasClamp = 0.0f;
-    drd.DepthClipEnable = false;
-    drd.FillMode = D3D11_FILL_SOLID;
-    drd.FrontCounterClockwise = TRUE;
-    drd.MultisampleEnable = false;
-    drd.ScissorEnable = false;
-    drd.SlopeScaledDepthBias = 0.0f;
+    // Creates used rasterizers
+    RasterizerManager::Instance()->Initialize();
 
-    RasterizerManager::Instance()->Add("3D", dxDevice.Get(), drd);
-
-
-    drd.CullMode = D3D11_CULL_NONE;
-    RasterizerManager::Instance()->Add("2D", dxDevice.Get(), drd);
-
-    drd.FillMode = D3D11_FILL_WIREFRAME;
-    RasterizerManager::Instance()->Add("Wireframe", dxDevice.Get(), drd);
-    
-    // hr = dxDevice->CreateRasterizerState(&drd, dxRasterizerState.GetAddressOf());
-    // if (FAILED(hr))
-    //     assert(!"Rasterizer state creation failed!");
-
+    // Creates used samplerStates
+    SamplerStateManager::Instance()->Initialize();
 
     // Viewport
     D3D11_VIEWPORT vp{};

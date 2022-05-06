@@ -3,16 +3,15 @@
 //#include "OBJECT.h"
 #include <wrl.h>
 #include <d3d11.h>
-//#include "SHADERS.h"
+//#include "Shader.h"
 #include "Math.h"
 
 using namespace Microsoft::WRL;
 using namespace Math;
-class SHADERS;
+class Shader;
 class MODEL;
-class OBJECT;
 class DebugController;
-class DEBUG_PRIMITIVE
+class DEBUG_PRIMITIVE /*: public OBJECT*/
 {
 protected:
     std::shared_ptr<MODEL>model;
@@ -128,7 +127,7 @@ protected:
     };
     std::vector<VERTEX>vertices;
     std::vector<int>indices;
-    std::shared_ptr<SHADERS>shader;
+    Shader* shader;
     ComPtr<ID3D11Buffer>vertexBuffer;
     ComPtr<ID3D11Buffer>indexBuffer;
     ComPtr<ID3D11Buffer>meshConstantBuffer;
