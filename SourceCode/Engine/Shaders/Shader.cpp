@@ -70,7 +70,7 @@ void ShaderManager::Set(std::wstring shader_name)
     
 }
 
-HRESULT ShaderManager::Insert(ShaderTypes type, std::unique_ptr<Shader>shader)
+HRESULT ShaderManager::Insert(ShaderTypes type, std::shared_ptr<Shader>shader)
 {
     return S_OK;
     // std::shared_ptr<Shader>s = std::make_shared<Shader>(shader_path, DirectX11::Instance()->Device(), ied, ied_count);
@@ -140,7 +140,7 @@ void ShaderManager::Clear()
 {
     shaders.clear();
 }
-std::unique_ptr<Shader>&ShaderManager::Retrieve(ShaderTypes type)
+std::shared_ptr<Shader>ShaderManager::Retrieve(ShaderTypes type)
 {
     return shaders.find(type)->second;
 }

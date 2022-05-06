@@ -57,18 +57,18 @@ enum class ShaderTypes
 
 class ShaderManager : public Singleton<ShaderManager>
 {
-    std::map<ShaderTypes, std::unique_ptr<Shader>>shaders;
+    std::map<ShaderTypes, std::shared_ptr<Shader>>shaders;
 
 public:
 
     void Set(std::wstring shader_name);
     void Clear();
     HRESULT Initialize();
-    HRESULT Insert(ShaderTypes type, std::unique_ptr<Shader>s);
+    HRESULT Insert(ShaderTypes type, std::shared_ptr<Shader>s);
 
 
 
-    std::unique_ptr<Shader>&Retrieve(ShaderTypes type);
+    std::shared_ptr<Shader>Retrieve(ShaderTypes type);
     ~ShaderManager()
     {
         Clear();

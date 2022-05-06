@@ -14,7 +14,7 @@ class OBJECT
 {
 protected:
 
-    std::map<ShaderTypes, Shader*>shaders;
+    std::map<ShaderTypes, std::shared_ptr<Shader>>shaders;
     int* indices{};
     int indexCount{}, vertexCount{};
     virtual void Render(ID3D11DeviceContext* dc) {};
@@ -30,7 +30,7 @@ public:
     /// <returns></returns>
     HRESULT InsertShader(ShaderTypes type)
     {
-        shaders.emplace(type, ShaderManager::Instance()->Retrieve(type).get());
+        shaders.emplace(type, ShaderManager::Instance()->Retrieve(type));
         return S_OK;
     }
     /// <summary>
