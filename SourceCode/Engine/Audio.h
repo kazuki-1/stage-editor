@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <x3daudio.h>
 #include "Singleton.h"
 #include "AudioStates/AudioStates.h"
 
@@ -15,7 +16,7 @@ class AUDIO;
 /// </summary>
 class AudioEngine : public Singleton<AudioEngine>
 {
-
+    X3DAUDIO_LISTENER audioListener;
     ComPtr<IXAudio2>xAudio;
     IXAudio2MasteringVoice* masteringVoice{};
     //IXAudio2SourceVoice* SourceVoice;
@@ -58,7 +59,7 @@ protected:
     IXAudio2SourceVoice* sourceVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
-
+    X3DAUDIO_EMITTER audioEmitter;
 
     std::wstring file_path;
     bool isDucking{};

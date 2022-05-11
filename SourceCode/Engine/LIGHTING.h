@@ -153,7 +153,10 @@ public:
 
 	std::string Name(std::shared_ptr<LIGHTING>d);
 	std::shared_ptr<LIGHTING>Retrieve(std::string n);
-	std::map<std::string, std::shared_ptr<LIGHTING>>Dataset() { return dataset; }
+	std::map<std::string, std::shared_ptr<LIGHTING>>Dataset() 
+	{ 
+		return dataset; 
+	}
 
 
 	template <class T>

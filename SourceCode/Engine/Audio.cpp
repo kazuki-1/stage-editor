@@ -27,11 +27,19 @@
 /// <returns></returns>
 HRESULT AudioEngine::Initialize()
 {
-
+    
 
     HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
     assert(hr == S_OK);
     hr = XAudio2Create(xAudio.GetAddressOf(), 0, XAUDIO2_DEFAULT_PROCESSOR);
+    assert(hr == S_OK);
+
+
+    // DWORD dwChannelMask;
+    // masteringVoice->GetChannelMask(&dwChannelMask);
+    
+    X3DAUDIO_HANDLE x3d_handle;
+    //hr = X3DAudioInitialize(dwChannelMask, X3DAUDIO_SPEED_OF_SOUND, x3d_handle);
     assert(hr == S_OK);
 
     hr = xAudio->CreateMasteringVoice(&masteringVoice, XAUDIO2_DEFAULT_CHANNELS, 48000);

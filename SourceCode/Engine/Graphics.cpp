@@ -138,14 +138,17 @@ bool Graphics::Render()
             break;
         case LIGHTING::L_TYPE::POINT:
             d.second->WriteBuffer<PLIGHT_DATA>(&scene_data.pointlights[p_LightCount]);
-            ++scene_data.pLightCount;
+            ++p_LightCount;
             break;
         case LIGHTING::L_TYPE::SPOT:
             d.second->WriteBuffer<SLIGHT_DATA>(&scene_data.spotlights[p_LightCount]);
-            ++scene_data.sLightCount;
+            ++s_LightCount;
             break;
         }
     }
+    
+    scene_data.pLightCount = p_LightCount;
+    scene_data.sLightCount = s_LightCount;
 
     // Updates the constant buffer and uploads it
     dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &scene_data, 0, 0);
