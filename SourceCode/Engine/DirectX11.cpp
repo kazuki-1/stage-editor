@@ -3,7 +3,10 @@
 #include <string>
 #include "Rasterizer.h"
 #include "SamplerStateManager.h"
-
+#include "DepthStencilStateManager.h"
+#include "BlendMode.h"
+#include "Shaders/ShaderManager.h"
+#include "Audio.h"
 DirectX11::~DirectX11()
 {
 }
@@ -143,6 +146,19 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
 
     // Creates used samplerStates
     SamplerStateManager::Instance()->Initialize();
+
+    // Creates used DepthStencilStates
+    DepthStencilStateManager::Instance()->Initialize();
+
+    // Create used BlendModes
+    BlendStateManager::Instance()->Initialize();
+    
+    // Create used shaders
+    ShaderManager::Instance()->Initialize();
+    
+    // Initializes XAudio2 
+    AudioEngine::Instance()->Initialize();
+
 
     // Viewport
     D3D11_VIEWPORT vp{};

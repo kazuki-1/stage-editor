@@ -14,8 +14,8 @@ public:
 		XMFLOAT4X4 inverse_view;
 		XMFLOAT4X4 inverse_projection;
 	};
-	void Initialize();
-	void UpdateConstantBuffer(ID3D11DeviceContext* dc, OBJECT* parent) override;
+	HRESULT Initialize() override;
+	void UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent) override;
 	void SetShaders(ID3D11DeviceContext* dc, OBJECT* parent) override;
 	void SetConstantBuffers(ID3D11DeviceContext* dc) override;
 };

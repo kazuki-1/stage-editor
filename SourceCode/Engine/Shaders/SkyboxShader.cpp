@@ -1,5 +1,6 @@
 #include "SkyboxShader.h"
 #include "../SamplerStateManager.h"
+#include "../DepthStencilStateManager.h"
 #include "../Graphics.h"
 #include "../Camera.h"
 #include "../MODEL_RESOURCE.h"
@@ -8,7 +9,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------SkyboxShader Initialize()---------------------------------------------------------*/
 
-void SkyboxShader::Initialize()
+HRESULT SkyboxShader::Initialize()
 {
 
 
@@ -63,21 +64,29 @@ void SkyboxShader::Initialize()
     ps->Release();
 
 
+    D3D11_BUFFER_DESC cbd{};
+    cbd.ByteWidth = sizeof(CBuffer_Skybox);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    return dv->CreateBuffer(&cbd, 0, skyboxConstantBuffer.GetAddressOf());
+
 
 
 }
 
 /*---------------------------------------SkyboxShader UpdateConstantBuffer()---------------------------------------------------------------*/
 
-void SkyboxShader::UpdateConstantBuffer(ID3D11DeviceContext* dc, OBJECT* parent)
+void SkyboxShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
 {
     CBuffer_Skybox data{};
     XMMATRIX view = Camera::Instance()->ViewMatrix() ;
     XMMATRIX proj = DirectX11::Instance()->ProjectionMatrix() ;
 
     data.view_position = Graphics::Instance()->scene_data.camera_position;
-    XMStoreFloat4x4(&data.inverse_view, view);
-    XMStoreFloat4x4(&data.inverse_projection, proj);
+
+
+
+    XMStoreFloat4x4(&data.inverse_view, XMMatrixInverse(0, view));
+    XMStoreFloat4x4(&data.inverse_projection, XMMatrixInverse(0, proj));
     dc->UpdateSubresource(skyboxConstantBuffer.Get(), 0, 0, &data, 0, 0);
 
 
@@ -90,13 +99,14 @@ void SkyboxShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
     dc->VSSetShader(vertexShader.Get(), 0, 0);
     dc->PSSetShader(pixelShader.Get(), 0, 0);
     dc->IASetInputLayout(inputLayout.Get());
+    DepthStencilStateManager::Instance()->Set(DepthStencilStateTypes::Skybox);
     SamplerStateManager::Instance()->Set(SamplerStateType::Skybox);
 }
 
 
 void SkyboxShader::SetConstantBuffers(ID3D11DeviceContext* dc)
 {
-    dc->VSSetConstantBuffers(4, 1, skyboxConstantBuffer.GetAddressOf());
-    dc->PSSetConstantBuffers(4, 1, skyboxConstantBuffer.GetAddressOf());
+    dc->VSSetConstantBuffers(1, 1, skyboxConstantBuffer.GetAddressOf());
+    dc->PSSetConstantBuffers(1, 1, skyboxConstantBuffer.GetAddressOf());
 
 }

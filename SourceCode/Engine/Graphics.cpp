@@ -1,23 +1,16 @@
 #include <time.h>
 #include "Graphics.h"
 #include "DirectX11.h"
-#include "Sprite.h"
-#include "Model.h"
 #include "Input.h"
 #include "Camera.h"
-#include "BlendMode.h"
 #include "MODEL.h"
-#include "IMGUI.h"
 #include "Audio.h"
 #include "Text.h"
-#include "Shaders/Shader.h"
-#include "../GUI.h"
-#include "../Scenes/SCENEMANAGER.h"
 #include "DEBUG_MANAGER.h"
+#include "../Scenes/SCENEMANAGER.h"
 #include "../Components/Base Classes/ComponentCreator.h"
 using namespace DirectX;
 std::shared_ptr<MODEL>stage;
-
 HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 {
 
@@ -35,21 +28,24 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     if (FAILED(hr))
         assert(!"Failed to create constant buffer");
 
+
     // Perform shader initialization by inserting used shaders into the map
-    ShaderManager::Instance()->Initialize();
+    //ShaderManager::Instance()->Initialize();
 
     // Create a default blend mode for use
-    BlendStateManager::Instance()->Initialize();
 
     // Initializes anything needed by XAudio2
-    AudioEngine::Instance()->Initialize();
+    //AudioEngine::Instance()->Initialize();
 
     // Perform Camera Initialization 
     Camera::Instance()->Initialize({ 0, 0, 1 }, { 0, 0, 0 });
     Camera::Instance()->SetRange(10);
 
     // Perform initialization for the user interface
-    GUI::Instance()->Initialize();
+    //GUI::Instance()->Initialize();
+
+    // Initializes the DepthStencilStateManager by inserting used DSS into the map
+    //DepthStencilStateManager::Instance()->Initialize();
 
     // Insert a directional light into the map for preview
     std::shared_ptr<LIGHTING>data = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
@@ -71,8 +67,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     // Debug primitive initialization
     DebugController::Instance()->Initialize();
 
-
-
+    
 
     // Initializes the white board below
     stage = std::make_shared<MODEL>();
@@ -81,7 +76,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     stage->SetScale({ 20, 1, 20});
     stage->SetTranslation({ 0, -20, 0 });
 
-
+    
 
 
 
@@ -157,7 +152,6 @@ bool Graphics::Render()
     dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
 
-
     stage->Render(0.0f, { 1.0f, 1.0f, 1.0f, 0.7f });
 
 
@@ -177,5 +171,5 @@ bool Graphics::Render()
 
 void Graphics::Finalize()
 {
-    GUI::Instance()->Finalize();
+    //GUI::Instance()->Finalize();
 }

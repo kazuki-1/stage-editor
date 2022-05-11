@@ -40,36 +40,6 @@ void STAGE_UI::RenderUI()
     if (popupCheck)
     {
         ImGui::OpenPopup("Create GameObject");
-        //if (ImGui::BeginCombo("Create Gameobject", gameObjectTypes[0].c_str()))
-        //{
-        //    int index{};
-        //    for (auto& type : gameObjectTypes)
-        //    {
-        //        if (ImGui::Selectable(type.c_str()))
-        //        {
-        //            // Create new dataset
-        //            DataManager::Instance()->Insert(std::make_shared<OBJECT_DATA>("GameObject"));
-        //
-        //            // Creates 2D or 3D gameObject
-        //            if (!index)
-        //                GameObjectManager::Instance()->Insert(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
-        //            else
-        //                GameObjectManager::Instance()->Insert2D(DataManager::Instance()->Dataset().back()->Name(), DataManager::Instance()->Dataset().back());
-        //
-        //            popupCheck = false;
-        //            ImGui::EndPopup();
-        //        }
-        //
-        //        ++index;
-        //    }
-        //
-        //
-        //
-        //    ImGui::EndCombo();
-        //}
-        
-
-
         if (ImGui::BeginPopup("Create GameObject"))
         {
             ImGui::ListBoxHeader("GameObject Type");

@@ -1,12 +1,13 @@
-#include "PhongShader.h"
+#include "BaseShader3D.h"
 #include "../MODEL_RESOURCE.h"
-#include "../SamplerStateManager.h"
-/*-----------------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------PhongShader Class----------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------PhongShader Initialize()---------------------------------*/
 
-HRESULT PhongShader::Initialize()
+
+/*------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------BaseShader3D Class------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------BaseShader3D Initialize()-----------------------------------------------------*/
+
+HRESULT BaseShader3D::Initialize()
 {
     ID3D11Device* dv = DirectX11::Instance()->Device();
 
@@ -31,13 +32,13 @@ HRESULT PhongShader::Initialize()
     shaderFlags |= D3DCOMPILE_DEBUG;
 #endif
 
-    hr = D3DCompileFromFile(L"./Shaders/PhongShader.fx", NULL, NULL, "VS_MAIN", "vs_5_0", shaderFlags, NULL, &vs, &error);
+    hr = D3DCompileFromFile(L"./Shaders/BaseShader3D.fx", NULL, NULL, "VS_MAIN", "vs_5_0", shaderFlags, NULL, &vs, &error);
     if (FAILED(hr))
     {
         std::string er = (const char*)error->GetBufferPointer();
         assert(!er.c_str());
     }
-    hr = D3DCompileFromFile(L"./Shaders/PhongShader.fx", NULL, NULL, "PS_MAIN", "ps_5_0", shaderFlags, NULL, &ps, &error);
+    hr = D3DCompileFromFile(L"./Shaders/BaseShader3D.fx", NULL, NULL, "PS_MAIN", "ps_5_0", shaderFlags, NULL, &ps, &error);
     if (FAILED(hr))
     {
         std::string er = (const char*)error->GetBufferPointer();
@@ -67,37 +68,23 @@ HRESULT PhongShader::Initialize()
 
     return dv->CreateBuffer(&cbd, 0, meshConstantBuffer.GetAddressOf());
 
-
 }
 
+/*------------------------------------------------BaseShader3D UpdateConstantBuffers()--------------------------------------------*/
 
-
-
-/*--------------------------------------------------------------PhongShader SetShaders()---------------------------------*/
-
-//void PhongShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
-//{
-//    dc->VSSetShader(vertexShader.Get(), 0, 0);
-//    dc->PSSetShader(pixelShader.Get(), 0, 0);
-//    dc->IASetInputLayout(inputLayout.Get());
-//    SamplerStateManager::Instance()->Set(SamplerStateType::Default);
-//}
-
-/*--------------------------------------------------------------PhongShader UpdateConstantBuffer()---------------------------------*/
-
-void PhongShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
+void BaseShader3D::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
 {
     MODEL_RESOURCES* model = (MODEL_RESOURCES*)parent;
+    MODEL_RESOURCES::MESH_CONSTANT_BUFFER data = model->data;
+    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
 
-
-    MODEL_RESOURCES::MESH_CONSTANT_BUFFER *data = &model->data;
-    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, data, 0, 0);
 }
 
-/*--------------------------------------------------------------PhongShader SetConstantBuffers()---------------------------------*/
+/*------------------------------------------------BaseShader3D SetConstantBuffers()------------------------------------------------*/
 
-void PhongShader::SetConstantBuffers(ID3D11DeviceContext* dc)
+void BaseShader3D::SetConstantBuffers(ID3D11DeviceContext* dc)
 {
     dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
+
 }

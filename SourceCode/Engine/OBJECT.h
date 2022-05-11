@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "BlendMode.h"
 #include "Shaders/Shader.h"
+#include "Shaders/ShaderManager.h"
 using namespace Microsoft::WRL;
 using namespace DirectX;
 class OBJECT

@@ -100,13 +100,6 @@ cbuffer CBUFFER_M : register(b1)
     float4 colour;
 
 }
-cbuffer CBUFFER_OUTLINE : register(b2)
-{
-    float4 outline_colour;
-    float outline_size;
-    float3 placeholder;
-}
-
 
 
 VS_OUT VS_MAIN(VS_IN vin)
@@ -159,83 +152,83 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
 
     float4 diffuseColour = diffuseM.Sample(Sampler, pin.uv) * pin.colour;
     return diffuseColour;
-    float3 normal = normalM.Sample(Sampler, pin.uv);
-    normal.xyz = (normal.xyz - 0.5) * 2;
-    float3x3 CM = { normalize(pin.tangent), normalize(pin.binormal), normalize(pin.normal) };
-    float3 N = mul(normal, CM);
-    float3 L = normalize(-directional.direction.xyz);
-    float3 E = normalize(viewPosition.xyz - pin.world_position);
-    N = normalize(N);
+    //float3 normal = normalM.Sample(Sampler, pin.uv);
+    //normal.xyz = (normal.xyz - 0.5) * 2;
+    //float3x3 CM = { normalize(pin.tangent), normalize(pin.binormal), normalize(pin.normal) };
+    //float3 N = mul(normal, CM);
+    //float3 L = normalize(-directional.direction.xyz);
+    //float3 E = normalize(viewPosition.xyz - pin.world_position);
+    //N = normalize(N);
 
 
 
 
 
 
-    //float3 N = normalize(float4(pin.normal, 0.0f)).xyz;
-    float3 kd = { 1, 1, 1 };
-    float3 ks = { 1, 1, 1 };
-    float3 ka = { 1, 1, 1 };
-    float shineFactor = 128;
+    ////float3 N = normalize(float4(pin.normal, 0.0f)).xyz;
+    //float3 kd = { 1, 1, 1 };
+    //float3 ks = { 1, 1, 1 };
+    //float3 ka = { 1, 1, 1 };
+    //float shineFactor = 128;
 
-    float3 DirectionalSpecular = CalculatePhongSpecular(N, L, directional.colour.rgb, E, shineFactor, ks);
-    float3 DirectionalDiffuse = CalculateLambertDiffuse(N, L, directional.colour.rgb, kd);
-    float3 ambient = ka * ambientLightColour.rgb;
+    //float3 DirectionalSpecular = CalculatePhongSpecular(N, L, directional.colour.rgb, E, shineFactor, ks);
+    //float3 DirectionalDiffuse = CalculateLambertDiffuse(N, L, directional.colour.rgb, kd);
+    //float3 ambient = ka * ambientLightColour.rgb;
 
-    float3 PointDiffuse = float3(0, 0, 0);
-    float3 PointSpecular = float3(0, 0, 0);
-    //for (int a = 0; a < pLightCount; ++a)
-    //{
-    //    float3 lightVector = pin.world_position.xyz - pointlights[a].position;
-    //    lightVector *= -1;
-    //    float lightLength = length(lightVector);
-    //    if (lightLength > pointlights[a].range)
-    //        continue;
-    //    float weaken = max(0.0f, 1.0f - (lightLength / pointlights[a].range));
-    //    weaken = clamp(weaken, 0.0f, 1.0f);
-    //    weaken *= weaken;
-    //    float3 pl_Norm = normalize(lightVector);
-    //    PointDiffuse += CalculateLambertDiffuse(N, pl_Norm, pointlights[a].colour.rgb, kd.rgb) * weaken;
-    //    PointSpecular += CalculatePhongSpecular(N, pl_Norm, pointlights[a].colour.rgb, E, shineFactor, ks.rgb) * weaken;
-    //}
-
-
-
-
-
-    float3 SpotDiffuse = { 0, 0, 0 };
-    float3 SpotSpecular = { 0, 0, 0 };
-    //for (int b = 0; b < sLightCount; ++b)
-    //{
-    //    float3 lightVector = pin.world_position.xyz - spotlights[b].position;
-    //    //lightVector *= -1;
-    //    float lightLength = length(lightVector);
-    //    if (lightLength > spotlights[b].range)
-    //        continue;
-    //    float weaken = max(0.0f, 1.0f - (lightLength / spotlights[b].range));
-    //    weaken = clamp(weaken, 0.0f, 1.0f);
-
-
-    //    float3 normalizedLV = normalize(lightVector);
-    //    float angle = dot(normalizedLV, spotlights[b].direction);
-    //    float area = spotlights[b].innerCorner - spotlights[b].outerCorner;
-    //    float weakenAngle = clamp(1.0f - ((spotlights[b].innerCorner - angle) / area), 0.0f, 1.0f);
-    //    weaken *= weakenAngle;
-
-    //    SpotDiffuse += CalculateLambertDiffuse(N, -normalizedLV, spotlights[b].colour.rgb, kd.rgb) * weaken;
-    //    SpotSpecular += CalculatePhongSpecular(N, -normalizedLV, spotlights[b].colour.rgb, E, shineFactor, ks.rgb) * weaken;
-
-    //}
+    //float3 PointDiffuse = float3(0, 0, 0);
+    //float3 PointSpecular = float3(0, 0, 0);
+    ////for (int a = 0; a < pLightCount; ++a)
+    ////{
+    ////    float3 lightVector = pin.world_position.xyz - pointlights[a].position;
+    ////    lightVector *= -1;
+    ////    float lightLength = length(lightVector);
+    ////    if (lightLength > pointlights[a].range)
+    ////        continue;
+    ////    float weaken = max(0.0f, 1.0f - (lightLength / pointlights[a].range));
+    ////    weaken = clamp(weaken, 0.0f, 1.0f);
+    ////    weaken *= weaken;
+    ////    float3 pl_Norm = normalize(lightVector);
+    ////    PointDiffuse += CalculateLambertDiffuse(N, pl_Norm, pointlights[a].colour.rgb, kd.rgb) * weaken;
+    ////    PointSpecular += CalculatePhongSpecular(N, pl_Norm, pointlights[a].colour.rgb, E, shineFactor, ks.rgb) * weaken;
+    ////}
 
 
 
 
 
-    float4 colour = float4(ambient, diffuseColour.a);
-    colour.rgb += diffuseColour.rgb * (DirectionalDiffuse /*+ PointDiffuse + SpotDiffuse*/);
-    colour.rgb += DirectionalSpecular /*+ PointSpecular + SpotSpecular*/;
-    //colour.rgb += CalculateRimLighting(N, E, L, directional.colour.rgb);
-    return colour;
+    //float3 SpotDiffuse = { 0, 0, 0 };
+    //float3 SpotSpecular = { 0, 0, 0 };
+    ////for (int b = 0; b < sLightCount; ++b)
+    ////{
+    ////    float3 lightVector = pin.world_position.xyz - spotlights[b].position;
+    ////    //lightVector *= -1;
+    ////    float lightLength = length(lightVector);
+    ////    if (lightLength > spotlights[b].range)
+    ////        continue;
+    ////    float weaken = max(0.0f, 1.0f - (lightLength / spotlights[b].range));
+    ////    weaken = clamp(weaken, 0.0f, 1.0f);
+
+
+    ////    float3 normalizedLV = normalize(lightVector);
+    ////    float angle = dot(normalizedLV, spotlights[b].direction);
+    ////    float area = spotlights[b].innerCorner - spotlights[b].outerCorner;
+    ////    float weakenAngle = clamp(1.0f - ((spotlights[b].innerCorner - angle) / area), 0.0f, 1.0f);
+    ////    weaken *= weakenAngle;
+
+    ////    SpotDiffuse += CalculateLambertDiffuse(N, -normalizedLV, spotlights[b].colour.rgb, kd.rgb) * weaken;
+    ////    SpotSpecular += CalculatePhongSpecular(N, -normalizedLV, spotlights[b].colour.rgb, E, shineFactor, ks.rgb) * weaken;
+
+    ////}
+
+
+
+
+
+    //float4 colour = float4(ambient, diffuseColour.a);
+    //colour.rgb += diffuseColour.rgb * (DirectionalDiffuse /*+ PointDiffuse + SpotDiffuse*/);
+    //colour.rgb += DirectionalSpecular /*+ PointSpecular + SpotSpecular*/;
+    ////colour.rgb += CalculateRimLighting(N, E, L, directional.colour.rgb);
+    //return colour;
 
 }
 

@@ -8,9 +8,6 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{94fe8efc-3cf7-4809-817a-2c91146c183f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\SourceCode">
-      <UniqueIdentifier>{79b27989-1c68-4135-bffc-ded63594923b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Header">
       <UniqueIdentifier>{4844e07a-0d57-49b1-be67-d4f424ff3468}</UniqueIdentifier>
     </Filter>
@@ -171,8 +168,26 @@
     <Filter Include="Engine\Shaders\Individual shaders\Phong Shader">
       <UniqueIdentifier>{8cf2960a-415d-49c6-b3c8-f04bf6d35cb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Shaders\Individual shaders\Base">
+    <Filter Include="Engine\Shaders\Individual shaders\DebugShader3D">
+      <UniqueIdentifier>{f115379d-51b6-487f-8f0c-fff4e69a9c84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Base">
       <UniqueIdentifier>{36f241ee-ceb0-4553-a6ce-da5fd3f2cb86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Base\ShaderManager">
+      <UniqueIdentifier>{171af6d9-6cbb-443d-b9cd-98eaa097564e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\BaseShader3D">
+      <UniqueIdentifier>{d2203027-e922-44b3-a786-f43c0e7944b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\Shader2D">
+      <UniqueIdentifier>{13382f29-31ad-4890-be3a-e6f9f1988d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\OutlineShader 3D">
+      <UniqueIdentifier>{1e0f12ea-d81f-4ce1-92d0-b4e51241ef4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\DepthStencilState Manager">
+      <UniqueIdentifier>{5450fd59-0a7d-49cf-8f3e-1e7d70855ba7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -390,10 +405,28 @@
       <Filter>Engine\Sampler</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Shaders\Shader.cpp">
-      <Filter>Engine\Shaders\Individual shaders\Base</Filter>
+      <Filter>Engine\Shaders\Base</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Shaders\PhongShader.cpp">
       <Filter>Engine\Shaders\Individual shaders\Phong Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\DebugShader3D.cpp">
+      <Filter>Engine\Shaders\Individual shaders\DebugShader3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\BaseShader3D.cpp">
+      <Filter>Engine\Shaders\Individual shaders\BaseShader3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\Shader2D.cpp">
+      <Filter>Engine\Shaders\Individual shaders\Shader2D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\OutlineShader.cpp">
+      <Filter>Engine\Shaders\Individual shaders\OutlineShader 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\ShaderManager.cpp">
+      <Filter>Engine\Shaders\Base\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\DepthStencilStateManager.cpp">
+      <Filter>Engine\DepthStencilState Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -650,7 +683,25 @@
       <Filter>Engine\Shaders\Individual shaders\Phong Shader</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Shaders\Shader.h">
-      <Filter>Engine\Shaders\Individual shaders\Base</Filter>
+      <Filter>Engine\Shaders\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\DebugShader3D.h">
+      <Filter>Engine\Shaders\Individual shaders\DebugShader3D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\BaseShader3D.h">
+      <Filter>Engine\Shaders\Individual shaders\BaseShader3D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\Shader2D.h">
+      <Filter>Engine\Shaders\Individual shaders\Shader2D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\OutlineShader.h">
+      <Filter>Engine\Shaders\Individual shaders\OutlineShader 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\ShaderManager.h">
+      <Filter>Engine\Shaders\Base\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DepthStencilStateManager.h">
+      <Filter>Engine\DepthStencilState Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -660,10 +711,7 @@
     <None Include="Shaders\Shader_2D.fx">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Shader_3d.fx">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\Base3DShader.fx">
+    <None Include="Shaders\BaseShader3D.fx">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\DebugShader.fx">

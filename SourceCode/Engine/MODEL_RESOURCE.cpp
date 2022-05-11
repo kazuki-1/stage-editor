@@ -181,13 +181,15 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
 
     for (auto& shader : shaders)
     {
+        shader.second->SetShaders(dc, this);
+        shader.second->SetConstantBuffers(dc);
+
         for (auto& m : Meshes)
         {
 
-            RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
             dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+            RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
             BlendStateManager::Instance()->Set(BlendModes::Alpha);
-            shader.second->SetShaders(dc, this);
             // Updating Object Constant buffers (World and colour)
             //MESH_CONSTANT_BUFFER data{};
             XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
@@ -216,10 +218,8 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                 dc->IASetVertexBuffers(0, 1, m.dxVertexBuffer.GetAddressOf(), &stride, &offset);
 
                 MATERIAL& ms{ Materials.at(s.m_UID) };
-                //ms.Textures[0]->SetTexture(dc);
                 XMStoreFloat4(&data.colour, XMLoadFloat4(&colour) * XMLoadFloat4(&ms.Kd));
-                dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
-                shader.second->UpdateConstantBuffer(dc, this);
+                shader.second->UpdateConstantBuffers(dc, this);
 
                 std::vector<ID3D11ShaderResourceView*>ts;
                 for (int a = 0; a < 4; ++a)
@@ -236,7 +236,6 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                     ++ind;
                 }
 
-                shader.second->SetConstantBuffers(dc);
                 dc->DrawIndexed((UINT)(s.indices.size()), 0, 0);
             }
         }

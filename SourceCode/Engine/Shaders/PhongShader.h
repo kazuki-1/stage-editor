@@ -7,9 +7,9 @@ class PhongShader : public Shader
 
 	ComPtr<ID3D11Buffer>meshConstantBuffer;
 public:
-	PhongShader() { Initialize(); }
-	void Initialize();
-	void UpdateConstantBuffer(ID3D11DeviceContext* dc, OBJECT* parent);
+	PhongShader() {}
+	HRESULT Initialize() override;
+	void UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent) override;
 	void SetConstantBuffers(ID3D11DeviceContext* dc) override;
-	void SetShaders(ID3D11DeviceContext* dc, OBJECT* parent);
+	//void SetShaders(ID3D11DeviceContext* dc, OBJECT* parent) override;
 };

@@ -9,7 +9,7 @@
 #include "OBJECT.h"
 using namespace Microsoft::WRL;
 
-class SPRITE : protected OBJECT
+class SPRITE : public OBJECT
 {
     struct VERTEX
     {

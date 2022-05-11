@@ -55,13 +55,13 @@ cbuffer CBUFFER_M : register(b1)
     float4 colour;
 }
 
-cbuffer CBUFFER_OUTLINE : register(b2)
-{
-    float4 outline_colour;
-    float outline_size;
-    float3 placeholder;
-}
-
+//cbuffer CBUFFER_OUTLINE : register(b2)
+//{
+//    float4 outline_colour;
+//    float outline_size;
+//    float3 placeholder;
+//}
+//
  
 VS_OUT VS_MAIN(VS_IN vin)
 {

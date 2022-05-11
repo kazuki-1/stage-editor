@@ -13,7 +13,7 @@ struct VS_OUT
 };
 
 
-cbuffer CONST_BUFFER_SKYBOX :register (b4)
+cbuffer CONST_BUFFER_SKYBOX :register (b1)
 {
     float4 viewPosition;
     row_major float4x4 inverseView;

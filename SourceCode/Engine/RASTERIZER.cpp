@@ -41,11 +41,15 @@ void RasterizerManager::Initialize()
 
 
     D3D11_RASTERIZER_DESC drd{};
-    drd.FrontCounterClockwise = TRUE;
+    drd.AntialiasedLineEnable = false;
     drd.CullMode = D3D11_CULL_BACK;
     drd.DepthBias = 0;
     drd.DepthBiasClamp = 0.0f;
+    drd.DepthClipEnable = false;
     drd.FillMode = D3D11_FILL_SOLID;
+    drd.FrontCounterClockwise = TRUE;
+    drd.MultisampleEnable = false;
+    drd.ScissorEnable = false;
     drd.SlopeScaledDepthBias = 0.0f;
     Insert(RasterizerTypes::Base_3D, dv, drd);
 
