@@ -92,8 +92,8 @@ void AudioController::Execute()
 
 void AudioController::DebugUI()
 {
-    if (ImGui::Begin("Audio Test"))
-    {
+    ImGui::Begin("Audio Test");
+    //{
         int ind{};
         if (ImGui::BeginCombo("AudioStates", states[index].c_str()))
         {
@@ -128,7 +128,7 @@ void AudioController::DebugUI()
 
         play ? Resume() : Pause();
         ImGui::End();
-    }
+    //}
 
 }
 

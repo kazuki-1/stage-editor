@@ -1,6 +1,8 @@
 #pragma once
 #include "Base Classes/Component.h"
 
+#include <x3daudio.h>
+//class X3DAUDIO_EMITTER;
 class EnvironmentalAudio_Component;
 class Transform3D_Data;
 class Transform3D_Component;
@@ -77,7 +79,13 @@ public:
     /// </summary>
     void UI();
 
-    std::shared_ptr<BaseColliderComponent>Collider();
+    /// <summary>
+    /// Returns the collider objects from COLLISION.h, where collision detection is calculated
+    /// </summary>
+    /// <returns></returns>
+    //std::shared_ptr<BaseColliderComponent>Collider();
+    std::shared_ptr<COLLIDERS::COLLIDER_BASE>GetCollider();
+    std::shared_ptr<BaseColliderComponent>GetColliderComponent() { return collider; }
     std::shared_ptr<Transform3D_Component>Transform();
 
     LocalizedCollider_Data* Data();
@@ -109,12 +117,15 @@ class EnvironmentalAudio_Component : public BASE_AUDIO_COMPONENT
     // 便利さを優先するためコードベースコライダーではなくコンポネントベースのコライダーを使う
     std::vector < std::shared_ptr<LocalizedCollider_SubComponent>>colliders;
     EnvironmentalAudio_Data* data{};
+    X3DAUDIO_EMITTER emitter{};
+    AudioEmitter audioEmitter;
 
     /// <summary>
     /// <para> Creates a localized collider and insert it into the dataset </para>
     /// <para> LOCALIZED_COLLIDERを生成し、データセットに登録 </para>
     /// </summary>
     void CreateLocalizedCollider(COMPONENT_TYPE t);
+    void CalculateVolume();
     friend LocalizedCollider_SubComponent;
 public:
     EnvironmentalAudio_Component() {};

@@ -122,50 +122,50 @@ void PlayerController_Component::JumpInput()
 void PlayerController_Component::SoundCollision()
 {
     // Retrieve the components for use
-    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
-    {
-        // Attempt to retrieve existing EnvironmentalAudio_Component
-        EnvironmentalAudio_Component* audio = g.second->GetComponent<EnvironmentalAudio_Component>();
-        if (!audio)
-            continue;
+    //Transform3D_Component* transform = GetComponent<Transform3D_Component>();
+    //for (auto& g : GameObjectManager::Instance()->GetGameObjects())
+    //{
+    //    // Attempt to retrieve existing EnvironmentalAudio_Component
+    //    EnvironmentalAudio_Component* audio = g.second->GetComponent<EnvironmentalAudio_Component>();
+    //    if (!audio)
+    //        continue;
 
-        bool collided{};
-        for (auto& c : audio->Colliders())
-        {
-            collided = c->Collider()->Collide(transform->GetTranslation());
-            if (collided)
-            {
-                
-                if (!audio->Audio()->IsPlaying())
-                    audio->Audio()->Play();
+    //    bool collided{};
+    //    for (auto& c : audio->Colliders())
+    //    {
+    //        collided = c->Collider()->Collide(transform->GetTranslation());
+    //        if (collided)
+    //        {
+    //            
+    //            if (!audio->Audio()->IsPlaying())
+    //                audio->Audio()->Play();
 
-                // Calculate the distance between the player character and the sound source
-                Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
-                closest_dist -= transform->GetTranslation();
-                float length{ closest_dist.Length() };
-                length = max(c->Data()->minimum_distance, length);
+    //            // Calculate the distance between the player character and the sound source
+    //            Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
+    //            closest_dist -= transform->GetTranslation();
+    //            float length{ closest_dist.Length() };
+    //            length = max(c->Data()->minimum_distance, length);
 
-                // Adjusts the volume according to the distance
-                float volume = 1.0f - (length / c->Collider()->Collider()->Size());
-                volume = min(volume, audio->GetData()->maximum_volume);
+    //            // Adjusts the volume according to the distance
+    //            float volume = 1.0f - (length / c->Collider()->Collider()->Size());
+    //            volume = min(volume, audio->GetData()->maximum_volume);
 
-                // Audio ducking function
-                if (audio->Audio()->IsDucking())
-                    audio->Audio()->FadeTo(0.1f, 0.5f);
-                else
-                {
-                    audio->Audio()->SetVolume(volume);
-                    audio->Audio()->SourceVoice()->SetVolume(volume);
-                    collided = true;
-                }
-                break;
-            }
-            else
-                audio->Audio()->Stop();
+    //            // Audio ducking function
+    //            if (audio->Audio()->IsDucking())
+    //                audio->Audio()->FadeTo(0.1f, 0.5f);
+    //            else
+    //            {
+    //                audio->Audio()->SetVolume(volume);
+    //                audio->Audio()->SourceVoice()->SetVolume(volume);
+    //                collided = true;
+    //            }
+    //            break;
+    //        }
+    //        else
+    //            audio->Audio()->Stop();
 
-        }
-    }
+    //    }
+    //}
 }
 
 /*--------------------------------------------------------PlayerController_Component VelocityControl()-------------------------------------------------*/
@@ -181,6 +181,7 @@ void PlayerController_Component::VelocityControl()
 /// </summary>
 void PlayerController_Component::GravityControl()
 {
+    return;
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     Vector3 velocity = transform->GetVelocity();
     velocity.y -= 0.1f;
@@ -303,6 +304,10 @@ HRESULT PlayerController_Component::Initialize()
 /// </summary>
 void PlayerController_Component::Execute()
 {
+
+    //if (GetComponent<Mesh_Component>() == nullptr)
+    //    return;
+
     Vector3 position = GetComponent<Transform3D_Component>()->GetTranslation();
     position.y += 5.0f;
     Camera::Instance()->SetTarget(position);
@@ -310,7 +315,6 @@ void PlayerController_Component::Execute()
 
 
     JumpInput();
-    SoundCollision();
     GravityControl();
     GroundCollision();
     WallCollision();
@@ -369,6 +373,8 @@ void PlayerController_Component::AnimationSettings()
 {
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     Mesh_Component* mesh = GetComponent<Mesh_Component>();
+    if (!mesh)
+        return;
     Vector3 velocity = transform->GetVelocity();
     velocity.y = 0;
     if (velocity.Length() >= 0.05f)

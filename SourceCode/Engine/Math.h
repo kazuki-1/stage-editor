@@ -1,6 +1,8 @@
 #pragma once
 #include <DirectXMath.h>
 #include <memory>
+#include <Windows.h>
+#include <x3daudio.h>
 #include "CerealHeaders.h"
 using namespace DirectX;
 
@@ -148,7 +150,6 @@ namespace Math
             y = p.y;
             z = p.z;
         }
-
         void operator = (const Vector3& v);
         bool operator ==(const Vector3& v);
         bool operator !=(const Vector3& v);
@@ -208,6 +209,7 @@ namespace Math
         /// </summary>
         /// <returns></returns>
         XMVECTOR XMV();
+        X3DAUDIO_VECTOR X3DV();
         /// <summary>
         /// Static function. Returns the length of the Vector3
         /// </summary>

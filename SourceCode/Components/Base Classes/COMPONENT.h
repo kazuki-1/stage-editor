@@ -117,6 +117,7 @@ public:
     virtual bool Collide(GameObject* target) { return false; };
     virtual bool Collide(Vector3 p) { return false; }
     virtual void Execute(XMMATRIX transform) {};
+    virtual Vector3 GetClosestPoint(Vector3 target) { return Vector3(); }
     virtual Vector3 DistanceToPlayer(PlayerController_Component* target) { return {}; }
 };
 

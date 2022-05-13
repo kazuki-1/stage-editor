@@ -101,6 +101,7 @@ public:
     /// </summary>
     /// <returns></returns>
     CapsuleCollider_Data* Data();
+    Vector3 GetClosestPoint(Vector3 target) override;
     COMPONENT_TYPE GetComponentType() override;
     std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider();
 

@@ -21,6 +21,7 @@ class SceneManager : public Singleton<SceneManager>
     std::map<ScenesEnum, std::shared_ptr<Scene>>scenes;
     std::shared_ptr<Scene> cur_Scene;
     ScenesEnum current_Enum;
+    bool isPaused{ true };
 public:
     /// <summary>
     /// Initializes the scene manager by inserting neccessary scenes into the map
@@ -74,5 +75,10 @@ public:
     /// </summary>
     /// <returns></returns>
     ScenesEnum CurrentSceneEnum();
+    /// <summary>
+    /// Returns true if scene is paused
+    /// </summary>
+    /// <returns></returns>
+    bool PauseState();
 
 };

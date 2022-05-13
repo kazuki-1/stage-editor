@@ -69,7 +69,7 @@ void SceneManager::Play()
     // Changes the scene if in UI
     if (current_Enum == ScenesEnum::Scene_UI)
         ChangeScene(ScenesEnum::Scene_Demo);
-
+    isPaused = false;
     // Resumes the scene if demo scene is paused
     if (current_Enum == ScenesEnum::Scene_Demo && ((SceneDemo*)cur_Scene.get())->GetState() == false)
     {
@@ -84,7 +84,10 @@ void SceneManager::Play()
 void SceneManager::Pause()
 {
     if (current_Enum == ScenesEnum::Scene_Demo && ((SceneDemo*)cur_Scene.get())->GetState() == true)
+    {
         ((SceneDemo*)cur_Scene.get())->Pause();
+        isPaused = true;
+    }
 }
 
 /*--------------------------------------------------SceneManager Stop()-------------------------------------*/
@@ -94,7 +97,10 @@ void SceneManager::Pause()
 void SceneManager::Stop()
 {
     if (current_Enum == ScenesEnum::Scene_Demo)
+    {
         ChangeScene(ScenesEnum::Scene_UI);
+        isPaused = true;
+    }
 }
 
 
@@ -115,5 +121,15 @@ std::shared_ptr<Scene>SceneManager::Retrieve(ScenesEnum name)
 ScenesEnum SceneManager::CurrentSceneEnum()
 {
     return current_Enum;
+}
+
+/*--------------------------------------------------SceneManager PauseState()-------------------------------------*/
+/// <summary>
+/// Returns true if scene is paused
+/// </summary>
+/// <returns></returns>
+bool SceneManager::PauseState()
+{
+    return isPaused;
 }
 

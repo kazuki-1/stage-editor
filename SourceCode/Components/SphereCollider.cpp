@@ -181,6 +181,7 @@ bool SphereCollider_Component::Collide(GameObject* target)
     }
     return false;
 }
+
 /// <summary>
 /// <para> Perform collision check based on coordinates </para>
 /// <para> À•W“_‚ğŠî‚Ã‚¢‚Ä“–‚½‚è”»’è‚ğŒvZ </para>
@@ -191,6 +192,12 @@ bool SphereCollider_Component::Collide(Vector3 p)
     return collider->Collide(p);
 }
 
+/*---------------------------------------SphereCollider_Component ClosestPoint()----------------------------------------------*/
+
+Vector3 SphereCollider_Component::GetClosestPoint(Vector3 target)
+{
+    return collider->Center();
+}
 /*---------------------------------------SphereCollider_Component Radius()----------------------------------------------*/
 
 float SphereCollider_Component::Radius()

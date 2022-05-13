@@ -1,28 +1,65 @@
 #pragma once
 #include <d3d11.h>
-#include <xaudio2.h>
 #include <wrl.h>
 #include <string>
 #include <memory>
 #include <map>
+#include <xaudio2.h>
 #include <x3daudio.h>
 #include "Singleton.h"
+#include "Math.h"
 #include "AudioStates/AudioStates.h"
-
+// Input channels used in 3d Audio
+#define MAX_OUTPUT_CHANNELS 8
+#define INPUT_CHANNELS 1
 using namespace Microsoft::WRL;
+
+
+
+
 class AUDIO;
+class AudioEmitter
+{
+public:
+    AudioEmitter() {};
+
+
+    Math::Vector3 position{};
+    Math::Vector3 velocity{};
+    Math::Vector3 vTopVector{};
+    Math::Vector3 vFrontVector{};
+    float minimum_distance{};
+    float size{};
+};
+class AudioListener
+{
+public:
+    AudioListener() {};
+
+
+    Math::Vector3 position{};
+    Math::Vector3 velocity{};
+    Math::Vector3 vTopVector{};
+    Math::Vector3 vFrontVector{};
+};
 /// <summary>
 /// Use this to create an AUDIO object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
 /// </summary>
 class AudioEngine : public Singleton<AudioEngine>
 {
-    X3DAUDIO_LISTENER audioListener;
     ComPtr<IXAudio2>xAudio;
     IXAudio2MasteringVoice* masteringVoice{};
-    //IXAudio2SourceVoice* SourceVoice;
+
+    // Parameters for 3DAudio calculations
+    X3DAUDIO_DSP_SETTINGS dspSettings;
+    X3DAUDIO_LISTENER* listener;
+    AudioListener* audioListener;
+    X3DAUDIO_HANDLE x3d_handle;
+    float matrixCoefficients[INPUT_CHANNELS * MAX_OUTPUT_CHANNELS];
+    int nChannels{};
+    friend class AUDIO;
     std::map<std::string, std::shared_ptr<AUDIO>>audios;
 
-    //WAVEFORMATEXTENSIBLE format;
 
 public:
     /// <summary>
@@ -51,6 +88,13 @@ public:
     std::shared_ptr<AUDIO>Retrieve(std::string name);
     std::map<std::string, std::shared_ptr<AUDIO>>Audios();
 
+    // Targets the listener
+    void SetListener(X3DAUDIO_LISTENER* l) { listener = l; }
+    void SetAudioListener(AudioListener* l) { audioListener = l; };
+
+
+    X3DAUDIO_LISTENER* GetListener() { return listener; }
+    AudioListener* GetAudioListener() { return audioListener; }
 };
 
 class AUDIO
@@ -59,7 +103,8 @@ protected:
     IXAudio2SourceVoice* sourceVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
-    X3DAUDIO_EMITTER audioEmitter;
+    X3DAUDIO_EMITTER* emitter{nullptr};
+    AudioEmitter* audioEmitter;
 
     std::wstring file_path;
     bool isDucking{};
@@ -69,6 +114,8 @@ protected:
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>stateMachine;
+
+    friend class AudioEngine;
 public:
 
     float volume{ 1.0f };
@@ -143,9 +190,21 @@ public:
     IXAudio2SourceVoice* SourceVoice();
     bool IsPlaying();
     bool IsDucking();
-    std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
-};
+    void RenderDebug();
+    /// <summary>
+    /// Call this to calculate the volume for each channels
+    /// </summary>
+    /// <param name="channel_num"> : Number of channels</param>
+    /// <returns></returns>
+    float* CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener);
 
+    std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
+
+    // Targets the emitter
+    void SetEmitter(X3DAUDIO_EMITTER* e) { 
+        emitter = e; }
+    void SetAudioEmitter(AudioEmitter* e) { audioEmitter = e; }
+};
 
 
 #ifdef _XBOX //Big-Endian

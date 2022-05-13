@@ -2,26 +2,38 @@
 #include "Input.h"
 #include "DEBUG_PRIMITIVE.h"
 #include "IMGUI.h"
-
 using namespace DirectX;
+
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------Camera Class--------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------Camera Initialize()-------------------------------------------------*/
+
 void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
 {
     
-    Eye = Default_Eye_Position;
+    cameraPosition = Default_Eye_Position;
     target = Target;
     XMVECTOR UP{ 0.0f, 1.0f, 0.0f, 0.0f };
-    viewMatrix = XMMatrixLookAtLH(Eye.XMV(), target.XMV(), UP);
+    viewMatrix = XMMatrixLookAtLH(cameraPosition.XMV(), target.XMV(), UP);
+
 
     
+    // X3DAUDIO_LISTENER initialization
+    listener.pCone = 0;
+
+    // Targets the Audiolistener to the camera
+    AudioEngine::Instance()->SetListener(&listener);
+    AudioEngine::Instance()->SetAudioListener(&audioListener);
 
 
 }
+
+/*-----------------------------------------------------------Camera Execute()-------------------------------------------------*/
+
 void Camera::Execute()
 {
-    
-    //VECTOR2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisY() };
-    //rotation.x += XMConvertToRadians(ax.y);
-    //rotation.y += XMConvertToRadians(ax.x);
+    // camera controls
     INPUTMANAGER* i = INPUTMANAGER::Instance();
     INPUTMANAGER::MOUSE* m = INPUTMANAGER::Instance()->Mouse().get();
     float wheel{};
@@ -33,6 +45,7 @@ void Camera::Execute()
     static Vector2 movement;
     Vector2 pos, pos2, drag_pos;
     static bool start{};
+
     if (i->AltKeys()->State().Held())
     {
         if (m->LButton().Triggered()) {
@@ -72,13 +85,15 @@ void Camera::Execute()
         }
     }
 
+
+    // Update the camera position 
     XMMATRIX temp{ XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
     Vector3 horizontol, vertical, forward;
     horizontol.Load(temp.r[0]);
     vertical.Load(temp.r[1]);
     horizontol.Normalize();
     vertical.Normalize();
-    forward = Eye - target;
+    forward = cameraPosition - target;
     forward.Normalize();
     target += horizontol * movement.x + vertical * movement.y ;
     //rotation.x = Math::Clamp(rotation.x, ToRadians(-89), ToRadians(89));
@@ -91,11 +106,26 @@ void Camera::Execute()
     XMStoreFloat3(&f, F);
 
     //XMFLOAT3 e;
-    Eye.x = target.x + (f.x * -range);
-    Eye.y = target.y + (f.y * range);
-    Eye.z = target.z + (f.z * -range);
+    cameraPosition.x = target.x + (f.x * -range);
+    cameraPosition.y = target.y + (f.y * range);
+    cameraPosition.z = target.z + (f.z * -range);
     
     SetLookAt();
+
+    // Updates X3DAUDIO_LISTENER
+    Vector3 last_pos{ listener.Position }, cur_pos{ cameraPosition };
+    Vector3 velocity = last_pos - cur_pos;
+    //cur_pos.x *= -1;
+    listener.Velocity = velocity.X3DV();
+    listener.Position = cur_pos.X3DV();
+    listener.OrientFront = forward.X3DV();
+    listener.OrientTop = vertical.X3DV();
+
+    audioListener.position = cur_pos;
+    audioListener.vFrontVector = forward;
+    audioListener.vTopVector = vertical;
+    audioListener.velocity = velocity;
+
 
     if (reset)
     {
@@ -112,8 +142,13 @@ void Camera::Execute()
 
 }
 
+/*-----------------------------------------------------------Camera Render()-------------------------------------------------*/
+
 void Camera::Render()
 {
+    ImGui::Begin("Listener");
+    ImGui::InputFloat3("Position", &listener.Position.x);
+    ImGui::End();
     //ImGui::Begin("Position");
     //ImGui::InputFloat3("Eye", &Eye.x);
     //ImGui::InputFloat3("Target", &target.x);
@@ -121,15 +156,109 @@ void Camera::Render()
     //s->Render();
 }
 
+/*-----------------------------------------------------------Camera ResetCamera()-------------------------------------------------*/
+
 void Camera::ResetCamera()
 {
     target = {};
-    Eye = {};
+    cameraPosition = {};
     rotation = {};
 }
+
+/*-----------------------------------------------------------Camera ResetToTarget()-------------------------------------------------*/
 
 void Camera::ResetToTarget(Vector3 t)
 {
     next_target = t;
     reset = true;
+}
+
+/*-----------------------------------------------------------Camera SetPosition()-------------------------------------------------*/
+
+void Camera::SetPosition(XMFLOAT3 pos)
+{
+    position = pos;
+}
+
+/*-----------------------------------------------------------Camera SetVelocity()-------------------------------------------------*/
+
+void Camera::SetVelocity(XMFLOAT3 vel)
+{
+    velocity = vel;
+}
+
+/*-----------------------------------------------------------Camera SetRotation()-------------------------------------------------*/
+
+void Camera::SetRotation(XMFLOAT3 rot)
+{
+    rotation = rot;
+}
+
+/*-----------------------------------------------------------Camera SetTarget()-------------------------------------------------*/
+
+void Camera::SetTarget(XMFLOAT3 t)
+{
+    target = t;
+}
+
+void Camera::SetTarget(Vector3 t)
+{
+    target = t;
+}
+
+/*-----------------------------------------------------------Camera SetLookAt()-------------------------------------------------*/
+
+void Camera::SetLookAt()
+{
+    Vector3 u{ 0, 1, 0 };
+    viewMatrix = XMMatrixLookAtLH(cameraPosition.XMV(), target.XMV(), u.XMV());
+}
+
+/*-----------------------------------------------------------Camera SetRange()-------------------------------------------------*/
+
+void Camera::SetRange(float r)
+{
+    range = r;
+}
+
+/*-----------------------------------------------------------Camera Range()-------------------------------------------------*/
+
+float Camera::Range()
+{
+    return range;
+}
+
+/*-----------------------------------------------------------Camera Position()-------------------------------------------------*/
+
+XMFLOAT3 Camera::Position()
+{
+    return position.XMF3();
+}
+
+/*-----------------------------------------------------------Camera Velocity()-------------------------------------------------*/
+
+XMFLOAT3 Camera::Velocity()
+{
+    return velocity.XMF3();
+}
+
+/*-----------------------------------------------------------Camera Rotation()-------------------------------------------------*/
+
+XMFLOAT3 Camera::Rotation()
+{
+    return rotation.XMF3();
+}
+
+/*-----------------------------------------------------------Camera EyePosition()-------------------------------------------------*/
+
+XMFLOAT3 Camera::EyePosition()
+{
+    return cameraPosition.XMF3();
+}
+
+/*-----------------------------------------------------------Camera ViewMatrix()-------------------------------------------------*/
+
+XMMATRIX Camera::ViewMatrix()
+{
+    return viewMatrix;
 }

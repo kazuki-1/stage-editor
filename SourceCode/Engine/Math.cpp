@@ -1,4 +1,5 @@
 #include "Math.h"
+
 using namespace Math;
 
 
@@ -504,6 +505,13 @@ XMVECTOR Vector3::XMV()
     XMFLOAT3 temp{ XMF3() };
 
     return XMLoadFloat3(&temp);
+}
+
+/*-------------------------------------------Vector3 X3DV()-----------------------------------------------------------*/
+
+X3DAUDIO_VECTOR Vector3::X3DV()
+{
+    return X3DAUDIO_VECTOR(x, y, z);
 }
 
 

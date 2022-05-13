@@ -74,6 +74,7 @@ public:
     /// </summary>
     /// <returns></returns>
     bool Collide(Vector3 p) override;
+    Vector3 GetClosestPoint(Vector3 target) override;
     float Radius();
     Vector3 Center();
     std::shared_ptr<COLLIDERS::COLLIDER_BASE>Collider() override;

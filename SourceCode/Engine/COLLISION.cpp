@@ -921,7 +921,7 @@ Vector3 OBB::Center()
 
 /*-----------------------------------------------------OBB Size()--------------------------------------------------------------*/\
 
-float OBB::Size()
+float OBB::GetSize()
 {
     Vector3 center{ Center() };
     return (points[0] - center).Length();
@@ -1136,7 +1136,7 @@ float CAPSULE::Radius()
 
 /*-----------------------------------------------------CAPSULE Size()--------------------------------------------------------------*/
 
-float CAPSULE::Size()
+float CAPSULE::GetSize()
 {
     return radius;
 }

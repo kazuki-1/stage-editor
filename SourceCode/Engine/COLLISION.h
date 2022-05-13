@@ -132,7 +132,7 @@ namespace COLLIDERS
         /// </summary>
         /// <returns></returns>
         XMMATRIX WorldMatrix() { return bone_World; }
-        virtual float Size() { return 0; };
+        virtual float GetSize() { return 0; };
     };
 
 
@@ -165,7 +165,7 @@ namespace COLLIDERS
         bool Collide(Vector3 p) override;
         Vector3 Center();
         float Radius();
-        float Size() override { return radius; }
+        float GetSize() override { return radius; }
 
         void SetCenter(Vector3 v);
         void SetRadius(float rad);
@@ -212,7 +212,7 @@ namespace COLLIDERS
         std::vector<Vector3>Points();
         Vector3 Rotation();
         Vector3 Center();
-        float Size() override;
+        float GetSize() override;
 
 
         bool Status();
@@ -264,7 +264,7 @@ namespace COLLIDERS
 
         Vector3 Center();
         float Radius();
-        float Size() override;
+        float GetSize() override;
         void OffsetCenter(XMMATRIX world);
         void SetCenter(Vector3 c);
         void SetRadius(float r);

@@ -3,14 +3,16 @@
 #include "DirectX11.h"
 #include "Input.h"
 #include "Camera.h"
-#include "MODEL.h"
 #include "Audio.h"
 #include "Text.h"
 #include "DEBUG_MANAGER.h"
+#include "Sprite.h"
 #include "../Scenes/SCENEMANAGER.h"
 #include "../Components/Base Classes/ComponentCreator.h"
 using namespace DirectX;
-std::shared_ptr<MODEL>stage;
+std::shared_ptr<SPRITE>skybox;
+
+
 HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 {
 
@@ -29,23 +31,9 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
         assert(!"Failed to create constant buffer");
 
 
-    // Perform shader initialization by inserting used shaders into the map
-    //ShaderManager::Instance()->Initialize();
-
-    // Create a default blend mode for use
-
-    // Initializes anything needed by XAudio2
-    //AudioEngine::Instance()->Initialize();
-
     // Perform Camera Initialization 
     Camera::Instance()->Initialize({ 0, 0, 1 }, { 0, 0, 0 });
     Camera::Instance()->SetRange(10);
-
-    // Perform initialization for the user interface
-    //GUI::Instance()->Initialize();
-
-    // Initializes the DepthStencilStateManager by inserting used DSS into the map
-    //DepthStencilStateManager::Instance()->Initialize();
 
     // Insert a directional light into the map for preview
     std::shared_ptr<LIGHTING>data = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
@@ -70,13 +58,10 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     
 
     // Initializes the white board below
-    stage = std::make_shared<MODEL>();
-    stage->Initialize("./Data/Model/stage.mrs");
-    stage->SetTake(0);
-    stage->SetScale({ 20, 1, 20});
-    stage->SetTranslation({ 0, -20, 0 });
-
-    
+    skybox = std::make_shared<SPRITE>();
+    skybox->Initialize(L"./Data/Images/skybox.png");
+    skybox->RemoveShader(ShaderTypes::Shader_2D);
+    skybox->InsertShader(ShaderTypes::Skybox);
 
 
 
@@ -87,10 +72,6 @@ bool Graphics::Frame()
 {
 
     SceneManager::Instance()->Execute();
-    stage->UpdateTransform();
-
-    //if (INPUTMANAGER::Instance()->Keyboard()->Triggered('L'))
-    //    AudioEngine::Instance()->Retrieve("Test2")->Play();
 
 
 #pragma region CALLS RENDER (DO NOT PUT FUNCTIONS BELOW HERE)
@@ -155,8 +136,9 @@ bool Graphics::Render()
     dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
 
-    stage->Render(0.0f, { 1.0f, 1.0f, 1.0f, 0.7f });
 
+
+    skybox->Render({}, { 1, 1 }, {}, { 1920, 1080 });
 
     Camera::Instance()->Render();
     SceneManager::Instance()->Render();

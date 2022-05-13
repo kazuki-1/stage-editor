@@ -1,5 +1,11 @@
 #include "Audio.h"
+#include <x3daudio.h>
 #include <assert.h>
+#include <vector>
+#include "IMGUI.h"
+#define SAMPLING_RATE 48000
+#define OBTUSE_ANGLE Math::ToRadians(180)
+//#pragma comment(lib, "x3daudio")
 #ifdef _XBOX //Big-Endian
 #define fourccRIFF 'RIFF'
 #define fourccDATA 'data'
@@ -35,16 +41,26 @@ HRESULT AudioEngine::Initialize()
     assert(hr == S_OK);
 
 
-    // DWORD dwChannelMask;
-    // masteringVoice->GetChannelMask(&dwChannelMask);
-    
-    X3DAUDIO_HANDLE x3d_handle;
-    //hr = X3DAudioInitialize(dwChannelMask, X3DAUDIO_SPEED_OF_SOUND, x3d_handle);
-    assert(hr == S_OK);
 
-    hr = xAudio->CreateMasteringVoice(&masteringVoice, XAUDIO2_DEFAULT_CHANNELS, 48000);
+    hr = xAudio->CreateMasteringVoice(&masteringVoice);
     assert(hr == S_OK);
     Insert("Empty", L"./Data/Audio/empty_sound.wav");
+
+
+    // Perform 3DAudio intiailization
+    XAUDIO2_VOICE_DETAILS details;
+    DWORD dwChannelMask;
+    hr = masteringVoice->GetChannelMask(&dwChannelMask);
+    masteringVoice->GetVoiceDetails(&details);
+
+    dspSettings.SrcChannelCount = INPUT_CHANNELS;
+    nChannels = dspSettings.DstChannelCount = details.InputChannels;
+    dspSettings.pMatrixCoefficients = matrixCoefficients;
+    
+    hr = X3DAudioInitialize(dwChannelMask, X3DAUDIO_SPEED_OF_SOUND, x3d_handle);
+    assert(hr == S_OK);
+    
+
     return S_OK;
 
 
@@ -363,44 +379,58 @@ void AUDIO::StopDucking()
         FadeTo(volume_before_ducking, 0.5f);
 }
 
-
 /*---------------------------------------------AUDIO Initialize()----------------------------------------------------*/
 
 HRESULT AUDIO::Initialize()
 {
+    // File creation
     HANDLE h = CreateFile(file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
     if (INVALID_HANDLE_VALUE == h)
         assert(!GetLastError());
     if (INVALID_SET_FILE_POINTER == SetFilePointer(h, 0, 0, FILE_BEGIN))
         assert(!GetLastError());
     DWORD dwChunkSize, dwChunkPos;
+
+    // Riff header searching
     FindChunk(h, fourccRIFF, dwChunkSize, dwChunkPos);
     DWORD fileType;
     ReadChunk(h, &fileType, sizeof(DWORD), dwChunkPos);
     if (fileType != fourccWAVE)
         assert(!"Wrong Format");
+
+    // FMT header searching
     FindChunk(h, fourccFMT, dwChunkSize, dwChunkPos);
     ReadChunk(h, &format, dwChunkSize, dwChunkPos);
 
+    // Data header searching and insertion
     FindChunk(h, fourccDATA, dwChunkSize, dwChunkPos);
     BYTE* buffer = new BYTE[dwChunkSize];
     ReadChunk(h, buffer, dwChunkSize, dwChunkPos);
-
 
     XAUDIO2_BUFFER buf{};
     buf.AudioBytes = dwChunkSize;
     buf.pAudioData = buffer;
     buf.Flags = XAUDIO2_END_OF_STREAM;
-    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format);
+
+    XAUDIO2_SEND_DESCRIPTOR descriptor[1]{};
+    descriptor[0].Flags = XAUDIO2_SEND_USEFILTER;
+    descriptor[0].pOutputVoice = AudioEngine::Instance()->masteringVoice;
+
+    XAUDIO2_VOICE_SENDS sendList{ 1, descriptor };
+
+    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format, 0, 2.0f, 0, &sendList);
     assert(hr == S_OK);
     this->buffer = buf;
-    //delete[] buffer;
-    //return buf;
+
+    // AudioStateMachine initialization
     stateMachine = std::make_shared<AUDIO_STATES::AudioStateMachine>(this);
     stateMachine->Initialize();
+
+    
+
     return hr;
 }
-
+float debug_volume[2];
 /*---------------------------------------------AUDIO Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
@@ -409,6 +439,19 @@ HRESULT AUDIO::Initialize()
 void AUDIO::Execute()
 {
     stateMachine->Execute();
+
+    // Perform 3DAudio calculations if emitter is targeted
+    if (emitter)
+    {
+        if (isPlaying) {
+            DWORD dwCalcFlags = X3DAUDIO_CALCULATE_MATRIX;
+            AudioEngine* audioEngine = AudioEngine::Instance();
+            float* volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener);
+            HRESULT hr = E_FAIL;
+            hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, INPUT_CHANNELS, audioEngine->nChannels, volumes);
+            int a = 0;
+        }
+    }
 }
 
 /*---------------------------------------------AUDIO Volume()----------------------------------------------------*/
@@ -446,7 +489,73 @@ bool AUDIO::IsDucking()
     return isDucking;
 }
 
-/*---------------------------------------------AUDIO IsDucking()----------------------------------------------------*/
+/*---------------------------------------------AUDIO RenderDebug()----------------------------------------------------*/
+
+void AUDIO::RenderDebug()
+{
+    // ImGui::Begin("Channel volumes");
+    // ImGui::InputFloat2("Channels", debug_volume);
+    // ImGui::End();
+}
+
+/*---------------------------------------------AUDIO CalculateChannelVolumes()----------------------------------------------------*/
+/// <summary>
+/// Call this to calculate the volume for each channels
+/// </summary>
+/// <param name="channel_num"> : Number of channels</param>
+/// <returns></returns>
+float* AUDIO::CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener)
+{
+    // Emitter parameters
+    Vector3  e_Position;
+    e_Position = emitter.position;
+
+    // Listener parameters
+    Vector3 l_Top, l_Front, l_Left, l_Right, l_Position;
+    l_Position = listener.position;
+    l_Top = listener.vTopVector;
+    l_Front = listener.vFrontVector;
+    l_Right = Vector3::Cross(l_Top, l_Front);
+    l_Left = l_Right * -1;
+
+    // Distance between emitter and listener
+    Vector3 distance = l_Position - e_Position ;
+    Vector3 direction = distance;
+    direction.Normalize();
+
+    float e_LeftAngle = Vector3::GetAngle(l_Left, direction);
+    float e_RightAngle = Vector3::GetAngle(l_Right, direction);
+
+    // Calculate the difference in angle to process the channel volumes
+    float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
+    float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
+
+    // Calculate the outputted volume based on the distance
+    float distance_length{ distance.Length() };
+    float volume = 1.0f - (distance_length / emitter.size);
+
+    float output_volume[2]{ volume, volume };
+
+    if (left_Difference > 1)
+        left_Difference = 0;
+    output_volume[0] *= 1.0f - left_Difference;
+
+    if (right_Difference > 1)
+        right_Difference = 0;
+    output_volume[1] *= 1.0f - right_Difference;
+
+
+    // Clamps the volume
+    output_volume[0] = Math::Clamp(output_volume[0], 0.0f, 1.0f);
+    output_volume[1] = Math::Clamp(output_volume[1], 0.0f, 1.0f);
+    return output_volume;
+
+
+
+}
+
+
+/*---------------------------------------------AUDIO GetStateMachine()----------------------------------------------------*/
 
 std::shared_ptr<AUDIO_STATES::AudioStateMachine>AUDIO::GetStateMachine()
 {

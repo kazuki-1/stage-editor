@@ -276,6 +276,14 @@ std::shared_ptr<COLLIDERS::COLLIDER_BASE>CapsuleCollider_Component::Collider()
     return collider;
 }
 
+/*----------------------------------------------CAPSULE COLLIDER GetClosestPoint()------------------------------------------*/
+
+Vector3 CapsuleCollider_Component::GetClosestPoint(Vector3 target)
+{
+    return COLLIDERS::PointLineClosest(target, collider.get());
+}
+
+
 /*----------------------------------------------CAPSULE COLLIDER GetComponentType()------------------------------------------*/
 
 COMPONENT_TYPE CapsuleCollider_Component::GetComponentType()

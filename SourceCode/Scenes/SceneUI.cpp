@@ -9,7 +9,6 @@
 #include "../Engine/Text.h"
 #include "../Engine/Audio.h"
 
-std::shared_ptr<SPRITE>skybox;
 
 
 /*---------------------------------------------------------------------------------------------------------------------*/
@@ -26,10 +25,6 @@ HRESULT SceneUI::Initialize()
             audio.second->Stop();
     }
 
-    skybox = std::make_shared<SPRITE>();
-    skybox->Initialize(L"./Data/Images/skybox.png");
-    skybox->RemoveShader(ShaderTypes::Shader_2D);
-    skybox->InsertShader(ShaderTypes::Skybox);
     // Loads pre existing data if it exists
     std::string cur_scene_path{ DataManager::Instance()->GetCurrentScenePath() };
     if (cur_scene_path == "")
@@ -54,7 +49,6 @@ void SceneUI::Execute()
 
 void SceneUI::Render()
 {
-    skybox->Render({}, { 1, 1 }, {}, {});
     STAGE_UI::Instance()->Render();
     IMGUI::Instance()->Render();
 
