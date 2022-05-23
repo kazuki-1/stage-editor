@@ -48,3 +48,10 @@ void SceneUI::Render()
     STAGE_UI::Instance()->Render();
     IMGUI::Instance()->Render();
 }
+
+/*--------------------------------------SceneUI Finalize()-----------------------------------------------------------*/
+
+void SceneUI::Finalize()
+{
+    GameObjectManager::Instance()->Finalize();
+}

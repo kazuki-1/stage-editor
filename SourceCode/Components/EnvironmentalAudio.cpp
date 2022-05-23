@@ -339,6 +339,14 @@ void EnvironmentalAudio_Component::UI()
                  std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
                  AudioEngine::Instance()->Insert(data->name, full_path);
                  data->file_path = full_path;
+                 name.replace_extension("");
+                 int ind{};
+                 for (auto& c : name.string())
+                 {
+                     data->name[ind] = c;
+                     ++ind;
+                 }
+                     
                  audio = AudioEngine::Instance()->Retrieve(data->name);
                  for (auto& c : data->file_path)
                  {
@@ -425,6 +433,19 @@ void EnvironmentalAudio_Component::UI()
     }
 
 }
+
+/*--------------------------------------------EnvironmentalAudio_Component Finalize()--------------------------------------------------*/
+/// <summary>
+/// Called when deinitializing
+/// </summary>
+void EnvironmentalAudio_Component::Finalize()
+{
+    if (audio->IsPlaying())
+        audio->Stop();
+    AudioEngine::Instance()->Delist(audio);
+    audio = {};
+}
+
 
 /*--------------------------------------------EnvironmentalAudio_Component Colliders()--------------------------------------------------*/
 

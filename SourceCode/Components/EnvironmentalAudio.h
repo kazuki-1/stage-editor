@@ -148,6 +148,11 @@ public:
     /// <para> UI‚ð•`‰æ </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// Called when deinitializing
+    /// </summary>
+    void Finalize() override;
+
 
     COMPONENT_TYPE GetComponentType() override;
     std::vector<std::shared_ptr<LocalizedCollider_SubComponent>>Colliders();

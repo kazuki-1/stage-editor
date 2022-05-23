@@ -154,6 +154,16 @@ void GameObject::Render()
     GetComponent<Transform3D_Component>()->Render();
 }
 
+/*--------------------------------GameObject Finalize()----------------------------------*/
+/// <summary>
+/// Called when deinitializing
+/// </summary>
+void GameObject::Finalize()
+{
+    for (auto& c : components)
+        c->Finalize();
+}
+
 /*--------------------------------GameObject RenderUI()----------------------------------*/
 
 void GameObject::RenderUI()
@@ -410,6 +420,8 @@ void GameObjectManager::RenderUI()
 /// </summary>
 void GameObjectManager::Finalize()
 {
+    for (auto& g : gameObjects)
+        g.second->Finalize();
     gameObjects.clear();
 }
 

@@ -142,6 +142,7 @@ void STAGE_UI::SceneUI()
             if (browser->HasSelected())
             {
                 std::string file_path = browser->GetSelected().string();
+                
                 DataManager::Instance()->Load(file_path);
                 DataManager::Instance()->SetFilePath(file_path);
                 browser->Close();

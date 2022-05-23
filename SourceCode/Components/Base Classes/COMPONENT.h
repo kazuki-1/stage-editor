@@ -52,6 +52,10 @@ public:
     /// </summary>
     virtual void UI() {};
     /// <summary>
+    /// Virtual function. Called when deintializing
+    /// </summary>
+    virtual void Finalize() {};
+    /// <summary>
     /// <para> Returns the GameObject of which this component is stored in </para>
     /// <para> このコンポネントの親となるゲームオブジェクトを戻る　</para>
     /// </summary>

@@ -14,10 +14,8 @@ void DataManager::Load(std::string n)
 {
     // Check current dataset to see if empty
     // Clear if empty
-    if (dataset.size() > 0)
-        dataset.clear();
-    if (GameObjectManager::Instance()->GetGameObjects().size() >= 0)
-        GameObjectManager::Instance()->Clear();
+    dataset.clear();
+    GAMEOBJECTS->Finalize();
 
     // Prepare file path
     std::filesystem::path path(n);
