@@ -2,8 +2,7 @@
 #include <map>
 #include <memory>
 
-// Audio state machine, internally used in AUDIO class
-class AUDIO;
+class Audio;
 namespace AUDIO_STATES
 {
     enum class AudioStateEnum
@@ -22,30 +21,31 @@ namespace AUDIO_STATES
         AudioStateBase() {};
         /// <summary>
         /// <para> Called when transitioned into this state </para>
-        /// <para> ﾋ訷ﾎ･ｹ･ﾆｩ`･ﾈ､ｫ､鱇wﾒﾆ､ﾎ､ﾈ､ｭ､ﾋｺﾓｳｹ｡｡</para>
+        /// <para>他のステートから遷移したら呼び出す</para>
         /// </summary>
-        virtual void Initialize(AUDIO* parent) {};
+        virtual void Initialize(Audio* parent) {};
         /// <summary>
         /// <para> Called every frame to perform any functions </para>
-        /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
+        /// <para>毎フレームに呼び出す</para>
         /// </summary>
-        virtual void Execute(AUDIO* parent) {};
+        virtual void Execute(Audio* parent) {};
         /// <summary>
         /// <para>Called when transitioning away from this state </para>
-        /// <para> ･ｹ･ﾆｩ`･ﾈﾟwﾒﾆ､ﾎ・､ﾋｺﾓｳｹ </para>
+        /// <para> 他のステート遷移の場合に呼び出す </para>
         /// </summary>
-        virtual void Finalize(AUDIO* parent) {};
+        virtual void Finalize(Audio* parent) {};
     };
 
 
+    // Audio state machine, internally used in Audio class
     class AudioStateMachine
     {
         std::map<AudioStateEnum, std::shared_ptr<AudioStateBase>>audioStates;
         std::shared_ptr<AudioStateBase> current_state{};
-        AUDIO* parent;
+        Audio* parent;
         AudioStateEnum state_Enum{AudioStateEnum::Start};
     public:
-        AudioStateMachine(AUDIO* p) : parent(p) {};
+        AudioStateMachine(Audio* p) : parent(p) {};
         /// <summary>
         /// <para> Called when AudioStateMachine is initialized </para>
         /// </summary>

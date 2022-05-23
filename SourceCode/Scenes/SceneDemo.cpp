@@ -2,10 +2,11 @@
 #include "../GAMEOBJECT.h"
 #include "../STAGE_UI.h"
 #include "../Audio/AudioController.h"
-#include "../Components\Base Classes\DataManager.h"
+#include "../Components/Base Classes/DataManager.h"
 #include "../DialogueController.h"
 #include "../Engine/IMGUI.h"
 #include "../DialogueController.h"
+#include "../Engine/Audio.h"
 
 /*--------------------------------------------------SceneDemo Insert()-------------------------------------*/
 
@@ -33,7 +34,8 @@ void SceneDemo::Render()
 {
     GAMEOBJECTS->Render();  
     STAGE_UI::Instance()->PlayUI();
-    AudioController::Instance()->DebugUI();
+    // For debugging
+    //AudioController::Instance()->DebugUI();
     DialogueController::Instance()->Render();
     IMGUI::Instance()->Render();
 
@@ -44,7 +46,6 @@ void SceneDemo::Render()
 void SceneDemo::Finalize()
 {
     GAMEOBJECTS->Finalize();
-    DataManager::Instance()->Finalize();
 
 }
 

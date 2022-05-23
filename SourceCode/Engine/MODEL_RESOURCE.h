@@ -241,7 +241,7 @@ public:
         // std::string diffuse_path;
         // std::string normal_path;
         // std::string bump_path;
-        std::shared_ptr<TEXTURE>Textures[4];            // DIFFUSE, NORMAL, BUMP, PLACEHOLDER
+        std::shared_ptr<Texture>Textures[4];            // DIFFUSE, NORMAL, BUMP, PLACEHOLDER
         // std::unique_ptr<TEXTURE>diffuseMap;
         // std::unique_ptr<TEXTURE>normalMap;
         // std::unique_ptr<TEXTURE>bumpMap;

@@ -12,12 +12,30 @@
 // Input channels used in 3d Audio
 #define MAX_OUTPUT_CHANNELS 8
 #define INPUT_CHANNELS 1
+
+enum AUDIO_CALCULATION_FLAGS
+{
+    CALCULATE_CHANNELS = 0X1,  
+    CALCULATE_DOPPLER = 0X2
+};
+
+
 using namespace Microsoft::WRL;
 
 
 
 
-class AUDIO;
+
+enum ChannelDirections
+{
+    FrontLeft, 
+    FrontRight, 
+    BackLeft, 
+    BackRight, 
+
+};
+
+class Audio;
 class AudioEmitter
 {
 public:
@@ -30,20 +48,21 @@ public:
     Math::Vector3 vFrontVector{};
     float minimum_distance{};
     float size{};
+    float doppler_frequency{};
 };
 class AudioListener
 {
 public:
     AudioListener() {};
 
-
     Math::Vector3 position{};
     Math::Vector3 velocity{};
     Math::Vector3 vTopVector{};
     Math::Vector3 vFrontVector{};
 };
+
 /// <summary>
-/// Use this to create an AUDIO object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
+/// Use this to create an Audio object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
 /// </summary>
 class AudioEngine : public Singleton<AudioEngine>
 {
@@ -52,16 +71,16 @@ class AudioEngine : public Singleton<AudioEngine>
 
     // Parameters for 3DAudio calculations
     X3DAUDIO_DSP_SETTINGS dspSettings;
-    X3DAUDIO_LISTENER* listener;
     AudioListener* audioListener;
     X3DAUDIO_HANDLE x3d_handle;
     float matrixCoefficients[INPUT_CHANNELS * MAX_OUTPUT_CHANNELS];
     int nChannels{};
-    friend class AUDIO;
-    std::map<std::string, std::shared_ptr<AUDIO>>audios;
+    friend class Audio;
+    std::map<std::string, std::shared_ptr<Audio>>audios;
 
 
 public:
+    ~AudioEngine() { Finalize(); }
     /// <summary>
     /// Initializes the audioengine, initializing the IXAudio2 and IXAudio2MasteringVoice
     /// </summary>
@@ -73,37 +92,43 @@ public:
     /// </summary>
     void Execute();
     /// <summary>
-    /// <para> Create an AUDIO object and insert it into the map </para>
+    /// <para> Create an Audio object and insert it into the map </para>
     /// <para> AUDIOÇê∂ê¨ÇµÅAÉ}ÉbÉvÇ…ìoò^</para>
     /// </summary>
     /// <param name="name"> : Name of audio file</param>
     /// <param name="file_path"> : File path of audio file</param>
     void Insert(std::string name, std::wstring file_path);
     /// <summary>
+    /// Called when switching between scenes
+    /// </summary>
+    void Cleanup();
+    /// <summary>
     /// Finalizes the class, generally not needed
     /// </summary>
     void Finalize();
+    /// <summary>
+    /// Delists the audio file from the map
+    /// </summary>
+    /// <param name="audio_name"></param>
+    void Delist(std::string audio_name);
+    void Delist(std::shared_ptr<Audio>audio);
+
     IXAudio2MasteringVoice* MasteringVoice();
     ComPtr<IXAudio2>XAudio();
-    std::shared_ptr<AUDIO>Retrieve(std::string name);
-    std::map<std::string, std::shared_ptr<AUDIO>>Audios();
+    std::shared_ptr<Audio>Retrieve(std::string name);
+    std::map<std::string, std::shared_ptr<Audio>>Audios();
 
     // Targets the listener
-    void SetListener(X3DAUDIO_LISTENER* l) { listener = l; }
     void SetAudioListener(AudioListener* l) { audioListener = l; };
-
-
-    X3DAUDIO_LISTENER* GetListener() { return listener; }
     AudioListener* GetAudioListener() { return audioListener; }
 };
 
-class AUDIO
+class Audio
 {
 protected:
     IXAudio2SourceVoice* sourceVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
-    X3DAUDIO_EMITTER* emitter{nullptr};
     AudioEmitter* audioEmitter;
 
     std::wstring file_path;
@@ -114,14 +139,14 @@ protected:
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
     HRESULT ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset);
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>stateMachine;
-
+    std::vector<float>channel_volumes;
     friend class AudioEngine;
 public:
 
     float volume{ 1.0f };
     float fade_in_volume{};
-    AUDIO() {};
-    AUDIO(std::wstring path);
+    Audio() {};
+    Audio(std::wstring path);
     virtual void Play();
     /// <summary>
     /// <para> Call this to perform fade in and play the file </para>
@@ -191,18 +216,12 @@ public:
     bool IsPlaying();
     bool IsDucking();
     void RenderDebug();
-    /// <summary>
-    /// Call this to calculate the volume for each channels
-    /// </summary>
-    /// <param name="channel_num"> : Number of channels</param>
-    /// <returns></returns>
-    float* CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener);
+
+    std::vector<float>CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener, int input_channels, int output_channels = 2, UINT flags = AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS);
 
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
 
     // Targets the emitter
-    void SetEmitter(X3DAUDIO_EMITTER* e) { 
-        emitter = e; }
     void SetAudioEmitter(AudioEmitter* e) { audioEmitter = e; }
 };
 

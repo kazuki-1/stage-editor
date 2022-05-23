@@ -22,6 +22,7 @@ namespace Math
     /// <summary>
     /// Returns -1 if tar < 0, 1 if tar > 0
     /// </summary>
+    /// <param name="tar"></param>
     /// <returns></returns>
     extern float Sign(float tar);
     /// <summary>

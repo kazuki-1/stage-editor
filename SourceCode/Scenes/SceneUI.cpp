@@ -26,11 +26,7 @@ HRESULT SceneUI::Initialize()
     }
 
     // Loads pre existing data if it exists
-    std::string cur_scene_path{ DataManager::Instance()->GetCurrentScenePath() };
-    if (cur_scene_path == "")
-        DataManager::Instance()->InsertAndInitialize();
-    else
-        DataManager::Instance()->Load(cur_scene_path);
+    DataManager::Instance()->InsertAndInitialize();
 
     return S_OK;
 
@@ -51,5 +47,4 @@ void SceneUI::Render()
 {
     STAGE_UI::Instance()->Render();
     IMGUI::Instance()->Render();
-
 }

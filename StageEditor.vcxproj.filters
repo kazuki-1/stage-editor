@@ -189,6 +189,9 @@
     <Filter Include="Engine\DepthStencilState Manager">
       <UniqueIdentifier>{5450fd59-0a7d-49cf-8f3e-1e7d70855ba7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Texture">
+      <UniqueIdentifier>{3b40b060-3ab5-427b-9aaa-59650c37e5d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -304,9 +307,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Rasterizer.cpp">
       <Filter>Engine\Rasterizer Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\TextureManager.cpp">
-      <Filter>Engine\Resource Manager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp">
       <Filter>Engine\Resource Manager</Filter>
@@ -428,6 +428,12 @@
     <ClCompile Include="SourceCode\Engine\DepthStencilStateManager.cpp">
       <Filter>Engine\DepthStencilState Manager</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\TextureManager.cpp">
+      <Filter>Engine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Texture.cpp">
+      <Filter>Engine\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -491,9 +497,6 @@
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Singleton.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Texture.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Graphics.h">
@@ -582,9 +585,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Rasterizer.h">
       <Filter>Engine\Rasterizer Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\TextureManager.h">
-      <Filter>Engine\Resource Manager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\ResourceManager.h">
       <Filter>Engine\Resource Manager</Filter>
@@ -702,6 +702,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\DepthStencilStateManager.h">
       <Filter>Engine\DepthStencilState Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\TextureManager.h">
+      <Filter>Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Texture.h">
+      <Filter>Engine\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

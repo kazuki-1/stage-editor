@@ -205,7 +205,7 @@ void AudioController::Resume()
 /// <para> Performs audio ducking. dock_target variable will be exempt </para>
 /// </summary>
 /// <param name="dock_target"></param>
-void AudioController::PerformDucking(std::shared_ptr<AUDIO>duck_target)
+void AudioController::PerformDucking(std::shared_ptr<Audio>duck_target)
 {
     if (isDucking)
         return;

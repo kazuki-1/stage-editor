@@ -82,12 +82,12 @@ class BASE_AUDIO_COMPONENT : public Component
 {
 protected:
     //std::shared_ptr<AUDIO>audio;
-    std::shared_ptr<AUDIO> audio;
+    std::shared_ptr<Audio> audio;
     //AudioData* data;
 public:
     BASE_AUDIO_COMPONENT() {};
     BASE_AUDIO_COMPONENT(GameObject* g, ComponentData* d) {};
-    std::shared_ptr<AUDIO>Audio() { return audio; }
+    std::shared_ptr<Audio>GetAudio() { return audio; }
     //AudioData* Data() { return data; }
     //std::wstring FilePath() { return data->file_path; }
     //bool LoopFlag() { return data->loopFlag; }

@@ -12,7 +12,6 @@ using namespace Math;
 class Camera : public Singleton<Camera>
 {
     //Camera() {};
-    X3DAUDIO_LISTENER listener{};
     AudioListener audioListener;
     float range{};
     Vector3 position{}, rotation{}, velocity{};

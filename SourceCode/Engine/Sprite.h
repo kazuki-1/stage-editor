@@ -17,7 +17,7 @@ class SPRITE : public OBJECT
         Vector4 colour;
         Vector2 uv;
     };
-    std::shared_ptr<TEXTURE>texture;
+    std::shared_ptr<Texture>texture;
     ComPtr<ID3D11Buffer>dxVertexBuffer, dxIndexBuffer;
     std::vector<VERTEX>Vertices;
 public:
@@ -25,6 +25,6 @@ public:
     SPRITE() {};
     HRESULT Initialize(const wchar_t* img_path);
     void Render(Vector2 position = { 0,0 }, Vector2 scale = { 1, 1 }, Vector2 tPos = { 0, 0 }, Vector2 tSize = { 0, 0 }, Vector2 pivot = { 0, 0 }, Vector4 colour = { 1, 1, 1, 1 }, float angle = 0);
-    std::shared_ptr<TEXTURE>Texture() { return texture; }
+    std::shared_ptr<Texture>Texture() { return texture; }
 };
 

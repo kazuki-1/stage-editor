@@ -5,7 +5,7 @@
 #include <d3d11.h>
 #include <string>
 class AUDIOSTATE_BASE;
-class AUDIO;
+class Audio;
 enum class AudioStates
 {
     State_Idle, 
@@ -21,10 +21,10 @@ enum class AudioStates
 
 class AudioController : public Singleton<AudioController>
 {
-    std::map<AudioStates, std::shared_ptr<AUDIO>>audioMap;
-    std::shared_ptr<AUDIO>cur_BGM;
-    std::shared_ptr<AUDIO>next_BGM;
-    std::shared_ptr<AUDIO>ducking_target;
+    std::map<AudioStates, std::shared_ptr<Audio>>audioMap;
+    std::shared_ptr<Audio>cur_BGM;
+    std::shared_ptr<Audio>next_BGM;
+    std::shared_ptr<Audio>ducking_target;
     bool pause{};
     bool isDucking{};
     bool transitioning{};
@@ -84,7 +84,7 @@ public:
     /// <para> Performs audio ducking. dock_target variable will be exempt </para>
     /// </summary>
     /// <param name="dock_target"></param>
-    void PerformDucking(std::shared_ptr<AUDIO>dock_target = {});
+    void PerformDucking(std::shared_ptr<Audio>dock_target = {});
     /// <summary>
     /// <para> Stops audio ducking if is ducking. </para>
     /// </summary>

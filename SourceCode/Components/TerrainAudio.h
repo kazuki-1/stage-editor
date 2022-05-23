@@ -73,7 +73,7 @@ class TerrainAudio_Emitter : public TerrainAudio_Internal_Base
     friend class TerrainAudio_Component;
     struct AUDIO_BUFFER
     {
-        std::shared_ptr<AUDIO>buffer;
+        std::shared_ptr<Audio>buffer;
         bool state{};
         int timer{};
     };

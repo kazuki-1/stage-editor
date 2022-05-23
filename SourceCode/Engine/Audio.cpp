@@ -3,8 +3,16 @@
 #include <assert.h>
 #include <vector>
 #include "IMGUI.h"
+#include "PERFORMANCE_COUNTER.h"
+#define SPEED_OF_SOUND_PER_FRAME SPEED_OF_SOUND / PerformanceCounter::Instance()->FPS()
+
 #define SAMPLING_RATE 48000
 #define OBTUSE_ANGLE Math::ToRadians(180)
+#define SPEED_OF_SOUND X3DAUDIO_SPEED_OF_SOUND
+#define DEFAULT_FREQUENCY 1.0f
+#define VELOCITY_OF_SOUND 5.0f
+
+
 //#pragma comment(lib, "x3daudio")
 #ifdef _XBOX //Big-Endian
 #define fourccRIFF 'RIFF'
@@ -33,8 +41,8 @@
 /// <returns></returns>
 HRESULT AudioEngine::Initialize()
 {
-    
 
+    // Coinitialization is called here, so calling it again is not needed
     HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
     assert(hr == S_OK);
     hr = XAudio2Create(xAudio.GetAddressOf(), 0, XAUDIO2_DEFAULT_PROCESSOR);
@@ -42,7 +50,7 @@ HRESULT AudioEngine::Initialize()
 
 
 
-    hr = xAudio->CreateMasteringVoice(&masteringVoice);
+    hr = xAudio->CreateMasteringVoice(&masteringVoice, 2, 48000);
     assert(hr == S_OK);
     Insert("Empty", L"./Data/Audio/empty_sound.wav");
 
@@ -53,11 +61,12 @@ HRESULT AudioEngine::Initialize()
     hr = masteringVoice->GetChannelMask(&dwChannelMask);
     masteringVoice->GetVoiceDetails(&details);
 
-    dspSettings.SrcChannelCount = INPUT_CHANNELS;
+    //DSP settings in case needed
+    dspSettings.SrcChannelCount = 2;
     nChannels = dspSettings.DstChannelCount = details.InputChannels;
     dspSettings.pMatrixCoefficients = matrixCoefficients;
     
-    hr = X3DAudioInitialize(dwChannelMask, X3DAUDIO_SPEED_OF_SOUND, x3d_handle);
+    hr = X3DAudioInitialize(dwChannelMask, SPEED_OF_SOUND, x3d_handle);
     assert(hr == S_OK);
     
 
@@ -78,6 +87,15 @@ void AudioEngine::Execute()
         a.second->Execute();
 }
 
+/*---------------------------------------------AudioEngine Cleanup()----------------------------------------------------*/
+/// <summary>
+/// Called when switching between scenes
+/// </summary>
+void AudioEngine::Cleanup()
+{
+    audios.clear();
+}
+
 /*---------------------------------------------AudioEngine Finalize()----------------------------------------------------*/
 /// <summary>
 /// Finalizes the class, generally not needed
@@ -90,9 +108,33 @@ void AudioEngine::Finalize()
     //delete MasteringVoice;
 }
 
+/*---------------------------------------------AudioEngine Delist()----------------------------------------------------*/
+/// <summary>
+/// Delists the audio file from the map
+/// </summary>
+/// <param name="audio_name"></param>
+void AudioEngine::Delist(std::string audio_name)
+{
+    audios.erase(audio_name);
+}
+
+void AudioEngine::Delist(std::shared_ptr<Audio>audio)
+{
+    
+    for (auto& a : audios)
+    {
+        if (audio == a.second)
+        {
+            audios.erase(a.first);
+            return;
+        }
+    }
+}
+
+
 /*---------------------------------------------AudioEngine Insert()----------------------------------------------------*/
 /// <summary>
-/// <para> Create an AUDIO object and insert it into the map </para>
+/// <para> Create an Audio object and insert it into the map </para>
 /// <para> AUDIOを生成し、マップに登録</para>
 /// </summary>
 /// <param name="name"> : Name of audio file</param>
@@ -107,8 +149,7 @@ void AudioEngine::Insert(std::string name, std::wstring file_path)
 
     }
     // Create and insert
-    std::shared_ptr<AUDIO>audio = std::make_shared<AUDIO>(file_path);
-    //audio->Populate(file_path);
+    std::shared_ptr<Audio>audio = std::make_shared<Audio>(file_path);
     audios.insert(std::make_pair(name, audio));
     audios.find(name)->second->Initialize();
 }
@@ -129,7 +170,7 @@ ComPtr<IXAudio2>AudioEngine::XAudio()
 
 /*---------------------------------------------AudioEngine Retrieve()----------------------------------------------------*/
 
-std::shared_ptr<AUDIO>AudioEngine::Retrieve(std::string name)
+std::shared_ptr<Audio>AudioEngine::Retrieve(std::string name)
 {
     for (auto& a : audios)
     {
@@ -141,24 +182,24 @@ std::shared_ptr<AUDIO>AudioEngine::Retrieve(std::string name)
 
 /*---------------------------------------------AudioEngine Audios()----------------------------------------------------*/
 
-std::map<std::string, std::shared_ptr<AUDIO>>AudioEngine::Audios()
+std::map<std::string, std::shared_ptr<Audio>>AudioEngine::Audios()
 {
     return audios;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AUDIO Class----------------------------------------------------*/
+/*---------------------------------------------Audio Class----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AUDIO Contructor----------------------------------------------------*/
+/*---------------------------------------------Audio Contructor----------------------------------------------------*/
 
-AUDIO::AUDIO(std::wstring path) : file_path(path)
+Audio::Audio(std::wstring path) : file_path(path)
 {
 
 }
 
-/*---------------------------------------------AUDIO FindChunk()----------------------------------------------------*/
+/*---------------------------------------------Audio FindChunk()----------------------------------------------------*/
 
-HRESULT AUDIO::FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition)
+HRESULT Audio::FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition)
 {
     HRESULT hr{ S_OK };
     if (INVALID_SET_FILE_POINTER == SetFilePointer(h, 0, 0, FILE_BEGIN))
@@ -202,9 +243,9 @@ HRESULT AUDIO::FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosit
     return S_OK;
 }
 
-/*---------------------------------------------AUDIO ReadChunk()----------------------------------------------------*/
+/*---------------------------------------------Audio ReadChunk()----------------------------------------------------*/
 
-HRESULT AUDIO::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset)
+HRESULT Audio::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset)
 {
     HRESULT hr{ S_OK };
 
@@ -217,9 +258,9 @@ HRESULT AUDIO::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset
     return hr;
 }
 
-/*---------------------------------------------AUDIO Play()----------------------------------------------------*/
+/*---------------------------------------------Audio Play()----------------------------------------------------*/
 
-void AUDIO::Play()
+void Audio::Play()
 {
     if (isPlaying)
         return;
@@ -233,30 +274,29 @@ void AUDIO::Play()
 
 }
 
-/*---------------------------------------------AUDIO FadeInAndPlay()----------------------------------------------------*/
+/*---------------------------------------------Audio FadeInAndPlay()----------------------------------------------------*/
 
-void AUDIO::FadeInAndPlay(float fade_time)
+void Audio::FadeInAndPlay(float fade_time)
 {
     Play();
     FadeIn(fade_time);
 }
 
-/*---------------------------------------------AUDIO FadeOutAndPause()----------------------------------------------------*/
+/*---------------------------------------------Audio FadeOutAndPause()----------------------------------------------------*/
 
-void AUDIO::FadeOutAndPause(float fade_time)
+void Audio::FadeOutAndPause(float fade_time)
 {
     FadeOut(1.0f);
     if (volume <= 0.0f)
         Stop();
 }
 
-/*---------------------------------------------AUDIO Stop()----------------------------------------------------*/
+/*---------------------------------------------Audio Stop()----------------------------------------------------*/
 
-void AUDIO::Stop()
+void Audio::Stop()
 {
     if (!isPlaying)
         return;
-    //stateMachine->FadeOut(1.0f);
     sourceVoice->Stop();
 
     //sourceVoice->Stop();
@@ -264,46 +304,46 @@ void AUDIO::Stop()
     isPlaying = false;
 }
 
-/*---------------------------------------------AUDIO Finalize()----------------------------------------------------*/
+/*---------------------------------------------Audio Finalize()----------------------------------------------------*/
 
-void AUDIO::Finalize()
+void Audio::Finalize()
 {
     sourceVoice->DestroyVoice();
 }
 
-/*---------------------------------------------AUDIO Loop()----------------------------------------------------*/
+/*---------------------------------------------Audio Loop()----------------------------------------------------*/
 
-void AUDIO::Loop(UINT loopCount)
+void Audio::Loop(UINT loopCount)
 {
     buffer.LoopCount = loopCount;
 }
 
-/*---------------------------------------------AUDIO Loop()----------------------------------------------------*/
+/*---------------------------------------------Audio Loop()----------------------------------------------------*/
 
-void AUDIO::LoopInRange(UINT begin, UINT end)
+void Audio::LoopInRange(UINT begin, UINT end)
 {
     buffer.LoopBegin = begin * format.Samples.wSamplesPerBlock;
     buffer.LoopLength = end * format.Samples.wSamplesPerBlock;
     buffer.PlayLength = buffer.LoopLength;
 }
 
-/*---------------------------------------------AUDIO FadeIn()----------------------------------------------------*/
+/*---------------------------------------------Audio FadeIn()----------------------------------------------------*/
 
-void AUDIO::FadeIn(float fade_time)
+void Audio::FadeIn(float fade_time)
 {
     FadeTo(1.0f, fade_time);
 }
 
-/*---------------------------------------------AUDIO FadeOut()----------------------------------------------------*/
+/*---------------------------------------------Audio FadeOut()----------------------------------------------------*/
 
-void AUDIO::FadeOut(float fade_time)
+void Audio::FadeOut(float fade_time)
 {
     stateMachine->FadeOut(fade_time);
 }
 
-/*---------------------------------------------AUDIO DisableLoop()----------------------------------------------------*/
+/*---------------------------------------------Audio DisableLoop()----------------------------------------------------*/
 
-void AUDIO::FadeTo(float fade_vol, float fade_time)
+void Audio::FadeTo(float fade_vol, float fade_time)
 {
     stateMachine->FadeTo(fade_time, fade_vol);
     // Check if audio is playing
@@ -324,33 +364,33 @@ void AUDIO::FadeTo(float fade_vol, float fade_time)
 }
 
 
-/*---------------------------------------------AUDIO DisableLoop()----------------------------------------------------*/
+/*---------------------------------------------Audio DisableLoop()----------------------------------------------------*/
 
-void AUDIO::DisableLoop()
+void Audio::DisableLoop()
 {
     buffer.LoopBegin = buffer.LoopLength = buffer.LoopCount = 0;
 }
 
-/*---------------------------------------------AUDIO SetVolume()----------------------------------------------------*/
+/*---------------------------------------------Audio SetVolume()----------------------------------------------------*/
 
-void AUDIO::SetVolume(float vol)
+void Audio::SetVolume(float vol)
 {
     volume = vol;
     sourceVoice->SetVolume(volume);
 }
 
-/*---------------------------------------------AUDIO SetBuffer()----------------------------------------------------*/
+/*---------------------------------------------Audio SetBuffer()----------------------------------------------------*/
 
-void AUDIO::SetBuffer(XAUDIO2_BUFFER buffer)
+void Audio::SetBuffer(XAUDIO2_BUFFER buffer)
 {
     this->buffer = buffer;
 }
 
-/*---------------------------------------------AUDIO PerformDucking()----------------------------------------------------*/
+/*---------------------------------------------Audio PerformDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> Performs ducking and fades the volume to 0.3f</para>
 /// </summary>
-void AUDIO::PerformDucking(float fade_vol)
+void Audio::PerformDucking(float fade_vol)
 {
     // Exits if not playing or is already ducking
     if (!isPlaying)
@@ -365,12 +405,12 @@ void AUDIO::PerformDucking(float fade_vol)
     }
 }
 
-/*---------------------------------------------AUDIO StopDucking()----------------------------------------------------*/
+/*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> stops the ducking state</para>
 /// <para> ･ﾀ･ﾃ･ｭ･ｰ､ﾐﾖｹ､ｹ､・/para>
 /// </summary>
-void AUDIO::StopDucking()
+void Audio::StopDucking()
 {
     if (!isDucking)
         return;
@@ -379,9 +419,9 @@ void AUDIO::StopDucking()
         FadeTo(volume_before_ducking, 0.5f);
 }
 
-/*---------------------------------------------AUDIO Initialize()----------------------------------------------------*/
+/*---------------------------------------------Audio Initialize()----------------------------------------------------*/
 
-HRESULT AUDIO::Initialize()
+HRESULT Audio::Initialize()
 {
     // File creation
     HANDLE h = CreateFile(file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
@@ -430,141 +470,220 @@ HRESULT AUDIO::Initialize()
 
     return hr;
 }
-float debug_volume[2];
-/*---------------------------------------------AUDIO Execute()----------------------------------------------------*/
+
+/*---------------------------------------------Audio Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
 /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
 /// </summary>
-void AUDIO::Execute()
+void Audio::Execute()
 {
     stateMachine->Execute();
+    AudioEngine* audioEngine = AudioEngine::Instance();
 
     // Perform 3DAudio calculations if emitter is targeted
-    if (emitter)
+    if (audioEmitter && audioEngine->audioListener)
     {
         if (isPlaying) {
-            DWORD dwCalcFlags = X3DAUDIO_CALCULATE_MATRIX;
-            AudioEngine* audioEngine = AudioEngine::Instance();
-            float* volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener);
-            HRESULT hr = E_FAIL;
-            hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, INPUT_CHANNELS, audioEngine->nChannels, volumes);
-            int a = 0;
+
+            UINT calc_flag{};
+            calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
+            channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
+            HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
+            hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_frequency);
+
         }
     }
 }
 
-/*---------------------------------------------AUDIO Volume()----------------------------------------------------*/
+/*---------------------------------------------Audio Volume()----------------------------------------------------*/
 
-float AUDIO::Volume()
+float Audio::Volume()
 {
     return volume;
 }
 
-/*---------------------------------------------AUDIO Buffer()----------------------------------------------------*/
+/*---------------------------------------------Audio Buffer()----------------------------------------------------*/
 
-XAUDIO2_BUFFER AUDIO::Buffer()
+XAUDIO2_BUFFER Audio::Buffer()
 {
     return buffer;
 }
 
-/*---------------------------------------------AUDIO SourceVoice()----------------------------------------------------*/
+/*---------------------------------------------Audio SourceVoice()----------------------------------------------------*/
 
-IXAudio2SourceVoice* AUDIO::SourceVoice()
+IXAudio2SourceVoice* Audio::SourceVoice()
 {
     return sourceVoice;
 }
 
-/*---------------------------------------------AUDIO IsPlaying()----------------------------------------------------*/
+/*---------------------------------------------Audio IsPlaying()----------------------------------------------------*/
 
-bool AUDIO::IsPlaying()
+bool Audio::IsPlaying()
 {
     return isPlaying;
 }
 
-/*---------------------------------------------AUDIO IsDucking()----------------------------------------------------*/
+/*---------------------------------------------Audio IsDucking()----------------------------------------------------*/
 
-bool AUDIO::IsDucking()
+bool Audio::IsDucking()
 {
     return isDucking;
 }
 
-/*---------------------------------------------AUDIO RenderDebug()----------------------------------------------------*/
+/*---------------------------------------------Audio RenderDebug()----------------------------------------------------*/
 
-void AUDIO::RenderDebug()
+void Audio::RenderDebug()
 {
-    // ImGui::Begin("Channel volumes");
-    // ImGui::InputFloat2("Channels", debug_volume);
-    // ImGui::End();
+    if (audioEmitter)
+    {
+        ImGui::Begin("Channel volumes");
+        int ind{};
+        for (auto& v : channel_volumes)
+        {
+            std::string preview{ "Channel volume " + std::to_string(ind) };
+            ImGui::DragFloat(preview.c_str(), &v);
+            ++ind;
+        }
+        ImGui::DragFloat("Frequency", &audioEmitter->doppler_frequency);
+        ImGui::End();
+    }
 }
 
-/*---------------------------------------------AUDIO CalculateChannelVolumes()----------------------------------------------------*/
+/*---------------------------------------------Audio CalculateChannelVolumes()----------------------------------------------------*/
 /// <summary>
 /// Call this to calculate the volume for each channels
 /// </summary>
 /// <param name="channel_num"> : Number of channels</param>
 /// <returns></returns>
-float* AUDIO::CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener)
+std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener, int input_channels, int output_channels, UINT flags)
 {
-    // Emitter parameters
-    Vector3  e_Position;
-    e_Position = emitter.position;
-
-    // Listener parameters
-    Vector3 l_Top, l_Front, l_Left, l_Right, l_Position;
-    l_Position = listener.position;
-    l_Top = listener.vTopVector;
-    l_Front = listener.vFrontVector;
-    l_Right = Vector3::Cross(l_Top, l_Front);
-    l_Left = l_Right * -1;
-
-    // Distance between emitter and listener
-    Vector3 distance = l_Position - e_Position ;
-    Vector3 direction = distance;
-    direction.Normalize();
-
-    float e_LeftAngle = Vector3::GetAngle(l_Left, direction);
-    float e_RightAngle = Vector3::GetAngle(l_Right, direction);
-
-    // Calculate the difference in angle to process the channel volumes
-    float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
-    float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
-
-    // Calculate the outputted volume based on the distance
-    float distance_length{ distance.Length() };
-    float volume = 1.0f - (distance_length / emitter.size);
-
-    float output_volume[2]{ volume, volume };
-
-    if (left_Difference > 1)
-        left_Difference = 0;
-    output_volume[0] *= 1.0f - left_Difference;
-
-    if (right_Difference > 1)
-        right_Difference = 0;
-    output_volume[1] *= 1.0f - right_Difference;
+    std::vector<float>output;
 
 
-    // Clamps the volume
-    output_volume[0] = Math::Clamp(output_volume[0], 0.0f, 1.0f);
-    output_volume[1] = Math::Clamp(output_volume[1], 0.0f, 1.0f);
-    return output_volume;
+
+    // Perform calculation of channel volumes
+    if (flags & AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS)
+    {
+        // Emitter parameters
+        Vector3  e_Position;
+        e_Position = emitter.position;
+
+        // Listener parameters
+        Vector3 l_Top, l_Front, l_Left, l_Right, l_Position;
+        l_Position = listener.position;
+        l_Top = listener.vTopVector;
+        l_Front = listener.vFrontVector;
+        l_Right = Vector3::Cross(l_Top, l_Front);
+        l_Left = l_Right * -1;
+
+        // Distance between emitter and listener
+        Vector3 distance = l_Position - e_Position;
+        Vector3 direction = distance;
+        direction.Normalize();
+
+        float e_LeftAngle = Vector3::GetAngle(l_Left, direction);
+        float e_RightAngle = Vector3::GetAngle(l_Right, direction);
+
+        // Calculate the difference in angle to process the channel volumes
+        float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
+        float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
+
+        // Calculate the outputted volume based on the distance
+        float distance_length{ distance.Length() };
+        float volume = 1.0f - (distance_length / emitter.size);
+
+        float output_volume[2]{ volume, volume };
+
+        // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
+        if (left_Difference > 1)
+            left_Difference = 0;
+        output_volume[0] *= left_Difference;
+
+        if (right_Difference > 1)
+            right_Difference = 0;
+        output_volume[1] *=  right_Difference;
 
 
+        // Clamps the volume
+        output_volume[0] = Math::Clamp(output_volume[0], 0.0f, 1.0f);
+        output_volume[1] = Math::Clamp(output_volume[1], 0.0f, 1.0f);
+        if (input_channels * output_channels > 2)
+        {
+            // Creates a multi channel array
+            for (int index = 0; index < input_channels * output_channels; ++index)
+            {
+                float cur_vol = output_volume[index % input_channels];
+                output.push_back(cur_vol);
+            }
+        }
+        else
+        {
+            // Creates a double channel array
+            output.push_back(output_volume[0]);
+            output.push_back(output_volume[1]);
+        }
+        // If the distance is 0, it will result in a invalid calculation in the angle, so just return the same volume
+        if (distance.Length() == 0)
+        {
+            for (auto& v : output)
+                v = volume;
+        }
+
+    }
+    // Perform calculation of doppler frequency
+    if (flags & AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER)
+    {
+        Vector3 distance = listener.position - emitter.position;
+        Vector3 direction = distance;
+        direction.Normalize();
+        // The distance being 0 will cause X2AudioSourceVoice->SetFrequencyRatio() to fail, so we set the frequency as the default frequency
+        if (distance.Length() == 0)
+            emitter.doppler_frequency = DEFAULT_FREQUENCY;
+        else {
+
+
+
+            // Determine if the listener is going towards or away from the source
+            float factor{ 1 }, emitter_factor{ 1 };
+            Vector3 l_VelocityNormal{ listener.velocity }, e_VelocityNormal{emitter.velocity};
+            l_VelocityNormal.Normalize();
+            e_VelocityNormal.Normalize();
+
+            if (listener.velocity.Length() > 0)
+            {
+                factor = Vector3::Dot(direction, l_VelocityNormal);
+                factor = Math::Sign(factor) * -1;
+
+            }if (emitter.velocity.Length() > 0)
+                emitter_factor = Math::Sign(Vector3::Dot(direction, e_VelocityNormal));
+
+            // Perform calculations
+            float cur_freq = 
+                (
+                (SPEED_OF_SOUND_PER_FRAME + (listener.velocity.Length() * factor) ) /
+                (SPEED_OF_SOUND_PER_FRAME + (emitter.velocity.Length() * emitter_factor))
+                ) *
+                DEFAULT_FREQUENCY;
+
+            // Lerps the doppler shift so it doesnt change abruptly
+            emitter.doppler_frequency = Math::Lerp(emitter.doppler_frequency, cur_freq, 0.3f);
+        }
+    }
+    return output;
 
 }
 
+/*---------------------------------------------Audio GetStateMachine()----------------------------------------------------*/
 
-/*---------------------------------------------AUDIO GetStateMachine()----------------------------------------------------*/
-
-std::shared_ptr<AUDIO_STATES::AudioStateMachine>AUDIO::GetStateMachine()
+std::shared_ptr<AUDIO_STATES::AudioStateMachine>Audio::GetStateMachine()
 {
     return stateMachine;
 }
 
-/*---------------------------------------------AUDIO FilePath()----------------------------------------------------*/
+/*---------------------------------------------Audio FilePath()----------------------------------------------------*/
 
-std::wstring AUDIO::FilePath()
+std::wstring Audio::FilePath()
 {
     return file_path;
 }
