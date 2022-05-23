@@ -1,6 +1,6 @@
 #pragma once
 #include "Base Classes/Component.h"
-
+#include "../Engine/Audio.h"
 enum class PlayerAnim
 {
     T_Pose,
@@ -27,7 +27,7 @@ public:
 class PlayerController_Component : public BaseCharacterComponent
 {
     PlayerController_Data* data;
-
+    AudioListener audioListener;
     /// <summary>
     /// <para> WASD movement input </para>
     /// <para> WASD ˆÚ“®“ü—Í </para>
@@ -68,6 +68,10 @@ class PlayerController_Component : public BaseCharacterComponent
     /// <para> ‘¼‚Ìƒ‚ƒfƒ‹‚ªÕ“Ë‚É‚æ‚Á‚Ä‰Á‘¬“x‚Ì’²®‚ğs‚¤ </para>
     /// </summary>
     void WallCollision();
+    /// <summary>
+    /// Updates the parameters of the listener
+    /// </summary>
+    void UpdateAudioListener();
 
     bool inDialogue{};
 public:

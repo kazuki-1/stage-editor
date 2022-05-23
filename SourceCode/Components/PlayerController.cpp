@@ -121,51 +121,6 @@ void PlayerController_Component::JumpInput()
 /// </summary>
 void PlayerController_Component::SoundCollision()
 {
-    // Retrieve the components for use
-    //Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    //for (auto& g : GameObjectManager::Instance()->GetGameObjects())
-    //{
-    //    // Attempt to retrieve existing EnvironmentalAudio_Component
-    //    EnvironmentalAudio_Component* audio = g.second->GetComponent<EnvironmentalAudio_Component>();
-    //    if (!audio)
-    //        continue;
-
-    //    bool collided{};
-    //    for (auto& c : audio->Colliders())
-    //    {
-    //        collided = c->Collider()->Collide(transform->GetTranslation());
-    //        if (collided)
-    //        {
-    //            
-    //            if (!audio->Audio()->IsPlaying())
-    //                audio->Audio()->Play();
-
-    //            // Calculate the distance between the player character and the sound source
-    //            Vector3 closest_dist{ c->Collider()->DistanceToPlayer(this) };
-    //            closest_dist -= transform->GetTranslation();
-    //            float length{ closest_dist.Length() };
-    //            length = max(c->Data()->minimum_distance, length);
-
-    //            // Adjusts the volume according to the distance
-    //            float volume = 1.0f - (length / c->Collider()->Collider()->Size());
-    //            volume = min(volume, audio->GetData()->maximum_volume);
-
-    //            // Audio ducking function
-    //            if (audio->Audio()->IsDucking())
-    //                audio->Audio()->FadeTo(0.1f, 0.5f);
-    //            else
-    //            {
-    //                audio->Audio()->SetVolume(volume);
-    //                audio->Audio()->SourceVoice()->SetVolume(volume);
-    //                collided = true;
-    //            }
-    //            break;
-    //        }
-    //        else
-    //            audio->Audio()->Stop();
-
-    //    }
-    //}
 }
 
 /*--------------------------------------------------------PlayerController_Component VelocityControl()-------------------------------------------------*/
@@ -181,7 +136,9 @@ void PlayerController_Component::VelocityControl()
 /// </summary>
 void PlayerController_Component::GravityControl()
 {
-    return;
+    //return;
+    if (GetComponent<MeshCollider_Component>() == nullptr)
+        return;
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     Vector3 velocity = transform->GetVelocity();
     velocity.y -= 0.1f;
@@ -282,6 +239,28 @@ void PlayerController_Component::WallCollision()
 
 }
 
+/*--------------------------------------------------------PlayerController_Component UpdateAudioListener()----------------------------------------------------*/
+/// <summary>
+/// Updates the parameters of the listener
+/// </summary>
+void PlayerController_Component::UpdateAudioListener()
+{
+    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
+
+    Vector3 cur_pos, last_pos{audioListener.position}, velocity;
+    Vector3 front, up;
+    up.Load(transform->TransformMatrix().r[1]);
+    front.Load(transform->TransformMatrix().r[2]);
+    cur_pos = transform->GetTranslation();
+    velocity = cur_pos - last_pos;
+    audioListener.position = cur_pos;
+    audioListener.velocity = velocity;
+    if (velocity.Length() > 0)
+        int test = 0;
+    audioListener.vFrontVector = front;
+    audioListener.vTopVector = up;
+}
+
 /*--------------------------------------------------------PlayerController_Component Initialize()-------------------------------------------------*/
 /// <summary>
 /// <para>Called when component is created. Initializes the component with the component data of its matching type (OBB_COLLIDER_DATA)</para>
@@ -292,7 +271,7 @@ HRESULT PlayerController_Component::Initialize()
 {
 
     //sphere = std::make_shared<DYNAMIC_SPHERE>();
-
+    AudioEngine::Instance()->SetAudioListener(&audioListener);
     return S_OK;
 
 }
@@ -321,6 +300,7 @@ void PlayerController_Component::Execute()
     VelocityControl();
     AnimationSettings();
     NPCDialogueTrigger();
+    UpdateAudioListener();
     if (inDialogue)
         return;
     MovementInput();

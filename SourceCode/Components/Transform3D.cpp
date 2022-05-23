@@ -33,8 +33,8 @@ Transform3D_Component::Transform3D_Component(GameObject* t, ComponentData* data)
 HRESULT Transform3D_Component::Initialize()
 {
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV()));
-    // scale = data->scale;
-    // translation = data->translation;
+     scale = data->scale;
+     translation = data->translation;
     return S_OK;
 }
 
@@ -45,19 +45,16 @@ HRESULT Transform3D_Component::Initialize()
 /// </summary>
 void Transform3D_Component::Execute()
 {
-    data->translation += velocity;
+    translation += velocity;
     velocity *= 0.9f;
     if (velocity.Length() < 0.01f)
         velocity = {};
 
 
-    // quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(data->rotation.XMV()));
-    // VECTOR3 r{ ToRadians(data->rotation) };
-    // quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
     XMMATRIX S, R, T;
-    S = XMMatrixScalingFromVector(data->scale.XMV());
+    S = XMMatrixScalingFromVector(scale.XMV());
     R = XMMatrixRotationQuaternion(quaternion.XMV());
-    T = XMMatrixTranslationFromVector(data->translation.XMV());
+    T = XMMatrixTranslationFromVector(translation.XMV());
     XMMATRIX W{ S * R * T };
 
     XMStoreFloat4x4(&transform, S * R * T);
@@ -71,10 +68,10 @@ void Transform3D_Component::Execute()
 void Transform3D_Component::ExecuteUI()
 {
     XMMATRIX S, R, T;
-    S = XMMatrixScalingFromVector(data->scale.XMV());
+    S = XMMatrixScalingFromVector(scale.XMV());
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV()) );
     R = XMMatrixRotationQuaternion(quaternion.XMV());
-    T = XMMatrixTranslationFromVector(data->translation.XMV());
+    T = XMMatrixTranslationFromVector(translation.XMV());
     XMStoreFloat4x4(&transform, S * R * T);
 }
 
@@ -113,7 +110,7 @@ void Transform3D_Component::UI()
 /// <returns></returns>
 Vector3 Transform3D_Component::Scale()
 {
-    return data->scale;
+    return scale;
 }
 
 /*---------------------------------------Transform3D_Component Rotation()-------------------------------------------------*/
@@ -133,7 +130,7 @@ Vector3 Transform3D_Component::Rotation()
 /// <returns></returns>
 Vector3 Transform3D_Component::GetTranslation()
 {
-    return data->translation;
+    return translation;
 }
 
 /*---------------------------------------Transform3D_Component GetVelocity()-------------------------------------------------*/
@@ -168,7 +165,7 @@ XMMATRIX Transform3D_Component::TransformMatrix()
     Vector4 q{};
     Vector3 r{ Vector3::ToRadians(data->rotation) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
-    return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
+    return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
 }
 
 /*---------------------------------------Transform3D_Component TranformMatrixQuaternion()-------------------------------------------------*/
@@ -179,7 +176,7 @@ XMMATRIX Transform3D_Component::TransformMatrix()
 /// <returns></returns>
 XMMATRIX Transform3D_Component::TransformMatrixQuaternion()
 {
-    return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
+    return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
 }
 
 
@@ -273,7 +270,7 @@ void Transform3D_Component::SlerpRotation(Vector4 target)
 
 void Transform3D_Component::SetScale(Vector3 s)
 {
-    data->scale = s;
+    scale = s;
 }
 
 /*---------------------------------------Transform3D_Component SetRotation()-------------------------------------------------*/
@@ -287,14 +284,14 @@ void Transform3D_Component::SetRotation(Vector3 r)
 
 void Transform3D_Component::SetTranslation(Vector3 t)
 {
-    data->translation = t;
+    translation = t;
 }
 
 /*---------------------------------------Transform3D_Component OffsetTranslation()-------------------------------------------------*/
 
 void Transform3D_Component::OffsetTranslation(Vector3 off)
 {
-    data->translation += off;
+    translation += off;
 }
 
 /*---------------------------------------Transform3D_Component SetVelocity()-------------------------------------------------*/

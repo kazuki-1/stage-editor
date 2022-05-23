@@ -25,9 +25,9 @@ public:
 class Transform3D_Component : public Component
 {
 private :
-    //VECTOR3 translation;
-    //VECTOR3 scale;
+    Vector3 scale{};
     Vector4 quaternion;
+    Vector3 translation{};
     Vector3 velocity;
 protected:
     XMFLOAT4X4 transform{};

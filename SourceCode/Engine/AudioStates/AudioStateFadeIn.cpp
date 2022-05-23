@@ -6,7 +6,10 @@ using namespace AUDIO_STATES;
 /*----------------------------------------AudioStateFadeIn Class----------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------AudioStateFadeIn Initialize()---------------------------------------------*/
-void AudioStateFadeIn::Initialize(AUDIO* parent)
+/// <summary>
+/// Called when transitioning to this state
+/// </summary>
+void AudioStateFadeIn::Initialize(Audio* parent)
 {
 	AudioStateFade::Initialize(parent);
 	if (!parent->IsPlaying())
@@ -18,9 +21,8 @@ void AudioStateFadeIn::Initialize(AUDIO* parent)
 /*----------------------------------------AudioStateFadeIn Execute()---------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform any functions </para>
-/// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
 /// </summary>
-void AudioStateFadeIn::Execute(AUDIO* parent)
+void AudioStateFadeIn::Execute(Audio* parent)
 {
 	float volume{ parent->Volume() };
 	if (fabsf(volume - fade_target) > 0.01f)

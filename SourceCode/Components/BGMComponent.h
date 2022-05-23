@@ -1,5 +1,6 @@
 #pragma once
 #include "./Base Classes/Component.h"
+#include "../Engine/Audio.h"
 class OBBCollider_Component;
 class OBBCollider_Data;
 class BGMComponent_Data : public AudioData
@@ -18,7 +19,7 @@ public:
 
 class BGM_Component : public BASE_AUDIO_COMPONENT
 {
-    std::vector<std::shared_ptr<AUDIO>>audioList;
+    std::vector<std::shared_ptr<Audio>>audioList;
     std::shared_ptr<OBBCollider_Component>collider;
     BGMComponent_Data* data{};
 public:

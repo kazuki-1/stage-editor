@@ -178,62 +178,23 @@ void EnvironmentalAudio_Component::CreateLocalizedCollider(COMPONENT_TYPE t)
     colliders.back()->data = data->collider_dataset.back().get();
 }
 
-/*--------------------------------------------EnvironmentalAudio_Component CalculateVolume()--------------------------------------------------*/
-
-void EnvironmentalAudio_Component::CalculateVolume()
-{
-    //// Retrieve Player object
-    //GameObject* player = GAMEOBJECTS->GetPlayer().get();
-    //if (!player) return;
-
-    //Transform3D_Component* player_transform = player->GetComponent<Transform3D_Component>();
-
-    //bool collided{};
-    //for (auto& collider : colliders)
-    //{
-    //    // Perform collision check
-    //    collided = collider->GetCollider()->Collide(player_transform->GetTranslation());
-    //    if (collided)
-    //    {
-    //        if (!audio->IsPlaying())
-    //            audio->Play();
-
-
-    //        // Calculate the volume based on distance between target and this object
-    //        PlayerController_Component* player_controller = player->GetComponent<PlayerController_Component>();
-    //        Vector3 closest_dist = collider->GetColliderComponent()->DistanceToPlayer(player_controller);
-    //        closest_dist -= player_transform->GetTranslation();
-    //        float length{ closest_dist.Length() };
-
-    //        // Limits the minimum distance
-    //        length = max(collider->data->minimum_distance, length);
-
-    //        // Limits the volume
-    //        float volume = 1.0f - (length / collider->GetCollider()->GetSize());
-    //        volume = min(volume, data->maximum_volume);
-
-    //        // Ducking functions
-    //        if (audio->IsDucking())
-    //            audio->FadeTo(0.1f, 0.5f);
-    //        else
-    //        {
-    //            //audio->SetVolume(volume);
-    //            //audio->SourceVoice()->SetVolume(volume);
-    //        }
-    //        break;
-    //    }
-    //    else
-    //        audio->Stop();
-    //}
-
-}
-
 /*--------------------------------------------EnvironmentalAudio_Component Constructor--------------------------------------------------*/
 
 EnvironmentalAudio_Component::EnvironmentalAudio_Component(GameObject* t, ComponentData* data)
 {
     parent = t;
     this->data = static_cast<EnvironmentalAudio_Data*>(data);
+}
+
+/*--------------------------------------------EnvironmentalAudio_Component Destructor--------------------------------------------------*/
+
+EnvironmentalAudio_Component::~EnvironmentalAudio_Component()
+{
+    //if (audio->IsPlaying())
+    //    audio->Stop();
+    //// Delists the audio from the map
+    //AudioEngine::Instance()->Delist(audio);
+    //audio = {};
 }
 
 /*--------------------------------------------EnvironmentalAudio_Component Initialize()--------------------------------------------------*/
@@ -250,18 +211,14 @@ HRESULT EnvironmentalAudio_Component::Initialize()
         {
             AudioEngine::Instance()->Insert(data->name, data->file_path);
             audio = AudioEngine::Instance()->Retrieve(data->name);
-            audio->SetEmitter(&emitter);
             audio->SetAudioEmitter(&audioEmitter);
             audio->Loop();
             audio->SetVolume(1.0f);
             audio->Play();
             //3DAudio emitter initialization
             Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-            emitter.Position = transform->GetTranslation().X3DV();
-            emitter.pVolumeCurve = (X3DAUDIO_DISTANCE_CURVE*)&X3DAudioDefault_LinearCurve;
-
             audioEmitter.position = transform->GetTranslation();
-
+            audio->SourceVoice()->GetFrequencyRatio(&audioEmitter.doppler_frequency);
 
 
 
@@ -270,8 +227,6 @@ HRESULT EnvironmentalAudio_Component::Initialize()
                 for (auto& d : data->collider_dataset) {
                     colliders.push_back(std::make_shared<LocalizedCollider_SubComponent>(this, d.get()));
                     colliders.back()->Initialize();
-                    emitter.CurveDistanceScaler = colliders.back()->GetCollider()->GetSize();
-                    audioEmitter.minimum_distance = d->minimum_distance;
                     audioEmitter.size = colliders.back()->GetCollider()->GetSize();
 
 
@@ -281,6 +236,7 @@ HRESULT EnvironmentalAudio_Component::Initialize()
         }
 
     }
+
     return S_OK;
 }
 
@@ -291,36 +247,30 @@ HRESULT EnvironmentalAudio_Component::Initialize()
 /// </summary>
 void EnvironmentalAudio_Component::Execute()
 {
-
+    if (!audio)
+        return;
+    if (colliders.size() < 1)
+        return;
+    for (auto& c : colliders)
+        c->Execute();
     if (SceneManager::Instance()->PauseState())
     {
         audio->Stop();
         return;
     }
-    if (colliders.size() < 1)
-        return;
-    for (auto& c : colliders)
-        c->Execute();
-
-    
-    CalculateVolume();
 
 
+
+    // 3DAudio Emitter parameter updates
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     XMMATRIX matrix = transform->TransformMatrixQuaternion();
     Vector3 forward, top;
     forward.Load(matrix.r[2]);
     top.Load(matrix.r[1]);
-    // 3DAudio Emitter parameter updates
     Vector3 closest_point = colliders[0]->collider->GetClosestPoint(Camera::Instance()->EyePosition());
-    Vector3 last_pos, cur_pos{closest_point};
+    Vector3 last_pos{audioEmitter.position}, cur_pos{closest_point};
     Vector3 velocity = cur_pos - last_pos;
 
-    //closest_point.x *= -1;
-    emitter.Position = closest_point.X3DV();
-    emitter.Velocity = velocity.X3DV();
-    emitter.OrientFront = forward.X3DV();
-    emitter.OrientTop = top.X3DV();
 
 
     audioEmitter.position = closest_point;
@@ -341,10 +291,8 @@ void EnvironmentalAudio_Component::Render()
 {
     for (auto& c : colliders)
         c->Render();
-    audio->RenderDebug();
-    ImGui::Begin("Emitters");
-    ImGui::InputFloat3("Position", &emitter.Position.x);
-    ImGui::End();
+    if(audio)
+        audio->RenderDebug();
 
 }
 
@@ -357,6 +305,7 @@ void EnvironmentalAudio_Component::UI()
 {
     if (ImGui::TreeNode("Environmental Audio"))
     {
+        // File browser dialog
         ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
         static bool fileOpenEA{};
         std::string preview{ "" };
@@ -395,11 +344,13 @@ void EnvironmentalAudio_Component::UI()
                  {
                      preview.push_back(c);
                  }
+                 audio->SetAudioEmitter(&audioEmitter);
 
                  browser->Close();
              }
          }
 
+         // Properties
          ImGui::DragFloat("Maximum volume", &data->maximum_volume, 0.05f, 0.0f, 1.0f);
 
         if (ImGui::Button("Play"))

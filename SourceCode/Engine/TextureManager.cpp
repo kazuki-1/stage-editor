@@ -7,7 +7,7 @@
 /*--------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------TextureManager Insert()---------------------------------------------------------------*/
 
-std::shared_ptr<TEXTURE>TextureManager::Insert(std::wstring file_path)
+std::shared_ptr<Texture>TextureManager::Insert(std::wstring file_path)
 {
     if (file_path == L"Default_Diffuse")
         return GenerateEmpty();
@@ -15,13 +15,13 @@ std::shared_ptr<TEXTURE>TextureManager::Insert(std::wstring file_path)
         return GenerateNormal();
 
     std::string path{};
-    std::shared_ptr<TEXTURE>entity;
+    std::shared_ptr<Texture>entity;
     
     if (file_path == L"") {
-        entity = std::make_shared<TEXTURE>(DirectX11::Instance()->Device());
+        entity = std::make_shared<Texture>(DirectX11::Instance()->Device());
         textureMap.emplace(file_path, entity);
     }
-    entity = std::make_shared<TEXTURE>(file_path, DirectX11::Instance()->Device());
+    entity = std::make_shared<Texture>(file_path, DirectX11::Instance()->Device());
     textureMap.emplace(file_path, entity);
 
 
@@ -31,27 +31,27 @@ std::shared_ptr<TEXTURE>TextureManager::Insert(std::wstring file_path)
 
 /*-------------------------------------------TextureManager GenerateEmpty()---------------------------------------------------------------*/
 
-std::shared_ptr<TEXTURE>TextureManager::GenerateEmpty()
+std::shared_ptr<Texture>TextureManager::GenerateEmpty()
 {
-    std::shared_ptr<TEXTURE>entity;
-    entity = std::make_shared<TEXTURE>(0xFFFFFFFF);
+    std::shared_ptr<Texture>entity;
+    entity = std::make_shared<Texture>(0xFFFFFFFF);
     textureMap.emplace(L"Default_Diffuse", entity);
     return entity;
 }
 
 /*-------------------------------------------TextureManager GenerateNormal()---------------------------------------------------------------*/
 
-std::shared_ptr<TEXTURE>TextureManager::GenerateNormal()
+std::shared_ptr<Texture>TextureManager::GenerateNormal()
 {
-    std::shared_ptr<TEXTURE>entity;
-    entity = std::make_shared<TEXTURE>(0xFFFF7F7F);
+    std::shared_ptr<Texture>entity;
+    entity = std::make_shared<Texture>(0xFFFF7F7F);
     textureMap.emplace(L"Default_Normal", entity);
     return entity;
 }
 
 /*-------------------------------------------TextureManager Retrieve()---------------------------------------------------------------*/
 
-std::shared_ptr<TEXTURE>TextureManager::Retrieve(std::wstring file_path)
+std::shared_ptr<Texture>TextureManager::Retrieve(std::wstring file_path)
 {
     // Returns empty texture if path is blank
     if (file_path == L"")

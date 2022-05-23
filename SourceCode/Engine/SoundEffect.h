@@ -2,10 +2,10 @@
 #include "Audio.h"
 #include <assert.h>
 
-class SoundEffect : public AUDIO
+class SoundEffect : public Audio
 {
 public:
-    SoundEffect(std::wstring path) : AUDIO(path)
+    SoundEffect(std::wstring path) : Audio(path)
     {
         
     }

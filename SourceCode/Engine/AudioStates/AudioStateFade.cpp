@@ -10,7 +10,7 @@ using namespace AUDIO_STATES;
 /// <summary>
 /// <para> Called when transitioned into this state </para>
 /// </summary>
-void AudioStateFade::Initialize(AUDIO* parent)
+void AudioStateFade::Initialize(Audio* parent)
 {
     float current_volume{ parent->Volume() };
     float fade_in_frame{ fade_in_time * 60.0f };
@@ -23,7 +23,7 @@ void AudioStateFade::Initialize(AUDIO* parent)
 /// <summary>
 /// <para>Called when transitioning away from this state </para>
 /// </summary>
-void AudioStateFade::Finalize(AUDIO* parent)
+void AudioStateFade::Finalize(Audio* parent)
 {
     parent->SetVolume(fade_target);
     fade_increment = fade_target = 0.0f;
@@ -51,7 +51,7 @@ void AudioStateFade::SetTime(float t)
 /// <summary>
 /// <para> Calculates the rate of fading. Call after SetVolume and SetTime</para>
 /// </summary>
-void AudioStateFade::CalculateRate(AUDIO* parent)
+void AudioStateFade::CalculateRate(Audio* parent)
 {
     float current_volume{ parent->Volume() };
     float fade_in_frame{ fade_in_time * 60.0f };

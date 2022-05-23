@@ -20,11 +20,9 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
 
     
     // X3DAUDIO_LISTENER initialization
-    listener.pCone = 0;
 
     // Targets the Audiolistener to the camera
-    AudioEngine::Instance()->SetListener(&listener);
-    AudioEngine::Instance()->SetAudioListener(&audioListener);
+    //AudioEngine::Instance()->SetAudioListener(&audioListener);
 
 
 }
@@ -104,7 +102,7 @@ void Camera::Execute()
     XMVECTOR F{ T.r[2] };
     XMFLOAT3 f;
     XMStoreFloat3(&f, F);
-
+    
     //XMFLOAT3 e;
     cameraPosition.x = target.x + (f.x * -range);
     cameraPosition.y = target.y + (f.y * range);
@@ -112,14 +110,9 @@ void Camera::Execute()
     
     SetLookAt();
 
-    // Updates X3DAUDIO_LISTENER
-    Vector3 last_pos{ listener.Position }, cur_pos{ cameraPosition };
+    // Updates AudioListener for 3D Audio
+    Vector3 last_pos{ audioListener.position}, cur_pos{ cameraPosition };
     Vector3 velocity = last_pos - cur_pos;
-    //cur_pos.x *= -1;
-    listener.Velocity = velocity.X3DV();
-    listener.Position = cur_pos.X3DV();
-    listener.OrientFront = forward.X3DV();
-    listener.OrientTop = vertical.X3DV();
 
     audioListener.position = cur_pos;
     audioListener.vFrontVector = forward;
@@ -146,14 +139,9 @@ void Camera::Execute()
 
 void Camera::Render()
 {
-    ImGui::Begin("Listener");
-    ImGui::InputFloat3("Position", &listener.Position.x);
-    ImGui::End();
-    //ImGui::Begin("Position");
-    //ImGui::InputFloat3("Eye", &Eye.x);
-    //ImGui::InputFloat3("Target", &target.x);
-    //ImGui::End();
-    //s->Render();
+    // ImGui::Begin("Listener");
+    // ImGui::InputFloat3("Position", &audioListener.Position.x);
+    // ImGui::End();
 }
 
 /*-----------------------------------------------------------Camera ResetCamera()-------------------------------------------------*/

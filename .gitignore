@@ -12,6 +12,9 @@
 *.fbx
 *.mrs
 *.wav
+*.zip
+*.7z
+*.rar
 
 
 
@@ -372,3 +375,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /audio_test_.stg
 stage-editor.7z
+/SourceCode.7z
