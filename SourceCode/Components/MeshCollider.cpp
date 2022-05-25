@@ -24,7 +24,9 @@ HRESULT MeshCollider_Component::Initialize()
 
     if (data)
     {
-        COLLIDERS::RAYCAST_MANAGER::Instance()->Insert(GetComponent<Mesh_Component>());
+        Mesh_Component* mesh = GetComponent<Mesh_Component>();
+        if (mesh)
+            COLLIDERS::RAYCAST_MANAGER::Instance()->Insert(GetComponent<Mesh_Component>());
     }
     return S_OK;
 }

@@ -22,7 +22,7 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
     // X3DAUDIO_LISTENER initialization
 
     // Targets the Audiolistener to the camera
-    //AudioEngine::Instance()->SetAudioListener(&audioListener);
+    AudioEngine::Instance()->SetAudioListener(&audioListener);
 
 
 }
@@ -31,7 +31,7 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
 
 void Camera::Execute()
 {
-    // camera controls
+    // Camera controls
     INPUTMANAGER* i = INPUTMANAGER::Instance();
     INPUTMANAGER::MOUSE* m = INPUTMANAGER::Instance()->Mouse().get();
     float wheel{};
@@ -85,34 +85,30 @@ void Camera::Execute()
 
 
     // Update the camera position 
-    XMMATRIX temp{ XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
+    XMMATRIX transform{ XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
     Vector3 horizontol, vertical, forward;
-    horizontol.Load(temp.r[0]);
-    vertical.Load(temp.r[1]);
+    horizontol.Load(transform.r[0]);
+    vertical.Load(transform.r[1]);
+    forward.Load(transform.r[2]);
     horizontol.Normalize();
     vertical.Normalize();
-    forward = cameraPosition - target;
     forward.Normalize();
     target += horizontol * movement.x + vertical * movement.y ;
     //rotation.x = Math::Clamp(rotation.x, ToRadians(-89), ToRadians(89));
     range += -forward.Length() * wheel * 0.5f;
-
     range = (std::max)(1.0f, range);
-    XMMATRIX T{ XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, 0) };
-    XMVECTOR F{ T.r[2] };
-    XMFLOAT3 f;
-    XMStoreFloat3(&f, F);
+
     
-    //XMFLOAT3 e;
-    cameraPosition.x = target.x + (f.x * -range);
-    cameraPosition.y = target.y + (f.y * range);
-    cameraPosition.z = target.z + (f.z * -range);
+    cameraPosition.x = target.x + (forward.x * -range);
+    cameraPosition.y = target.y + (forward.y * range);
+    cameraPosition.z = target.z + (forward.z * -range);
     
     SetLookAt();
 
     // Updates AudioListener for 3D Audio
+    forward.Normalize();
     Vector3 last_pos{ audioListener.position}, cur_pos{ cameraPosition };
-    Vector3 velocity = last_pos - cur_pos;
+    Vector3 velocity = cur_pos - last_pos;
 
     audioListener.position = cur_pos;
     audioListener.vFrontVector = forward;

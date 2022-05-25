@@ -8,6 +8,7 @@
 #include "../Components/Base Classes/DataManager.h"
 #include "../Engine/Text.h"
 #include "../Engine/Audio.h"
+#include "../Engine/COLLISION.h"
 
 
 
@@ -54,4 +55,5 @@ void SceneUI::Render()
 void SceneUI::Finalize()
 {
     GameObjectManager::Instance()->Finalize();
+    COLLIDERS::RAYCAST_MANAGER::Instance()->Finalize();
 }

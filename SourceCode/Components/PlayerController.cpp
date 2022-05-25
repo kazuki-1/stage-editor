@@ -251,12 +251,13 @@ void PlayerController_Component::UpdateAudioListener()
     Vector3 front, up;
     up.Load(transform->TransformMatrix().r[1]);
     front.Load(transform->TransformMatrix().r[2]);
+
+    front = transform->GetTranslation() - Camera::Instance()->EyePosition();
+
     cur_pos = transform->GetTranslation();
     velocity = cur_pos - last_pos;
     audioListener.position = cur_pos;
     audioListener.velocity = velocity;
-    if (velocity.Length() > 0)
-        int test = 0;
     audioListener.vFrontVector = front;
     audioListener.vTopVector = up;
 }
@@ -271,7 +272,6 @@ HRESULT PlayerController_Component::Initialize()
 {
 
     //sphere = std::make_shared<DYNAMIC_SPHERE>();
-    AudioEngine::Instance()->SetAudioListener(&audioListener);
     return S_OK;
 
 }
@@ -317,6 +317,7 @@ void PlayerController_Component::Execute()
 /// </summary>
 void PlayerController_Component::Render()
 {
+
 }
 
 /*--------------------------------------------------------PlayerController_Component UI()-------------------------------------------------*/

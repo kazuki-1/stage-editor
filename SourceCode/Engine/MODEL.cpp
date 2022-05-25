@@ -50,9 +50,8 @@ void MODEL::UpdateTransform()
 
 void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 {
-    static float factor;
     static const int transition_delay{ 15 };
-    static int transition_progress;
+    
     AN::KEYFRAME* cur_kf, * next_kf, output;
     AN* cur_an, * next_an;
 

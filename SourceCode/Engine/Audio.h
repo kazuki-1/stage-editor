@@ -147,6 +147,11 @@ public:
     float fade_in_volume{};
     Audio() {};
     Audio(std::wstring path);
+    ~Audio()
+    {
+        int test;
+        test = 0;
+    }
     virtual void Play();
     /// <summary>
     /// <para> Call this to perform fade in and play the file </para>

@@ -239,7 +239,6 @@ HRESULT EnvironmentalAudio_Component::Initialize()
 
     return S_OK;
 }
-
 /*--------------------------------------------EnvironmentalAudio_Component Execute()--------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame </para>
@@ -265,9 +264,9 @@ void EnvironmentalAudio_Component::Execute()
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     XMMATRIX matrix = transform->TransformMatrixQuaternion();
     Vector3 forward, top;
-    forward.Load(matrix.r[2]);
     top.Load(matrix.r[1]);
-    Vector3 closest_point = colliders[0]->collider->GetClosestPoint(Camera::Instance()->EyePosition());
+    forward.Load(matrix.r[2]);
+    Vector3 closest_point = colliders[0]->collider->GetClosestPoint(AudioEngine::Instance()->GetAudioListener()->position);
     Vector3 last_pos{audioEmitter.position}, cur_pos{closest_point};
     Vector3 velocity = cur_pos - last_pos;
 

@@ -558,8 +558,9 @@ void Audio::RenderDebug()
 /// <returns></returns>
 std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener, int input_channels, int output_channels, UINT flags)
 {
-    std::vector<float>output;
 
+    std::vector<float>output;
+    std::vector<float>volumes;
 
 
     // Perform calculation of channel volumes
@@ -570,58 +571,110 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
         e_Position = emitter.position;
 
         // Listener parameters
-        Vector3 l_Top, l_Front, l_Left, l_Right, l_Position;
+        Vector3 l_Top, l_Front, l_Back, l_Left, l_Right, l_Position;
         l_Position = listener.position;
         l_Top = listener.vTopVector;
         l_Front = listener.vFrontVector;
         l_Right = Vector3::Cross(l_Top, l_Front);
-        l_Left = l_Right * -1;
+        l_Left = l_Right * -1.0f;
+        l_Back = l_Front * -1.0f;
+
+        l_Front.Normalize();
+        l_Back.Normalize();
+        l_Left.Normalize();
+        l_Right.Normalize();
+
 
         // Distance between emitter and listener
         Vector3 distance = l_Position - e_Position;
         Vector3 direction = distance;
         direction.Normalize();
 
-        float e_LeftAngle = Vector3::GetAngle(l_Left, direction);
-        float e_RightAngle = Vector3::GetAngle(l_Right, direction);
-
-        // Calculate the difference in angle to process the channel volumes
-        float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
-        float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
-
-        // Calculate the outputted volume based on the distance
-        float distance_length{ distance.Length() };
-        float volume = 1.0f - (distance_length / emitter.size);
-
-        float output_volume[2]{ volume, volume };
-
-        // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
-        if (left_Difference > 1)
-            left_Difference = 0;
-        output_volume[0] *= left_Difference;
-
-        if (right_Difference > 1)
-            right_Difference = 0;
-        output_volume[1] *=  right_Difference;
 
 
-        // Clamps the volume
-        output_volume[0] = Math::Clamp(output_volume[0], 0.0f, 1.0f);
-        output_volume[1] = Math::Clamp(output_volume[1], 0.0f, 1.0f);
+        // FrontLeft and FrontRight
+        {
+            Vector3 front_dir = direction;
+            front_dir += l_Front;
+            front_dir.Normalize();
+
+
+            float e_LeftAngle = Vector3::GetAngle(l_Left, front_dir);
+            float e_RightAngle = Vector3::GetAngle(l_Right, front_dir);
+
+            // Calculate the difference in angle to process the channel volumes
+            float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
+            float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
+
+            // Calculate the outputted volume based on the distance
+            float distance_length{ distance.Length() };
+            float volume = 1.0f - (distance_length / emitter.size);
+
+            // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
+            if (left_Difference > 1)
+                left_Difference = 0;
+            if (right_Difference > 1)
+                right_Difference = 0;
+
+
+
+            volumes.push_back(volume * left_Difference);
+            volumes.back() = Math::Clamp(volumes.back(), 0.0f, 1.0f);
+            volumes.push_back(volume * right_Difference);
+            volumes.back() = Math::Clamp(volumes.back(), 0.0f, 1.0f);
+
+        }
+
+        // BackLeft and BackRight
+        {
+            Vector3 back_dir = direction;
+            back_dir -= l_Front;
+            back_dir.Normalize();
+
+
+            float e_LeftAngle = Vector3::GetAngle(l_Left, back_dir);
+            float e_RightAngle = Vector3::GetAngle(l_Right, back_dir);
+
+            // Calculate the difference in angle to process the channel volumes
+            float left_Difference{ fabsf(e_LeftAngle / OBTUSE_ANGLE) };
+            float right_Difference{ fabsf(e_RightAngle / OBTUSE_ANGLE) };
+
+            // Calculate the outputted volume based on the distance
+            float distance_length{ distance.Length() };
+            float volume = 1.0f - (distance_length / emitter.size);
+
+            // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
+            if (left_Difference > 1)
+                left_Difference = 0;
+            if (right_Difference > 1)
+                right_Difference = 0;
+
+
+
+            volumes.push_back(volume * left_Difference);
+            volumes.back() = Math::Clamp(volumes.back(), 0.0f, 1.0f);
+            volumes.push_back(volume * right_Difference);
+            volumes.back() = Math::Clamp(volumes.back(), 0.0f, 1.0f);
+
+        }
+
+
+
+
         if (input_channels * output_channels > 2)
         {
             // Creates a multi channel array
             for (int index = 0; index < input_channels * output_channels; ++index)
             {
-                float cur_vol = output_volume[index % input_channels];
+                float cur_vol = volumes[index % output_channels];
                 output.push_back(cur_vol);
             }
         }
         else
         {
             // Creates a double channel array
-            output.push_back(output_volume[0]);
-            output.push_back(output_volume[1]);
+            output.push_back(volumes[0]);
+            output.push_back(volumes[1]);
         }
         // If the distance is 0, it will result in a invalid calculation in the angle, so just return the same volume
         if (distance.Length() == 0)
@@ -662,7 +715,7 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
             float cur_freq = 
                 (
                 (SPEED_OF_SOUND_PER_FRAME + (listener.velocity.Length() * factor) ) /
-                (SPEED_OF_SOUND_PER_FRAME + (emitter.velocity.Length() * emitter_factor))
+                (SPEED_OF_SOUND_PER_FRAME - (emitter.velocity.Length() * emitter_factor))
                 ) *
                 DEFAULT_FREQUENCY;
 
@@ -671,7 +724,6 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
         }
     }
     return output;
-
 }
 
 /*---------------------------------------------Audio GetStateMachine()----------------------------------------------------*/

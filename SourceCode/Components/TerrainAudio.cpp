@@ -419,44 +419,7 @@ void TerrainAudio_Component::ExecuteReceiver()
 
     }
 
-
-
-
-
-    //for (auto& entity : receiver->list_of_emitters)
-    //{
-    //    //TerrainAudio_Emitter* emitter = (TerrainAudio_Emitter*)(entity->parameters.get());
-    //    Mesh_Component* emitter_mesh = entity->GetComponent<Mesh_Component>();
-    //    TerrainAudio_Data_Emitter* emitter_data = (TerrainAudio_Data_Emitter*)(entity->data->property_data.get());
-
-    //    for (int index = 0; index < data->receiver_bones.size(); ++index)
-    //    {
-    //        // Prepare the rays
-    //        Vector3 start, end;
-    //        start = receiver_coords[index];
-
-    //        // Error compensation
-    //        start.y += 0.092f;
-    //        end = start;
-    //        end.y -= 0.022f;
-
-
-    //        // Perform rayCasting collision check
-    //        COLLIDERS::RAYCASTDATA rcd{};
-    //        bool collided;
-    //        collided = RAYCAST(start, end, emitter_mesh,
-    //            emitter_data->mesh_index, rcd);
-    //        // Updates the collided mesh index
-    //        if (rcd.m_Index >= 0 && collided)
-    //            receiver->parameters[index].collided_mesh_index = rcd.m_Index;
-    //        else if (!collided)
-    //            receiver->parameters[index].collided_mesh_index = -1;
-
-    //    }
-    //}
-
     // Plays the audio if the collider has been triggered
-
     for (auto& status : receiver->parameters)
     {
 
