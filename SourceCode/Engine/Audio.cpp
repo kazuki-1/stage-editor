@@ -695,8 +695,6 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
             emitter.doppler_frequency = DEFAULT_FREQUENCY;
         else {
 
-
-
             // Determine if the listener is going towards or away from the source
             float factor{ 1 }, emitter_factor{ 1 };
             Vector3 l_VelocityNormal{ listener.velocity }, e_VelocityNormal{emitter.velocity};

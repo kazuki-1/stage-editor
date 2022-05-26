@@ -272,6 +272,7 @@ HRESULT PlayerController_Component::Initialize()
 {
 
     //sphere = std::make_shared<DYNAMIC_SPHERE>();
+    //AudioEngine::Instance()->SetAudioListener(&audioListener);
     return S_OK;
 
 }
