@@ -58,7 +58,6 @@
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStates.cpp" />
-    <ClCompile Include="SourceCode\Engine\Audio\AudioFileAnalyzer.cpp" />
     <ClCompile Include="SourceCode\Engine\BlendMode.cpp" />
     <ClCompile Include="SourceCode\Engine\Camera.cpp" />
     <ClCompile Include="SourceCode\Engine\COLLISION.cpp" />
@@ -146,7 +145,6 @@
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h" />
-    <ClInclude Include="SourceCode\Engine\Audio\AudioFileAnalyzer.h" />
     <ClInclude Include="SourceCode\Engine\BlendMode.h" />
     <ClInclude Include="SourceCode\Engine\Camera.h" />
     <ClInclude Include="SourceCode\Engine\COLLISION.h" />
@@ -285,8 +283,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\External\Effekseer153a\include;.\External\ogg\include;.\External\Cereal\include;.\External\DirectXTK\Inc;$(IncludePath)</IncludePath>
-    <LibraryPath>.\External\ogg;.\External\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\External\Effekseer153a\include;.\External\Cereal\include;$(solution)External\DirectXTK\Inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solution)External\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -337,7 +335,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;XAudio2.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

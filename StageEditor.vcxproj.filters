@@ -192,9 +192,6 @@
     <Filter Include="Engine\Texture">
       <UniqueIdentifier>{3b40b060-3ab5-427b-9aaa-59650c37e5d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Audio\AudioStates">
-      <UniqueIdentifier>{88005a0b-da38-4aef-96b4-34bf3e4ff9df}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -251,11 +248,29 @@
     <ClCompile Include="SourceCode\Engine\Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStates.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\Audio\AudioController.cpp">
       <Filter>Source Files\AudioController</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Scenes\Scene.cpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\BlendMode.cpp">
       <Filter>Engine\BlendMode</Filter>
@@ -419,27 +434,6 @@
     <ClCompile Include="SourceCode\Engine\Texture.cpp">
       <Filter>Engine\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Audio\AudioFileAnalyzer.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePause.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStatePlay.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Engine\AudioStates\AudioStates.cpp">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -532,11 +526,29 @@
     <ClInclude Include="SourceCode\Engine\Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
     <ClInclude Include="SourceCode\Engine\SoundEffect.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Audio\AudioController.h">
       <Filter>Source Files\AudioController</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\BlendMode.h">
       <Filter>Engine\BlendMode</Filter>
@@ -696,27 +708,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Texture.h">
       <Filter>Engine\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Audio\AudioFileAnalyzer.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h">
-      <Filter>Engine\Audio\AudioStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
