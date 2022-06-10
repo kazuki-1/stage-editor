@@ -8,7 +8,6 @@ using namespace DirectX;
 class DirectX11 : public Graphics
 {
     DirectX11() {};
-    ~DirectX11();
     XMMATRIX PR{}, OR{}, WO{};
     XMFLOAT4X4 projection{}, ortho{}, world{};
     int GPUMemory{};
