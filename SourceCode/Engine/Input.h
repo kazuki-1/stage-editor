@@ -126,7 +126,6 @@ public:
 	void Initialize();
 	void Execute();
 	void ResetState();
-	void DragMousePosition(Vector2* v, KEYSTATE* k);
 	bool MouseRayCast(MODEL* m, D3D11_VIEWPORT vp);
 
 	std::shared_ptr<KEYBOARD> Keyboard();

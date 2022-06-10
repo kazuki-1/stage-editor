@@ -74,7 +74,7 @@ class AudioEngine : public Singleton<AudioEngine>
     AudioListener* audioListener;
     X3DAUDIO_HANDLE x3d_handle;
     float matrixCoefficients[INPUT_CHANNELS * MAX_OUTPUT_CHANNELS];
-    int nChannels{};
+    int nChannels{};        // Output channels
     friend class Audio;
     std::map<std::string, std::shared_ptr<Audio>>audios;
 
@@ -152,6 +152,16 @@ public:
         int test;
         test = 0;
     }
+
+    /// <summary>
+    /// <para> Called to initialize the object </para>
+    /// </summary>
+    /// <returns></returns>
+    HRESULT Initialize();
+    /// <summary>
+    /// <para> Called every frame to perform functions </para>
+    /// </summary>
+    void Execute();
     virtual void Play();
     /// <summary>
     /// <para> Call this to perform fade in and play the file </para>
@@ -206,15 +216,6 @@ public:
     /// </summary>
     void StopDucking();
     std::wstring FilePath();
-    /// <summary>
-    /// <para> Called to initialize the object </para>
-    /// </summary>
-    /// <returns></returns>
-    HRESULT Initialize();
-    /// <summary>
-    /// <para> Called every frame to perform functions </para>
-    /// </summary>
-    void Execute();
     float Volume();
     XAUDIO2_BUFFER Buffer();
     IXAudio2SourceVoice* SourceVoice();

@@ -146,6 +146,7 @@ public:
 	void Remove(std::string n);
 	void Create(std::string n, LIGHTING::L_TYPE t);
 
+	// Deprecated. To set lighting other than directional light, create a gameObject and insert the component PointLight_Component or SpotLight_Component
 	void RenderUI();
 	void OutputFile(std::string f);
 	void ReadFromFile(std::string f);

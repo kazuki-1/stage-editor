@@ -1,3 +1,10 @@
+// This shader is used when I want to apply an outline or draw wireframe
+// Currently, this is unused, I left this in just in case
+// As wireframe rendering is somewhat convenient
+
+
+
+// VertexData
 struct VS_IN
 {
     float4 position : POSITION;
@@ -7,6 +14,8 @@ struct VS_IN
     float4 weights : WEIGHTS;
     uint4 bones : BONES;
 };
+
+// VertexShader output
 struct VS_OUT
 {
     float4 position : SV_POSITION;
@@ -18,11 +27,14 @@ struct VS_OUT
     float2 uv : UV;
 };
 
+// DirectionalLight data
 struct DLIGHT_DATA
 {
     float4 direction;
     float4 colour;
 };
+
+// PointLight data
 struct PLIGHT_DATA
 {
     float4 position;
@@ -30,6 +42,8 @@ struct PLIGHT_DATA
     float range;
     float3 temp;
 };
+
+// SpotlightData
 struct SLIGHT_DATA
 {
     float4 position;
@@ -44,18 +58,16 @@ struct SLIGHT_DATA
 static const int PLIGHT_MAX = 8;
 static const int SLIGHT_MAX = 8;
 
+// Scene Constant buffer (Light, camera etc)
 cbuffer CBUFFER_S : register(b0)
 {
     row_major float4x4 view_proj;
     float4 viewPosition;
     float4 ambientLightColour;
     DLIGHT_DATA directional;
-    //PLIGHT_DATA pointlights[PLIGHT_MAX];
-    //SLIGHT_DATA spotlights[SLIGHT_MAX];
-    //int pLightCount;
-    //int sLightCount;
-    //float2 temp;
 }
+
+// Mesh Constant buffer
 cbuffer CBUFFER_M : register(b1)
 {
     row_major float4x4 world;
@@ -63,6 +75,8 @@ cbuffer CBUFFER_M : register(b1)
     float4 colour;
 
 }
+
+// Outline constant buffer (Outline properties)
 cbuffer CBUFFER_OUTLINE : register(b2)
 {
     float4 outline_colour;
@@ -75,12 +89,12 @@ cbuffer CBUFFER_OUTLINE : register(b2)
 VS_OUT VS_MAIN(VS_IN vin)
 {
     VS_OUT vout;
-    //float sigma = vin.tangent.w;
-    //vin.tangent.w = 0;
 
     float4 n_Pos = { 0,0, 0, 1.0f };
     float4 n_Normal = { 0, 0, 0, 0 };
     float4 n_Tangent = { 0, 0, 0, 0 };
+    
+    // Cast the parameters based on their bone influences
     for (int ind = 0; ind < 4; ++ind)
     {
         n_Pos += vin.weights[ind] * mul(float4(vin.position.xyz, 1.0f), b_Transform[vin.bones[ind]]);
@@ -94,8 +108,6 @@ VS_OUT VS_MAIN(VS_IN vin)
     vout.tangent = mul(float4(n_Tangent.xyz, 0.0f), world).xyz;
     vout.world_position += float4(normalize(vout.normal).xyz, 1.0f) * outline_size;
     vout.position += float4(normalize(vout.normal).xyz , 1.0f) * outline_size;
-    //vout.tangent = mul(float4(vout.tangent.xyz, 0.0f), view_proj).xyz;
-    //vout.normal = mul(float4(vout.normal.xyz, 0.0f), view_proj).xyz;
     vout.tangent = normalize(vout.tangent).xyz;
     vout.normal = normalize(vout.normal).xyz;
     vout.uv = vin.uv;

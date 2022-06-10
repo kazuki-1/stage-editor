@@ -1,3 +1,4 @@
+#include "../Engine/IMGUI.h"
 #include "Sprite2D.h"
 #include "Transform2D.h"
 namespace FS = std::filesystem;
@@ -59,22 +60,34 @@ void Sprite2D_Component::UI()
 {
     if (ImGui::TreeNode("Sprite 2d"))
     {
+        ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
+        static bool fileOpenS{};
         IMGUI::Instance()->InputText("Image Path", &data->image_path);
-        if (ImGui::Button("Load Sprite"))
+        if (ImGui::Button("Open Sprite"))
         {
-            if (!sprite)
-                sprite = std::make_shared<SPRITE>();
-            std::wstring directory{ L"./Data/Images/" };
-            FS::path path(data->image_path);
-            FS::path name{ path.filename() };
-            name.replace_extension("");
-            directory +=  path.filename().wstring();
-            data->image_path = directory;
-            sprite->Initialize(data->image_path.c_str());
-            D3D11_TEXTURE2D_DESC t2d;
-            sprite->Texture()->QueryTextureDesc(&t2d);
+            browser->Open();
+            browser->SetTitle("Open Image");
+            browser->SetTypeFilters({ ".jpg", ".png", ".*" });
+            fileOpenS  = true;
+        }
+        if (fileOpenS)
+        {
+            browser->Display();
+            if (browser->HasSelected())
+            {
+                if (!sprite)
+                    sprite = std::make_shared<SPRITE>();
+                std::filesystem::path path(browser->GetSelected());
+                FS::path name(path.filename());
+                FS::path directory{ "./Data/Images/" };
+                directory += name.string();
+                sprite->Initialize(directory.wstring().c_str());
+                data->image_path = directory.wstring();
+                D3D11_TEXTURE2D_DESC desc{};
+                sprite->Texture()->QueryTextureDesc(&desc);
+                data->uvSize = { (float)desc.Width, (float)desc.Height };
 
-            data->uvSize = { (float)t2d.Width, (float)t2d.Height };
+            }
         }
         ImGui::DragFloat2("Image Size", &data->size.x, 0.05f);
         ImGui::DragFloat2("UV Position", &data->uvPosition.x, 0.05f);

@@ -1,3 +1,11 @@
+// This shader is used on skyboxes
+// Currently, booting the application will show a blue skybox
+// To implement skyboxes, you must remove the default shader
+// and implement the skyboxShader
+// To check how to implement skyboxes, refer to an example in Graphics.cpp
+
+
+// Vertex data
 struct VS_IN
 {
     float4 position : POSITION;
@@ -5,6 +13,7 @@ struct VS_IN
     float2 uv : UV;
 };
 
+// VertexShader output
 struct VS_OUT
 {
     float4 position : SV_POSITION;
@@ -12,7 +21,7 @@ struct VS_OUT
     float3 world_position : POSITION;
 };
 
-
+// Skybox constant buffer 
 cbuffer CONST_BUFFER_SKYBOX :register (b1)
 {
     float4 viewPosition;

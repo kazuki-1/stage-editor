@@ -43,7 +43,6 @@ void PlayerController_Component::MovementInput()
         move = 0;
         return;
     }
-    Vector2 limit{ -20.0f, 20.0f };
     if (k_Axis.x || k_Axis.y)
         move += 0.005f;
     move = Math::Clamp(move, 0, 1.0f);
@@ -67,11 +66,12 @@ void PlayerController_Component::MovementInput()
 /// </summary>
 void PlayerController_Component::RotationInput()
 {
+    // Retrieve the XZ forward from the camera
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     Vector2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
     if (!ax.x && !ax.y)
     {
-        //isRotating = false;
+
         return;
     }
     float y_ax{ Camera::Instance()->Rotation().y };
@@ -114,15 +114,6 @@ void PlayerController_Component::JumpInput()
     }
 }
 
-/*--------------------------------------------------------PlayerController_Component SoundCollision()-------------------------------------------------*/
-/// <summary>
-/// <para> Perform collision check with EnvironmentalAudio_Component gameObjects </para>
-/// <para> ENVIRONMENTAL_AUDIOゲームオブジェクトと当たり判定を計算 </para>
-/// </summary>
-void PlayerController_Component::SoundCollision()
-{
-}
-
 /*--------------------------------------------------------PlayerController_Component VelocityControl()-------------------------------------------------*/
 
 void PlayerController_Component::VelocityControl()
@@ -136,7 +127,6 @@ void PlayerController_Component::VelocityControl()
 /// </summary>
 void PlayerController_Component::GravityControl()
 {
-    //return;
     if (GetComponent<MeshCollider_Component>() == nullptr)
         return;
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
@@ -183,13 +173,7 @@ void PlayerController_Component::GroundCollision()
         transform->SetVelocity(velocity);
 
 
-        //XMMATRIX test{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(rcd.position.XMV()) };
-        //sphere->UpdateVertices(0.1f,&test );
-
-    } else {
-        int i = 0;
-    }
-
+    } 
 }
 
 /*--------------------------------------------------------PlayerController_Component WallCollision()----------------------------------------------------*/
@@ -228,7 +212,6 @@ void PlayerController_Component::WallCollision()
     {
         Vector3 normal, position;
         normal = rcd.normal;
-        //rcd.position ;
         transform->SetTranslation(rcd.position + normal * 0.2f);
         Vector3 velocity;
         velocity = transform->GetVelocity();
@@ -271,7 +254,6 @@ void PlayerController_Component::UpdateAudioListener()
 HRESULT PlayerController_Component::Initialize()
 {
 
-    //sphere = std::make_shared<DYNAMIC_SPHERE>();
     return S_OK;
 
 }
@@ -283,9 +265,6 @@ HRESULT PlayerController_Component::Initialize()
 /// </summary>
 void PlayerController_Component::Execute()
 {
-
-    //if (GetComponent<Mesh_Component>() == nullptr)
-    //    return;
 
     Vector3 position = GetComponent<Transform3D_Component>()->GetTranslation();
     position.y += 5.0f;
@@ -401,6 +380,8 @@ void PlayerController_Component::NPCDialogueTrigger()
 {
     if (inDialogue)
         return;
+
+    // Check the gameObjects for NPCs
     std::vector<GameObject*>npcs;
     for (auto& g : GameObjectManager::Instance()->GetGameObjects())
     {
@@ -411,8 +392,9 @@ void PlayerController_Component::NPCDialogueTrigger()
     Vector3 player_pos = transform->GetTranslation();
     for (auto npc : npcs)
     {
-        Vector3 target_pos{ npc->GetComponent<Transform3D_Component>()->GetTranslation() };
 
+        // Check if facing NPC and if close enough
+        Vector3 target_pos{ npc->GetComponent<Transform3D_Component>()->GetTranslation() };
         Vector3 distance = Vector3::Distance(player_pos, target_pos);
         Vector3 n_TargetPos{Vector3::Normalize(target_pos)}, n_PlayerPos{Vector3::Normalize(player_pos)};
         float angle_diff = Vector3::GetAngle(n_PlayerPos, n_TargetPos);

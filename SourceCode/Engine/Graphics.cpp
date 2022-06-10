@@ -12,6 +12,10 @@
 using namespace DirectX;
 std::shared_ptr<SPRITE>skybox;
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------Graphics Class---------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------Graphics Initialize()--------------------------------------------------------------*/
 
 HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 {
@@ -57,7 +61,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     
 
-    // Initializes the white board below
+    // Initializes the skybox
     skybox = std::make_shared<SPRITE>();
     skybox->Initialize(L"./Data/Images/skybox.png");
     skybox->RemoveShader(ShaderTypes::Shader_2D);
@@ -67,6 +71,8 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     return S_OK;
 }
+
+/*------------------------------------------------Graphics Frame()--------------------------------------------------------------*/
 
 bool Graphics::Frame()
 {
@@ -84,6 +90,8 @@ bool Graphics::Frame()
 
 #pragma endregion
 }
+
+/*------------------------------------------------Graphics Render()--------------------------------------------------------------*/
 
 bool Graphics::Render()
 {
@@ -154,7 +162,8 @@ bool Graphics::Render()
     return true;
 }
 
+/*------------------------------------------------Graphics Finalize()--------------------------------------------------------------*/
+
 void Graphics::Finalize()
 {
-    //GUI::Instance()->Finalize();
 }

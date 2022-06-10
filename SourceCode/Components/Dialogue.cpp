@@ -64,6 +64,8 @@ void Dialogue_Component::UI()
 		static char text[256], text_name[256];
 
 		static int cur_type{};
+
+		// TODO: To be implemented. Random dialogue or sequential dialogue
 		if (ImGui::BeginCombo("NPC Type", npc_types[cur_type].c_str()))
 		{
 			int index{};
@@ -85,6 +87,7 @@ void Dialogue_Component::UI()
 		bool isEmpty{ data->dialogue_list.size() < 1 };
 		if (!isEmpty)
 		{
+			// Shows a list of dialogues
 			std::string header{ "Dialogue " + std::to_string(index) };
 			if (ImGui::BeginCombo("Dialogue List", header.c_str()))
 			{

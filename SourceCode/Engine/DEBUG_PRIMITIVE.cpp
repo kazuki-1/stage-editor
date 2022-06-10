@@ -6,10 +6,18 @@
 //#include "OBJECT.h"
 #pragma region DEBUG_PRIMITIVE
 
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_PRIMITIVE class---------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_PRIMITIVE Render()------------------------------------------------------*/
+
 void DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     model->Render(0.0f, colour.XMF4());
 }
+
+/*------------------------------------------DEBUG_PRIMITIVE Execute()------------------------------------------------------*/
+
 void DEBUG_PRIMITIVE::Execute()
 {
     model->SetTransformation(scale, rotation , position);
@@ -18,6 +26,11 @@ void DEBUG_PRIMITIVE::Execute()
 
 #pragma endregion
 #pragma region DEBUG_CUBE
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_CUBE class--------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_CUBE Constructor--------------------------------------------------------*/
+
 
 DEBUG_CUBE::DEBUG_CUBE()
 {
@@ -31,6 +44,13 @@ DEBUG_CUBE::DEBUG_CUBE()
 
 #pragma endregion
 #pragma region DEBUG_CYLINDER
+
+
+/*----------------------------------------------------------------------------------=====-------------------------------------*/
+/*------------------------------------------DEBUG_CYLINDER class--------------------------------------------------------------*/
+/*----------------------------------------------------------------------====--------------------------------------------------*/
+/*------------------------------------------DEBUG_CYLINDER Constructor--------------------------------------------------------*/
+
 
 DEBUG_CYLINDER::DEBUG_CYLINDER()
 {
@@ -54,6 +74,11 @@ DEBUG_CYLINDER::DEBUG_CYLINDER(float r) : radius(r)
 #pragma endregion
 #pragma region DEBUG_SPHERE
 
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------Sphere_Debug class------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------Sphere_Debug Render()---------------------------------------------------------*/
+
 Sphere_Debug::Sphere_Debug()
 {
     model = std::make_shared<MODEL>();
@@ -74,6 +99,8 @@ Sphere_Debug::Sphere_Debug(float r) : radius(r)
 
 }
 
+/*------------------------------------------Sphere_Debug SetRadius()---------------------------------------------------------*/
+
 void Sphere_Debug::SetRadius(float r)
 {
     radius = r;
@@ -81,6 +108,11 @@ void Sphere_Debug::SetRadius(float r)
 
 #pragma endregion
 #pragma region DEBUG_ARROWS
+
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_ARROWS class------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_ARROWS Initialize()-----------------------------------------------------*/
 
 void DEBUG_ARROWS::Initialize()
 {
@@ -117,6 +149,9 @@ void DEBUG_ARROWS::Initialize()
 
 
 }
+
+/*------------------------------------------DEBUG_ARROWS Execute()-----------------------------------------------------*/
+
 void DEBUG_ARROWS::Execute()
 {
 
@@ -126,16 +161,11 @@ void DEBUG_ARROWS::Execute()
     Z = zAxis->TransformMatrix();
 
 
-    //target = XMMatrixScaling(1, 1, 1);
     Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
     Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
-
-    //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
     Vector3 y;
@@ -153,19 +183,23 @@ void DEBUG_ARROWS::Execute()
 
 
 }
-void DEBUG_ARROWS::Execute(XMMATRIX mat)
-{
-}
+
+/*------------------------------------------DEBUG_ARROWS Render()-----------------------------------------------------*/
+
 void DEBUG_ARROWS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
+
+/*------------------------------------------DEBUG_ARROWS SetTarget()-----------------------------------------------------*/
+
 void DEBUG_ARROWS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
+
 void DEBUG_ARROWS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
@@ -174,6 +208,11 @@ void DEBUG_ARROWS::SetTarget(Vector3 p, Vector3 r)
 
 #pragma endregion
 #pragma region DEBUG_SCALARS
+
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_SCALARS class-----------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_SCALARS Initialize()----------------------------------------------------*/
 
 void DEBUG_SCALARS::Initialize()
 {
@@ -205,6 +244,9 @@ void DEBUG_SCALARS::Initialize()
     zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
 
 }
+
+/*------------------------------------------DEBUG_SCALARS Execute()----------------------------------------------------*/
+
 void DEBUG_SCALARS::Execute()
 {
 
@@ -214,16 +256,12 @@ void DEBUG_SCALARS::Execute()
     Z = zAxis->TransformMatrix();
 
 
-    //target = XMMatrixScaling(1, 1, 1);
     Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
     Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
 
-    //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
     Vector3 y;
@@ -241,33 +279,23 @@ void DEBUG_SCALARS::Execute()
 
 
 }
-void DEBUG_SCALARS::Execute(XMMATRIX mat)
-{
-    //VECTOR3 x;
-    //x.Load({ XMVector3TransformCoord(xAxis->GetTranslation().XMV(), *target) });
-    //VECTOR3 y;
-    //y.Load({ XMVector3TransformCoord(yAxis->GetTranslation().XMV(), *target) });
-    //VECTOR3 z;
-    //z.Load({ XMVector3TransformCoord(zAxis->GetTranslation().XMV(), *target) });
 
-    //xAxis->SetTranslation(x);
-    //yAxis->SetTranslation(y);
-    //zAxis->SetTranslation(z);
+/*------------------------------------------DEBUG_SCALARS Render()----------------------------------------------------*/
 
-    //xAxis->UpdateTransform();
-    //yAxis->UpdateTransform();
-    //zAxis->UpdateTransform();
-}
 void DEBUG_SCALARS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
+
+/*------------------------------------------DEBUG_SCALARS SetTarget()----------------------------------------------------*/
+
 void DEBUG_SCALARS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
+
 void DEBUG_SCALARS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
@@ -276,6 +304,12 @@ void DEBUG_SCALARS::SetTarget(Vector3 p, Vector3 r)
 
 #pragma endregion
 #pragma region DEBUG_DISCS
+
+
+/*----------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_DISCS class-----------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DEBUG_DISCS Initialize()----------------------------------------------------*/
 
 void DEBUG_DISCS::Initialize()
 {
@@ -307,6 +341,9 @@ void DEBUG_DISCS::Initialize()
     zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
 
 }
+
+/*------------------------------------------DEBUG_DISCS Execute()----------------------------------------------------*/
+
 void DEBUG_DISCS::Execute()
 {
 
@@ -316,16 +353,12 @@ void DEBUG_DISCS::Execute()
     Z = zAxis->TransformMatrix();
 
 
-    //target = XMMatrixScaling(1, 1, 1);
     Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
     Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
     target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
 
-    //X *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Y *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
-    //Z *= XMLoadFloat4x4(&(target->Resource()->Axises.AxisCoords)) * world;
     Vector3 x;
     x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
     Vector3 y;
@@ -343,33 +376,24 @@ void DEBUG_DISCS::Execute()
 
 
 }
-void DEBUG_DISCS::Execute(XMMATRIX mat)
-{
-    //VECTOR3 x;
-    //x.Load({ XMVector3TransformCoord(xAxis->GetTranslation().XMV(), *target) });
-    //VECTOR3 y;
-    //y.Load({ XMVector3TransformCoord(yAxis->GetTranslation().XMV(), *target) });
-    //VECTOR3 z;
-    //z.Load({ XMVector3TransformCoord(zAxis->GetTranslation().XMV(), *target) });
 
-    //xAxis->SetTranslation(x);
-    //yAxis->SetTranslation(y);
-    //zAxis->SetTranslation(z);
+/*------------------------------------------DEBUG_DISCS Render()----------------------------------------------------*/
 
-    //xAxis->UpdateTransform();
-    //yAxis->UpdateTransform();
-    //zAxis->UpdateTransform();
-}
 void DEBUG_DISCS::Render(Vector4 colour)
 {
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
+
+/*------------------------------------------DEBUG_DISCS SetTarget()----------------------------------------------------*/
+
 void DEBUG_DISCS::SetTarget(XMMATRIX t)
 {
     target = t;
 }
+
+
 void DEBUG_DISCS::SetTarget(Vector3 p, Vector3 r)
 {
     position = p;
@@ -378,10 +402,17 @@ void DEBUG_DISCS::SetTarget(Vector3 p, Vector3 r)
 
 #pragma endregion
 
-#pragma region DYNAMIC DEBUG PRIMITIVE
+#pragma region DYNAMIC_DEBUG_PRIMITIVE
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE class-----------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE Initialize()----------------------------------------------------*/
+
 
 HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
 {
+    // Vertex buffer and constant buffer creation
     ID3D11Device* dv = DirectX11::Instance()->Device();
     D3D11_BUFFER_DESC vbd{};
     D3D11_SUBRESOURCE_DATA vd{};
@@ -408,20 +439,30 @@ HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
     return hr;
 
 }
+
+/*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE Execute()----------------------------------------------------*/
+
 void DYNAMIC_DEBUG_PRIMITIVE::Execute()
 {
+    // Pure virtual func
 }
+
 void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
 {
+    // Transforms the vertices of the primitive to match the target
     for (auto& v : vertices)
         v.position.Load(XMVector3TransformCoord(v.position.XMV(), target));
 
 }
+
+/*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE Render()----------------------------------------------------*/
+
 void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
     shader->SetShaders(dc, nullptr);
 
+    // Setup Dx required parameters and prepare to render
     dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
     BlendStateManager::Instance()->Set(BlendModes::Alpha);
     CBUFFER_M data;
@@ -439,16 +480,25 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
     dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     dc->DrawIndexed((UINT)indices.size(), 0, 0);
 }
+
+/*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE SetTarget()----------------------------------------------------*/
+
 void DYNAMIC_DEBUG_PRIMITIVE::SetTarget(Vector3 t)
 {
     position = t;
 }
 
 #pragma endregion
-#pragma region DYNAMIC CUBE
+#pragma region DYNAMIC_CUBE
+
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CUBE class------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CUBE Constructor------------------------------------------------------*/
 
 DYNAMIC_CUBE::DYNAMIC_CUBE()
 {
+    // Vertice and index buffer  creation
     vertices.resize(8);
     int ind[24] =
     {
@@ -488,17 +538,22 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
+
+    // Uses a debug shader since this only renders lines
     shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D).get();
 
 
 
 }
+
+/*------------------------------------------DYNAMIC_CUBE UpdateVertices()------------------------------------------------------*/
+
 void DYNAMIC_CUBE::UpdateVertices(std::vector<Vector3>pos)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
-    for (int ind = 0; ind < 8; ++ind)
+
+    for (int ind = 0; ind < 8 /*cube has 8 vertices since no normal is used*/; ++ind)
     {
-        //VECTOR3 p{ pos[ind] };
         vertices[ind].position = pos[ind];
     }
     D3D11_MAPPED_SUBRESOURCE res;
@@ -509,6 +564,12 @@ void DYNAMIC_CUBE::UpdateVertices(std::vector<Vector3>pos)
 
 #pragma endregion
 #pragma region DYNAMIC_SPHERE
+
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_SPHERE class------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_SPHERE Constructor------------------------------------------------------*/
 
 DYNAMIC_SPHERE::DYNAMIC_SPHERE(int v_count, float rad) : vertices_count(v_count) , radius(rad)
 {
@@ -561,71 +622,30 @@ DYNAMIC_SPHERE::DYNAMIC_SPHERE(int v_count, float rad) : vertices_count(v_count)
 
     Initialize();
 }
-//HRESULT DYNAMIC_SPHERE::Initialize()
-//{
-//    ID3D11Device* dv = DirectX11::Instance()->Device();
-//    D3D11_BUFFER_DESC vbd{};
-//    D3D11_SUBRESOURCE_DATA vd{};
-//    vbd.ByteWidth = (UINT)sizeof(VERTEX) * (UINT)vertices.size();
-//    vbd.Usage = D3D11_USAGE_DYNAMIC;
-//    vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-//    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-//    vd.pSysMem = vertices.data();
-//    HRESULT hr = dv->CreateBuffer(&vbd, &vd, vertexBuffer.GetAddressOf());
-//    assert(hr == S_OK);
-//    vbd.CPUAccessFlags = 0;
-//    vbd.Usage = D3D11_USAGE_DEFAULT;
-//
-//    vbd.ByteWidth = sizeof(int) * indices.size();
-//    vbd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-//    vd.pSysMem = indices.data();
-//    hr = dv->CreateBuffer(&vbd, &vd, indexBuffer.GetAddressOf());
-//    assert(hr == S_OK);
-//    vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-//    vbd.ByteWidth = sizeof(CBUFFER_M);
-//    hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-//    shader = ShaderManager::Instance()->Retrieve(L"DebugShader.fx");
-//
-//    return hr;
-//}
+
+/*------------------------------------------DYNAMIC_SPHERE UpdateVertices()------------------------------------------------------*/
+
 void DYNAMIC_SPHERE::UpdateVertices(float rad, XMMATRIX* target)
 {
     float angle_per_vertex{ 360.0f / (float)vertices_count };
     radius = rad;
-    //rad = radius;
-    //std::vector<VERTEX>vs;
+
+    // Vertical circle
     for (int ind = 0; ind < vertices_count; ++ind)
     {
         vertices[ind] = { { 0.0f, cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius} };
-        //vs.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertices_count - 1)
-        //{
-        //    indices.push_back(ind);
-        //    indices.push_back(0);
-        //}
-        //indices.push_back(ind);
-        //indices.push_back(ind - 1);
     }
+
+    // X axis Horizontal circle
     for (int ind = vertices_count * 1; ind < vertices_count * 2; ++ind)
     {
         vertices[ind] = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, 0.0f , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
-        //vs.push_back(vert);
-        // if (ind == 0)
-        //     continue;
-        // if (ind == vertices_count - 1)
-        // {
-        //     indices.push_back(vertices_count + ind);
-        //     indices.push_back(vertices_count);
-        // }
-        // indices.push_back(vertices_count + ind);
-        // indices.push_back(vertices_count + ind - 1);
     }
+
+    // Z axis horizontal circle
     for (int ind = vertices_count * 2; ind < vertices_count * 3; ++ind)
     {
         vertices[ind] = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius, 0.0f } };
-        //vs.push_back(vert);
     }
 
     if (target != nullptr)
@@ -641,6 +661,8 @@ void DYNAMIC_SPHERE::UpdateVertices(float rad, XMMATRIX* target)
 
 }
 
+/*------------------------------------------DYNAMIC_SPHERE SetRadius()------------------------------------------------------*/
+
 void DYNAMIC_SPHERE::SetRadius(float r)
 {
     radius = r;
@@ -648,9 +670,17 @@ void DYNAMIC_SPHERE::SetRadius(float r)
 
 #pragma endregion
 #pragma region DYNAMIC_CYLINDER
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CYLINDER class------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CYLINDER Constructor------------------------------------------------------*/
+
 DYNAMIC_CYLINDER::DYNAMIC_CYLINDER(float rad, int vert_count) : radius(rad), vertex_count(vert_count)
 {
     float angle_per_vertex{ 360.0f / (float)vert_count };
+
+    // Top circle vertex and index creation
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -665,6 +695,8 @@ DYNAMIC_CYLINDER::DYNAMIC_CYLINDER(float rad, int vert_count) : radius(rad), ver
         indices.push_back(ind);
         indices.push_back(ind - 1);
     }
+
+    // Bottom circle vertex and index creation
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, -height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -679,6 +711,8 @@ DYNAMIC_CYLINDER::DYNAMIC_CYLINDER(float rad, int vert_count) : radius(rad), ver
         indices.push_back(vertex_count + ind);
         indices.push_back(vertex_count + ind - 1);
     }
+
+    // the index of the lines between the top and bottom circles
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         indices.push_back(vertex_count + ind);
@@ -686,16 +720,23 @@ DYNAMIC_CYLINDER::DYNAMIC_CYLINDER(float rad, int vert_count) : radius(rad), ver
     }
     Initialize();
 }
+
+/*------------------------------------------DYNAMIC_CYLINDER UpdateVertices()------------------------------------------------------*/
+
 void DYNAMIC_CYLINDER::UpdateVertices(float rad, float h)
 {
     float angle_per_vertex{ 360.0f / (float)vertex_count };
     height = h;
     std::vector<VERTEX>vs;
+
+    // Top circle
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
         vs.push_back(vert);
     }
+
+    // Bottom circle
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, -height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -713,27 +754,18 @@ void DYNAMIC_CYLINDER::UpdateVertices(float rad, float h)
 #pragma endregion
 #pragma region DYNAMIC_CAPSULE
 
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CAPSULE class------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------DYNAMIC_CAPSULE Constructor------------------------------------------------------*/
+
 DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(rad), vertex_count(vert_count), height(ht)
 {
 
     float angle_per_vertex{ 360.0f / (float)vertex_count };
-    //for (int ind = 0; ind < vertex_count; ++ind)
-    //{
-    //    VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, -height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
-    //    vertices.push_back(vert);
-    //    if (ind == 0)
-    //        continue;
-    //    if (ind == vertex_count - 1)
-    //    {
-    //        indices.push_back(vertex_count + ind);
-    //        indices.push_back(vertex_count);
-    //    }
-    //    indices.push_back(vertex_count + ind);
-    //    indices.push_back(vertex_count + ind - 1);
-    //}
 
 #pragma region HORIZONTAL CIRCLES 
-     //Creating a horizontol circle on the top area
+     // Top horizontal circle
      for (int ind = 0; ind < vertex_count; ++ind)
      {
          VERTEX vert = { {cosf(ToRadians(angle_per_vertex) * ind) * radius , height / 2  , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -750,7 +782,7 @@ DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(
      }
  
  
-    // Creating a horizontol circle on the bottom area
+    // Bottom horizontal circle
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, -height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -768,7 +800,7 @@ DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(
 
 #pragma endregion
 
-    // Linking the indices of the top and bottom circles
+    // Lines between top and bottom circles
     for (int ind = 0; ind < 32; ++ind)
     {
         indices.push_back(vertex_count + ind);
@@ -776,7 +808,7 @@ DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(
     }
 #pragma region VERTICAL CIRCLES
 
-    // Creating vertices for the vertical circle on the top area
+    // Top vertical circle
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { {0.0f , height / 2 + cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -792,7 +824,7 @@ DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(
         indices.push_back(vertex_count * 2 + ind - 1);
     }
 
-    // Creating vertices for the vertical circle on the bottom area
+    // Bottom vertical circle
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { {0.0f , -height / 2 + cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius } };
@@ -847,113 +879,55 @@ DYNAMIC_CAPSULE::DYNAMIC_CAPSULE(float rad , int vert_count, float ht) : radius(
     Initialize();
 
 }
+
+/*------------------------------------------DYNAMIC_CAPSULE UpdateVertices()------------------------------------------------------*/
+
 void DYNAMIC_CAPSULE::UpdateVertices(float rad, float height, XMMATRIX* target)
 {
     radius = rad;
     this->height = height;
     vertices.clear();
     float angle_per_vertex{ 360.0f / (float)vertex_count };
-    // Creating vertices for the horizontol circle on the top area
+    // Updating vertices for the horizontol circle on the top area
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { {cosf(ToRadians(angle_per_vertex) * ind) * radius , height / 2  , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
         vertices.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertex_count - 1)
-        //{
-        //    indices.push_back(vertex_count + ind);
-        //    indices.push_back(vertex_count);
-        //}
-        //indices.push_back(vertex_count + ind);
-        //indices.push_back(vertex_count + ind - 1);
     }
 
-    // Creating vertices for the horizontol circle on the bottom area
+    // Updating vertices for the horizontol circle on the bottom area
      for (int ind = 0; ind < vertex_count; ++ind)
      {
          VERTEX vert = { {cosf(ToRadians(angle_per_vertex) * ind) * radius , -height / 2 , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
          vertices.push_back(vert);
-         //if (ind == 0)
-         //    continue;
-         //if (ind == vertex_count - 1)
-         //{
-         //    indices.push_back(ind);
-         //    indices.push_back(0);
-         //}
-         //indices.push_back(ind);
-         //indices.push_back(ind - 1);
      }
  
  
-    // Creating a vertical circle on the top area
+    // Updating a vertical circle on the top area
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, height / 2 + sinf(ToRadians(angle_per_vertex) * ind) * radius , 0.0f} };
         vertices.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertex_count - 1)
-        //{
-        //    indices.push_back(ind);
-        //    indices.push_back(0);
-        //}
-        //indices.push_back(ind);
-        //indices.push_back(ind - 1);
     }
 
-    // Linking the vertices of the top and bottom circles
-    //for (int ind = 0; ind < 32; ++ind)
-    //{
-    //    indices.push_back(vertex_count + ind);
-    //    indices.push_back(ind);
-    //}
-
-    // Creating vertices for the vertical circle on the top area
+    // Updating vertices for the vertical circle on the top area
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, -height / 2 + sinf(ToRadians(angle_per_vertex) * ind) * radius , 0.0f} };
         vertices.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertex_count - 1)
-        //{
-        //    indices.push_back(ind);
-        //    indices.push_back(0);
-        //}
-        //indices.push_back(ind);
-        //indices.push_back(ind - 1);
     }
-    // Creating vertices for a z-Axis circle on the top area
+    // Updating vertices for a z-Axis circle on the top area
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { {0.0f, height / 2 + cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius} };
         vertices.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertex_count - 1)
-        //{
-        //    indices.push_back(vertex_count * 4 + ind);
-        //    indices.push_back(vertex_count * 4 + 0);
-        //}
-        //indices.push_back(vertex_count * 4 + ind);
-        //indices.push_back(vertex_count * 4 + ind - 1);
 
     }
-    // Creating vertices for a z-Axis circle on the bottom area
+    // Updating vertices for a z-Axis circle on the bottom area
     for (int ind = 0; ind < vertex_count; ++ind)
     {
         VERTEX vert = { {0.0f , -height / 2 + cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius} };
         vertices.push_back(vert);
-        //if (ind == 0)
-        //    continue;
-        //if (ind == vertex_count - 1)
-        //{
-        //    indices.push_back(vertex_count * 5 + ind);
-        //    indices.push_back(vertex_count * 5 + 0);
-        //}
-        //indices.push_back(vertex_count * 5 + ind);
-        //indices.push_back(vertex_count * 5 + ind - 1);
 
     }
 
@@ -961,38 +935,6 @@ void DYNAMIC_CAPSULE::UpdateVertices(float rad, float height, XMMATRIX* target)
         Execute(*target);
 
     //for (int ind = 0; ind < vertex_count; ++ind)
-    //{
-    //}
-    // Creating vertices for the vertical circle on the bottom area
-    //for (int ind = 0; ind < vertex_count; ++ind)
-    //{
-    //    VERTEX vert = { {0.0f , -height / 2 + cosf(ToRadians(angle_per_vertex) * ind) * radius, sinf(ToRadians(angle_per_vertex) * ind) * radius } };
-    //    vertices.push_back(vert);
-    //    //if (ind == 0)
-    //    //    continue;
-    //    //if (ind == vertex_count - 1)
-    //    //{
-    //    //    indices.push_back(ind);
-    //    //    indices.push_back(0);
-    //    //}
-    //    //indices.push_back(ind);
-    //    //indices.push_back(ind - 1);
-    //}
-
-    //for (int ind = 0; ind < vertex_count; ++ind)
-    //{
-    //    VERTEX vert = { {cosf(ToRadians(angle_per_vertex) * ind) * radius , -height / 2 + sinf(ToRadians(angle_per_vertex) * ind) * radius , 0.0f } };
-    //    vertices.push_back(vert);
-    //    if (ind == 0)
-    //        continue;
-    //    if (ind == vertex_count - 1)
-    //    {
-    //        indices.push_back(ind);
-    //        indices.push_back(0);
-    //    }
-    //    indices.push_back(ind);
-    //    indices.push_back(ind - 1);
-    //}
 
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
     D3D11_MAPPED_SUBRESOURCE mrs{};

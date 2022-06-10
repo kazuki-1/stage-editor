@@ -51,12 +51,12 @@ void SphereCollider_Component::Execute()
 {
     Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
     XMMATRIX world{ XMMatrixIdentity() };
+    // If not attached to bone
     if (data->bone_name == "")
     {
         collider->Execute(transform->TransformMatrix());
         sphere->Execute(collider->MatrixOffset() * transform->TransformMatrix());
         world = { collider->MatrixOffset() * transform->TransformMatrix() };
-        //sphere->UpdateVertices(data->radius, &world);
     }
     else
     {
@@ -72,12 +72,12 @@ void SphereCollider_Component::Execute()
 void SphereCollider_Component::Execute(XMMATRIX transform)
 {
     XMMATRIX world{ XMMatrixIdentity() };
+    // If not attached to bone
     if (data->bone_name == "")
     {
         collider->Execute(transform);
         sphere->Execute(collider->MatrixOffset() * transform);
         world = { collider->MatrixOffset() * transform };
-        //sphere->UpdateVertices(data->radius, &world);
     }
     else
     {
@@ -107,6 +107,7 @@ void SphereCollider_Component::UI()
 {
     if (ImGui::TreeNode("Sphere Collider"))
     {
+        // Parameters
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Center : ", &data->center.x, 0.05f);
         ImGui::DragFloat("Radius", &data->radius, 0.05f);
@@ -116,6 +117,7 @@ void SphereCollider_Component::UI()
             collider->SetRadius(data->radius);
             collider->OffsetCollider(data->center);
         }
+        // Bind to bone
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
         {
             MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };

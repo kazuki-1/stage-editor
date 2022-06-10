@@ -1,20 +1,31 @@
+// This is the phongLambert shader
+// This is the most used shader in the entire project
+// All models are by default loaded with a phongShader
+
+// Calculates the lambert diffuse value of the coordinates based on the position of the vertex and the light sources
 float3 CalculateLambertDiffuse(float3 normal, float3 lightDir, float3 lightColour, float3 kd)
 {
     float d = max(0, dot(lightDir, normal));
     return d * lightColour * kd;
 }
+
+// Calculates the phong specular value of the coordinates based on the position of the vertex and the light sources
 float3 CalculatePhongSpecular(float3 normal, float3 lightVector, float3 lightColour, float3 eyeVector, float shineFactor, float3 ks)
 {
     float3 r = reflect(-lightVector, normal);
     float d = max(0, pow(max(0, dot(r, eyeVector)), shineFactor));
     return d * lightColour * ks;
 }
+
+// Slight difference from Lambert, the shading is lighter for this, unused but left in just in case
 float3 CalculateHalfLambertDiffuse(float3 normal, float3 lightDir, float3 lightColour, float3 kd)
 {
     float d = dot(lightDir, normal) * 0.5f + 0.5f;
     d = clamp(d, 0, 1);
     return d * lightColour * kd;
 }
+
+// Calculate back lighting on the vertex, unused but left in just in case
 float3 CalculateRimLighting(float3 normal, float3 eyeVector, float3 lightVector, float3 lightColour, float rimPower = 3.0f)
 {
     float rim = 1.0f - saturate(dot(eyeVector, normal));
@@ -22,6 +33,8 @@ float3 CalculateRimLighting(float3 normal, float3 eyeVector, float3 lightVector,
     return lightColour * rim * saturate(dot(eyeVector, -lightVector));
 
 }
+
+// Gives the vertices a more toonish feel shading, unused but left in just in case
 float3 CalculateToonDiffuse(Texture2D t2d, SamplerState tss, float3 normal, float3 lightVector, float3 lightColour, float3 kd)
 {
     float u = clamp(dot(normal, lightVector), 0, 1);
@@ -29,11 +42,14 @@ float3 CalculateToonDiffuse(Texture2D t2d, SamplerState tss, float3 normal, floa
     return lightColour * c * kd;
 }
 
+// DirectionalLight data
 struct DLIGHT_DATA
 {
     float4 direction;
     float4 colour;
 };
+
+// PointLight data
 struct PLIGHT_DATA
 {
     float4 position;
@@ -42,6 +58,8 @@ struct PLIGHT_DATA
     float intensity;
     float2 temp;
 };
+
+// SpotLight data
 struct SLIGHT_DATA
 {
     float4 position;
@@ -56,7 +74,7 @@ struct SLIGHT_DATA
 static const int PLIGHT_MAX = 8;
 static const int SLIGHT_MAX = 8;
 
-
+// Vertex Data
 struct VS_IN
 {
     float4 position : POSITION;
@@ -66,6 +84,8 @@ struct VS_IN
     float4 weights : WEIGHTS;
     uint4 bones : BONES;
 };
+
+// VertexShader output
 struct VS_OUT
 {
     float4 position : SV_POSITION;
@@ -77,6 +97,8 @@ struct VS_OUT
     float2 uv : UV;
 };
 
+
+// Scene Constant Buffer (Light, camera etc)
 cbuffer CBUFFER_S : register(b0)
 {
     row_major float4x4 view_proj;
@@ -89,6 +111,8 @@ cbuffer CBUFFER_S : register(b0)
     int sLightCount;
     float2 temp;
 }
+
+// Mesh Constant buffer
 cbuffer CBUFFER_M : register(b1)
 {
     row_major float4x4 world;
@@ -105,6 +129,7 @@ VS_OUT VS_MAIN(VS_IN vin)
     float4 n_Pos = { 0,0, 0, 1.0f };
     float4 n_Normal = { 0, 0, 0, 0 };
     float4 n_Tangent = { 0, 0, 0, 0 };
+    // Cast the vertex based on their bone influences
     for (int ind = 0; ind < 4; ++ind)
     {
         n_Pos += vin.weights[ind] * mul(float4(vin.position.xyz, 1.0f), b_Transform[vin.bones[ind]]);
@@ -131,6 +156,10 @@ SamplerState Sampler : register(s0);
 
 float4 PS_MAIN(VS_OUT pin) : SV_TARGET
 {
+
+    // Perform normal calculation based on the normal map
+    // If no normal map is provided, models will default to a purple plane texture
+    // To see creation of this default normal, refer to Texture.h
     float4 diffuseColour = diffuseM.Sample(Sampler, pin.uv) * pin.colour;
     float3 normal = normalM.Sample(Sampler, pin.uv);
     normal.xyz = (normal.xyz - 0.5) * 2;
@@ -150,6 +179,8 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
     float3 DirectionalDiffuse = CalculateLambertDiffuse(N, L, directional.colour.rgb, kd);
     float3 ambient = ka * ambientLightColour.rgb;
 
+
+    // Perform pointLight calculation
     float3 PointDiffuse = float3(0, 0, 0);
     float3 PointSpecular = float3(0, 0, 0);
     for (int a = 0; a < pLightCount; ++a)
@@ -167,6 +198,7 @@ float4 PS_MAIN(VS_OUT pin) : SV_TARGET
         PointSpecular += CalculatePhongSpecular(N, pl_Norm, pointlights[a].colour.rgb, E, shineFactor, ks.rgb) * weaken * pointlights[a].intensity;
     }
 
+    // Perform spotLight calculation
     float3 SpotDiffuse = { 0, 0, 0 };
     float3 SpotSpecular = { 0, 0, 0 };
     for (int b = 0; b < sLightCount; ++b)

@@ -68,6 +68,7 @@
     <ClCompile Include="SourceCode\Engine\DROPMANAGER.cpp" />
     <ClCompile Include="SourceCode\Engine\EFFECTS.cpp" />
     <ClCompile Include="SourceCode\Engine\Graphics.cpp" />
+    <ClCompile Include="SourceCode\Engine\ImGuiLocal.cpp" />
     <ClCompile Include="SourceCode\Engine\Input.cpp" />
     <ClCompile Include="SourceCode\Engine\LIGHTING.cpp" />
     <ClCompile Include="SourceCode\Engine\Main.cpp" />
@@ -288,8 +289,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\External\Effekseer153a\include;$(solution)Cereal/include;$(solution)External\DirectXTK\Inc;./SourceCode/Engine/ImGui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(solution)External\DirectXTK\Bin\Desktop_2019_Win10\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\External\Effekseer153a\include;.\External\Cereal\include;.\External\DirectXTK\Inc;.\External\ImGui;$(IncludePath)</IncludePath>
+    <LibraryPath>.\External\DirectXTK\Bin\Desktop_2019_Win10\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -353,7 +354,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;Effekseerd.lib;EffekseerRendererDX11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

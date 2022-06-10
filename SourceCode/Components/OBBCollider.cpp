@@ -5,7 +5,6 @@
 #include "PlayerController.h"
 int selected_mesh_o{};
 int selected_bone_o{};
-bool update_o{};
 
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------OBBCollider_Data Class--------------------------------------------------*/
@@ -51,17 +50,22 @@ void OBBCollider_Component::Execute()
 {
     Transform3D_Component* m{ GetComponent<Transform3D_Component>() };
     cube->SetTarget(m->GetTranslation());
-    if (data->bone_name == "") {
+    // Attached to bone
+    if (data->bone_name == "") 
+    {
         collider->Execute(m->TransformMatrix());
         cube->Execute(m->TransformMatrix());
     }
-    else {
+    else 
+    {
         MODEL* m = GetComponent<Mesh_Component>()->Model().get();
         collider->FitToBone(data->bone_name, m);
         cube->Execute(collider->WorldMatrix());
     }
+    // Updates the vertices of the debug cube
     cube->UpdateVertices(collider->Points());
 }
+
 /// <summary>
 /// <para> Called each frame </para>
 /// <para> ñàÉtÉåÅ[ÉÄÇ…åƒÇ—èoÇ∑ </para>
@@ -72,11 +76,13 @@ void OBBCollider_Component::Execute(XMMATRIX transform)
     XMMatrixDecompose(&s, &r, &t, transform);
     Vector3 target{};
     target.Load(t);
-    if (data->bone_name == "") {
+    if (data->bone_name == "")
+    {
         collider->Execute(transform);
         cube->Execute(transform);
     }
-    else {
+    else 
+    {
         MODEL* m = GetComponent<Mesh_Component>()->Model().get();
         collider->FitToBone(data->bone_name, m);
         cube->Execute(collider->WorldMatrix());
@@ -92,7 +98,8 @@ void OBBCollider_Component::Execute(XMMATRIX transform)
 /// </summary>
 void OBBCollider_Component::Render()
 {
-    if (collider) {
+    if (collider)
+    {
         collider->Render();
         cube->Render();
     }
@@ -109,6 +116,7 @@ void OBBCollider_Component::UI()
         collider = std::make_shared<COLLIDERS::OBB>(data->min, data->max);
     if (ImGui::TreeNode("OBB Collider"))
     {
+        // Parameters
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Min", &data->min.x, 0.05f);
         ImGui::DragFloat3("Max", &data->max.x, 0.05f);
@@ -119,12 +127,11 @@ void OBBCollider_Component::UI()
             collider->SetMax(data->max);
             collider->OffsetCollider(data->offset);
 
-            update_o = true;
         }
         Mesh_Component* m{ GetComponent<Mesh_Component>() };
 
 
-
+        // Bind to bone
         if (m && m->Model())
         {
             MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };

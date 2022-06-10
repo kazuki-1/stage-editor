@@ -132,12 +132,9 @@ void Camera::Execute()
 }
 
 /*-----------------------------------------------------------Camera Render()-------------------------------------------------*/
-
+// For Debug
 void Camera::Render()
 {
-    // ImGui::Begin("Listener");
-    // ImGui::InputFloat3("Position", &audioListener.Position.x);
-    // ImGui::End();
 }
 
 /*-----------------------------------------------------------Camera ResetCamera()-------------------------------------------------*/
@@ -214,30 +211,30 @@ float Camera::Range()
 
 /*-----------------------------------------------------------Camera Position()-------------------------------------------------*/
 
-XMFLOAT3 Camera::Position()
+Vector3 Camera::Position()
 {
-    return position.XMF3();
+    return position;
 }
 
 /*-----------------------------------------------------------Camera Velocity()-------------------------------------------------*/
 
-XMFLOAT3 Camera::Velocity()
+Vector3 Camera::Velocity()
 {
-    return velocity.XMF3();
+    return velocity;
 }
 
 /*-----------------------------------------------------------Camera Rotation()-------------------------------------------------*/
 
-XMFLOAT3 Camera::Rotation()
+Vector3 Camera::Rotation()
 {
-    return rotation.XMF3();
+    return rotation;
 }
 
 /*-----------------------------------------------------------Camera EyePosition()-------------------------------------------------*/
 
-XMFLOAT3 Camera::EyePosition()
+Vector3 Camera::EyePosition()
 {
-    return cameraPosition.XMF3();
+    return cameraPosition;
 }
 
 /*-----------------------------------------------------------Camera ViewMatrix()-------------------------------------------------*/

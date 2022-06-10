@@ -20,7 +20,6 @@ BGM_Component::BGM_Component(GameObject* t, ComponentData* data)
 
 HRESULT BGM_Component::Initialize()
 {
-    //audio = AudioEngine::Instance()->Retrieve(data->name);
     for (auto& d : data->dataset)
     {
         AudioEngine::Instance()->Insert(d->name, d->file_path);
@@ -55,6 +54,7 @@ void BGM_Component::UI()
 {
     if (ImGui::TreeNode("BGM"))
     {
+        // Create an Audio entity
         if (ImGui::Button("Add BGM"))
         {
             data->dataset.push_back(std::dynamic_pointer_cast<AudioData>(INSTANTIATE(COMPONENT_TYPE::AUDIO)));
@@ -74,6 +74,8 @@ void BGM_Component::UI()
             ++selected;
         }
         ImGui::ListBoxFooter();
+
+        // ImGui FileBrowser settings and functions
         if (data->dataset.size() > 0 && ind >= 0 )
         {
             ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };

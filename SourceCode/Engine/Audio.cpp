@@ -64,7 +64,6 @@ HRESULT AudioEngine::Initialize()
     //DSP settings in case needed
     dspSettings.SrcChannelCount = 2;
     nChannels = dspSettings.DstChannelCount = details.InputChannels;
-    dspSettings.pMatrixCoefficients = matrixCoefficients;
     
     hr = X3DAudioInitialize(dwChannelMask, SPEED_OF_SOUND, x3d_handle);
     assert(hr == S_OK);
@@ -79,7 +78,6 @@ HRESULT AudioEngine::Initialize()
 /*---------------------------------------------AudioEngine Execute()----------------------------------------------------*/
 /// <summary>
 /// <para> Called every frame to perform functions </para>
-/// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
 /// </summary>
 void AudioEngine::Execute()
 {
@@ -104,8 +102,6 @@ void AudioEngine::Finalize()
 {
     for (auto& a : audios)
         a.second->Finalize();
-    //delete SourceVoice;
-    //delete MasteringVoice;
 }
 
 /*---------------------------------------------AudioEngine Delist()----------------------------------------------------*/
@@ -258,6 +254,90 @@ HRESULT Audio::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset
     return hr;
 }
 
+/*---------------------------------------------Audio Initialize()----------------------------------------------------*/
+/// <summary>
+/// <para> Called to initialize the object </para>
+/// </summary>
+/// <returns></returns>
+HRESULT Audio::Initialize()
+{
+    // File creation
+    HANDLE h = CreateFile(file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
+    if (INVALID_HANDLE_VALUE == h)
+        assert(!GetLastError());
+    if (INVALID_SET_FILE_POINTER == SetFilePointer(h, 0, 0, FILE_BEGIN))
+        assert(!GetLastError());
+    DWORD dwChunkSize, dwChunkPos;
+
+    // Riff header searching
+    FindChunk(h, fourccRIFF, dwChunkSize, dwChunkPos);
+    DWORD fileType;
+    ReadChunk(h, &fileType, sizeof(DWORD), dwChunkPos);
+    if (fileType != fourccWAVE)
+        assert(!"Wrong Format");
+
+    // FMT header searching
+    FindChunk(h, fourccFMT, dwChunkSize, dwChunkPos);
+    ReadChunk(h, &format, dwChunkSize, dwChunkPos);
+
+    // Data header searching and insertion
+    FindChunk(h, fourccDATA, dwChunkSize, dwChunkPos);
+    BYTE* buffer = new BYTE[dwChunkSize];
+    ReadChunk(h, buffer, dwChunkSize, dwChunkPos);
+
+
+    
+
+
+
+    XAUDIO2_BUFFER buf{};
+    buf.AudioBytes = dwChunkSize;
+    buf.pAudioData = buffer;
+    buf.Flags = XAUDIO2_END_OF_STREAM;
+
+    XAUDIO2_SEND_DESCRIPTOR descriptor[1]{};
+    descriptor[0].Flags = XAUDIO2_SEND_USEFILTER;
+    descriptor[0].pOutputVoice = AudioEngine::Instance()->masteringVoice;
+
+    XAUDIO2_VOICE_SENDS sendList{ 1, descriptor };
+
+    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format, 0, 2.0f, 0, &sendList);
+    assert(hr == S_OK);
+    this->buffer = buf;
+
+    // AudioStateMachine initialization
+    stateMachine = std::make_shared<AUDIO_STATES::AudioStateMachine>(this);
+    stateMachine->Initialize();
+
+
+
+    return hr;
+}
+
+/*---------------------------------------------Audio Execute()----------------------------------------------------*/
+/// <summary>
+/// <para> Called every frame to perform functions </para>
+/// </summary>
+void Audio::Execute()
+{
+    stateMachine->Execute();
+    AudioEngine* audioEngine = AudioEngine::Instance();
+
+    // Perform 3DAudio calculations if emitter is targeted
+    if (audioEmitter && audioEngine->audioListener)
+    {
+        if (isPlaying) {
+
+            UINT calc_flag{};
+            calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
+            channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
+            HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
+            hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_frequency);
+
+        }
+    }
+}
+
 /*---------------------------------------------Audio Play()----------------------------------------------------*/
 
 void Audio::Play()
@@ -268,9 +348,6 @@ void Audio::Play()
     assert(hr == S_OK);
     sourceVoice->Start();
     isPlaying = true;
-    //sourceVoice->Start();
-    //sourceVoice->SetVolume(volume);
-    //stateMachine->FadeTo(1.0f, 1.0f);
 
 }
 
@@ -298,9 +375,6 @@ void Audio::Stop()
     if (!isPlaying)
         return;
     sourceVoice->Stop();
-
-    //sourceVoice->Stop();
-    //sourceVoice->DestroyVoice();
     isPlaying = false;
 }
 
@@ -346,21 +420,6 @@ void Audio::FadeOut(float fade_time)
 void Audio::FadeTo(float fade_vol, float fade_time)
 {
     stateMachine->FadeTo(fade_time, fade_vol);
-    // Check if audio is playing
-    //if (!isPlaying || volume == fade_vol)
-    //    return;
-
-    //// Calculate increment rate
-    //float increment = { 1.0f / 60.0f / fade_time };
-    //
-    //
-    //if (fabsf(volume - fade_vol) <= 0.01f)
-    //{
-    //    volume = fade_vol;
-    //    return;
-    //}   
-    //volume <= fade_vol ? volume += increment : volume -= increment;
-    //
 }
 
 
@@ -417,83 +476,6 @@ void Audio::StopDucking()
     isDucking = false;
     if (isPlaying)
         FadeTo(volume_before_ducking, 0.5f);
-}
-
-/*---------------------------------------------Audio Initialize()----------------------------------------------------*/
-
-HRESULT Audio::Initialize()
-{
-    // File creation
-    HANDLE h = CreateFile(file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-    if (INVALID_HANDLE_VALUE == h)
-        assert(!GetLastError());
-    if (INVALID_SET_FILE_POINTER == SetFilePointer(h, 0, 0, FILE_BEGIN))
-        assert(!GetLastError());
-    DWORD dwChunkSize, dwChunkPos;
-
-    // Riff header searching
-    FindChunk(h, fourccRIFF, dwChunkSize, dwChunkPos);
-    DWORD fileType;
-    ReadChunk(h, &fileType, sizeof(DWORD), dwChunkPos);
-    if (fileType != fourccWAVE)
-        assert(!"Wrong Format");
-
-    // FMT header searching
-    FindChunk(h, fourccFMT, dwChunkSize, dwChunkPos);
-    ReadChunk(h, &format, dwChunkSize, dwChunkPos);
-
-    // Data header searching and insertion
-    FindChunk(h, fourccDATA, dwChunkSize, dwChunkPos);
-    BYTE* buffer = new BYTE[dwChunkSize];
-    ReadChunk(h, buffer, dwChunkSize, dwChunkPos);
-
-    XAUDIO2_BUFFER buf{};
-    buf.AudioBytes = dwChunkSize;
-    buf.pAudioData = buffer;
-    buf.Flags = XAUDIO2_END_OF_STREAM;
-
-    XAUDIO2_SEND_DESCRIPTOR descriptor[1]{};
-    descriptor[0].Flags = XAUDIO2_SEND_USEFILTER;
-    descriptor[0].pOutputVoice = AudioEngine::Instance()->masteringVoice;
-
-    XAUDIO2_VOICE_SENDS sendList{ 1, descriptor };
-
-    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format, 0, 2.0f, 0, &sendList);
-    assert(hr == S_OK);
-    this->buffer = buf;
-
-    // AudioStateMachine initialization
-    stateMachine = std::make_shared<AUDIO_STATES::AudioStateMachine>(this);
-    stateMachine->Initialize();
-
-    
-
-    return hr;
-}
-
-/*---------------------------------------------Audio Execute()----------------------------------------------------*/
-/// <summary>
-/// <para> Called every frame to perform functions </para>
-/// <para> ö∞•’•ÅE`•‡§À∫Ù§”≥ˆ§π </para>
-/// </summary>
-void Audio::Execute()
-{
-    stateMachine->Execute();
-    AudioEngine* audioEngine = AudioEngine::Instance();
-
-    // Perform 3DAudio calculations if emitter is targeted
-    if (audioEmitter && audioEngine->audioListener)
-    {
-        if (isPlaying) {
-
-            UINT calc_flag{};
-            calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
-            channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
-            HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
-            hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_frequency);
-
-        }
-    }
 }
 
 /*---------------------------------------------Audio Volume()----------------------------------------------------*/

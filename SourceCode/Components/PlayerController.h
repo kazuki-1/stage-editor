@@ -44,11 +44,6 @@ class PlayerController_Component : public BaseCharacterComponent
     /// </summary>    
     void JumpInput();
     /// <summary>
-    /// <para> Perform collision check with EnvironmentalAudio_Component gameObjects </para>
-    /// <para> ENVIRONMENTAL_AUDIOゲームオブジェクトと当たり判定を計算 </para>
-    /// </summary>
-    void SoundCollision();
-    /// <summary>
     /// <para> Performs velocity control </para>
     /// <para> 加速度の調整を行う </para>
     /// </summary>

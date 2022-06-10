@@ -192,6 +192,9 @@
     <Filter Include="Engine\Texture">
       <UniqueIdentifier>{3b40b060-3ab5-427b-9aaa-59650c37e5d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ImGui">
+      <UniqueIdentifier>{c1c2646e-9ef7-4962-b6f9-5b09769fc25d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -434,6 +437,9 @@
     <ClCompile Include="SourceCode\Engine\Texture.cpp">
       <Filter>Engine\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\ImGuiLocal.cpp">
+      <Filter>Engine\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Graphics.h">
@@ -500,9 +506,6 @@
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Graphics.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\IMGUI.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\OBJECT.h">
@@ -708,6 +711,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Texture.h">
       <Filter>Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\IMGUI.h">
+      <Filter>Engine\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

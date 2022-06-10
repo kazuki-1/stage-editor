@@ -1,3 +1,6 @@
+// A 2dShader that is default upon all 2dSprites
+
+// Vertex data
 struct VS_IN
 {
 	float4 position : POSITION;
@@ -5,6 +8,7 @@ struct VS_IN
 	float2 uv : UV;
 };
 
+// VertexShader output
 struct VS_OUT
 {
 	float4 position : SV_POSITION;
@@ -20,24 +24,12 @@ VS_OUT VS_MAIN(VS_IN vin)
 	vout.uv = vin.uv;
 	return vin;
 };
-//cbuffer CONSTANT_SCENE_BUFFER
-//{	
-//	float4x4 view;
-//	float4x4 projection;
-//	float4x4 light_dir;
-//	
-//};
-//
-//cbuffer CONSTANT_OBJECT_BUFFER
-//{
-//	float4x4 world;
-//
-//};
+
 
 Texture2D difMap : register(t0);
 SamplerState difMap_sampState : register(s0);
 float4 PS_MAIN(VS_OUT pin) : SV_TARGET
 {
 	return difMap.Sample(difMap_sampState, pin.uv) * pin.colour;
-	//return pin.colour;
+
 };

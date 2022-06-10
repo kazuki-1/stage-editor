@@ -68,7 +68,6 @@ public:
     DEBUG_ARROWS() {};
     void Initialize();
     void Execute() override;
-    void Execute(XMMATRIX mat);
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
@@ -86,7 +85,6 @@ public:
     DEBUG_SCALARS() {};
     void Initialize();
     void Execute() override;
-    void Execute(XMMATRIX mat);
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
@@ -104,7 +102,6 @@ public:
     DEBUG_DISCS() {};
     void Initialize();
     void Execute() override;
-    void Execute(XMMATRIX mat);
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);

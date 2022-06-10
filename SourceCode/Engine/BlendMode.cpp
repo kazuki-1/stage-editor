@@ -30,6 +30,8 @@ HRESULT BlendStateManager::Initialize()
     // res (Resulting colour)
     // alpha 
     //  res = dst * (1 - src.a) + src * src.a
+
+    // Alpha 
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -38,6 +40,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
     Insert(BlendModes::Alpha, bld);
 
+    // Lighten 
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_MAX;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
@@ -46,7 +49,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     Insert(BlendModes::Lighten, bld);
 
-
+    // Darken
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_MIN;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MIN;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
@@ -55,6 +58,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     Insert(BlendModes::Darken, bld);
 
+    // Addition
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -63,6 +67,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     Insert(BlendModes::Add, bld);
 
+    // Subtract
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_SUBTRACT;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -71,6 +76,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     Insert(BlendModes::Subtract, bld);
 
+    // Multiply
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_ALPHA;
@@ -79,6 +85,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
     Insert(BlendModes::Multiply, bld);
 
+    // Replace
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -87,6 +94,7 @@ HRESULT BlendStateManager::Initialize()
     bld.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
     Insert(BlendModes::Replace, bld);
 
+    // Screen
     bld.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     bld.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;

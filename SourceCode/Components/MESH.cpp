@@ -81,12 +81,9 @@ void Mesh_Component::UI()
     std::string header{ "Mesh ##" + std::to_string(data->id) };
     if (ImGui::TreeNode(header.c_str()))
     {
+        // ImGui FileBrowser
         ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
-        bool isEmpty{};
         static bool fileOpenM{};
-
-
-
         IMGUI::Instance()->InputText("Model Path", &data->model_path);
         if (ImGui::Button("Load Model"))
         {
@@ -95,10 +92,15 @@ void Mesh_Component::UI()
                 browser->Open();
                 browser->SetTitle("Open Model");
                 browser->SetTypeFilters({ ".mrs", ".*" });
-                isEmpty = fileOpenM = true;
+                fileOpenM = true;
             }
-            if (!isEmpty)
+        }
+        if (fileOpenM)
+        {
+            browser->Display();
+            if (browser->HasSelected())
             {
+                data->model_path = browser->GetSelected().string();
                 std::string directory{ "./Data/Model/" };
                 FS::path path(data->model_path);
                 FS::path name(path.filename().string());
@@ -111,14 +113,17 @@ void Mesh_Component::UI()
                 model = std::make_shared<MODEL>();
 
                 model->Initialize(data->model_path);
+
             }
         }
-        IMGUI::Instance()->DisplayBrowser(&data->model_path, &fileOpenM);
+
         if (!model)
         {
             ImGui::TreePop();
             return;
         }
+
+        // Show animation list
         std::vector<MODEL_RESOURCES::ANIMATION>& anims{ model->Resource()->Animations };
         ImGui::ListBoxHeader("Animations", { 300, 200 });
         for (int a = 0; a < model->Resource()->Animations.size(); ++a)
@@ -222,6 +227,7 @@ XMMATRIX Mesh_Component::GetBoneTransform(std::string name)
             }
         }
     }
+    // Get the world Transform from the bone
     if (index != -1)
     {
         int kf{ model->NextFrame() };
@@ -234,8 +240,9 @@ XMMATRIX Mesh_Component::GetBoneTransform(std::string name)
         bone = XMLoadFloat4x4(&temp);
     }
     global = transform->TransformMatrix();;
-    XMFLOAT4X4 temp{ model->Resource()->Axises.AxisCoords };
 
+    // Transforms the matrix to the LH
+    XMFLOAT4X4 temp{ model->Resource()->Axises.AxisCoords };
     bone *= XMLoadFloat4x4(&temp);
     bone *= global;
     return bone;

@@ -39,10 +39,10 @@ public:
     void SetRange(float r);
 
     float Range();
-    XMFLOAT3 Position();
-    XMFLOAT3 Velocity();
-    XMFLOAT3 Rotation();
-    XMFLOAT3 EyePosition();
+    Vector3 Position();
+    Vector3 Velocity();
+    Vector3 Rotation();
+    Vector3 EyePosition();
     XMMATRIX ViewMatrix();
 
 

@@ -7,6 +7,11 @@
 #include <filesystem>
 #pragma region LIGHTING
 
+/*---------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------LIGHTING Class------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------LIGHTING Constructor------------------------------------------------*/
+
 LIGHTING::LIGHTING(L_TYPE t) : type(t)
 {
 	if (type == L_TYPE::DIRECTIONAL)
@@ -15,10 +20,14 @@ LIGHTING::LIGHTING(L_TYPE t) : type(t)
 
 }
 
+/*-------------------------------------------------LIGHTING Type()------------------------------------------------*/
+
 LIGHTING::L_TYPE LIGHTING::Type()
 {
 	return type;
 }
+
+/*-------------------------------------------------LIGHTING RenderDebug()------------------------------------------------*/
 
 void LIGHTING::RenderDebug()
 {
@@ -31,40 +40,63 @@ void LIGHTING::RenderDebug()
 
 
 #pragma region Setters
+/*-------------------------------------------------LIGHTING SetDirection()------------------------------------------------*/
 
 void LIGHTING::SetDirection(Vector3 dir)
 {
 	direction = dir;
 }
+
+/*-------------------------------------------------LIGHTING SetPosition()------------------------------------------------*/
+
 void LIGHTING::SetPosition(Vector3 pos)
 {
 	position = pos;
 }
+
+/*-------------------------------------------------LIGHTING SetColour()------------------------------------------------*/
+
 void LIGHTING::SetColour(Vector4 col)
 {
 	colour = col;
 }
+
+/*-------------------------------------------------LIGHTING SetInnerCorner()------------------------------------------------*/
+
 void LIGHTING::SetInnerCorner(float in)
 {
 	inner = inner;
 }
+
+/*-------------------------------------------------LIGHTING SetOuterCorner()------------------------------------------------*/
+
 void LIGHTING::SetOuterCorner(float out)
 {
 	outer = outer;
 }
+
+/*-------------------------------------------------LIGHTING SetRange()------------------------------------------------*/
+
 void LIGHTING::SetRange(float r)
 {
 	range = r;
 }
+
+/*-------------------------------------------------LIGHTING SetType()------------------------------------------------*/
+
 void LIGHTING::SetType(L_TYPE t)
 {
 	type = t;
 }
+
+/*-------------------------------------------------LIGHTING WriteToData()------------------------------------------------*/
+
 void LIGHTING::WriteToData(DirectionalLight_Component* d)
 {
 	direction = { d->Direction().x, d->Direction().y, d->Direction().z };
 	colour = d->Colour();
 }
+
 void LIGHTING::WriteToData(PointLight_Component* p)
 {
 	position = { p->Position().x, p->Position().y, p->Position().z };
@@ -72,6 +104,7 @@ void LIGHTING::WriteToData(PointLight_Component* p)
 	intensity = p->GetIntensity();
 	range = p->Range();
 }
+
 void LIGHTING::WriteToData(SpotLight_Component* s)
 {
 	position = { s->Position().x, s->Position().y, s->Position().z };
@@ -81,34 +114,50 @@ void LIGHTING::WriteToData(SpotLight_Component* s)
 	inner = s->InnerCorner();
 	outer = s->OuterCorner();
 
-
-
 }
 
 
 #pragma endregion
 #pragma region Getters
 
+/*-------------------------------------------------LIGHTING Direction()------------------------------------------------*/
+
+
 Vector3 LIGHTING::Direction()
 {
 	return direction;
 }
+
+/*-------------------------------------------------LIGHTING Position()------------------------------------------------*/
+
 Vector3 LIGHTING::Position()
 {
 	return position;
 }
+
+/*-------------------------------------------------LIGHTING Colour()------------------------------------------------*/
+
 Vector4 LIGHTING::Colour()
 {
 	return colour;
 }
+
+/*-------------------------------------------------LIGHTING Range()------------------------------------------------*/
+
 float LIGHTING::Range()
 {
 	return range;
 }
+
+/*-------------------------------------------------LIGHTING Inner()------------------------------------------------*/
+
 float LIGHTING::Inner()
 {
 	return inner;
 }
+
+/*-------------------------------------------------LIGHTING Outer()------------------------------------------------*/
+
 float LIGHTING::Outer()
 {
 	return outer;
@@ -119,10 +168,18 @@ float LIGHTING::Outer()
 #pragma endregion
 #pragma region LIGHTINGMANAGER
 
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------LightingManager Class----------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------LightingManager Insert()-------------------------------------------------------------*/
+
 void LightingManager::Insert(std::string n, std::shared_ptr<LIGHTING> l)
 {
 	dataset.insert(std::make_pair(n, l));
 }
+
+/*------------------------------------------------LightingManager Remove()-------------------------------------------------------------*/
+
 void LightingManager::Remove(std::string n)
 {
 	for (auto d = dataset.begin(); d != dataset.end(); ++d)
@@ -131,46 +188,20 @@ void LightingManager::Remove(std::string n)
 			dataset.erase(d);
 	}
 }
+
+/*------------------------------------------------LightingManager Create()-------------------------------------------------------------*/
+
 void LightingManager::Create(std::string n, LIGHTING::L_TYPE t)
 {
 	std::shared_ptr<LIGHTING>l = std::make_shared<LIGHTING>(t);
 	Insert(n, l);
 }
+
+/*------------------------------------------------LightingManager RenderUI()-------------------------------------------------------------*/
+// Deprecated. To set lighting other than directional light, create a gameObject and insert the component PointLight_Component or SpotLight_Component
 void LightingManager::RenderUI()
 {
 	ImGui::Begin("Stage Settings");
-	//ImGui::SetWindowSize({ 300, 900 });
-	//ImGui::InputText("Read From File", (char*)input_file.c_str(), 256);
-	//if (ImGui::Button("Load"))
-	//{
-	//	std::filesystem::path path(input_file);
-	//	path.replace_extension(".ld");
-
-	//	ReadFromFile(input_file);
-	//}
-
-
-	//if (ImGui::TreeNode("Light"))
-	//  {
-	//	std::string types[] = { "Directional", "Point", "Spot" };
-	//	static LIGHTING::L_TYPE selected_type{ LIGHTING::L_TYPE::DIRECTIONAL};
-
-	//	if (ImGui::BeginCombo("Type : ", types[selected_type].c_str())) 
-	//	{
-	//			for (int a = 0; a < 3; ++a) {
-	//				bool selected{ types[a] == types[selected_type] };
-	//				if (ImGui::Selectable(types[a].c_str(), &selected))
-	//					selected_type = (LIGHTING::L_TYPE)a;
-	//			}
-	//			ImGui::EndCombo();
-	//		}
-
-	//	ImGui::InputText("Name", (char*)input.c_str(), 256);
-	//	if (ImGui::Button("Create ##01"))
-	//		{
-	//			Create(input, selected_type);
-	//		}
-
 
 		static std::shared_ptr<LIGHTING>d{ dataset.begin()->second };
 		if (ImGui::BeginCombo("Lights : ", Name(d).c_str()))
@@ -193,39 +224,17 @@ void LightingManager::RenderUI()
 				ImGui::ColorEdit4("Colour : ", &d->colour.x);
 				break;
 			}
-			//case LIGHTING::L_TYPE::POINT: {
-			//	ImGui::InputFloat3("Position : ", &d->position.x);
-			//	ImGui::InputFloat("Range : ", &d->range);
-			//	ImGui::ColorEdit3("Colour : ", &d->colour.x);
-			//	break;
-			//}
-			//case LIGHTING::L_TYPE::SPOT: {
-			//	ImGui::InputFloat3("Position : ", &d->position.x);
-			//	ImGui::InputFloat3("Direction : ", &d->direction.x);
-			//	ImGui::InputFloat("Range : ", &d->range);
-			//	ImGui::InputFloat("Inner Corner : ", &d->inner);
-			//	ImGui::InputFloat("Outer Corner: ", &d->outer);
-			//	ImGui::ColorEdit4("Colour : ", &d->colour.x);
-			//}
 			}
 
 			ImGui::TreePop();
 
 		}
-		//ImGui::InputText("Create File", (char*)output_file.c_str(), 256);
-		//if (ImGui::Button("Output ##01"))
-		//{
-		//	std::filesystem::path dir("./Generated/Lighting/");
-		//	std::string format{ ".ld" };
-		//	if (!std::filesystem::exists(dir))
-		//		std::filesystem::create_directories(dir);
-		//	std::filesystem::path path(dir.string() + output_file);
-		//	path.replace_extension(format);
-		//	OutputFile(path.string());
-		//}
 
 		ImGui::End();
 }
+
+/*------------------------------------------------LightingManager OutputFile()-------------------------------------------------------------*/
+
 void LightingManager::OutputFile(std::string f)
 {
 	std::filesystem::path path(f);
@@ -235,6 +244,9 @@ void LightingManager::OutputFile(std::string f)
 	cereal::BinaryOutputArchive output(ofs);
 	output(dataset);
 }
+
+/*------------------------------------------------LightingManager ReadFromFile()-------------------------------------------------------------*/
+// Deprecated, now loads the entire stage data along with the lighting data
 void LightingManager::ReadFromFile(std::string f)
 {
 	std::filesystem::path path(f);
@@ -245,11 +257,15 @@ void LightingManager::ReadFromFile(std::string f)
 	in(dataset);
 
 }
+
+/*------------------------------------------------LightingManager RenderDebug()-------------------------------------------------------------*/
+
 void LightingManager::RenderDebug()
 {
-	//for (auto& d : dataset)
-	//	d.second->RenderDebug();
 }
+
+/*------------------------------------------------LightingManager Name()-------------------------------------------------------------*/
+
 std::string LightingManager::Name(std::shared_ptr<LIGHTING>d)
 {
 	for (auto& dt : dataset)
@@ -258,6 +274,9 @@ std::string LightingManager::Name(std::shared_ptr<LIGHTING>d)
 	assert(!"No such light");
 	return "";
 }
+
+/*------------------------------------------------LightingManager Retrieve()-------------------------------------------------------------*/
+
 std::shared_ptr<LIGHTING> LightingManager::Retrieve(std::string n)
 {
 	return dataset.find(n)->second;

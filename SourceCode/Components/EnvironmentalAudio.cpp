@@ -3,12 +3,9 @@
 #include "Base Classes/ComponentCreator.h"
 #include "../Engine/Audio.h"
 #include "../Scenes/SceneManager.h"
-#include "../Engine/Camera.h"
-#include "../Engine/Input.h"
 #include "../Engine/IMGUI.h"
 #include "SphereCollider.h"
 #include "CapsuleCollider.h"
-#include "PlayerController.h"
 #include "OBBCollider.h"
 #include "Transform3D.h"
 #define POINTER_CAST std::dynamic_pointer_cast
@@ -444,7 +441,6 @@ void EnvironmentalAudio_Component::Finalize()
     AudioEngine::Instance()->Delist(audio);
     audio = {};
 }
-
 
 /*--------------------------------------------EnvironmentalAudio_Component Colliders()--------------------------------------------------*/
 

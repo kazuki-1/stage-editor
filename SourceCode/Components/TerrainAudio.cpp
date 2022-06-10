@@ -1,5 +1,6 @@
 #include "../Audio/AudioController.h"
 #include "../Engine/SoundEffect.h"
+#include "PlayerController.h"
 #include "Transform3D.h"
 #include "TerrainAudio.h"
 #include "Mesh.h"
@@ -16,9 +17,9 @@ TerrainAudio_Data::TerrainAudio_Data()
 
 }
 
-/*-----------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------TerrainAudio_Component Class---------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------TerrainAudio_Component Constructor------------------------------------------------*/
 
 TerrainAudio_Component::TerrainAudio_Component(GameObject* g, ComponentData* d)
@@ -305,6 +306,8 @@ void TerrainAudio_Component::Play()
     if (!emitter)
         return;
     bool isDucking{ AudioController::Instance()->IsDucking() };
+
+    // Cycle through the buffers to look for one that isn't being used 
     for (auto& b : emitter->buffers)
     {
         if (isDucking)
@@ -348,7 +351,7 @@ void TerrainAudio_Component::ExecuteEmitter()
 void TerrainAudio_Component::ExecuteReceiver()
 {
     // Execute functions for emitter
-    //PlayerController_Component* playerController = GetComponent<PlayerController_Component>();
+    PlayerController_Component* playerController = GetComponent<PlayerController_Component>();
     if (data->class_type != TerrainAudio_Property::RECEIVER)
         return;
     Mesh_Component* mesh = GetComponent<Mesh_Component>();
@@ -356,8 +359,8 @@ void TerrainAudio_Component::ExecuteReceiver()
     TerrainAudio_Data_Receiver* data = (TerrainAudio_Data_Receiver*)this->data->property_data.get();
     TerrainAudio_Receiver* receiver = (TerrainAudio_Receiver*)parameters.get();
     // Stops the function if gameObject does not have a playerController
-    // if (!playerController)
-    //     return;
+     if (!playerController)
+         return;
 
 
     // Search all gameobjects for emitters
@@ -375,9 +378,6 @@ void TerrainAudio_Component::ExecuteReceiver()
                 if (entity->data->class_type == TerrainAudio_Property::EMITTER)
                     receiver->list_of_emitters.push_back(entity);
             }
-
-            //if (component->data->class_type == TerrainAudio_Property::EMITTER)
-            //    receiver->list_of_emitters.push_back(object.second.get());
         }
     }
 

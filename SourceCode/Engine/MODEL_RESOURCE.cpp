@@ -59,7 +59,6 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
                 HRESULT hr = DirectX11::Instance()->Device()->CreateBuffer(&ibd, &id, m.Subsets[a].subsetIndexBuffer.GetAddressOf());
                 if (FAILED(hr))
                     assert(!"Failed to create Index Buffer");
-                /*a.index_Count = a.Indices.size();*/
                 ++a;
             }
 
@@ -70,16 +69,6 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
     bool hasTexture{};
     for (auto m = Materials.begin(); m != Materials.end(); ++m)
     {
-
-        // Search for material
-        //for (auto m2 = Materials.begin(); m2 != Materials.end(); ++m2)
-        //{
-        //    if (m2->second.texture_path[0] != "")
-        //    {
-        //        hasTexture = true;
-        //        break;
-        //    }
-        //}
 
         // Set material path
         const char* back{ "/" };
@@ -164,19 +153,6 @@ void MODEL_RESOURCES::BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYF
 
 void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf)
 {
-    //OUTLINE_CONSTANT_BUFFER outlineData{};
-    //outlineData.outline_colour = { 1.0f, 1.0f, 1.0f, 1.0f };
-    //outlineData.outline_size = 0.01f;
-    //dc->RSSetState(RasterizerManager::Instance()->Retrieve(RasterizerTypes::Base_3D)->GetRasterizer().Get());
-
-    //if (performUVScroll)
-    //{
-    //    scroll += {1.0f, 1.0f};
-    //    UVSCROLL_CONSTANT_BUFFER data{};
-    //    data.scrollVal = scroll;
-    //    dc->UpdateSubresource(uvScrollConstantBuffer.Get(), 0, 0, &data, 0, 0);
-    //    
-    //}
 
 
     for (auto& shader : shaders)
@@ -191,8 +167,17 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
             RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
             BlendStateManager::Instance()->Set(BlendModes::Alpha);
             // Updating Object Constant buffers (World and colour)
-            //MESH_CONSTANT_BUFFER data{};
+            // For some reason, the normals and coordinates are all flipped in release build
+#ifdef _DEBUG
             XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
+
+#else     
+            XMMATRIX mat = { -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+            XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * XMLoadFloat4x4(&world) };       // Converting  Axis Systems to Base Axis
+#endif
+
+
+
 
             data.colour = colour;               // Incase model has no subsets
 
@@ -228,7 +213,6 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
                         ts.push_back(ms.Textures[a]->GetSRV().Get());
                 }
 
-                //dc->PSSetShaderResources(0, (uint)ts.size(), ts.data());
                 int ind{};
                 for (auto& t : ms.Textures)
                 {

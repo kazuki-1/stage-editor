@@ -30,7 +30,6 @@ void AudioStateMachine::Initialize()
 /*----------------------------------------AudioStateMachine Transition()---------------------------------------------*/
 /// <summary>
 /// <para> Called to transition to a different state </para>
-/// <para> •π•∆©`•»§Úﬂw“∆§π§ÅE°</para>
 /// </summary>
 void AudioStateMachine::Transition(AudioStateEnum next_state)
 {
@@ -86,7 +85,6 @@ void AudioStateMachine::FadeOut(float fade_time)
 /*----------------------------------------AudioStateMachine CurrentState()---------------------------------------------*/
 /// <summary>
 /// <para> Returns the current audioStateEnum</para>
-/// <para> ¨F‘⁄§Œ•π•∆©`•»Enum§Ú∑µ§π </para>
 /// </summary>
 /// <returns></returns>
 AudioStateEnum AudioStateMachine::CurrentState()
@@ -95,6 +93,7 @@ AudioStateEnum AudioStateMachine::CurrentState()
 }
 
 /*----------------------------------------AudioStateMachine DebugUI()---------------------------------------------*/
+
 void AudioStateMachine::DebugUI()
 {
     

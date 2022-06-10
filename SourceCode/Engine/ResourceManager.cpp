@@ -1,6 +1,10 @@
 #include "ResourceManager.h"
 #include "MODEL.h"
 
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------ModelResourceManager Class----------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------ModelResourceManager Load()---------------------------------------------------------------*/
 
 std::shared_ptr<MODEL_RESOURCES> ModelResourceManager::Load(std::string model_path)
 {
@@ -19,6 +23,7 @@ std::shared_ptr<MODEL_RESOURCES> ModelResourceManager::Load(std::string model_pa
     return Generate(model_path);
 }
 
+/*--------------------------------------ModelResourceManager Generate()---------------------------------------------------------------*/
 
 std::shared_ptr<MODEL_RESOURCES>ModelResourceManager::Generate(std::string model_path)
 {
@@ -29,6 +34,7 @@ std::shared_ptr<MODEL_RESOURCES>ModelResourceManager::Generate(std::string model
     return m ? m : nullptr;
 }
 
+/*--------------------------------------ModelResourceManager Recreate()---------------------------------------------------------------*/
 
 HRESULT ModelResourceManager::Recreate(MODEL* m, std::string new_file_name)
 {

@@ -15,11 +15,33 @@ class DataManager : public Singleton<DataManager>
 
     friend class OBJECT_DATA;
 public:
+    /// <summary>
+    /// Inserts the OBJECT_DATA into the dataset
+    /// </summary>
+    /// <param name="d"></param>
     void Insert(std::shared_ptr<OBJECT_DATA>d);
+    /// <summary>
+    /// Loads the file
+    /// </summary>
+    /// <param name="file_path"></param>
     void Load(std::string file_path);
+    /// <summary>
+    /// Use the data loaded and initializes all gameObjects
+    /// </summary>
     void InsertAndInitialize();
+    /// <summary>
+    /// Clear the dataset
+    /// </summary>
     void Finalize();
+    /// <summary>
+    /// Creates a stage data file
+    /// </summary>
+    /// <param name="output_path"></param>
     void OutputFile(std::string output_path);
+    /// <summary>
+    /// Removes the target from the dataset
+    /// </summary>
+    /// <param name="target"></param>
     void Remove(std::shared_ptr<OBJECT_DATA>target);
     void SetFilePath(std::string path);
     std::vector<std::shared_ptr<OBJECT_DATA>>Dataset();

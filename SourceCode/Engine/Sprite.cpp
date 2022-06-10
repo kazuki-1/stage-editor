@@ -1,6 +1,12 @@
 #include "Rasterizer.h"
 #include "Sprite.h"
 #include "BlendMode.h"
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------SPRITE Class------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------SPRITE Constructor------------------------------------------------------------------*/
+
 SPRITE::SPRITE(const wchar_t* img_path)
 {
     HRESULT hr{ S_OK };
@@ -20,12 +26,10 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
     vertexCount = (int)Vertices.size();
     indexCount = 6;
-    // Vertex Buffer Desc and Index Buffer Desc
     D3D11_BUFFER_DESC vbd{}, ibd{};
-    // Vertex and Index Buffer Subresource Data
     D3D11_SUBRESOURCE_DATA vd{}, id{};
-
-    /*-------------------------------------Vertex Buffer Creation--------------------------------------------*/
+    
+    // Vertex Buffer
     vbd.ByteWidth = (UINT)(sizeof(VERTEX) * Vertices.size());
     vbd.Usage = D3D11_USAGE_DYNAMIC;
     vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -36,11 +40,9 @@ SPRITE::SPRITE(const wchar_t* img_path)
     hr = dv->CreateBuffer(&vbd, &vd, dxVertexBuffer.GetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create Vertex Buffer");
-    /*-------------------------------------End of Vertex Buffer Creation--------------------------------------------*/
 
 
-    /*-------------------------------------Index Buffer Creation--------------------------------------------*/
-
+    // Index Buffer
     ibd.ByteWidth = sizeof(int) * indexCount;
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.Usage = D3D11_USAGE_DEFAULT;
@@ -48,7 +50,6 @@ SPRITE::SPRITE(const wchar_t* img_path)
     id.pSysMem = indices;
     hr = dv->CreateBuffer(&ibd, &id, dxIndexBuffer.GetAddressOf());
     if (FAILED(hr))
-        assert(!"Failed to create Index Buffer");
     /*-------------------------------------End of Index Buffer Creation--------------------------------------------*/
 
 
@@ -66,6 +67,8 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
 
 }
+
+/*-------------------------------------------------SPRITE Initialize()------------------------------------------------------------------*/
 
 HRESULT SPRITE::Initialize(const wchar_t* img_path)
 {
@@ -86,14 +89,12 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 
     vertexCount = (int)Vertices.size();
     indexCount = 6;
-    // Vertex Buffer Desc and Index Buffer Desc
     D3D11_BUFFER_DESC vbd{}, ibd{};
-    // Vertex and Index Buffer Subresource Data
     D3D11_SUBRESOURCE_DATA vd{}, id{};
 
     ID3D11Device* dv = DirectX11::Instance()->Device();
 
-    /*-------------------------------------Vertex Buffer Creation--------------------------------------------*/
+    // Vertex Buffer
     vbd.ByteWidth = (UINT)(sizeof(VERTEX) * Vertices.size());
     vbd.Usage = D3D11_USAGE_DYNAMIC;
     vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -104,11 +105,8 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
     hr = dv->CreateBuffer(&vbd, &vd, dxVertexBuffer.GetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create Vertex Buffer");
-    /*-------------------------------------End of Vertex Buffer Creation--------------------------------------------*/
-
-
-    /*-------------------------------------Index Buffer Creation--------------------------------------------*/
-
+    
+    // Index Buffer
     ibd.ByteWidth = sizeof(int) * indexCount;
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.Usage = D3D11_USAGE_DEFAULT;
@@ -117,7 +115,6 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
     hr = dv->CreateBuffer(&ibd, &id, dxIndexBuffer.GetAddressOf());
     if (FAILED(hr))
         assert(!"Failed to create Index Buffer");
-    /*-------------------------------------End of Index Buffer Creation--------------------------------------------*/
 
 
 
@@ -134,7 +131,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
     return S_OK;
 }
 
-
+/*-------------------------------------------------SPRITE Render()------------------------------------------------------------------*/
 
 void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSize, Vector2 pivot, Vector4 colour, float angle)
 {

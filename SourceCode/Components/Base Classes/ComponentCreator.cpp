@@ -4,7 +4,7 @@
 #include "ComponentHeaders.h"
 
 
-#pragma region Component Constructors
+#pragma region Component_Constructors
 
 std::shared_ptr<Transform3D_Component> __Transform3D_Component(GameObject* g, std::shared_ptr<ComponentData>d)
 {
@@ -86,7 +86,7 @@ std::shared_ptr<Component>__Component(GameObject* g, std::shared_ptr<ComponentDa
 
 #pragma endregion
 
-#pragma region Component Data Constructors
+#pragma region Component_Data_Constructors
 
 std::shared_ptr<Transform3D_Data>__Transform3D_Data()
 {
@@ -183,7 +183,7 @@ std::shared_ptr<Dialogue_Data>__Dialogue_Data()
 void ComponentCreator::Initialize()
 {
 
-#pragma region Component Data Registering
+#pragma region Component_Data_Registering
 
     RegisterData(COMPONENT_TYPE::Transform3D_Component, __Transform3D_Data);
     RegisterData(COMPONENT_TYPE::Transform2D_Component, __Transform2D_Data);
@@ -207,7 +207,7 @@ void ComponentCreator::Initialize()
 
 #pragma endregion
 
-#pragma region Component Registering
+#pragma region Component_Registering
 
     RegisterComponent(COMPONENT_TYPE::Transform3D_Component, __Transform3D_Component);
     RegisterComponent(COMPONENT_TYPE::Transform2D_Component, __Transform2D_Component);

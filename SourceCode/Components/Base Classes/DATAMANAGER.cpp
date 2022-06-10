@@ -22,6 +22,7 @@ void DataManager::Load(std::string n)
     if (!std::filesystem::exists(n))
         assert(!"No file found");
 
+    // Load file
     std::ifstream ifs(path, std::ios::in | std::ios::binary);   
     cereal::BinaryInputArchive bin(ifs);
     bin(dataset);
@@ -36,7 +37,6 @@ void DataManager::InsertAndInitialize()
     GameObjectManager::Instance()->GetGameObjects().clear();
     for (auto& d : dataset)
     {
-        //GameObjectManager::Instance()->Insert(d->Name(), d);
         GameObjectManager::Instance()->Insert(d->Name(), d);
     }
 }
@@ -59,6 +59,8 @@ void DataManager::OutputFile(std::string output_path)
     // Replace current file if same file exists
     if (std::filesystem::exists(path))
         std::filesystem::remove(path);
+
+    // Create file
     std::ofstream ofs(path, std::ios::binary);
     cereal::BinaryOutputArchive boa(ofs);
     boa(dataset);

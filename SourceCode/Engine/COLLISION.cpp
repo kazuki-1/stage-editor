@@ -5,7 +5,6 @@
 #include "../Components/CapsuleCollider.h"
 #include "../Components/Mesh.h"
 #include "../Components/Transform3D.h"
-//#define MathLib
 using namespace COLLIDERS;
 #define Vertex MODEL_RESOURCES::VERTEX
 /*---------------------------------------------------PointLineClosest()---------------------------------------------------*/
@@ -200,7 +199,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 
 
 }
-#define MathLib
+
 /*---------------------------------------------------RayCast()---------------------------------------------------*/
 /// <summary>
 /// <para> Perform Raycasting </para>
@@ -228,15 +227,7 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
     int current_mesh_index{};
     for (auto& mesh : resources->Meshes)
     {
-        //Check if current target
-            //if (mesh_index != -1)
-            //{
-            //    if (mesh_index != current_mesh_index)
-            //    {
-            //        ++current_mesh_index;
-            //        continue;
-            //    }
-            //}
+        // Retrieve vertices
         XMMATRIX world_Transform = m->TransformMatrix();
         Vector3 vector{ worldEnd - worldStart };
         Vector3 direction = Vector3::Normalize(vector);
@@ -341,6 +332,7 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
     return hit;
 #pragma endregion
 
+    // Keeping just in case needed
 //#pragma region Original
 //
 //        XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
@@ -500,155 +492,6 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 
 }
 
-////XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
-////XMVECTOR w_End{ e.XMV() };                             // Ray World End Position
-////XMVECTOR w_RayVector{ w_End - w_Start };                        // World Ray Vector 
-////XMVECTOR w_RayLength = XMVector3Length(w_RayVector);            // World Ray Length
-////XMStoreFloat(&hr.distance, w_RayLength);
-//
-////// Retrieve current keyframe 
-////// 現在のキーフレームを抽出
-////bool hit{};
-////MODEL_RESOURCES::ANIMATION::KEYFRAME& kf = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame());
-////int cur_index{};
-////for (auto& ms : m->Resource()->Meshes)
-////{
-////    bool onTarget{};
-////    //if (mesh_index != -1)
-////    //{
-////    //    if (mesh_index != cur_index)
-////    //    {
-////    //        ++cur_index;
-////    //        continue;
-////    //    }
-////    //    else
-////    //        onTarget = true;
-////    //}
-//
-////    //if (!onTarget && mesh_index != -1)
-////    //    continue;
-//
-////    // Retrieve the current mesh node and transform matrix to Local Transformation
-////    // げんざいMESHNODEを抽出し、ローカル変換行列に変換
-////    MODEL_RESOURCES::ANIMATION::KEYFRAME::NODE& n = m->Resource()->Animations.at(m->CurrentTake()).Keyframes.at(m->CurrentFrame()).Nodes.at(ms.n_Index);
-//
-////    XMMATRIX w_Transform{ XMLoadFloat4x4(&n.g_Transform) };
-////    w_Transform *= m->TransformMatrix();
-////    XMMATRIX inv_w_Transform{ XMMatrixInverse(nullptr, w_Transform) };
-//
-////    XMVECTOR S{ XMVector3TransformCoord(w_Start, inv_w_Transform) };
-////    XMVECTOR E{ XMVector3TransformCoord(w_End, inv_w_Transform) };
-//
-////    XMVECTOR V{ E - S };
-////    XMVECTOR Dir{ XMVector3Normalize(V) };
-////    XMVECTOR L{ XMVector3Length(V) };
-////    float min_Length{};
-////    XMStoreFloat(&min_Length, L);
-//
-//
-////    std::vector<MODEL_RESOURCES::VERTEX>& v{ ms.Vertices };
-////    const std::vector<int>i{ ms.Indices };
-//
-////    int m_Index{ -1 };
-////    XMVECTOR h_Pos, h_Norm;
-////    for (auto& sub : ms.Subsets)
-////    {
-////        for (int in = 0; in < sub.indices.size(); in += 3)
-////        {
-////            //UINT index{ sub.first_index + in };
-////            // if (index > sub.indexCount)
-////            //     continue;
-//
-////            MODEL_RESOURCES::VERTEX& a{ v.at(sub.indices[in]) };
-////            MODEL_RESOURCES::VERTEX& b{ v.at(sub.indices[in + 1]) };
-////            MODEL_RESOURCES::VERTEX& c{ v.at(sub.indices[in + 2]) };
-//
-//
-////            //  Step 1: Triangle Vertex Retrieval
-////            // 三角の生成
-////            XMVECTOR A{ a.position.XMV() };
-////            XMVECTOR B{ b.position.XMV() };
-////            XMVECTOR C{ c.position.XMV() };
-//
-////            // Skip if not near
-//
-////            //  Step 2: Vector of edges
-////            // 三角のベクタ
-////            XMVECTOR AB{ B - A };
-////            XMVECTOR BC{ C - B };
-////            XMVECTOR CA{ A - C };
-//
-//
-////            //  Step 3: Normal retrieval
-////            // 法線抽出
-////            XMVECTOR Normal{ XMVector3Cross(AB, BC) };
-//
-//
-////            //  Step 4: In front of or behind
-////            // ターゲットは三角以外か以内
-////            XMVECTOR Dot{ XMVector3Dot(Normal, Dir) };
-////            float f_Dot;
-////            XMStoreFloat(&f_Dot, Dot);
-////            if (f_Dot >= 0)
-////                continue;
-////            // Step 5: Point of intersection
-////            // 交差点
-////            XMVECTOR distance{ A - S };
-////            XMVECTOR T = XMVector3Dot(Normal, distance) / Dot;
-////            float length = XMVectorGetX(T);
-////            if (length > min_Length || length < 0)
-////                continue;
-////            XMVECTOR ContactPoint{ S + Dir * T };
-//
-////            // Perform dot check on each point on the triangle 
-////            // 各点に内積チェック
-////            XMVECTOR PA{ A - ContactPoint };
-////            XMVECTOR PB{ B - ContactPoint };
-////            XMVECTOR PC{ C - ContactPoint };
-//
-//
-////            XMVECTOR C_PAB{ XMVector3Cross(PA, AB) };
-////            XMVECTOR C_PAC{ XMVector3Cross(PB, BC) };
-////            XMVECTOR C_PBC{ XMVector3Cross(PC, CA) };
-//
-////            XMVECTOR PAB_DOT{ XMVector3Dot(Normal, C_PAB) };
-////            XMVECTOR PAC_DOT{ XMVector3Dot(Normal, C_PAC) };
-////            XMVECTOR PBC_DOT{ XMVector3Dot(Normal, C_PBC) };
-//
-//
-////            float f_pabdot{ XMVectorGetX(PAB_DOT) }, f_pacdot{ XMVectorGetX(PAC_DOT) }, f_pbcdot{ XMVectorGetX(PBC_DOT) };
-////            if (f_pabdot < 0 || f_pacdot < 0 || f_pbcdot < 0)
-////                continue;
-////            h_Pos = ContactPoint;
-////            h_Norm = Normal;
-////            m_Index = (int)sub.m_UID;
-////        }
-////    }
-////    if (m_Index >= 0)
-////    {   
-////        // RAYCASTDATA storing
-////        // RAYCASTDATA 保存
-//
-////        XMVECTOR w_Position{ XMVector3TransformCoord(h_Pos, w_Transform) };
-////        XMVECTOR w_CrossVector{ w_Position - w_Start };
-////        XMVECTOR w_CrossLength{ XMVector3Length(w_CrossVector) };
-////        float dist;
-////        XMStoreFloat(&dist, w_CrossLength);
-////        if (hr.distance > dist)
-////        {
-////            XMVECTOR w_Normal = XMVector3TransformNormal(h_Norm, w_Transform);
-////            hr.distance = dist;
-////            hr.m_Index = m_Index;
-////            // XMStoreFloat3(&hr.position, w_Position);
-////            // XMStoreFloat3(&hr.normal, XMVector3Normalize(w_Normal));
-////            hr.position.Load(w_Position);
-////            hr.normal.Load(w_Normal);
-////            hr.normal.Normalize();
-////            hit = true;
-////        }
-////    }
-////}
-////return hit;
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------COLLIDER_BASE Class--------------------------------------------------------------------*/
@@ -662,6 +505,7 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 /// <param name="m"> : Pointer of model</param>
 void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
 {
+    // Search for bone in list
     int64_t index{ -1 };
     XMMATRIX bone, global;
     for (auto& m : m->Resource()->Meshes)
@@ -686,6 +530,7 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
         XMFLOAT4X4 temp = m->Resource()->Animations[m->CurrentTake()].Keyframes[kf].Nodes.at(index).g_Transform;
         bone = XMLoadFloat4x4(&temp);
     }
+    // Transform to global transform
     global = m->TransformMatrix();
     XMFLOAT4X4 temp{ m->Resource()->Axises.AxisCoords };
 
@@ -804,7 +649,7 @@ OBB::OBB(Vector3 vMin, Vector3 vMax)
     oriMin = vMin;
     oriMax = vMax;
 
-
+    // Sets each point
     Vector3& p = points.emplace_back();
     p = vMin;
     Vector3& p2 = points.emplace_back();
@@ -838,6 +683,7 @@ void OBB::UpdatePosition(XMMATRIX mat)
 {
     std::vector<Vector3>& ps(points);
 
+    // Defaults the point
     ps[0] = oriMin;
     ps[1] = Vector3{ oriMax.x, oriMin.y, oriMin.z };
     ps[2] = Vector3{ oriMin.x, oriMax.y, oriMin.z };
@@ -1220,8 +1066,6 @@ bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Compone
     for (auto& m : meshes)
     {
         Vector3 target{ m->GetParent()->GetComponent<Transform3D_Component>()->GetTranslation() };
-        //if ((target - startOfRay).Length() > 0.3f)
-        //    continue;
         if (m == cur_mesh)
             continue;
         output = RayCast(startOfRay, endOfRay, m->Model().get(), rcd);

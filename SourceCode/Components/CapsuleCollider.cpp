@@ -66,7 +66,6 @@ void CapsuleCollider_Component::Execute()
     {
         // If attached to bone
         collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
-        //capsule->Execute(collider->WorldMatrix());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
     capsule->UpdateVertices(data->radius, data->height, &world);
@@ -121,6 +120,7 @@ void CapsuleCollider_Component::UI()
         collider = std::make_shared<COLLIDERS::CAPSULE>(data->center, data->height, data->radius);
     if (ImGui::TreeNode("Capsule Collider"))
     {
+        // Parameters
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Center : ", &data->center.x, 0.05f);
         ImGui::DragFloat3("Rotation : ", &data->rotation.x, 0.05f);
@@ -135,6 +135,7 @@ void CapsuleCollider_Component::UI()
             collider->RotateCollider(Vector3::ToRadians(data->rotation));
         }
 
+        // Bind to bone
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
         {
             MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };
