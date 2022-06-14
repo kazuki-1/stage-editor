@@ -20,7 +20,7 @@ namespace Math
     /// <returns></returns>
     extern float Clamp(float tar, float min, float max);
     /// <summary>
-    /// Returns -1 if tar < 0, 1 if tar > 0
+    /// Returns +1 if tar > 0
     /// </summary>
     /// <param name="tar"></param>
     /// <returns></returns>

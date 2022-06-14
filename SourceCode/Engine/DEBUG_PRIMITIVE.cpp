@@ -434,7 +434,7 @@ HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D).get();
+    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D);
 
     return hr;
 
@@ -540,7 +540,7 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
 
     // Uses a debug shader since this only renders lines
-    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D).get();
+    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D);
 
 
 

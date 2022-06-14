@@ -55,9 +55,9 @@ HRESULT SkyboxShader::Initialize()
         {"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    size_t ied_size = ARRAYSIZE(ied);
+    UINT ied_size = ARRAYSIZE(ied);
     hr = dv->CreateInputLayout(ied, ied_size, vs->GetBufferPointer(), vs->GetBufferSize(), inputLayout.GetAddressOf());
-    assert(hr == S_OK, "Failed to create input layout");
+    assert(hr == S_OK);
 
     // Blob release
     vs->Release();

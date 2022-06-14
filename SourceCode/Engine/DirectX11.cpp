@@ -18,7 +18,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
 {
     HRESULT hr{ S_OK };
     vSync = VSYNC;
-    UINT numModes, numerator, denominator;
+    UINT numModes{}, numerator{}, denominator{};
     hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)dxFactory.GetAddressOf());
     assert(hr == S_OK);
 
@@ -31,7 +31,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     hr = dxAdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, 0);
     assert(hr == S_OK);
 
-    DXGI_MODE_DESC* modes;
+    DXGI_MODE_DESC* modes{};
     modes = new DXGI_MODE_DESC[numModes];
     if (!modes)
         assert(!"DXGI Mode creation failed");
@@ -54,9 +54,6 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     assert(hr == S_OK);
 
     GPUMemory = (int)(dad.DedicatedVideoMemory / 1024 / 1024);
-
-    std::wstring name;
-    name = std::to_wstring((wchar_t)dad.Description);
 
 
     UINT deviceFlags{ 0 };

@@ -14,8 +14,8 @@ typedef MODEL_RESOURCES::ANIMATION AN;
 class MODEL
 {
 #pragma region VARIABLES
-    float factor;
-    int transition_progress;
+    float factor{};
+    int transition_progress{};
     bool animPaused{};
     bool isTransitioning{};
 

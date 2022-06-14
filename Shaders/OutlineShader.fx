@@ -106,6 +106,8 @@ VS_OUT VS_MAIN(VS_IN vin)
     vout.normal = mul(float4(n_Normal.xyz, 0.0f), world).xyz;
     vout.position = mul(vout.world_position, view_proj);
     vout.tangent = mul(float4(n_Tangent.xyz, 0.0f), world).xyz;
+
+    // Offsets the vertices slightly for outlines
     vout.world_position += float4(normalize(vout.normal).xyz, 1.0f) * outline_size;
     vout.position += float4(normalize(vout.normal).xyz , 1.0f) * outline_size;
     vout.tangent = normalize(vout.tangent).xyz;

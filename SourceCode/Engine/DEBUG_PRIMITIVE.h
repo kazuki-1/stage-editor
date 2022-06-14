@@ -124,7 +124,7 @@ protected:
     };
     std::vector<VERTEX>vertices;
     std::vector<int>indices;
-    Shader* shader;
+    std::shared_ptr<Shader> shader;
     ComPtr<ID3D11Buffer>vertexBuffer;
     ComPtr<ID3D11Buffer>indexBuffer;
     ComPtr<ID3D11Buffer>meshConstantBuffer;

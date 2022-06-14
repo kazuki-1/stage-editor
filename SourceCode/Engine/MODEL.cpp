@@ -57,6 +57,8 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 
     if (cur_AnimationTake == -1)
         cur_AnimationTake = next_AnimationTake;
+
+    // Perform a lerp to the next animation
     if (cur_AnimationTake != next_AnimationTake && !isTransitioning)
     {
         transition_progress = next_Keyframe = 0;
@@ -65,9 +67,13 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
     }
     else if (!isTransitioning)
         cur_AnimationTake = next_AnimationTake;
+
+    // Preps the next animation take in advance
     cur_an = &Resource()->Animations.at(cur_AnimationTake);
     next_an = &Resource()->Animations.at(next_AnimationTake);
     SamplingRate = SamplingRate ? SamplingRate : cur_an->SamplingRate;
+
+    // Calculate the transition progress
     if (isTransitioning)
     {
         ++transition_progress;
@@ -76,6 +82,8 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
     }
     else
         factor = 0.5f;
+
+    // Increase the keyframes
     if (!animPaused)
     {
         cur_Keyframe = (int)(cur_AnimTimer * SamplingRate);
@@ -178,10 +186,6 @@ void MODEL::SetTranslation(Vector3 t)
 
 /*--------------------------------MODEL SetRotation()--------------------------------------------*/
 
-//void MODEL::SetQuaternion(VECTOR4 q)
-//{
-//    quaternion = q;
-//}
 void MODEL::SetRotation(Vector3 r)
 {
     rotation = r;
@@ -203,18 +207,13 @@ void MODEL::SetTransformation(Vector3 s, Vector3 r, Vector3 t)
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
     translation = t;
 }
+
 void MODEL::SetTransformation(Vector3 s, Vector4 q, Vector3 t)
 {
     scale = s;
     quaternion = q;
     translation = t;
 }
-//void MODEL::SetTransformationQ(VECTOR3 s, VECTOR4 q, VECTOR3 t)
-//{
-//    scale = s.XMF3();
-//    quaternion = q;
-//    translation = t.XMF3();
-//}
 
 /*--------------------------------MODEL OffsetTransformation()--------------------------------------------*/
 
@@ -272,10 +271,6 @@ Vector3 MODEL::Translation()
 {
     return translation;
 }
-//VECTOR4 MODEL::Quaternion()
-//{
-//    return quaternion;
-//}
 
 /*--------------------------------MODEL Transform()--------------------------------------------*/
 
@@ -288,7 +283,6 @@ XMFLOAT4X4 MODEL::Transform()
 
 XMMATRIX MODEL::TransformMatrix()
 {
-    //return XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslation(translation.x, translation.y, translation.z);
     Vector4 q;
     Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
@@ -311,7 +305,7 @@ std::shared_ptr<MODEL_RESOURCES>MODEL::Resource()
 }
 
 /*--------------------------------MODEL GetBB()--------------------------------------------*/
-
+// Deprecated
 std::vector<std::shared_ptr<MODEL::BOUNDING_BOX>>MODEL::GetBB()
 {
     return Boxes;
@@ -345,7 +339,7 @@ Vector3 MODEL::Forward()
 }
 
 /*--------------------------------MODEL RetrieveAxises()--------------------------------------------*/
-
+// Deprecated
 void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
 {
     UpdateTransform();
@@ -375,12 +369,12 @@ void MODEL::RetrieveAxisesQ(Vector3* r, Vector3* u, Vector3* f)
 
 void MODEL::PerformUVScrolling()
 {
-    //resource->performUVScroll = true;
+    // TODO : To be implemented
 }
 
 /*--------------------------------MODEL StopUVScrolling()--------------------------------------------*/
 
 void MODEL::StopUVScrolling()
 {
-    //resource->performUVScroll = false;
+    // TODO : To be implemented
 }

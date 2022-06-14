@@ -14,8 +14,8 @@ class DebugController : public Singleton<DebugController>
 {
     //XMMATRIX target;
     //Transform3D_Component* target;
-    GameObject* target;
-    bool hasTarget;
+    GameObject* target{};
+    bool hasTarget{};
     std::shared_ptr<DEBUG_ARROWS>arrows;
     std::shared_ptr<DEBUG_DISCS>discs;
     std::shared_ptr<DEBUG_SCALARS>scalars;

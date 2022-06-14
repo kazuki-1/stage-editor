@@ -45,7 +45,7 @@ void DebugController::Execute()
 
 
 
-    INPUTMANAGER::KEYBOARD* k{ INPUTMANAGER::Instance()->Keyboard().get() };
+    std::shared_ptr<INPUTMANAGER::KEYBOARD>k{ INPUTMANAGER::Instance()->Keyboard() };
 
     if (k->Triggered('W'))
     {
@@ -93,7 +93,7 @@ void DebugController::ClearTarget()
 void DebugController::MouseControl()
 {
     Vector2 pos;
-    INPUTMANAGER::MOUSE* m{ INPUTMANAGER::Instance()->Mouse().get() };
+    std::shared_ptr<INPUTMANAGER::MOUSE> m{ INPUTMANAGER::Instance()->Mouse() };
     if (m->LButton().Triggered())
     {
         clicked_pos += m->fPosition();

@@ -23,7 +23,7 @@ float Math::Clamp(float target, float min, float max)
 
 /*-------------------------------------------------------Sign()-----------------------------------------------------*/
 /// <summary>
-/// Returns -1 if tar < 0, 1 if tar > 0
+/// Returns +1 if tar > 0
 /// </summary>
 /// <param name="tar"></param>
 /// <returns></returns>

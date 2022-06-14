@@ -19,6 +19,7 @@ SamplerState::SamplerState(D3D11_SAMPLER_DESC dsd)
 void SamplerStateManager::Initialize()
 {
 
+    // Default sampler for sprites and models
     D3D11_SAMPLER_DESC dsd{};
     dsd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     dsd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -36,6 +37,8 @@ void SamplerStateManager::Initialize()
 
     Insert(SamplerStateType::Default, dsd);
 
+
+    // Skybox sampler 
     dsd.MipLODBias = 0.0f;
     dsd.MaxAnisotropy = 1;
     dsd.ComparisonFunc = D3D11_COMPARISON_NEVER;

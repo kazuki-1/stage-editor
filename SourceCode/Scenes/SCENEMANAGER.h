@@ -20,7 +20,7 @@ class SceneManager : public Singleton<SceneManager>
 {
     std::map<ScenesEnum, std::shared_ptr<Scene>>scenes;
     std::shared_ptr<Scene> cur_Scene;
-    ScenesEnum current_Enum;
+    ScenesEnum current_Enum{ScenesEnum::Scene_UI};
     bool isPaused{ true };
 public:
     /// <summary>
