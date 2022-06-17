@@ -58,8 +58,8 @@ void OBBCollider_Component::Execute()
     }
     else 
     {
-        MODEL* m = GetComponent<Mesh_Component>()->Model().get();
-        collider->FitToBone(data->bone_name, m);
+        std::shared_ptr<MODEL> m = GetComponent<Mesh_Component>()->Model();
+        collider->FitToBone(data->bone_name, m.get());
         cube->Execute(collider->WorldMatrix());
     }
     // Updates the vertices of the debug cube
@@ -134,7 +134,7 @@ void OBBCollider_Component::UI()
         // Bind to bone
         if (m && m->Model())
         {
-            MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };
+            MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource() };
             if (ImGui::BeginCombo("Meshes", mr.Meshes[selected_mesh_o].Name.c_str()))
             {
                 int ind{};

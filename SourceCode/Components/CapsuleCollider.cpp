@@ -91,6 +91,8 @@ void CapsuleCollider_Component::Execute(XMMATRIX transform)
         collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
+
+    // Line rendered capsule
     capsule->UpdateVertices(data->radius, data->height, &world);
 
 }

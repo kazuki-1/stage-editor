@@ -203,7 +203,7 @@ void STAGE_UI::HierarchyUI()
             }
             ImGui::ListBoxFooter();
             MouseSelect();
-            if ((ImGui::Button("Remove Item") || INPUTMANAGER::Instance()->Keyboard()->Triggered(VK_DELETE)) && selected_item)
+            if ((ImGui::Button("Remove Item") || InputManager::Instance()->Keyboard()->Triggered(VK_DELETE)) && selected_item)
             {
                 std::shared_ptr<OBJECT_DATA>cur_Data = selected_item->Data();
                 GameObjectManager::Instance()->Remove(selected_item);
@@ -259,13 +259,13 @@ void STAGE_UI::MouseSelect()
     // Perform ray casting on the mouse and select the object 
     if (DataManager::Instance()->Dataset().size() < 1)
         return;
-    if (!INPUTMANAGER::Instance()->Keyboard()->Held(VK_CONTROL))
+    if (!InputManager::Instance()->Keyboard()->Held(VK_CONTROL))
     {
         return;
     }
     Vector3 cur_pos;
-    cur_pos.x = INPUTMANAGER::Instance()->Mouse()->fPosition().x;
-    cur_pos.y = INPUTMANAGER::Instance()->Mouse()->fPosition().y;
+    cur_pos.x = InputManager::Instance()->Mouse()->fPosition().x;
+    cur_pos.y = InputManager::Instance()->Mouse()->fPosition().y;
     D3D11_VIEWPORT vp;
     UINT num{ 1 };
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
@@ -292,7 +292,7 @@ void STAGE_UI::MouseSelect()
         float f_dist{ dist.Length() };
 
 
-        if (INPUTMANAGER::Instance()->Mouse()->LButton().Triggered())
+        if (InputManager::Instance()->Mouse()->LButton().Triggered())
         {
             if (COLLIDERS::RayCast(N, F, o.second->GetComponent<Mesh_Component>()->Model().get(), rcd))
             {

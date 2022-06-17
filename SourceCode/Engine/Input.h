@@ -11,7 +11,7 @@ class MODEL;
 
 
 
-class INPUTMANAGER : public Singleton<INPUTMANAGER>
+class InputManager : public Singleton<InputManager>
 {
 public:
 	class KEYBOARD;
@@ -121,7 +121,7 @@ private:
 
 public:
 
-	INPUTMANAGER();
+	InputManager();
 
 	void Initialize();
 	void Execute();
@@ -142,26 +142,26 @@ namespace InputController
 	};
 	inline bool Pressed(unsigned int key)
 	{
-		return INPUTMANAGER::Instance()->Keyboard()->Held(key);
+		return InputManager::Instance()->Keyboard()->Held(key);
 	}
 	inline bool Triggered(unsigned int key)
 	{
-		return INPUTMANAGER::Instance()->Keyboard()->Triggered(key);
+		return InputManager::Instance()->Keyboard()->Triggered(key);
 	}
 	inline bool Released(unsigned int key)
 	{
-		INPUTMANAGER::Instance()->Keyboard()->Released(key);
+		InputManager::Instance()->Keyboard()->Released(key);
 	}
 	inline bool Clicked(MBS mouseButton)
 	{
 		switch (mouseButton)
 		{
 		case MBS::LB:
-			return INPUTMANAGER::Instance()->Mouse()->LButton().Held();
+			return InputManager::Instance()->Mouse()->LButton().Held();
 		case MBS::RB:
-			return INPUTMANAGER::Instance()->Mouse()->RButton().Held();
+			return InputManager::Instance()->Mouse()->RButton().Held();
 		case MBS::MB:
-			return INPUTMANAGER::Instance()->Mouse()->MButton().Held();
+			return InputManager::Instance()->Mouse()->MButton().Held();
 
 		}
 		return false;
@@ -171,11 +171,11 @@ namespace InputController
 		switch (mouseButton)
 		{
 		case MBS::LB:
-			return INPUTMANAGER::Instance()->Mouse()->LButton().Triggered();
+			return InputManager::Instance()->Mouse()->LButton().Triggered();
 		case MBS::RB:
-			return INPUTMANAGER::Instance()->Mouse()->RButton().Triggered();
+			return InputManager::Instance()->Mouse()->RButton().Triggered();
 		case MBS::MB:
-			return INPUTMANAGER::Instance()->Mouse()->MButton().Triggered();
+			return InputManager::Instance()->Mouse()->MButton().Triggered();
 
 		}
 		return false;
@@ -185,11 +185,11 @@ namespace InputController
 		switch (mouseButton)
 		{
 		case MBS::LB:
-			return INPUTMANAGER::Instance()->Mouse()->LButton().Released();
+			return InputManager::Instance()->Mouse()->LButton().Released();
 		case MBS::RB:
-			return INPUTMANAGER::Instance()->Mouse()->RButton().Released();
+			return InputManager::Instance()->Mouse()->RButton().Released();
 		case MBS::MB:
-			return INPUTMANAGER::Instance()->Mouse()->MButton().Released();
+			return InputManager::Instance()->Mouse()->MButton().Released();
 
 		}
 		return false;

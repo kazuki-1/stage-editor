@@ -13,9 +13,9 @@ class System
 
 
 
-    LPCWSTR applicationName;
-    HINSTANCE hInstance;
-    HWND hwnd;
+    LPCWSTR applicationName{};
+    HINSTANCE hInstance{};
+    HWND hwnd{};
     bool Frame();
     void InitializeWindows(int& Width, int& Height);
     void ShutdownWindows();

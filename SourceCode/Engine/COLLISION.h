@@ -26,7 +26,7 @@ namespace COLLIDERS
         std::string model_name{};
         Vector3 position{ 0, 0, 0 };
         Vector3 normal{ 0, 0, 0 };
-        float distance;
+        float distance{};
         int m_Index{ -1 };
     };
     struct OBB_DIRECTION

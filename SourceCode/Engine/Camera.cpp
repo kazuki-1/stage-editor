@@ -17,10 +17,6 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
     XMVECTOR UP{ 0.0f, 1.0f, 0.0f, 0.0f };
     viewMatrix = XMMatrixLookAtLH(cameraPosition.XMV(), target.XMV(), UP);
 
-
-    
-    // X3DAUDIO_LISTENER initialization
-
     // Targets the Audiolistener to the camera
     AudioEngine::Instance()->SetAudioListener(&audioListener);
 
@@ -32,8 +28,8 @@ void Camera::Initialize(XMFLOAT3 Default_Eye_Position, XMFLOAT3 Target)
 void Camera::Execute()
 {
     // Camera controls
-    INPUTMANAGER* i = INPUTMANAGER::Instance();
-    INPUTMANAGER::MOUSE* m = INPUTMANAGER::Instance()->Mouse().get();
+    InputManager* i = InputManager::Instance();
+    InputManager::MOUSE* m = InputManager::Instance()->Mouse().get();
     float wheel{};
     if (m->Wheel().Up().Held())
         wheel = 5.0f;

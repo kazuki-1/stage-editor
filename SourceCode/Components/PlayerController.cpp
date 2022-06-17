@@ -37,7 +37,7 @@ void PlayerController_Component::MovementInput()
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
     static Vector3 d_Rot{ Camera::Instance()->Rotation() };
     static float move{};
-    Vector2 k_Axis{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
+    Vector2 k_Axis{ InputManager::Instance()->Keyboard()->AxisX() };
     if (!k_Axis.x && !k_Axis.y)
     {
         move = 0;
@@ -68,7 +68,7 @@ void PlayerController_Component::RotationInput()
 {
     // Retrieve the XZ forward from the camera
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    Vector2 ax{ INPUTMANAGER::Instance()->Keyboard()->AxisX() };
+    Vector2 ax{ InputManager::Instance()->Keyboard()->AxisX() };
     if (!ax.x && !ax.y)
     {
 
@@ -102,7 +102,7 @@ void PlayerController_Component::RotationInput()
 void PlayerController_Component::JumpInput()
 {
     Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-    if (INPUTMANAGER::Instance()->Keyboard()->Triggered(VK_SPACE))
+    if (InputManager::Instance()->Keyboard()->Triggered(VK_SPACE))
     {
         Vector3 velocity{ transform->GetVelocity() };
         Vector3 position{ transform->GetTranslation() };
@@ -401,7 +401,7 @@ void PlayerController_Component::NPCDialogueTrigger()
         float length{ Vector3::Length(distance) };
         if (angle_diff < ToRadians(90) && length < 10.0f)
         {
-            if (INPUTMANAGER::Instance()->Keyboard()->Triggered('F'))
+            if (InputManager::Instance()->Keyboard()->Triggered('F'))
             {
                 npc->GetComponent<Dialogue_Component>()->Trigger();
                 inDialogue = true;

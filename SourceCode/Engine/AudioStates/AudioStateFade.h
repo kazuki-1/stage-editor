@@ -3,6 +3,7 @@
 
 namespace AUDIO_STATES
 {
+    // This state is used when you want to fade between volumes (eg. 1.0f to 0.5f)
     class AudioStateFade : public AudioStateBase
     {
     protected:

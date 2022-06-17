@@ -9,7 +9,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------INPUTMANAGER::KEYSTATE CheckLastState()------------------------------------------*/
 
-void INPUTMANAGER::KEYSTATE::CheckLastState()
+void InputManager::KEYSTATE::CheckLastState()
 {
 
 	if (last_code != code && code != 0)
@@ -23,7 +23,7 @@ void INPUTMANAGER::KEYSTATE::CheckLastState()
 
 /*-------------------------------------------INPUTMANAGER::KEYSTATE CheckReleasedState()------------------------------------------*/
 
-void INPUTMANAGER::KEYSTATE::CheckReleasedState()
+void InputManager::KEYSTATE::CheckReleasedState()
 {
 	released = code == 0 && last_code != 0 ? true : false;
 	last_code = released ? 0 : last_code;
@@ -31,21 +31,21 @@ void INPUTMANAGER::KEYSTATE::CheckReleasedState()
 
 /*-------------------------------------------INPUTMANAGER::KEYSTATE Held()------------------------------------------*/
 
-bool INPUTMANAGER::KEYSTATE::Held()
+bool InputManager::KEYSTATE::Held()
 {
     return held;
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYSTATE Released()------------------------------------------*/
 
-bool INPUTMANAGER::KEYSTATE::Released()
+bool InputManager::KEYSTATE::Released()
 {
     return released;
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYSTATE Triggered()------------------------------------------*/
 
-bool INPUTMANAGER::KEYSTATE::Triggered()
+bool InputManager::KEYSTATE::Triggered()
 {
     return triggered;
 }
@@ -55,7 +55,7 @@ bool INPUTMANAGER::KEYSTATE::Triggered()
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD Execute()------------------------------------------*/
 
-void INPUTMANAGER::KEYBOARD::Execute()
+void InputManager::KEYBOARD::Execute()
 {
 #pragma region KEYSTATE SETTINGS
 
@@ -126,7 +126,7 @@ void INPUTMANAGER::KEYBOARD::Execute()
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD KeyDown()------------------------------------------*/
 
-void INPUTMANAGER::KEYBOARD::KeyDown(unsigned int k)
+void InputManager::KEYBOARD::KeyDown(unsigned int k)
 {
 	Keys[k].held = true;
 	Keys[k].code = k;
@@ -134,7 +134,7 @@ void INPUTMANAGER::KEYBOARD::KeyDown(unsigned int k)
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD KeyUp()------------------------------------------*/
 
-void INPUTMANAGER::KEYBOARD::KeyUp(unsigned int k)
+void InputManager::KEYBOARD::KeyUp(unsigned int k)
 {
 	Keys[k].released = true;
 	Keys[k].held = false;
@@ -143,42 +143,42 @@ void INPUTMANAGER::KEYBOARD::KeyUp(unsigned int k)
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD Held()------------------------------------------*/
 
-bool INPUTMANAGER::KEYBOARD::Held(unsigned int k)
+bool InputManager::KEYBOARD::Held(unsigned int k)
 {
 	return Keys[k].Held();
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD Released()------------------------------------------*/
 
-bool INPUTMANAGER::KEYBOARD::Released(unsigned int k)
+bool InputManager::KEYBOARD::Released(unsigned int k)
 {
 	return Keys[k].Released();
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD Triggered()------------------------------------------*/
 
-bool INPUTMANAGER::KEYBOARD::Triggered(unsigned int k)
+bool InputManager::KEYBOARD::Triggered(unsigned int k)
 {
 	return Keys[k].Triggered();
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD KeyState()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::KEYBOARD::KeyState(unsigned int k)
+InputManager::KEYSTATE InputManager::KEYBOARD::KeyState(unsigned int k)
 {
 	return Keys[k];
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD AxisX()------------------------------------------*/
 
-Vector2 INPUTMANAGER::KEYBOARD::AxisX()
+Vector2 InputManager::KEYBOARD::AxisX()
 {
 	return axisX;
 }
 
 /*-------------------------------------------INPUTMANAGER::KEYBOARD AxisY()------------------------------------------*/
 
-Vector2 INPUTMANAGER::KEYBOARD::AxisY()
+Vector2 InputManager::KEYBOARD::AxisY()
 {
 	return axisY;
 }
@@ -189,21 +189,21 @@ Vector2 INPUTMANAGER::KEYBOARD::AxisY()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE Up()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::MOUSE::MOUSE_WHEEL::Up()
+InputManager::KEYSTATE InputManager::MOUSE::MOUSE_WHEEL::Up()
 {
 	return up;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE Down()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::MOUSE::MOUSE_WHEEL::Down()
+InputManager::KEYSTATE InputManager::MOUSE::MOUSE_WHEEL::Down()
 {
 	return down;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnPressLButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnPressLButton()
+void InputManager::MOUSE::OnPressLButton()
 {
 	lButton.held = true;
 	lButton.code = WM_LBUTTONDOWN;
@@ -211,7 +211,7 @@ void INPUTMANAGER::MOUSE::OnPressLButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnReleaseLButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnReleaseLButton()
+void InputManager::MOUSE::OnReleaseLButton()
 {
 	lButton.released = true;
 	lButton.held = false;
@@ -220,7 +220,7 @@ void INPUTMANAGER::MOUSE::OnReleaseLButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnPressRButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnPressRButton()
+void InputManager::MOUSE::OnPressRButton()
 {
 	rButton.held = true;
 	rButton.code = WM_RBUTTONDOWN;
@@ -228,7 +228,7 @@ void INPUTMANAGER::MOUSE::OnPressRButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnReleaseRButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnReleaseRButton()
+void InputManager::MOUSE::OnReleaseRButton()
 {
 	rButton.released = true;
 	rButton.held = false;
@@ -237,7 +237,7 @@ void INPUTMANAGER::MOUSE::OnReleaseRButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnPressMButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnPressMButton()
+void InputManager::MOUSE::OnPressMButton()
 {
 	mButton.held = true;
 	mButton.code = WM_MBUTTONDOWN;
@@ -245,7 +245,7 @@ void INPUTMANAGER::MOUSE::OnPressMButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnReleaseMButton()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnReleaseMButton()
+void InputManager::MOUSE::OnReleaseMButton()
 {
 	mButton.released = true;
 	mButton.held = false;
@@ -254,21 +254,21 @@ void INPUTMANAGER::MOUSE::OnReleaseMButton()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnMouseWheelUp()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnMousewheelUp()
+void InputManager::MOUSE::OnMousewheelUp()
 {
 	wheel.up.held = true;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE OnMouseWheelDown()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::OnMouseWheelDown()
+void InputManager::MOUSE::OnMouseWheelDown()
 {
 	wheel.down.held = true;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE ResetState()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::ResetState()
+void InputManager::MOUSE::ResetState()
 {
 	wheel.up.held = wheel.down.held = false;
 	lButton.CheckReleasedState();
@@ -281,42 +281,42 @@ void INPUTMANAGER::MOUSE::ResetState()
 
 /*-------------------------------------------INPUTMANAGER::MOUSE LButton()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::MOUSE::LButton()
+InputManager::KEYSTATE InputManager::MOUSE::LButton()
 {
 	return lButton;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE RButton()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::MOUSE::RButton()
+InputManager::KEYSTATE InputManager::MOUSE::RButton()
 {
 	return rButton;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE MButton()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::MOUSE::MButton()
+InputManager::KEYSTATE InputManager::MOUSE::MButton()
 {
 	return mButton;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE Wheel()------------------------------------------*/
 
-INPUTMANAGER::MOUSE::MOUSE_WHEEL INPUTMANAGER::MOUSE::Wheel()
+InputManager::MOUSE::MOUSE_WHEEL InputManager::MOUSE::Wheel()
 {
 	return wheel;
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE fPosition()------------------------------------------*/
 
-Vector2 INPUTMANAGER::MOUSE::fPosition()
+Vector2 InputManager::MOUSE::fPosition()
 {
 	return { (float)position.x, (float)position.y };
 }
 
 /*-------------------------------------------INPUTMANAGER::MOUSE SetPosition()------------------------------------------*/
 
-void INPUTMANAGER::MOUSE::SetPosition(int x, int y)
+void InputManager::MOUSE::SetPosition(int x, int y)
 {
 	position = { x ,y };
 }
@@ -326,14 +326,14 @@ void INPUTMANAGER::MOUSE::SetPosition(int x, int y)
 
 /*-------------------------------------------INPUTMANAGER::ALTKEY OnPress()------------------------------------------*/
 
-void INPUTMANAGER::ALTKEY::OnPress()
+void InputManager::ALTKEY::OnPress()
 {
 	state.held = true;
 }
 
 /*-------------------------------------------INPUTMANAGER::ALTKEY OnRelease()------------------------------------------*/
 
-void INPUTMANAGER::ALTKEY::OnRelease()
+void InputManager::ALTKEY::OnRelease()
 {
 	state.held = false;
 	state.released = true;
@@ -341,7 +341,7 @@ void INPUTMANAGER::ALTKEY::OnRelease()
 
 /*-------------------------------------------INPUTMANAGER::ALTKEY State()------------------------------------------*/
 
-INPUTMANAGER::KEYSTATE INPUTMANAGER::ALTKEY::State()
+InputManager::KEYSTATE InputManager::ALTKEY::State()
 {
 	return state;
 }
@@ -352,7 +352,7 @@ INPUTMANAGER::KEYSTATE INPUTMANAGER::ALTKEY::State()
 
 /*-------------------------------------------INPUTMANAGER Constructor------------------------------------------*/
 
-INPUTMANAGER::INPUTMANAGER()
+InputManager::InputManager()
 {
 	keyboard = std::make_shared<KEYBOARD>();
 	mouse = std::make_shared<MOUSE>();
@@ -361,14 +361,14 @@ INPUTMANAGER::INPUTMANAGER()
 
 /*-------------------------------------------INPUTMANAGER Initialize()------------------------------------------*/
 
-void INPUTMANAGER::Initialize()
+void InputManager::Initialize()
 {
 
 }
 
 /*-------------------------------------------INPUTMANAGER Execute()------------------------------------------*/
 
-void INPUTMANAGER::Execute()
+void InputManager::Execute()
 {
 	ResetState();
 	keyboard->Execute();
@@ -376,14 +376,14 @@ void INPUTMANAGER::Execute()
 
 /*-------------------------------------------INPUTMANAGER ResetState()------------------------------------------*/
 
-void INPUTMANAGER::ResetState()
+void InputManager::ResetState()
 {
 	mouse->ResetState();
 }
 
 /*-------------------------------------------INPUTMANAGER MouseRayCast()------------------------------------------*/
 
-bool INPUTMANAGER::MouseRayCast(MODEL* m, D3D11_VIEWPORT vp)
+bool InputManager::MouseRayCast(MODEL* m, D3D11_VIEWPORT vp)
 {
 	Vector3 m_pos;
 	Vector3 start, end;
@@ -399,21 +399,21 @@ bool INPUTMANAGER::MouseRayCast(MODEL* m, D3D11_VIEWPORT vp)
 
 /*-------------------------------------------INPUTMANAGER Keyboard()------------------------------------------*/
 
-std::shared_ptr<INPUTMANAGER::KEYBOARD> INPUTMANAGER::Keyboard()
+std::shared_ptr<InputManager::KEYBOARD> InputManager::Keyboard()
 {
 	return keyboard;
 }
 
 /*-------------------------------------------INPUTMANAGER Mouse()------------------------------------------*/
 
-std::shared_ptr<INPUTMANAGER::MOUSE> INPUTMANAGER::Mouse()
+std::shared_ptr<InputManager::MOUSE> InputManager::Mouse()
 {
 	return mouse;
 }
 
 /*-------------------------------------------INPUTMANAGER AltKeys()------------------------------------------*/
 
-std::shared_ptr<INPUTMANAGER::ALTKEY>INPUTMANAGER::AltKeys()
+std::shared_ptr<InputManager::ALTKEY>InputManager::AltKeys()
 {
 	return altKeys;
 }

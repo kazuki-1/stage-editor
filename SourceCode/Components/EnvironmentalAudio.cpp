@@ -215,7 +215,7 @@ HRESULT EnvironmentalAudio_Component::Initialize()
             //3DAudio emitter initialization
             Transform3D_Component* transform = GetComponent<Transform3D_Component>();
             audioEmitter.position = transform->GetTranslation();
-            audio->SourceVoice()->GetFrequencyRatio(&audioEmitter.doppler_frequency);
+            audio->SourceVoice()->GetFrequencyRatio(&audioEmitter.doppler_factor);
 
 
 
@@ -263,7 +263,18 @@ void EnvironmentalAudio_Component::Execute()
     Vector3 forward, top;
     top.Load(matrix.r[1]);
     forward.Load(matrix.r[2]);
-    Vector3 closest_point = colliders[0]->collider->GetClosestPoint(AudioEngine::Instance()->GetAudioListener()->position);
+
+    Vector3 closest_point{FLT_MAX, FLT_MAX, FLT_MAX};
+
+    // Check each colliders for the closest point
+    for (auto& collider : colliders)
+    {
+        Vector3 closest = collider->GetColliderComponent()->GetClosestPoint(AudioEngine::Instance()->GetAudioListener()->position);
+        if (closest.Length() < closest_point.Length())
+            closest_point = closest;
+    }
+
+
     Vector3 last_pos{audioEmitter.position}, cur_pos{closest_point};
     Vector3 velocity = cur_pos - last_pos;
 

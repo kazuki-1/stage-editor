@@ -3,6 +3,7 @@
 
 namespace AUDIO_STATES
 {
+    // This state is used transitioning from paused to play
 	class AudioStateFadeIn : public AudioStateFade
 	{
         /// <summary>

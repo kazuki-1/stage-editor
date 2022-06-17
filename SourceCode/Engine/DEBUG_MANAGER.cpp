@@ -45,7 +45,7 @@ void DebugController::Execute()
 
 
 
-    std::shared_ptr<INPUTMANAGER::KEYBOARD>k{ INPUTMANAGER::Instance()->Keyboard() };
+    std::shared_ptr<InputManager::KEYBOARD>k{ InputManager::Instance()->Keyboard() };
 
     if (k->Triggered('W'))
     {
@@ -93,7 +93,7 @@ void DebugController::ClearTarget()
 void DebugController::MouseControl()
 {
     Vector2 pos;
-    std::shared_ptr<INPUTMANAGER::MOUSE> m{ INPUTMANAGER::Instance()->Mouse() };
+    std::shared_ptr<InputManager::MOUSE> m{ InputManager::Instance()->Mouse() };
     if (m->LButton().Triggered())
     {
         clicked_pos += m->fPosition();
@@ -127,7 +127,7 @@ bool x{}, y{}, z{};
 
 void DebugController::TranslateArrows()
 {
-    INPUTMANAGER* in{ INPUTMANAGER::Instance() };
+    InputManager* in{ InputManager::Instance() };
     Vector2 movement{};
     D3D11_VIEWPORT vp;
     UINT num{ 1 };

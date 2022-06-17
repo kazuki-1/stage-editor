@@ -48,7 +48,7 @@ public:
     Math::Vector3 vFrontVector{};
     float minimum_distance{};
     float size{};
-    float doppler_frequency{};
+    float doppler_factor{};
 };
 class AudioListener
 {

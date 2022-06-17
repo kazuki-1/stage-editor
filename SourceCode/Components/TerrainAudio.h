@@ -89,7 +89,7 @@ class TerrainAudio_Receiver : public TerrainAudio_Internal_Base
     {
         int collided_mesh_index{ -1 };
         int previous_collided_mesh_index{ -1 };
-        bool status;
+        bool status{};
     };
     std::vector<Parameter>parameters{};
     std::vector<TerrainAudio_Component*>list_of_emitters;

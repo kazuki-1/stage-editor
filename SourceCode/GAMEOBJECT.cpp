@@ -194,7 +194,7 @@ void GameObject::RenderUI()
                     ++ind;
                 }
                 ImGui::ListBoxFooter();
-                if (!ImGui::IsItemHovered() && INPUTMANAGER::Instance()->Mouse()->LButton().Triggered())
+                if (!ImGui::IsItemHovered() && InputManager::Instance()->Mouse()->LButton().Triggered())
                 {
                     popup = false;
                 }

@@ -2,6 +2,8 @@
 #include "Audio.h"
 #include <assert.h>
 
+// Used in TerrainAudio_Component
+// The only difference between this and Audio is that this does not use a AudioStateMachine
 class SoundEffect : public Audio
 {
 public:

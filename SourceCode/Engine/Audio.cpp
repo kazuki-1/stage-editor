@@ -332,7 +332,7 @@ void Audio::Execute()
             calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
             channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
             HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
-            hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_frequency);
+            hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_factor);
 
         }
     }
@@ -517,6 +517,8 @@ bool Audio::IsDucking()
 
 void Audio::RenderDebug()
 {
+
+    // Shows the channel volume and frequencies of the audio emitter
     if (audioEmitter)
     {
         ImGui::Begin("Channel volumes");
@@ -527,7 +529,7 @@ void Audio::RenderDebug()
             ImGui::DragFloat(preview.c_str(), &v);
             ++ind;
         }
-        ImGui::DragFloat("Frequency", &audioEmitter->doppler_frequency);
+        ImGui::DragFloat("Frequency", &audioEmitter->doppler_factor);
         ImGui::End();
     }
 }
@@ -672,23 +674,26 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
         Vector3 distance = listener.position - emitter.position;
         Vector3 direction = distance;
         direction.Normalize();
+
+
         // The distance being 0 will cause X2AudioSourceVoice->SetFrequencyRatio() to fail, so we set the frequency as the default frequency
         if (distance.Length() == 0)
-            emitter.doppler_frequency = DEFAULT_FREQUENCY;
+            emitter.doppler_factor = DEFAULT_FREQUENCY;
+
         else {
 
 
 
             // Determine if the listener is going towards or away from the source
-            float factor{ 1 }, emitter_factor{ 1 };
+            float listener_factor{ 1 }, emitter_factor{ 1 };
             Vector3 l_VelocityNormal{ listener.velocity }, e_VelocityNormal{emitter.velocity};
             l_VelocityNormal.Normalize();
             e_VelocityNormal.Normalize();
 
             if (listener.velocity.Length() > 0)
             {
-                factor = Vector3::Dot(direction, l_VelocityNormal);
-                factor = Math::Sign(factor) * -1;
+                listener_factor = Vector3::Dot(direction, l_VelocityNormal);
+                listener_factor = Math::Sign(listener_factor) * -1;
 
             }if (emitter.velocity.Length() > 0)
                 emitter_factor = Math::Sign(Vector3::Dot(direction, e_VelocityNormal));
@@ -696,13 +701,13 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
             // Perform calculations
             float cur_freq = 
                 (
-                (SPEED_OF_SOUND_PER_FRAME + (listener.velocity.Length() * factor) ) /
+                (SPEED_OF_SOUND_PER_FRAME + (listener.velocity.Length() * listener_factor) ) /
                 (SPEED_OF_SOUND_PER_FRAME - (emitter.velocity.Length() * emitter_factor))
                 ) *
                 DEFAULT_FREQUENCY;
 
             // Lerps the doppler shift so it doesnt change abruptly
-            emitter.doppler_frequency = Math::Lerp(emitter.doppler_frequency, cur_freq, 0.3f);
+            emitter.doppler_factor = Math::Lerp(emitter.doppler_factor, cur_freq, 0.3f);
         }
     }
     return output;

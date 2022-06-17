@@ -12,14 +12,6 @@ bool FullScreen{};
 bool vSync{ false };
 const float SCREEN_DEPTH{ 1000.0f };
 const float SCREEN_NEAR{ 0.1f };
-// static int frames_passed{};
-// static double time_passed{};
-// LARGE_INTEGER start, end, freq;
-// int ea_frame{};
-
-
-
-
 
 System::System()
 {
@@ -36,7 +28,7 @@ bool System::Initialize()
     bool result{};
     InitializeWindows(S_W, S_H);
     IMGUI::Instance()->Initialize(DirectX11::Instance());
-    INPUTMANAGER::Instance()->Initialize();
+    InputManager::Instance()->Initialize();
 
     return true;
 }
@@ -44,7 +36,6 @@ void System::Shutdown()
 {
     Graphics::Instance()->Finalize();
     IMGUI::Instance()->End();
-    //AudioEngine::Instance()->Finalize();
     ShutdownWindows();
     PostQuitMessage(0);
     
@@ -76,6 +67,8 @@ bool System::Frame()
     BeginQuery();
     result = Graphics::Instance()->Frame();
     EndQuery();
+
+    // Outputs the delta time and fps on the title bar
     SetWindowTextA(hwnd, PerformanceCounter::Instance()->Results().str().c_str());
     if (!result)
         return false;
@@ -101,6 +94,7 @@ LRESULT CALLBACK System::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
         return 0;
     case WM_DROPFILES:
     {
+        // Drag and drop
         TCHAR text[256] = TEXT("");
         HDROP drop{ (HDROP)wparam };
         DragQueryFile(drop, 0, text, 256);
@@ -108,51 +102,62 @@ LRESULT CALLBACK System::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
         return 0;
     }
     case WM_KEYDOWN:
-        INPUTMANAGER::Instance()->Keyboard()->KeyDown((unsigned int)wparam);
+        InputManager::Instance()->Keyboard()->KeyDown((unsigned int)wparam);
         return 0;
     case WM_KEYUP:
-        INPUTMANAGER::Instance()->Keyboard()->KeyUp((unsigned int)wparam);
+        InputManager::Instance()->Keyboard()->KeyUp((unsigned int)wparam);
         if (GetAsyncKeyState(VK_ESCAPE))
             PostMessage(hwnd, WM_CLOSE, 0, 0);
         return 0;
     case WM_SYSKEYDOWN:
-        INPUTMANAGER::Instance()->AltKeys()->OnPress();
+        // AltKeys
+        InputManager::Instance()->AltKeys()->OnPress();
         return 0;
     case WM_SYSKEYUP:
-        INPUTMANAGER::Instance()->AltKeys()->OnRelease();
+        // AltKeys
+        InputManager::Instance()->AltKeys()->OnRelease();
         return 0;
     case WM_MOUSEMOVE:
-        INPUTMANAGER::Instance()->Mouse()->SetPosition(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+        // Mouse movement
+        InputManager::Instance()->Mouse()->SetPosition(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
         return 0;
     case WM_LBUTTONDOWN:
-        INPUTMANAGER::Instance()->Mouse()->OnPressLButton();
+        // Mouse leftClick press
+        InputManager::Instance()->Mouse()->OnPressLButton();
         return 0;
     case WM_LBUTTONUP:
-
-        INPUTMANAGER::Instance()->Mouse()->OnReleaseLButton();
+        // Mouse leftClick release
+        InputManager::Instance()->Mouse()->OnReleaseLButton();
         return 0;
     case WM_RBUTTONDOWN:
-        INPUTMANAGER::Instance()->Mouse()->OnPressRButton();
+        // Mouse rightClick press
+        InputManager::Instance()->Mouse()->OnPressRButton();
         return 0;
 
     case WM_RBUTTONUP:
-        INPUTMANAGER::Instance()->Mouse()->OnReleaseRButton();
+        // Mouse rightClick release
+        InputManager::Instance()->Mouse()->OnReleaseRButton();
         return 0;
     case WM_MBUTTONDOWN:
-        INPUTMANAGER::Instance()->Mouse()->OnPressMButton();
+        // Mouse middleButton click
+        InputManager::Instance()->Mouse()->OnPressMButton();
         return 0;
     case WM_MBUTTONUP:
-        INPUTMANAGER::Instance()->Mouse()->OnReleaseMButton();
+        // Mouse middleButton release
+        InputManager::Instance()->Mouse()->OnReleaseMButton();
         return 0;
     case WM_MOUSEWHEEL:
+        // Mouse wheel scrolling
         if (GET_WHEEL_DELTA_WPARAM(wparam) > 0)
-            INPUTMANAGER::Instance()->Mouse()->OnMousewheelUp();
+            InputManager::Instance()->Mouse()->OnMousewheelUp();
         else if (GET_WHEEL_DELTA_WPARAM(wparam) < 0)
-            INPUTMANAGER::Instance()->Mouse()->OnMouseWheelDown();
+            InputManager::Instance()->Mouse()->OnMouseWheelDown();
         return 0;
     default:
         return DefWindowProc(hwnd, umsg, wparam, lparam);
     }
+    // This part shouldn't be reached
+    return 0;
 }
 
 void System::InitializeWindows(int& S_W, int& S_H)
@@ -209,7 +214,6 @@ void System::InitializeWindows(int& S_W, int& S_H)
     DragAcceptFiles(hwnd, TRUE);
 
     IMGUI::Instance()->Initialize(hwnd);
-    //ImGui_ImplWin32_Init(hwnd);
     ShowCursor(true);
 
 }
@@ -243,4 +247,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
     default:
         return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
     }
+    // This part shouldn't be reached
+    return 0;
 }

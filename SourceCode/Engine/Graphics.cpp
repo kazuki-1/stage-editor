@@ -153,7 +153,7 @@ bool Graphics::Render()
     LightingManager::Instance()->RenderDebug();
 #pragma endregion
 
-    INPUTMANAGER::Instance()->Execute();
+    InputManager::Instance()->Execute();
 
 
     DirectX11::Instance()->End();

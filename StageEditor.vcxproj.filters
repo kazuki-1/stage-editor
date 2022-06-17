@@ -18,9 +18,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{d9e80f0e-77a3-41cd-a6de-da0eeedde3f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{e182182d-4e4f-42c2-8edc-76ba3d7f21cf}</UniqueIdentifier>
     </Filter>
@@ -194,6 +191,9 @@
     </Filter>
     <Filter Include="Engine\ImGui">
       <UniqueIdentifier>{c1c2646e-9ef7-4962-b6f9-5b09769fc25d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Shaders Files">
+      <UniqueIdentifier>{d9e80f0e-77a3-41cd-a6de-da0eeedde3f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -718,22 +718,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\Shader_2D.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\BaseShader3D.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\DebugShader.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\OutlineShader.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\SkyboxShader.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
   </ItemGroup>
 </Project>

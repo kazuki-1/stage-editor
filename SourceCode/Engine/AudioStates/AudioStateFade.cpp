@@ -12,6 +12,10 @@ using namespace AUDIO_STATES;
 /// </summary>
 void AudioStateFade::Initialize(Audio* parent)
 {
+    // Generally the parameters aren't set
+    // making fade_increment calculation impossible
+    // But I left this here just in case 
+    // Generally the stateMachine switches to fadeState by setting the parameters and then calling CalculateRate()
     float current_volume{ parent->Volume() };
     float fade_in_frame{ fade_in_time * 60.0f };
     float difference{ current_volume - fade_target };

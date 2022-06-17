@@ -156,18 +156,13 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
             max1 = v;
         }
 
-        if (min1.x > v.x)
-            min1.x = v.x;
-        if (min1.y > v.y)
-            min1.y = v.y;
-        if (min1.z > v.z)
-            min1.z = v.z;
-        if (max1.x < v.x)
-            max1.x = v.x;
-        if (max1.y < v.y)
-            max1.y = v.y;
-        if (max1.z < v.z)
-            max1.z = v.z;
+        min1.x = min(min1.x, v.x);
+        min1.z = min(min1.y, v.y);
+        min1.z = min(min1.z, v.z);
+
+        max1.x = max(max1.x, v.x);
+        max1.y = max(max1.y, v.y);
+        max1.z = max(max1.z, v.z);
     }
     for (auto& v : tar->Points())
     {
@@ -176,18 +171,14 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
             min2 = v;
             max2 = v;
         }
-        if (min2.x > v.x)
-            min2.x = v.x;
-        if (min2.y > v.y)
-            min2.y = v.y;
-        if (min2.z > v.z)
-            min2.z = v.z;
-        if (max2.x < v.x)
-            max2.x = v.x;
-        if (max2.y < v.y)
-            max2.y = v.y;
-        if (max2.z < v.z)
-            max2.z = v.z;
+
+        min2.x = min(min2.x, v.x);
+        min2.z = min(min2.y, v.y);
+        min2.z = min(min2.z, v.z);
+
+        max2.x = max(max2.x, v.x);
+        max2.y = max(max2.y, v.y);
+        max2.z = max(max2.z, v.z);
     }
 
     // Perform axis casting to see if all points are within range
@@ -212,8 +203,9 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 /// <returns></returns>
 bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
 {
-#pragma region Rewrote
-
+    // This equation casts the model vertices to the world transform
+    // The cost for this is higher but it is easier to debug 
+    // I personally felt this equation provides more precision
 
     Vector3 worldStart{ s }, worldEnd{ e };
     Vector3 world_RayVector{ worldEnd - worldStart };
@@ -254,6 +246,7 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
                 Vector3 B = c.position;
                 Vector3 C = b.position;
 
+                // Cast the vertices to the world transform
                 A.Load(XMVector3TransformCoord(A.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
                 B.Load(XMVector3TransformCoord(B.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
                 C.Load(XMVector3TransformCoord(C.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
@@ -283,8 +276,6 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
                 Vector3 IB{ intersection - B };
                 Vector3 IC{ intersection - C };
 
-
-
                 Vector3 cross_IAB{ Vector3::Cross(AB, IA) };
                 Vector3 cross_IBC{ Vector3::Cross(BC, IB) };
                 Vector3 cross_IAC{ Vector3::Cross(CA, IC) };
@@ -302,7 +293,6 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
                     continue;
 
                 minimum_Length = distance_to_contact;
-
                 intersection_point = intersection;
                 intersection_normal = normal;
                 collided_mesh_index = current_mesh_index;
@@ -330,9 +320,12 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
         ++current_mesh_index;
     }
     return hit;
-#pragma endregion
 
-    // Keeping just in case needed
+// Keeping just in case needed
+// This equation casts the ray to the models local space instead of casting the model to the world space
+// The costs for this is lower, but this is harder to debug
+// 
+// 
 //#pragma region Original
 //
 //        XMVECTOR w_Start{ s.XMV() };                           // Ray World Start Position
@@ -591,6 +584,8 @@ bool SPHERE::Collide(COLLIDER_BASE* other)
     }
     return false;
 }
+
+// This performs collision check on a point instead of another collider
 bool SPHERE::Collide(Vector3 p)
 {
     return (Center() - p).Length() < radius;

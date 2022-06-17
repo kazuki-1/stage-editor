@@ -50,7 +50,6 @@ SPRITE::SPRITE(const wchar_t* img_path)
     id.pSysMem = indices;
     hr = dv->CreateBuffer(&ibd, &id, dxIndexBuffer.GetAddressOf());
     if (FAILED(hr))
-    /*-------------------------------------End of Index Buffer Creation--------------------------------------------*/
 
 
 
