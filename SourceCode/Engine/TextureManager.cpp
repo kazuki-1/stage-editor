@@ -17,6 +17,8 @@ std::shared_ptr<Texture>TextureManager::Insert(std::wstring file_path)
     std::string path{};
     std::shared_ptr<Texture>entity;
     
+    // ModelEditor makes sure that if there are no textures loaded, 
+    // it will be defaulted to Default Diffuse or Default Normal, but just in case
     if (file_path == L"") {
         entity = std::make_shared<Texture>(DirectX11::Instance()->Device());
         textureMap.emplace(file_path, entity);

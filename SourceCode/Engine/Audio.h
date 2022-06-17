@@ -70,8 +70,8 @@ class AudioEngine : public Singleton<AudioEngine>
     IXAudio2MasteringVoice* masteringVoice{};
 
     // Parameters for 3DAudio calculations
-    X3DAUDIO_DSP_SETTINGS dspSettings;
-    AudioListener* audioListener;
+    X3DAUDIO_DSP_SETTINGS dspSettings{};
+    AudioListener* audioListener{};
     X3DAUDIO_HANDLE x3d_handle;
     float matrixCoefficients[INPUT_CHANNELS * MAX_OUTPUT_CHANNELS];
     int nChannels{};        // Output channels
@@ -222,7 +222,8 @@ public:
     bool IsPlaying();
     bool IsDucking();
     void RenderDebug();
-
+    
+    void PerformObstructionCalculation();
     std::vector<float>CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener, int input_channels, int output_channels = 2, UINT flags = AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS);
 
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();

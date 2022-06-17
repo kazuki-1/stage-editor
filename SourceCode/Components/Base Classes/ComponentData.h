@@ -15,6 +15,7 @@ enum class COMPONENT_TYPE
     OBB_COL, 
     PLAYER_CONTROLLER,
     POINT_LIGHT, 
+   
     SPHERE_COL,
     SPOTLIGHT,
     SPRITE_2D,
@@ -27,7 +28,7 @@ enum class COMPONENT_TYPE
     CHARACTER,              // Base Class
     Transform2D_Component,           
     Transform3D_Component, 
-    DIRECTIONAL_LIGHT
+    DIRECTIONAL_LIGHT , SOUND_OBSTRUCTION
 };
 
 class ComponentData

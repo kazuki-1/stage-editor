@@ -44,6 +44,7 @@
     <ClCompile Include="SourceCode\Components\OBBTerrain.cpp" />
     <ClCompile Include="SourceCode\Components\PlayerController.cpp" />
     <ClCompile Include="SourceCode\Components\PointLight.cpp" />
+    <ClCompile Include="SourceCode\Components\SoundObstruction.cpp" />
     <ClCompile Include="SourceCode\Components\SphereCollider.cpp" />
     <ClCompile Include="SourceCode\Components\SpotLight.cpp" />
     <ClCompile Include="SourceCode\Components\Sprite2D.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="SourceCode\Engine\Shaders\Shader2D.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp" />
+    <ClCompile Include="SourceCode\Engine\SoundObstructionManager.cpp" />
     <ClCompile Include="SourceCode\Engine\Sprite.cpp" />
     <ClCompile Include="SourceCode\Engine\System.cpp" />
     <ClCompile Include="SourceCode\Engine\Text.cpp" />
@@ -132,6 +134,7 @@
     <ClInclude Include="SourceCode\Components\OBBTerrain.h" />
     <ClInclude Include="SourceCode\Components\PlayerController.h" />
     <ClInclude Include="SourceCode\Components\PointLight.h" />
+    <ClInclude Include="SourceCode\Components\SoundObstruction.h" />
     <ClInclude Include="SourceCode\Components\SphereCollider.h" />
     <ClInclude Include="SourceCode\Components\SpotLight.h" />
     <ClInclude Include="SourceCode\Components\Sprite2D.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
+    <ClInclude Include="SourceCode\Engine\SoundObstructionManager.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
     <ClInclude Include="SourceCode\Engine\Text.h" />
@@ -184,7 +188,6 @@
     <ClInclude Include="SourceCode\Engine\TextureManager.h" />
     <ClInclude Include="SourceCode\GameObject.h" />
     <ClInclude Include="SourceCode\GameObject_2D.h" />
-    <ClInclude Include="SourceCode\Graphics.h" />
     <ClInclude Include="SourceCode\GUI.h" />
     <ClInclude Include="SourceCode\OBJECT_DATA.h" />
     <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h" />

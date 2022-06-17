@@ -146,6 +146,7 @@ void STAGE_UI::SceneUI()
                 DataManager::Instance()->Load(file_path);
                 DataManager::Instance()->SetFilePath(file_path);
                 browser->Close();
+                fileLoad = false;
             }
         }
         // File saving

@@ -71,13 +71,13 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
     {
 
         // Set material path
+        // 
         const char* back{ "/" };
         std::filesystem::path bs{ back };
         std::filesystem::path path(model_path);
         path.replace_extension("");
         std::filesystem::path model_name{ path.filename() };
         std::string dir{ "./Data/Model/" + model_name.string() + "/Textures/" };
-        //model_name += 
         std::filesystem::path directory("/Textures/");
         path += directory;
         std::string form{ path.string() };
@@ -87,6 +87,7 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
         {
             if (m->second.texture_path[ind] != "")
             {
+                // If model has a texture loaded
                 std::filesystem::path format{ dir };
                 if (!std::filesystem::exists(format))
                     std::filesystem::create_directories(format);
@@ -94,38 +95,39 @@ void MODEL_RESOURCES::CreateBuffers(ID3D11Device* dv, const char* model_path)
                 filename.replace_extension("png");
 
                 path = format += filename.filename();
-                //m->second.Textures[ind].reset(new TEXTURE(path, dv));
                 m->second.Textures[ind] = TextureManager::Instance()->Retrieve(path.wstring());
             }
             else
+                // Loads an empty texture
                 m->second.Textures[ind] = TextureManager::Instance()->Retrieve(texture_names[ind]);
         }
 
 
     }
-    D3D11_BUFFER_DESC cbd{};
-    cbd.ByteWidth = sizeof(MESH_CONSTANT_BUFFER);
-    cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    HRESULT hr = dv->CreateBuffer(&cbd, nullptr, meshConstantBuffer.GetAddressOf());
-    if (FAILED(hr))
-        assert(!"Failed to create constant buffer");
-
-
-    cbd.ByteWidth = sizeof(SUBSET_CONSTANT_BUFFER);
-    hr = dv->CreateBuffer(&cbd, nullptr, subsetConstantBuffer.GetAddressOf());
-    assert(hr == S_OK);
-
-    cbd.ByteWidth = sizeof(OUTLINE_CONSTANT_BUFFER);
-    hr = dv->CreateBuffer(&cbd, nullptr, outlineConstantBuffer.GetAddressOf());
-    assert(hr == S_OK);
-
-    cbd.ByteWidth = sizeof(UVSCROLL_CONSTANT_BUFFER);
-    hr = dv->CreateBuffer(&cbd, 0, uvScrollConstantBuffer.GetAddressOf());
-    assert(hr == S_OK);
 
 
 }
+
+/*-------------------------------------------MODEL_RESOURCES UpdateAnimation()---------------------------------------------------------------*/
+
+void MODEL_RESOURCES::UpdateAnimation(ANIMATION::KEYFRAME* kf)
+{
+    size_t n_Count{ kf->Nodes.size() };
+    for (size_t n_Index = 0; n_Index < n_Count; ++n_Index)
+    {
+        ANIMATION::KEYFRAME::NODE& n{ kf->Nodes.at(n_Index) };
+        XMMATRIX S{ XMMatrixScaling(n.Scaling.x, n.Scaling.y, n.Scaling.z) };
+        XMMATRIX R{ XMMatrixRotationQuaternion(XMLoadFloat4(&n.Rotation)) };
+        XMMATRIX T{ XMMatrixTranslation(n.Translation.x, n.Translation.y, n.Translation.z) };
+
+        int64_t p_Index{ Scenes.Nodes.at(n_Index).p_Index };
+        XMMATRIX P{ p_Index >= 0 ? XMLoadFloat4x4(&kf->Nodes.at(p_Index).g_Transform) : XMMatrixIdentity() };
+
+        XMStoreFloat4x4(&n.g_Transform, S * R * T * P);
+
+    }
+}
+
 
 /*-------------------------------------------MODEL_RESOURCES BlendAnimation()---------------------------------------------------------------*/
 
@@ -226,4 +228,14 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
     }
 }
 
+/*-------------------------------------------MODEL_RESOURCES Recreate()---------------------------------------------------------------*/
 
+void MODEL_RESOURCES::Recreate(std::string file_path)
+{
+    std::filesystem::path path(file_path);
+    if (std::filesystem::exists(file_path))
+        assert(!"File already exists");
+    std::ofstream ofs(path, std::ios::binary);
+    cereal::BinaryOutputArchive in(ofs);
+    in(Scenes, Axises, Meshes, Materials, Animations);
+}

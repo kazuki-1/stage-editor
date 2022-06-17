@@ -54,7 +54,7 @@ void Transform3D_Component::Execute()
     XMMATRIX S, R, T;
     S = XMMatrixScalingFromVector(scale.XMV());
     R = XMMatrixRotationQuaternion(quaternion.XMV());
-    T = XMMatrixTranslationFromVector(translation.XMV());
+    T = XMMatrixTranslationFromVector(data->translation.XMV());
     XMMATRIX W{ S * R * T };
 
     XMStoreFloat4x4(&transform, S * R * T);
@@ -68,10 +68,10 @@ void Transform3D_Component::Execute()
 void Transform3D_Component::ExecuteUI()
 {
     XMMATRIX S, R, T;
-    S = XMMatrixScalingFromVector(scale.XMV());
+    S = XMMatrixScalingFromVector(data->scale.XMV());
     quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV()) );
     R = XMMatrixRotationQuaternion(quaternion.XMV());
-    T = XMMatrixTranslationFromVector(translation.XMV());
+    T = XMMatrixTranslationFromVector(data->translation.XMV());
     XMStoreFloat4x4(&transform, S * R * T);
 }
 
@@ -130,7 +130,7 @@ Vector3 Transform3D_Component::Rotation()
 /// <returns></returns>
 Vector3 Transform3D_Component::GetTranslation()
 {
-    return translation;
+    return data->translation;
 }
 
 /*---------------------------------------Transform3D_Component GetVelocity()-------------------------------------------------*/
@@ -165,7 +165,7 @@ XMMATRIX Transform3D_Component::TransformMatrix()
     Vector4 q{};
     Vector3 r{ Vector3::ToRadians(data->rotation) };
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
-    return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
+    return XMMatrixScalingFromVector(data->scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(data->translation.XMV());
 }
 
 /*---------------------------------------Transform3D_Component TranformMatrixQuaternion()-------------------------------------------------*/

@@ -131,24 +131,8 @@ public:
         XMFLOAT4X4 b_Transform[MAX_BONES]{ Convert::Identity() };
         XMFLOAT4 colour;
     };
-    struct SUBSET_CONSTANT_BUFFER
-    {
-        XMFLOAT4 colour;
-    };
-    struct OUTLINE_CONSTANT_BUFFER
-    {
-        Vector4 outline_colour{};
-        float outline_size{ 0.1f };
-        Vector3 placeholder;
-    };
-    struct UVSCROLL_CONSTANT_BUFFER
-    {
-        Vector2 scrollVal;
-        Vector2 placeholder;
-    };
-#pragma region STRUCTS
 
-#pragma region VERTEX
+    // Vertex data
     struct VERTEX
     {
         Vector3 position, normal;
@@ -172,10 +156,9 @@ public:
 
 
     };
-#pragma endregion
-#pragma region SCENE
     struct SCENE
     {
+        // Nodes in the fbx file
         struct NODE
         {
             uint64_t UID{ 0 };
@@ -206,7 +189,7 @@ public:
             t(Nodes);
         }
 
-
+        // Returns the index of the node
         int64_t indexof(uint64_t unique_id)const
         {
             int64_t index{};
@@ -220,8 +203,8 @@ public:
         }
 
     }Scenes;
-#pragma endregion
-#pragma region MATERIAL
+
+    // Material struct
     struct MATERIAL
     {
         // Unique ID
@@ -238,13 +221,7 @@ public:
 
         std::string name;
         std::string texture_path[4];                    // DIFFUSE, NORMAL, BUMP, PLACEHOLDER
-        // std::string diffuse_path;
-        // std::string normal_path;
-        // std::string bump_path;
         std::shared_ptr<Texture>Textures[4];            // DIFFUSE, NORMAL, BUMP, PLACEHOLDER
-        // std::unique_ptr<TEXTURE>diffuseMap;
-        // std::unique_ptr<TEXTURE>normalMap;
-        // std::unique_ptr<TEXTURE>bumpMap;
 
         template<class T>
         void serialize(T& t)
@@ -252,8 +229,9 @@ public:
             t(uid, Ka, Kd, Ks, name, texture_path);
         }
     };
-#pragma endregion
-#pragma region AXISES
+
+    // Models loaded will something other than Left hand coordinates
+    // will have a float4x4 to transpose it back to LH coords
     struct AXISES
     {
         XMFLOAT4X4 AxisCoords;
@@ -265,8 +243,8 @@ public:
         }
 
     }Axises;
-#pragma endregion
-#pragma region BONE_INFLEUNCE
+
+    
     struct BONE_INFLUENCE
     {
 
@@ -278,8 +256,8 @@ public:
             t(b_Index, b_Weight);
         }
     };
-#pragma endregion
-#pragma region SKELETON
+
+    // For animation
     struct SKELETON
     {
         struct BONE
@@ -299,7 +277,7 @@ public:
         };
         std::vector<BONE>Bones;
 
-
+        // Return the index of the bone
         int64_t indexof(uint64_t uid) const
         {
             int64_t ind{};
@@ -317,113 +295,103 @@ public:
             t(Bones);
         }
     };
-#pragma endregion
-#pragma region MESH
+
+    
     struct MESH
-    {
-        XMFLOAT4X4 BaseTransform{};
-        struct SUBSET
-        {
-            // Unique ID
-            uint64_t m_UID{};
-            // At which index does the subset starts
-            uint32_t first_index{};
-            // How many indices use this subset
-            uint32_t i_Count{};
-
-            // Material Name
-            std::string m_Name{};
-            
-            std::vector<int>indices;
-
-            ComPtr<ID3D11Buffer>subsetIndexBuffer;
-            template<class T>
-            void serialize(T& t)
-            {
-                t(m_UID, first_index, i_Count, m_Name, indices);
-            }
-
-        };
-        XMFLOAT3 BOUNDING_BOX[2] = { {D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX , D3D11_FLOAT32_MAX }, {-D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX} };
-
-        ComPtr<ID3D11Buffer>dxVertexBuffer;
-        ComPtr<ID3D11Buffer>dxIndexBuffer;
-        // Vertex Buffer Desc and Index Buffer Desc
-        D3D11_BUFFER_DESC vbd{}, ibd{};
-
-        // Subresource Data for Vertex and Index Buffer
-        D3D11_SUBRESOURCE_DATA vd{}, id{};
-
-
-        int index_Count{};
-        int64_t UID{}, n_Index{};
-        std::string Name;
-        std::vector<VERTEX>Vertices;
-        std::vector<int>Indices;
-        std::vector<SUBSET>Subsets;
-        SKELETON Bind_Pose;
-
-        template <class T>
-        void serialize(T& t)
-        {
-            t(BaseTransform, index_Count, UID, n_Index, Name, Vertices, Indices, Subsets, Bind_Pose, BOUNDING_BOX);
-        }
-    };
-#pragma endregion
-#pragma region ANIMATIONS
+    /*|*/{
+    /*|*/    XMFLOAT4X4 BaseTransform{};
+    /*|*/    struct SUBSET
+    /*|*/    {
+    /*|*/        /*|*/
+    /*|*/        /*|*/uint64_t m_UID{};                                                 // Unique ID
+    /*|*/        /*|*/
+    /*|*/        /*|*/uint32_t first_index{};                                           // At which index does the subset starts
+    /*|*/        /*|*/
+    /*|*/        /*|*/uint32_t i_Count{};                                               // How many indices use this subset                                         
+    /*|*/        /*|*/
+    /*|*/        /*|*/
+    /*|*/        /*|*/std::string m_Name{};                                             // Material Name
+    /*|*/        /*|*/
+    /*|*/        /*|*/std::vector<int>indices;
+    /*|*/        /*|*/
+    /*|*/        /*|*/ComPtr<ID3D11Buffer>subsetIndexBuffer;
+    /*|*/        /*|*/template<class T>
+    /*|*/        /*|*/void serialize(T& t)
+    /*|*/        /*|*/{
+    /*|*/        /*|*/    t(m_UID, first_index, i_Count, m_Name, indices);
+    /*|*/        /*|*/}
+    /*|*/
+    /*|*/    };
+    /*|*/
+    /*|*/    // UNUSED
+    /*|*/    XMFLOAT3 BOUNDING_BOX[2] = { {D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX , D3D11_FLOAT32_MAX }, {-D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX} };
+    /*|*/
+    /*|*/    ComPtr<ID3D11Buffer>dxVertexBuffer;
+    /*|*/    ComPtr<ID3D11Buffer>dxIndexBuffer;
+    /*|*/    // Vertex Buffer Desc and Index Buffer Desc
+    /*|*/    D3D11_BUFFER_DESC vbd{}, ibd{};
+    /*|*/
+    /*|*/    // Subresource Data for Vertex and Index Buffer
+    /*|*/    D3D11_SUBRESOURCE_DATA vd{}, id{};
+    /*|*/
+    /*|*/
+    /*|*/    int index_Count{};
+    /*|*/    int64_t UID{}, n_Index{};
+    /*|*/    std::string Name;
+    /*|*/    std::vector<VERTEX>Vertices;
+    /*|*/    std::vector<int>Indices;
+    /*|*/    std::vector<SUBSET>Subsets;
+    /*|*/    SKELETON Bind_Pose;
+    /*|*/
+    /*|*/    template <class T>
+    /*|*/    void serialize(T& t)
+    /*|*/    {
+    /*|*/        t(BaseTransform, index_Count, UID, n_Index, Name, Vertices, Indices, Subsets, Bind_Pose, BOUNDING_BOX);
+    /*|*/    }
+    /*|*/};
 
     struct ANIMATION
-    {
-        float SamplingRate{};
-        std::string Name{ "" };
-#pragma region KEYFRAME
+    /*|*/{
+    /*|*/    float SamplingRate{};
+    /*|*/    std::string Name{ "" };
+    /*|*/
+    /*|*/    struct KEYFRAME
+    /*|*/    /*|*/{
+    /*|*/    /*|*/    // Animation nodes with their transform parameters
+    /*|*/    /*|*/    struct NODE
+    /*|*/    /*|*/    /*|*/{
+    /*|*/    /*|*/    /*|*/    XMFLOAT4X4 g_Transform{ Convert::Identity() };          // Global Transform
+    /*|*/    /*|*/    /*|*/    XMFLOAT3 Scaling{ 1, 1, 1 };                            // Scale
+    /*|*/    /*|*/    /*|*/    XMFLOAT4 Rotation{ 0, 0, 0, 1 };                        // Quaternion rotation
+    /*|*/    /*|*/    /*|*/    XMFLOAT3 Translation{ 0, 0, 0 };
+    /*|*/    /*|*/    /*|*/
+    /*|*/    /*|*/    /*|*/
+    /*|*/    /*|*/    /*|*/    template <class T>
+    /*|*/    /*|*/    /*|*/    void serialize(T& t)
+    /*|*/    /*|*/    /*|*/    {
+    /*|*/    /*|*/    /*|*/        t(g_Transform, Scaling, Rotation, Translation);
+    /*|*/    /*|*/    /*|*/    }
+    /*|*/    /*|*/    /*|*/};
+    /*|*/    /*|*/    std::vector<KEYFRAME::NODE>Nodes;
+    /*|*/    /*|*/    template <class T>
+    /*|*/    /*|*/    void serialize(T& t)
+    /*|*/    /*|*/    {
+    /*|*/    /*|*/        t(Nodes);
+    /*|*/    /*|*/    }
+    /*|*/    /*|*/};
+    /*|*/
+    /*|*/    std::vector<KEYFRAME>Keyframes;
+    /*|*/    template <class T>
+    /*|*/    void serialize(T& t)
+    /*|*/    {
+    /*|*/        t(SamplingRate, Name, Keyframes);
+    /*|*/    }
+    /*|*/};
 
-        struct KEYFRAME
-        {
-#pragma region NODE
-            struct NODE
-            {
-                XMFLOAT4X4 g_Transform{ Convert::Identity() };          // Global Transform
-                XMFLOAT3 Scaling{ 1, 1, 1 };                            // Scale
-                XMFLOAT4 Rotation{ 0, 0, 0, 1 };                        // Quaternion rotation
-                XMFLOAT3 Translation{ 0, 0, 0 };
-
-
-                template <class T>
-                void serialize(T& t)
-                {
-                    t(g_Transform, Scaling, Rotation, Translation);
-                }
-            };
-#pragma endregion
-            std::vector<KEYFRAME::NODE>Nodes;
-            template <class T>
-            void serialize(T& t)
-            {
-                t(Nodes);
-            }
-        };
-
-#pragma endregion
-        std::vector<KEYFRAME>Keyframes;
-        template <class T>
-        void serialize(T& t)
-        {
-            t(SamplingRate, Name, Keyframes);
-        }
-    };
-
-#pragma endregion
-
-#pragma endregion
 
     ComPtr<ID3D11Buffer>meshConstantBuffer;
-    ComPtr<ID3D11Buffer>subsetConstantBuffer;
-    ComPtr<ID3D11Buffer>outlineConstantBuffer;
-    ComPtr<ID3D11Buffer>uvScrollConstantBuffer;
     std::vector<MESH>Meshes;
     std::vector<ANIMATION>Animations;
-    //std::vector<NODE>Nodes;
     std::unordered_map<uint64_t, MATERIAL>Materials;
 
 
@@ -435,23 +403,7 @@ public:
 
     MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool Triangulate = true);
     void CreateBuffers(ID3D11Device* dv, const char* model_path);
-    void UpdateAnimation(ANIMATION::KEYFRAME* kf)
-    {
-        size_t n_Count{ kf->Nodes.size() };
-        for (size_t n_Index = 0; n_Index < n_Count; ++n_Index)
-        {
-            ANIMATION::KEYFRAME::NODE& n{ kf->Nodes.at(n_Index) };
-            XMMATRIX S{ XMMatrixScaling(n.Scaling.x, n.Scaling.y, n.Scaling.z) };
-            XMMATRIX R{ XMMatrixRotationQuaternion(XMLoadFloat4(&n.Rotation)) };
-            XMMATRIX T{ XMMatrixTranslation(n.Translation.x, n.Translation.y, n.Translation.z) };
-
-            int64_t p_Index{ Scenes.Nodes.at(n_Index).p_Index };
-            XMMATRIX P{ p_Index >= 0 ? XMLoadFloat4x4(&kf->Nodes.at(p_Index).g_Transform) : XMMatrixIdentity() };
-
-            XMStoreFloat4x4(&n.g_Transform, S * R * T * P);
-
-        }
-    }
+    void UpdateAnimation(ANIMATION::KEYFRAME* kf);
     void BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYFRAME* end, float factor, ANIMATION::KEYFRAME* output);
     void Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf);
     template <class T>
@@ -461,13 +413,5 @@ public:
     }
 
     //bool AddAnimation(std::string anim_path, float SamplingRate = 0);
-    void Recreate(std::string file_path)
-    {
-        std::filesystem::path path(file_path);
-        if (std::filesystem::exists(file_path))
-            assert(!"File already exists");
-        std::ofstream ofs(path, std::ios::binary);
-        cereal::BinaryOutputArchive in(ofs);
-        in(Scenes, Axises, Meshes, Materials, Animations);
-    }
+    void Recreate(std::string file_path);
 };

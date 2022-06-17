@@ -114,6 +114,8 @@ void Mesh_Component::UI()
 
                 model->Initialize(data->model_path);
 
+                fileOpenM = false;
+
             }
         }
 
@@ -124,12 +126,12 @@ void Mesh_Component::UI()
         }
 
         // Show animation list
-        std::vector<MODEL_RESOURCES::ANIMATION>& anims{ model->Resource()->Animations };
+        std::vector<MODEL_RESOURCES::ANIMATION>* anims{ &model->Resource()->Animations };
         ImGui::ListBoxHeader("Animations", { 300, 200 });
-        for (int a = 0; a < model->Resource()->Animations.size(); ++a)
+        for (int a = 0; a < anims->size(); ++a)
         {
             bool s{};
-            if (ImGui::Selectable(anims[a].Name.c_str(), &s)) {
+            if (ImGui::Selectable(anims->at(a).Name.c_str(), &s)) {
                 data->animationTake = a;
                 break;
             }

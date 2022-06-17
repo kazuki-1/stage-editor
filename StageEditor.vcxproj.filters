@@ -195,6 +195,9 @@
     <Filter Include="Engine\Shaders\Shaders Files">
       <UniqueIdentifier>{d9e80f0e-77a3-41cd-a6de-da0eeedde3f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\SoundObstruction">
+      <UniqueIdentifier>{7bddcccd-f4a4-4aaa-a024-d849f9bfdc2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -440,11 +443,14 @@
     <ClCompile Include="SourceCode\Engine\ImGuiLocal.cpp">
       <Filter>Engine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Components\SoundObstruction.cpp">
+      <Filter>Components\SoundObstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\SoundObstructionManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -503,9 +509,6 @@
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Singleton.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Graphics.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\OBJECT.h">
@@ -714,6 +717,15 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\IMGUI.h">
       <Filter>Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Components\SoundObstruction.h">
+      <Filter>Components\SoundObstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\SoundObstructionManager.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Graphics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

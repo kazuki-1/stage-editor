@@ -1,8 +1,12 @@
 #include "Audio.h"
+#include "../GAMEOBJECT.h"
+#include "../Components/MESH.h"
+#include "COLLISION.h"
 #include <x3daudio.h>
 #include <assert.h>
 #include <vector>
 #include "IMGUI.h"
+#include "SoundObstructionManager.h"
 #include "PERFORMANCE_COUNTER.h"
 #define SPEED_OF_SOUND_PER_FRAME SPEED_OF_SOUND / PerformanceCounter::Instance()->FPS()
 
@@ -331,6 +335,7 @@ void Audio::Execute()
             UINT calc_flag{};
             calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
             channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
+            PerformObstructionCalculation();
             HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
             hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_factor);
 
@@ -467,7 +472,6 @@ void Audio::PerformDucking(float fade_vol)
 /*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
 /// <summary>
 /// <para> stops the ducking state</para>
-/// <para> ¥À¥Ã¥­¥ó¥°¤òÖÐÖ¹¤¹¤E/para>
 /// </summary>
 void Audio::StopDucking()
 {
@@ -476,6 +480,39 @@ void Audio::StopDucking()
     isDucking = false;
     if (isPlaying)
         FadeTo(volume_before_ducking, 0.5f);
+}
+
+/*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
+
+void Audio::PerformObstructionCalculation()
+{
+    if (!audioEmitter)
+        return;
+    AudioListener* listener = AudioEngine::Instance()->GetAudioListener();
+
+    Vector3 start = audioEmitter->position;
+    Vector3 end = listener->position;
+
+
+
+    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
+    {
+        if (!g.second->GetComponent<Mesh_Component>())
+            continue;
+
+        COLLIDERS::RAYCASTDATA rcd{};
+        if (COLLIDERS::RayCast(start, end, g.second->GetComponent<Mesh_Component>()->Model().get(), rcd))
+        {
+            for(auto& v : channel_volumes)
+                v *= 0.2f;
+        }
+
+
+
+    }
+
+
+
 }
 
 /*---------------------------------------------Audio Volume()----------------------------------------------------*/
