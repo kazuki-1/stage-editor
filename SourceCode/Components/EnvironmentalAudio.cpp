@@ -2,6 +2,7 @@
 #include "Base Classes/Component.h"
 #include "Base Classes/ComponentCreator.h"
 #include "../Engine/Audio.h"
+#include "../Engine/AudioEngine.h"
 #include "../Scenes/SceneManager.h"
 #include "../Engine/IMGUI.h"
 #include "SphereCollider.h"
@@ -344,7 +345,6 @@ void EnvironmentalAudio_Component::UI()
                  std::filesystem::path path(data->file_path);
                  std::filesystem::path name(path.filename());
                  std::wstring full_path = L"Data/Audio/" + name.filename().wstring();
-                 AudioEngine::Instance()->Insert(data->name, full_path);
                  data->file_path = full_path;
                  name.replace_extension("");
                  int ind{};
@@ -354,6 +354,7 @@ void EnvironmentalAudio_Component::UI()
                      ++ind;
                  }
                      
+                 AudioEngine::Instance()->Insert(data->name, full_path);
                  audio = AudioEngine::Instance()->Retrieve(data->name);
                  for (auto& c : data->file_path)
                  {

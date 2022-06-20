@@ -12,6 +12,7 @@ class Mesh_Component;
 class ComponentData;
 class OBBCollider_Data;
 class CapsuleCollider_Data;
+class Dynamic_Plane;
 
 namespace COLLIDERS
 {
@@ -21,7 +22,7 @@ namespace COLLIDERS
     /// <summary>
     /// For Storing RayCast data
     /// </summary>
-    struct RAYCASTDATA
+    struct RayCastResults
     {
         std::string model_name{};
         Vector3 position{ 0, 0, 0 };
@@ -302,8 +303,8 @@ namespace COLLIDERS
         /// <param name="cur_mesh"> : Pointer of current mesh component. Collision check will not be performed onto this mesh</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        bool Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RAYCASTDATA& rcd);
-        bool Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RAYCASTDATA& rcd);
+        bool Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RayCastResults& rcd);
+        bool Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RayCastResults& rcd);
         /// <summary>
         /// <para> Performs ray cast on all models in the vector and returns a list of collided model and collision data </para>
         /// <para> モデルリストのすべてのモデルをレイーキャスト当たり判定を計算し、あたったモデルのリストを返す </para>
@@ -313,7 +314,7 @@ namespace COLLIDERS
         /// <param name="direction_vector"> : Direction of movement</param>
         /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
         /// <returns></returns>
-        void GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd);
+        void GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RayCastResults>& rcd);
         std::vector<Mesh_Component*>Meshes();
 
 
@@ -362,7 +363,8 @@ namespace COLLIDERS
     /// <param name="m"> : Target model</param>
     /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
     /// <returns></returns>
-    bool RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index = -1);
+    bool RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, int mesh_index = -1);
+    bool RayCastToPlane(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastResults& results);
 
 }
 

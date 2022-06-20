@@ -9,7 +9,7 @@
 #include "../Engine/Text.h"
 #include "../Engine/Audio.h"
 #include "../Engine/COLLISION.h"
-
+#include "../Engine/AudioEngine.h"
 
 
 /*---------------------------------------------------------------------------------------------------------------------*/
@@ -56,5 +56,6 @@ void SceneUI::Render()
 void SceneUI::Finalize()
 {
     GameObjectManager::Instance()->Finalize();
+    AudioEngine::Instance()->CleanupObstructors();
     COLLIDERS::RAYCAST_MANAGER::Instance()->Finalize();
 }

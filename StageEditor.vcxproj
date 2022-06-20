@@ -44,7 +44,7 @@
     <ClCompile Include="SourceCode\Components\OBBTerrain.cpp" />
     <ClCompile Include="SourceCode\Components\PlayerController.cpp" />
     <ClCompile Include="SourceCode\Components\PointLight.cpp" />
-    <ClCompile Include="SourceCode\Components\SoundObstruction.cpp" />
+    <ClCompile Include="SourceCode\Components\SoundObstructor.cpp" />
     <ClCompile Include="SourceCode\Components\SphereCollider.cpp" />
     <ClCompile Include="SourceCode\Components\SpotLight.cpp" />
     <ClCompile Include="SourceCode\Components\Sprite2D.cpp" />
@@ -53,6 +53,7 @@
     <ClCompile Include="SourceCode\Components\Transform3D.cpp" />
     <ClCompile Include="SourceCode\DialogueController.cpp" />
     <ClCompile Include="SourceCode\Engine\Audio.cpp" />
+    <ClCompile Include="SourceCode\Engine\AudioEngine.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFade.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.cpp" />
     <ClCompile Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.cpp" />
@@ -87,7 +88,6 @@
     <ClCompile Include="SourceCode\Engine\Shaders\Shader2D.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp" />
-    <ClCompile Include="SourceCode\Engine\SoundObstructionManager.cpp" />
     <ClCompile Include="SourceCode\Engine\Sprite.cpp" />
     <ClCompile Include="SourceCode\Engine\System.cpp" />
     <ClCompile Include="SourceCode\Engine\Text.cpp" />
@@ -134,7 +134,7 @@
     <ClInclude Include="SourceCode\Components\OBBTerrain.h" />
     <ClInclude Include="SourceCode\Components\PlayerController.h" />
     <ClInclude Include="SourceCode\Components\PointLight.h" />
-    <ClInclude Include="SourceCode\Components\SoundObstruction.h" />
+    <ClInclude Include="SourceCode\Components\SoundObstructor.h" />
     <ClInclude Include="SourceCode\Components\SphereCollider.h" />
     <ClInclude Include="SourceCode\Components\SpotLight.h" />
     <ClInclude Include="SourceCode\Components\Sprite2D.h" />
@@ -143,6 +143,7 @@
     <ClInclude Include="SourceCode\Components\Transform3D.h" />
     <ClInclude Include="SourceCode\DialogueController.h" />
     <ClInclude Include="SourceCode\Engine\Audio.h" />
+    <ClInclude Include="SourceCode\Engine\AudioEngine.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFade.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeIn.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStateFadeOut.h" />
@@ -180,7 +181,6 @@
     <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
-    <ClInclude Include="SourceCode\Engine\SoundObstructionManager.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
     <ClInclude Include="SourceCode\Engine\Text.h" />

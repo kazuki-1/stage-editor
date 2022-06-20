@@ -5,7 +5,10 @@
 #include "../Components/CapsuleCollider.h"
 #include "../Components/Mesh.h"
 #include "../Components/Transform3D.h"
+#include "DEBUG_PRIMITIVE.h"
+
 using namespace COLLIDERS;
+#define PLANE_TRIANGLE_COUNT 2
 #define Vertex MODEL_RESOURCES::VERTEX
 /*---------------------------------------------------PointLineClosest()---------------------------------------------------*/
 
@@ -201,7 +204,7 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
 /// <param name="m"> : Target model</param>
 /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int mesh_index)
+bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, int mesh_index)
 {
     // This equation casts the model vertices to the world transform
     // The cost for this is higher but it is easier to debug 
@@ -270,6 +273,9 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
                 if (distance_to_contact < 0 || distance_to_contact > minimum_Length)
                     continue;
                 Vector3 intersection = vector * distance_to_contact + worldStart;
+
+
+
 
                 // Perform dot check to see if point is on the triangle;
                 Vector3 IA{ intersection - A };
@@ -454,8 +460,8 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 //        }
 //        if (m_Index >= 0)
 //        {   
-//            // RAYCASTDATA storing
-//            // RAYCASTDATA •Û‘¶
+//            // RayCastResults storing
+//            // RayCastResults •Û‘¶
 //
 //            XMVECTOR w_Position{ XMVector3TransformCoord(h_Pos, w_Transform) };
 //            XMVECTOR w_CrossVector{ w_Position - w_Start };
@@ -482,6 +488,88 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RAYCASTDATA& hr, int m
 //#pragma endregion
 
 
+
+}
+
+/*---------------------------------------------------RayCastToPlane()---------------------------------------------------*/
+
+bool COLLIDERS::RayCastToPlane(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastResults& results)
+{
+    Vector3 start{ s }, end{ e };
+    Vector3 light_vector{ end - start };
+    Vector3 direction = light_vector;
+    direction.Normalize();
+
+
+
+    // Vertex retrieval
+    std::vector<Vector3>vertices;
+    for (auto& v : plane->GetVertices())
+    {
+        vertices.push_back(v.position);
+    }
+
+
+    for (int ind = 0; ind < PLANE_TRIANGLE_COUNT; ++ind)
+    {
+
+        // Triangle points
+        Vector3 A = vertices.at(ind + 0);
+        Vector3 B = vertices.at(ind + 1);
+        Vector3 C = vertices.at(ind + 2);
+
+        // Skips if the triangle is at a complete different direction
+        Vector3 dist_to_triangle{ A - start };
+        if (Vector3::Dot(dist_to_triangle, direction) < 0)
+            continue;
+
+        Vector3 AB = B - A;
+        Vector3 BC = C - B;
+        Vector3 CA = A - C;
+
+        Vector3 normal = Vector3::Cross(AB, BC);
+        normal.Normalize();
+
+        float dot = Vector3::Dot(direction, normal);
+
+        Vector3 dist{ A - start };
+        float distance_to_contact{ Vector3::Dot(normal, dist) / dot };
+        Vector3 intersection = direction * distance_to_contact + start;
+
+
+        Vector3 end_to_intersection{ end - intersection };
+        if (Vector3::Dot(end_to_intersection, direction) < 0)
+            continue;
+
+
+
+        // Perform dot check to see if point is on the triangle;
+        Vector3 IA{ intersection - A };
+        Vector3 IB{ intersection - B };
+        Vector3 IC{ intersection - C };
+
+        Vector3 cross_IAB{ Vector3::Cross(AB, IA) };
+        Vector3 cross_IBC{ Vector3::Cross(BC, IB) };
+        Vector3 cross_IAC{ Vector3::Cross(CA, IC) };
+
+        float dot_IAB{ Vector3::Dot(cross_IAB, normal) };
+        float dot_IBC{ Vector3::Dot(cross_IBC, normal) };
+        float dot_IAC{ Vector3::Dot(cross_IAC, normal) };
+
+
+        if (dot_IAB < 0)
+            continue;
+        if (dot_IBC < 0)
+            continue;
+        if (dot_IAC < 0)
+            continue;
+
+        results.position = intersection;
+        return true;
+    }
+
+
+    return false;
 
 }
 
@@ -1055,7 +1143,7 @@ void RAYCAST_MANAGER::Finalize()
 /// <param name="direction_vector"> : Direction of movement</param>
 /// <param name="rcd"> : Output. RayCastData is stored here. Create a new and put it here</param>
 /// <returns></returns>
-bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Component* cur_mesh, RayCastResults& rcd)
 {
     bool output{};
     for (auto& m : meshes)
@@ -1072,7 +1160,7 @@ bool RAYCAST_MANAGER::Collide(Vector3 startOfRay, Vector3 endOfRay, Mesh_Compone
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RAYCASTDATA& rcd)
+bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Component* target_mesh, int target_mesh_index, RayCastResults& rcd)
 {
     bool output{};
     for (auto& m : meshes)
@@ -1089,11 +1177,11 @@ bool RAYCAST_MANAGER::Collide(Vector3 startofRay, Vector3 endOfRay, Mesh_Compone
 
 /*-----------------------------------------------------RAYCAST_MANAGER Collide()--------------------------------------------------------------*/
 
-void RAYCAST_MANAGER::GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RAYCASTDATA>& rcd)
+void RAYCAST_MANAGER::GetListOfCollided(Mesh_Component* cur_Mesh, Vector3 startOfRay, Vector3 directionVector, std::vector<RayCastResults>& rcd)
 {
     for (auto& m : meshes)
     {
-        RAYCASTDATA& cur_rcd{ rcd.emplace_back() };
+        RayCastResults& cur_rcd{ rcd.emplace_back() };
         if (RayCast(startOfRay, directionVector, m->Model().get(), cur_rcd))
         {
             cur_rcd.model_name = m->GetParent()->Data()->Name();

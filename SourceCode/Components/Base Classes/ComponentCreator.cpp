@@ -78,6 +78,10 @@ std::shared_ptr<Dialogue_Component>__Dialogue_Component(GameObject* g, std::shar
 {
     return std::make_shared<Dialogue_Component>(g, d.get());
 }
+std::shared_ptr<SoundObstructor_Component>__SoundObstruction_Component(GameObject* g, std::shared_ptr<ComponentData>d)
+{
+    return std::make_shared<SoundObstructor_Component>(g, d.get());
+}
 std::shared_ptr<Component>__Component(GameObject* g, std::shared_ptr<ComponentData>d)
 {
     return std::make_shared<Component>(g, d);
@@ -168,6 +172,10 @@ std::shared_ptr<Dialogue_Data>__Dialogue_Data()
 {
     return std::make_shared<Dialogue_Data>();
 }
+std::shared_ptr<SoundObstructor_Data>__SoundObstruction_Data()
+{
+    return std::make_shared<SoundObstructor_Data>();
+}
 //std::shared_ptr<CYLINDER_COLLIDER_DATA>CCDD()
 //{
 //    return std::make_shared<CYLINDER_COLLIDER_DATA>();
@@ -204,6 +212,7 @@ void ComponentCreator::Initialize()
     RegisterData(COMPONENT_TYPE::PLAYER_CONTROLLER, __PlayerController_Data);
     RegisterData(COMPONENT_TYPE::ENEMY_CONTROLLER, __EnemyController_Data);
     RegisterData(COMPONENT_TYPE::NPC_DIALOGUE, __Dialogue_Data);
+    RegisterData(COMPONENT_TYPE::SOUND_OBSTRUCTOR, __SoundObstruction_Data);
 
 #pragma endregion
 
@@ -226,6 +235,7 @@ void ComponentCreator::Initialize()
     RegisterComponent(COMPONENT_TYPE::PLAYER_CONTROLLER, __PlayerController_Component);
     RegisterComponent(COMPONENT_TYPE::ENEMY_CONTROLLER, __EnemyController_Component);
     RegisterComponent(COMPONENT_TYPE::NPC_DIALOGUE, __Dialogue_Component);
+    RegisterComponent(COMPONENT_TYPE::SOUND_OBSTRUCTOR, __SoundObstruction_Component);
 
 #pragma endregion
 

@@ -8,6 +8,7 @@
 #include "DEBUG_MANAGER.h"
 #include "Sprite.h"
 #include "../Scenes/SCENEMANAGER.h"
+#include "../Components/Base Classes/DATAMANAGER.h"
 #include "../Components/Base Classes/ComponentCreator.h"
 using namespace DirectX;
 std::shared_ptr<SPRITE>skybox;
@@ -166,4 +167,6 @@ bool Graphics::Render()
 
 void Graphics::Finalize()
 {
+    // Destroys any instances of temp.stg data if there are any
+    DataManager::Instance()->DestroyTemporaryData();
 }

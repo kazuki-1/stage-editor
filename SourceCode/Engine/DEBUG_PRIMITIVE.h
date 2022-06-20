@@ -115,12 +115,12 @@ class DYNAMIC_DEBUG_PRIMITIVE : public DEBUG_PRIMITIVE
 protected:
     struct VERTEX
     {
-        Vector3 position;
+        Vector3 position{};
     };
     struct CBUFFER_M
     {
-        XMFLOAT4X4 world;
-        Vector4 colour;
+        XMFLOAT4X4 world{};
+        Vector4 colour{};
     };
     std::vector<VERTEX>vertices;
     std::vector<int>indices;
@@ -128,7 +128,7 @@ protected:
     ComPtr<ID3D11Buffer>vertexBuffer;
     ComPtr<ID3D11Buffer>indexBuffer;
     ComPtr<ID3D11Buffer>meshConstantBuffer;
-    XMFLOAT4X4 world;
+    XMFLOAT4X4 world{};
 protected:
     virtual HRESULT Initialize();
 public:
@@ -148,6 +148,7 @@ public:
     virtual void Render(Vector4 colour = {1.0f, 1.0f, 1.0f, 1.0f});
     virtual void SetTarget(Vector3 target);
     virtual void SetTransform(Vector3 pos, Vector3 rot) { position = pos; rotation = rot; }
+    virtual std::vector<VERTEX>GetVertices() { return vertices; }
 };
 
 
@@ -218,4 +219,14 @@ public:
     /// <param name="rad"> : User declared radius</param>
     /// <param name="height">: User declared height</param>
     void UpdateVertices(float rad, float height, XMMATRIX* target = nullptr);
+};
+
+class Dynamic_Plane : public DYNAMIC_DEBUG_PRIMITIVE
+{
+    Vector3 size;           // only X and Y are used
+public:
+    Dynamic_Plane(Vector3 size);
+    void UpdateVertices(Vector3 s, XMMATRIX* target = nullptr);
+    float GetSize();        // Retrieves the size length
+    Vector3 GetCenter();    // Retrieves the center point
 };

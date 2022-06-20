@@ -124,6 +124,35 @@ void DataManager::Remove(std::shared_ptr<OBJECT_DATA>target)
     }
 }
 
+/*--------------------------------------------------DataManager CreateTemporaryData()-------------------------------------------------------------------*/
+/// <summary>
+/// Used when playing a scene data that isnt saved
+/// </summary>
+void DataManager::CreateTemporaryData()
+{
+    // Directory path
+    std::filesystem::path path(std::string("./Temporary"));
+    if (!std::filesystem::exists(path))
+        std::filesystem::create_directories(path);
+
+    std::string full_path = path.string() + "/temp.stg";
+    OutputFile(full_path);
+    SetFilePath(full_path);
+
+
+}
+
+/*--------------------------------------------------DataManager DestroyTemporaryData()-------------------------------------------------------------------*/
+/// <summary>
+/// Called at the end of the program to delete any temporary data
+/// </summary>
+void DataManager::DestroyTemporaryData()
+{
+    std::filesystem::path path("./Temporary/temp.stg");
+    if (std::filesystem::exists(path))
+        std::filesystem::remove(path);
+}
+
 /*--------------------------------------------------DataManager SetFilePath()-------------------------------------------------------------------*/
 
 void DataManager::SetFilePath(std::string path)

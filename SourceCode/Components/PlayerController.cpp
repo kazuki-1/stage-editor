@@ -157,7 +157,7 @@ void PlayerController_Component::GroundCollision()
     end = transform->GetTranslation();
     end.y += transform->GetVelocity().y ;
 
-    COLLIDERS::RAYCASTDATA rcd{};
+    COLLIDERS::RayCastResults rcd{};
     bool collided{ COLLIDERS::RAYCAST_MANAGER::Instance()->Collide(start, end, mesh, rcd) };
 
 
@@ -202,7 +202,7 @@ void PlayerController_Component::WallCollision()
     end = transform->GetTranslation();
     end.x += transform->GetVelocity().x;
     end.z += transform->GetVelocity().z;
-    COLLIDERS::RAYCASTDATA rcd{};
+    COLLIDERS::RayCastResults rcd{};
     bool collided{ COLLIDERS::RAYCAST_MANAGER::Instance()->Collide(start, end, mesh, rcd) };
 
     // Update trigger state of mesh collider
@@ -267,7 +267,7 @@ void PlayerController_Component::Execute()
 {
 
     Vector3 position = GetComponent<Transform3D_Component>()->GetTranslation();
-    position.y += 5.0f;
+    position.y += 2.0f;
     Camera::Instance()->SetTarget(position);
     inDialogue = DialogueController::Instance()->GetStatus();
 

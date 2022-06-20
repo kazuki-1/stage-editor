@@ -136,19 +136,18 @@ void STAGE_UI::SceneUI()
             browser->Open();
             fileLoad = true;
         }
+
+
         browser->Display();
-        if (fileLoad)
+        if (browser->HasSelected())
         {
-            if (browser->HasSelected())
-            {
-                std::string file_path = browser->GetSelected().string();
-                
-                DataManager::Instance()->SetFilePath(file_path);
-                DataManager::Instance()->Load(file_path);
-                DataManager::Instance()->InsertAndInitialize();
-                browser->Close();
-                fileLoad = false;
-            }
+            std::string file_path = browser->GetSelected().string();
+
+            DataManager::Instance()->SetFilePath(file_path);
+            DataManager::Instance()->Load(file_path);
+            DataManager::Instance()->InsertAndInitialize();
+            browser->Close();
+            fileLoad = false;
         }
         // File saving
         if (ImGui::Button("Save scene as"))
@@ -288,7 +287,7 @@ void STAGE_UI::MouseSelect()
 
 
 
-        COLLIDERS::RAYCASTDATA rcd{};
+        COLLIDERS::RayCastResults rcd{};
         Vector3 cam{ Camera::Instance()->EyePosition() }, tar{ o.second->GetComponent<Transform3D_Component>()->GetTranslation() };
         Vector3 dist = tar - cam;
         float f_dist{ dist.Length() };

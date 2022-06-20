@@ -43,6 +43,14 @@ public:
     /// </summary>
     /// <param name="target"></param>
     void Remove(std::shared_ptr<OBJECT_DATA>target);
+    /// <summary>
+    /// Used when playing a scene data that isnt saved
+    /// </summary>
+    void CreateTemporaryData();
+    /// <summary>
+    /// Called at the end of the program to delete any temporary data
+    /// </summary>
+    void DestroyTemporaryData();
     void SetFilePath(std::string path);
     std::vector<std::shared_ptr<OBJECT_DATA>>Dataset();
     std::string GetCurrentScenePath();

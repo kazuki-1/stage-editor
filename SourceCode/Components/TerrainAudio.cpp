@@ -4,6 +4,8 @@
 #include "Transform3D.h"
 #include "TerrainAudio.h"
 #include "Mesh.h"
+#include "../Engine/AudioEngine.h"
+
 std::string types[] = { "Emitter", "Receiver" };
 #define MAX_TIME 120
 /*----------------------------------------------------------------------------------------------------------------------------*/
@@ -408,7 +410,7 @@ void TerrainAudio_Component::ExecuteReceiver()
         end = start;
         end.y -= 0.022f;
         // Perform rayCasting collision check
-        COLLIDERS::RAYCASTDATA rcd{};
+        COLLIDERS::RayCastResults rcd{};
         bool collided;
         collided = RAYCAST(start, end, player_mesh, rcd);
         // Updates the collided mesh index

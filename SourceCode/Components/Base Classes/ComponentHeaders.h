@@ -19,3 +19,4 @@
 #include "../OBBTerrain.h"
 #include "../TerrainAudio.h"
 #include "../Dialogue.h"
+#include "../SoundObstructor.h"

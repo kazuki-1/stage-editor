@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "SceneUI.h"
 #include "SceneDemo.h"
-
+#include "../Components/Base Classes/DATAMANAGER.h"
 
 
 /*--------------------------------------------------SceneManager Initialize()-------------------------------------*/
@@ -67,6 +67,11 @@ void SceneManager::Insert(ScenesEnum name, std::shared_ptr<Scene>s)
 void SceneManager::Play()
 {
     // Changes the scene if in UI
+    // Creates a temporary instance of the stage data
+    if (current_Enum == ScenesEnum::Scene_UI)
+        DataManager::Instance()->CreateTemporaryData();
+
+
     if (current_Enum == ScenesEnum::Scene_UI)
         ChangeScene(ScenesEnum::Scene_Demo);
     isPaused = false;

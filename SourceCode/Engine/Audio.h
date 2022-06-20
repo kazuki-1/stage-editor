@@ -12,6 +12,12 @@
 // Input channels used in 3d Audio
 #define MAX_OUTPUT_CHANNELS 8
 #define INPUT_CHANNELS 1
+#define SPEED_OF_SOUND_PER_FRAME SPEED_OF_SOUND / PerformanceCounter::Instance()->FPS()
+#define SAMPLING_RATE 48000
+#define OBTUSE_ANGLE Math::ToRadians(180)
+#define SPEED_OF_SOUND X3DAUDIO_SPEED_OF_SOUND
+#define DEFAULT_FREQUENCY 1.0f
+#define VELOCITY_OF_SOUND 5.0f
 
 enum AUDIO_CALCULATION_FLAGS
 {
@@ -61,67 +67,6 @@ public:
     Math::Vector3 vFrontVector{};
 };
 
-/// <summary>
-/// Use this to create an Audio object by calling AudioEngine::Instance()->Insert(std::string name, std::wstring file_path)
-/// </summary>
-class AudioEngine : public Singleton<AudioEngine>
-{
-    ComPtr<IXAudio2>xAudio;
-    IXAudio2MasteringVoice* masteringVoice{};
-
-    // Parameters for 3DAudio calculations
-    X3DAUDIO_DSP_SETTINGS dspSettings{};
-    AudioListener* audioListener{};
-    X3DAUDIO_HANDLE x3d_handle;
-    float matrixCoefficients[INPUT_CHANNELS * MAX_OUTPUT_CHANNELS];
-    int nChannels{};        // Output channels
-    friend class Audio;
-    std::map<std::string, std::shared_ptr<Audio>>audios;
-
-
-public:
-    ~AudioEngine() { Finalize(); }
-    /// <summary>
-    /// Initializes the audioengine, initializing the IXAudio2 and IXAudio2MasteringVoice
-    /// </summary>
-    /// <returns></returns>
-    HRESULT Initialize();
-    /// <summary>
-    /// <para> Called every frame to perform functions </para>
-    /// <para> 垈･ﾕ･・`･爨ﾋｺﾓｳｹ </para>
-    /// </summary>
-    void Execute();
-    /// <summary>
-    /// <para> Create an Audio object and insert it into the map </para>
-    /// <para> AUDIOを生成し、マップに登録</para>
-    /// </summary>
-    /// <param name="name"> : Name of audio file</param>
-    /// <param name="file_path"> : File path of audio file</param>
-    void Insert(std::string name, std::wstring file_path);
-    /// <summary>
-    /// Called when switching between scenes
-    /// </summary>
-    void Cleanup();
-    /// <summary>
-    /// Finalizes the class, generally not needed
-    /// </summary>
-    void Finalize();
-    /// <summary>
-    /// Delists the audio file from the map
-    /// </summary>
-    /// <param name="audio_name"></param>
-    void Delist(std::string audio_name);
-    void Delist(std::shared_ptr<Audio>audio);
-
-    IXAudio2MasteringVoice* MasteringVoice();
-    ComPtr<IXAudio2>XAudio();
-    std::shared_ptr<Audio>Retrieve(std::string name);
-    std::map<std::string, std::shared_ptr<Audio>>Audios();
-
-    // Targets the listener
-    void SetAudioListener(AudioListener* l) { audioListener = l; };
-    AudioListener* GetAudioListener() { return audioListener; }
-};
 
 class Audio
 {

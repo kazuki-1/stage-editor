@@ -113,7 +113,7 @@ void Mesh_Component::UI()
                 model = std::make_shared<MODEL>();
 
                 model->Initialize(data->model_path);
-
+                browser->Close();
                 fileOpenM = false;
 
             }

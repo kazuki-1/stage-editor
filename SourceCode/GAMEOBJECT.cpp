@@ -20,6 +20,7 @@ std::string COMP_TYPE[] = {
     "OBB Collider",
     "Player Controller",
     "Point Light",
+    "Sound Obstruction", 
     "Sphere Collider",
     "Spotlight",
     "Sprite 2D",

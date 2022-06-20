@@ -6,15 +6,9 @@
 #include <assert.h>
 #include <vector>
 #include "IMGUI.h"
-#include "SoundObstructionManager.h"
 #include "PERFORMANCE_COUNTER.h"
-#define SPEED_OF_SOUND_PER_FRAME SPEED_OF_SOUND / PerformanceCounter::Instance()->FPS()
+#include "AudioEngine.h"
 
-#define SAMPLING_RATE 48000
-#define OBTUSE_ANGLE Math::ToRadians(180)
-#define SPEED_OF_SOUND X3DAUDIO_SPEED_OF_SOUND
-#define DEFAULT_FREQUENCY 1.0f
-#define VELOCITY_OF_SOUND 5.0f
 
 
 //#pragma comment(lib, "x3daudio")
@@ -35,157 +29,6 @@
 #define fourccXWMA 'AMWX'
 #define fourccDPDS 'sdpd'
 #endif
-/*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AudioEngine Class-----------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------AudioEngine Initialize()----------------------------------------------------*/
-/// <summary>
-/// Initializes the audioengine, initializing the IXAudio2 and IXAudio2MasteringVoice
-/// </summary>
-/// <returns></returns>
-HRESULT AudioEngine::Initialize()
-{
-
-    // Coinitialization is called here, so calling it again is not needed
-    HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-    assert(hr == S_OK);
-    hr = XAudio2Create(xAudio.GetAddressOf(), 0, XAUDIO2_DEFAULT_PROCESSOR);
-    assert(hr == S_OK);
-
-
-
-    hr = xAudio->CreateMasteringVoice(&masteringVoice, 2, 48000);
-    assert(hr == S_OK);
-    Insert("Empty", L"./Data/Audio/empty_sound.wav");
-
-
-    // Perform 3DAudio intiailization
-    XAUDIO2_VOICE_DETAILS details;
-    DWORD dwChannelMask;
-    hr = masteringVoice->GetChannelMask(&dwChannelMask);
-    masteringVoice->GetVoiceDetails(&details);
-
-    //DSP settings in case needed
-    dspSettings.SrcChannelCount = 2;
-    nChannels = dspSettings.DstChannelCount = details.InputChannels;
-    
-    hr = X3DAudioInitialize(dwChannelMask, SPEED_OF_SOUND, x3d_handle);
-    assert(hr == S_OK);
-    
-
-    return S_OK;
-
-
-
-}
-
-/*---------------------------------------------AudioEngine Execute()----------------------------------------------------*/
-/// <summary>
-/// <para> Called every frame to perform functions </para>
-/// </summary>
-void AudioEngine::Execute()
-{
-    for (auto& a : audios)
-        a.second->Execute();
-}
-
-/*---------------------------------------------AudioEngine Cleanup()----------------------------------------------------*/
-/// <summary>
-/// Called when switching between scenes
-/// </summary>
-void AudioEngine::Cleanup()
-{
-    audios.clear();
-}
-
-/*---------------------------------------------AudioEngine Finalize()----------------------------------------------------*/
-/// <summary>
-/// Finalizes the class, generally not needed
-/// </summary>
-void AudioEngine::Finalize()
-{
-    for (auto& a : audios)
-        a.second->Finalize();
-}
-
-/*---------------------------------------------AudioEngine Delist()----------------------------------------------------*/
-/// <summary>
-/// Delists the audio file from the map
-/// </summary>
-/// <param name="audio_name"></param>
-void AudioEngine::Delist(std::string audio_name)
-{
-    audios.erase(audio_name);
-}
-
-void AudioEngine::Delist(std::shared_ptr<Audio>audio)
-{
-    
-    for (auto& a : audios)
-    {
-        if (audio == a.second)
-        {
-            audios.erase(a.first);
-            return;
-        }
-    }
-}
-
-
-/*---------------------------------------------AudioEngine Insert()----------------------------------------------------*/
-/// <summary>
-/// <para> Create an Audio object and insert it into the map </para>
-/// <para> AUDIOÇê∂ê¨ÇµÅAÉ}ÉbÉvÇ…ìoò^</para>
-/// </summary>
-/// <param name="name"> : Name of audio file</param>
-/// <param name="file_path"> : File path of audio file</param>
-void AudioEngine::Insert(std::string name, std::wstring file_path)
-{
-    // Check if instance exists in map
-    for (auto& a : audios)
-    {
-        if (a.first == name && a.second->FilePath() == file_path)
-            return;
-
-    }
-    // Create and insert
-    std::shared_ptr<Audio>audio = std::make_shared<Audio>(file_path);
-    audios.insert(std::make_pair(name, audio));
-    audios.find(name)->second->Initialize();
-}
-
-/*---------------------------------------------AudioEngine MasteringVoice()----------------------------------------------------*/
-
-IXAudio2MasteringVoice* AudioEngine::MasteringVoice()
-{
-    return masteringVoice;
-}
-
-/*---------------------------------------------AudioEngine XAudio()----------------------------------------------------*/
-
-ComPtr<IXAudio2>AudioEngine::XAudio()
-{
-    return xAudio;
-}
-
-/*---------------------------------------------AudioEngine Retrieve()----------------------------------------------------*/
-
-std::shared_ptr<Audio>AudioEngine::Retrieve(std::string name)
-{
-    for (auto& a : audios)
-    {
-        if (name == a.first)
-            return a.second;
-    }
-    return audios.find("Empty")->second;
-}
-
-/*---------------------------------------------AudioEngine Audios()----------------------------------------------------*/
-
-std::map<std::string, std::shared_ptr<Audio>>AudioEngine::Audios()
-{
-    return audios;
-}
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------Audio Class----------------------------------------------------*/
@@ -335,7 +178,7 @@ void Audio::Execute()
             UINT calc_flag{};
             calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
             channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
-            //PerformObstructionCalculation();
+            PerformObstructionCalculation();
             HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
             hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_factor);
 
@@ -493,24 +336,31 @@ void Audio::PerformObstructionCalculation()
     Vector3 start = audioEmitter->position;
     Vector3 end = listener->position;
 
-
-
-    for (auto& g : GameObjectManager::Instance()->GetGameObjects())
+    for (auto& obstructor : AudioEngine::Instance()->GetObstructors())
     {
-        if (!g.second->GetComponent<Mesh_Component>())
+        Dynamic_Plane* plane = obstructor.plane;
+        COLLIDERS::RayCastResults results;
+        if (!COLLIDERS::RayCastToPlane(start, end, plane, results))
             continue;
 
-        COLLIDERS::RAYCASTDATA rcd{};
-        if (COLLIDERS::RayCast(start, end, g.second->GetComponent<Mesh_Component>()->Model().get(), rcd))
-        {
-            for(auto& v : channel_volumes)
-                v *= 0.2f;
-        }
+        float max_influence = { plane->GetSize() };
+        float point_influence = { fabsf((plane->GetCenter() - results.position).Length()) };
+        point_influence = max_influence - point_influence;
+        point_influence = point_influence / max_influence;
+        point_influence = obstructor.obstruction_rate * point_influence;
+
+        // The further away the listener is away from the obstructor
+        // The weaker the obstruction
+        float depth_influence = (end - results.position).Length();
+        depth_influence = 1.0f - depth_influence / plane->GetSize();
+        depth_influence = min(depth_influence, 1.0f);
 
 
+        for (auto& volume : channel_volumes)
+            volume *= 1.0f - (point_influence * depth_influence);
+        break;
 
     }
-
 
 
 }

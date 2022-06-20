@@ -500,20 +500,59 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
 {
     // Vertice and index buffer  creation
     vertices.resize(8);
-    int ind[24] =
+    int ind[] =
     {
+        // Front facing face
         0, 1,
         0, 2,
         1, 3,
         2, 3,
+
+
+        // Bottom facing face
         2, 6,
         3, 7,
+
+
+        // Top facing face
         0, 4,
         1, 5,
+
+
+        // Back facing face
         4, 5,
         4, 6,
         5, 7,
-        6, 7
+        6, 7,
+
+
+
+        // Front facing X
+        0, 3,
+        1, 2,
+
+        // Bottom facing X
+        2, 7, 
+        3, 6,
+
+        // Top facing X
+        0, 5, 
+        1, 4,
+
+        // Back facing X
+        4, 7, 
+        5, 6,
+
+        // Left facing X
+        0, 6, 
+        2, 4,
+
+        // Right facing X
+        1, 7, 
+        3, 5
+
+
+
     };
     for (int& i : ind)
         indices.push_back(i);
@@ -530,7 +569,7 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     vbd.CPUAccessFlags = 0;
     vbd.Usage = D3D11_USAGE_DEFAULT;
 
-    vbd.ByteWidth = sizeof(int) * 24;
+    vbd.ByteWidth = sizeof(int) * ARRAYSIZE(ind);
     vbd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     vd.pSysMem = indices.data();
     hr = dv->CreateBuffer(&vbd, &vd, indexBuffer.GetAddressOf());
@@ -945,3 +984,97 @@ void DYNAMIC_CAPSULE::UpdateVertices(float rad, float height, XMMATRIX* target)
 }
 
 #pragma endregion
+
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------Dynamic_Plane Class--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------Dynamic_Plane Constructor--------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Dynamic_Plane::Dynamic_Plane(Vector3 s) : size(s)
+{
+    VERTEX vertex{};
+    vertex.position = { -s.x, s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { s.x, s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { -s.x, -s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { s.x, -s.y, 0.0f };
+    vertices.push_back(vertex);
+    
+
+    int index[] =
+    {
+        0, 1,
+        1, 3,
+        3, 2,
+        2, 0,
+
+        0, 3,
+        1, 2
+
+    };
+
+    for (auto& i : index)
+        indices.push_back(i);
+
+
+
+
+    Initialize();
+}
+
+/*---------------------------------------------------------------------Dynamic_Plane UpdateVertices()----------------------------------------------------------------------*/
+
+void Dynamic_Plane::UpdateVertices(Vector3 s, XMMATRIX* target) 
+{
+    size = s;
+
+
+    vertices.clear();
+    VERTEX vertex{};
+    vertex.position = { -s.x, s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { s.x, s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { -s.x, -s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    vertex.position = { s.x, -s.y, 0.0f };
+    vertices.push_back(vertex);
+
+    if (target)
+        Execute(*target);
+
+
+    ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
+    D3D11_MAPPED_SUBRESOURCE mrs{};
+    dc->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mrs);
+    memcpy(mrs.pData, vertices.data(), sizeof(VERTEX) * vertices.size());
+    dc->Unmap(vertexBuffer.Get(), 0);
+
+}
+
+/*---------------------------------------------------------------------Dynamic_Plane GetSize()----------------------------------------------------------------------*/
+
+float Dynamic_Plane::GetSize()
+{
+    float x{ fabsf(size.x * 2) };
+    float y{ fabsf(size.y * 2) };
+    Vector2 vec{ x, y };
+    return Vector2::Length(vec);
+}
+
+/*---------------------------------------------------------------------Dynamic_Plane GetCenter()----------------------------------------------------------------------*/
+
+Vector3 Dynamic_Plane::GetCenter()
+{
+    return (vertices[0].position + vertices[1].position) / 2;
+}

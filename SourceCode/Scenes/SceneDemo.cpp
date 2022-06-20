@@ -7,6 +7,7 @@
 #include "../Engine/IMGUI.h"
 #include "../DialogueController.h"
 #include "../Engine/Audio.h"
+#include "../Engine/AudioEngine.h"
 
 /*--------------------------------------------------SceneDemo Insert()-------------------------------------*/
 
@@ -46,7 +47,7 @@ void SceneDemo::Render()
 void SceneDemo::Finalize()
 {
     GAMEOBJECTS->Finalize();
-    //AudioEngine::Instance()->Cleanup();
+    AudioEngine::Instance()->CleanupObstructors();
     DataManager::Instance()->Finalize();
 
 }
