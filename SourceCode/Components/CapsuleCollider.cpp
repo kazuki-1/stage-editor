@@ -140,11 +140,11 @@ void CapsuleCollider_Component::UI()
         // Bind to bone
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
         {
-            MODEL_RESOURCES& mr{ *GetComponent<Mesh_Component>()->Model().get()->Resource().get() };
-            if (ImGui::BeginCombo("Meshes", mr.Meshes[selected_mesh_c].Name.c_str()))
+            std::shared_ptr<MODEL_RESOURCES>mr{ GetComponent<Mesh_Component>()->Model().get()->Resource() };
+            if (ImGui::BeginCombo("Meshes", mr->Meshes[selected_mesh_c].Name.c_str()))
             {
                 int ind{};
-                for (auto& m : mr.Meshes)
+                for (auto& m : mr->Meshes)
                 {
                     bool s{};
                     if (ImGui::Selectable(m.Name.c_str(), &s))
@@ -153,7 +153,7 @@ void CapsuleCollider_Component::UI()
                 }
                 ImGui::EndCombo();
             }
-            MODEL_RESOURCES::SKELETON& bs{ mr.Meshes[selected_mesh_c].Bind_Pose };
+            MODEL_RESOURCES::SKELETON& bs{ mr->Meshes[selected_mesh_c].Bind_Pose };
             if (ImGui::BeginCombo("Bones", bs.Bones[selected_bone_c].Name.c_str()))
             {
                 int ind{};

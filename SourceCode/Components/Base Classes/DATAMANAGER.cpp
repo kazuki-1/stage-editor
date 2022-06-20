@@ -27,13 +27,19 @@ void DataManager::Load(std::string n)
     cereal::BinaryInputArchive bin(ifs);
     bin(dataset);
     ifs.close();
-    InsertAndInitialize();
+    //InsertAndInitialize();
 }
 
 /*--------------------------------------------------DataManager InsertAndInitialize()-------------------------------------------------------------------*/
 
 void DataManager::InsertAndInitialize()
 {
+    if (file_path != "")
+    {
+        Finalize();
+        Load(file_path);
+    }
+
     GameObjectManager::Instance()->GetGameObjects().clear();
     for (auto& d : dataset)
     {
@@ -86,6 +92,8 @@ std::string DataManager::GetCurrentScenePath()
 
 void DataManager::Insert(std::shared_ptr<OBJECT_DATA>d)
 {
+    // In case the id already exists
+
     for (auto& d : dataset)
     {
         if (cur_id == d->id)

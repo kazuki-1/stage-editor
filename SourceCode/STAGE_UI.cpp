@@ -116,7 +116,7 @@ void STAGE_UI::GameObjectWindow()
 }
 
 /*--------------------------------------------------------STAGE_UI SceneUI()--------------------------------------------------------------------*/
-//bool text_test{};
+
 void STAGE_UI::SceneUI()
 {
     // Data saving and loading
@@ -143,8 +143,9 @@ void STAGE_UI::SceneUI()
             {
                 std::string file_path = browser->GetSelected().string();
                 
-                DataManager::Instance()->Load(file_path);
                 DataManager::Instance()->SetFilePath(file_path);
+                DataManager::Instance()->Load(file_path);
+                DataManager::Instance()->InsertAndInitialize();
                 browser->Close();
                 fileLoad = false;
             }

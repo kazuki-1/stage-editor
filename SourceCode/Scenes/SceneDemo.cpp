@@ -46,6 +46,8 @@ void SceneDemo::Render()
 void SceneDemo::Finalize()
 {
     GAMEOBJECTS->Finalize();
+    //AudioEngine::Instance()->Cleanup();
+    DataManager::Instance()->Finalize();
 
 }
 

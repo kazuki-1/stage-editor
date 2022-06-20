@@ -45,7 +45,7 @@ HRESULT Transform3D_Component::Initialize()
 /// </summary>
 void Transform3D_Component::Execute()
 {
-    translation += velocity;
+    data->translation += velocity;
     velocity *= 0.9f;
     if (velocity.Length() < 0.01f)
         velocity = {};
@@ -123,7 +123,7 @@ Vector3 Transform3D_Component::Rotation()
     return data->rotation;
 }
 
-/*---------------------------------------Transform3D_Component GetTranslation-------------------------------------------------*/
+/*---------------------------------------Transform3D_Component GetTranslation()-------------------------------------------------*/
 /// <summary>
 /// Returns the translation
 /// </summary>
@@ -132,6 +132,17 @@ Vector3 Transform3D_Component::GetTranslation()
 {
     return data->translation;
 }
+
+/*---------------------------------------Transform3D_Component GetRealtimeTranslation()-------------------------------------------------*/
+/// <summary>
+/// Returns the translation. This is used in actual movement rather than the declared translation in the UI
+/// </summary>
+/// <returns></returns>
+Vector3 Transform3D_Component::GetRealtimeTranslation()
+{
+    return translation;
+}
+
 
 /*---------------------------------------Transform3D_Component GetVelocity()-------------------------------------------------*/
 /// <summary>

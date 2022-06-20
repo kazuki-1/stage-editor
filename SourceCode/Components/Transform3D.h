@@ -74,6 +74,11 @@ public:
     /// <returns></returns>
     Vector3 GetTranslation();
     /// <summary>
+    /// Returns the translation. This is used in actual movement rather than the declared translation in the UI
+    /// </summary>
+    /// <returns></returns>
+    Vector3 GetRealtimeTranslation();
+    /// <summary>
     /// Returns the velocity
     /// </summary>
     /// <returns></returns>

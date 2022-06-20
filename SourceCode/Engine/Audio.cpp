@@ -335,7 +335,7 @@ void Audio::Execute()
             UINT calc_flag{};
             calc_flag |= AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS | AUDIO_CALCULATION_FLAGS::CALCULATE_DOPPLER;
             channel_volumes = CalculateChannelVolumes(*audioEmitter, *audioEngine->audioListener, format.Format.nChannels, audioEngine->nChannels, calc_flag);
-            PerformObstructionCalculation();
+            //PerformObstructionCalculation();
             HRESULT hr = sourceVoice->SetOutputMatrix(audioEngine->masteringVoice, format.Format.nChannels, audioEngine->nChannels, channel_volumes.data());
             hr = sourceVoice->SetFrequencyRatio(audioEmitter->doppler_factor);
 
@@ -483,7 +483,7 @@ void Audio::StopDucking()
 }
 
 /*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
-
+// TODO : Change to plane, mesh calculation too heavy
 void Audio::PerformObstructionCalculation()
 {
     if (!audioEmitter)
