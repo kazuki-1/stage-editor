@@ -49,7 +49,7 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
     id.pSysMem = indices;
     hr = dv->CreateBuffer(&ibd, &id, dxIndexBuffer.GetAddressOf());
-    if (FAILED(hr))
+    assert(hr == S_OK);
 
 
 
@@ -61,7 +61,7 @@ SPRITE::SPRITE(const wchar_t* img_path)
 
     // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
-    InsertShader(ShaderTypes::Shader_2D);
+    RegisterShader(ShaderTypes::Shader_2D);
 
 
 
@@ -123,7 +123,7 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 
     // Insert shader from ShaderManager and create new if non-existant
     // SHADERMANAGERの中から既存のシェーダーを探す。なければ新規生成
-    InsertShader(ShaderTypes::Shader_2D);
+    RegisterShader(ShaderTypes::Shader_2D);
 
 
 
@@ -135,7 +135,6 @@ HRESULT SPRITE::Initialize(const wchar_t* img_path)
 void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSize, Vector2 pivot, Vector4 colour, float angle)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
-    dc->RSSetState(RasterizerManager::Instance()->Retrieve(RasterizerTypes::Base_3D)->GetRasterizer().Get());
 
     D3D11_TEXTURE2D_DESC t2d{};
     texture->QueryTextureDesc(&t2d);
@@ -199,26 +198,11 @@ void SPRITE::Render(Vector2 position, Vector2 scale , Vector2 tPos, Vector2 tSiz
     }
 
 
-    
+    // Updates the vertex buffer    
     D3D11_MAPPED_SUBRESOURCE data{};
     dc->Map(dxVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &data);
     size_t size{ sizeof(VERTEX) * Vertices.size() };
     memcpy(data.pData, Vertices.data(), sizeof(VERTEX) * Vertices.size());
     dc->Unmap(dxVertexBuffer.Get(), 0);
-    UINT stride{ sizeof(VERTEX) }, offset{ 0 };
-    for (auto& s : shaders)
-    {
-        
-        s.second->SetShaders(dc, this);
-        s.second->UpdateConstantBuffers(dc, this);
-        s.second->SetConstantBuffers(dc);
-        RasterizerManager::Instance()->Set(RasterizerTypes::Base_2D);
-        BlendStateManager::Instance()->Set(BlendModes::Alpha);
-        dc->IASetVertexBuffers(0, 1, dxVertexBuffer.GetAddressOf(), &stride, &offset);
-        dc->IASetIndexBuffer(dxIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
-        dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-        texture->SetTexture(dc);
-        dc->DrawIndexed(6, 0, 0);
-    }
 
 }

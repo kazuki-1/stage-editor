@@ -1,5 +1,7 @@
 #include "Shader2D.h"
-
+#include "../Sprite.h"
+#include "../RASTERIZER.h"
+#include "../BlendMode.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------Shader2D Class--------------------------------------------*/
@@ -59,4 +61,39 @@ HRESULT Shader2D::Initialize()
     ps->Release();
 
     return S_OK;
+}
+
+/*----------------------------------------------------------Shader2D Render()-------------------------------------*/
+
+void Shader2D::Render()
+{
+    SetShaders();
+    SetConstantBuffers();
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+    dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    for (auto& object : objects)
+    {
+        if (!object->GetRenderState())
+            continue;
+
+
+        SPRITE* sprite = (SPRITE*)object;
+        sprite->Texture()->SetTexture(dc);
+
+
+
+        RasterizerManager::Instance()->Set(RasterizerTypes::Base_2D);
+        BlendStateManager::Instance()->Set(BlendModes::Alpha);
+
+
+        UINT stride{ sizeof(SPRITE::VERTEX) }, offset{};
+
+
+        dc->IASetVertexBuffers(0, 1, sprite->GetVertexBuffer().GetAddressOf(), &stride, &offset);
+        dc->IASetIndexBuffer(sprite->GetIndexBuffer().Get(), DXGI_FORMAT_R32_UINT, offset);
+        dc->DrawIndexed(6, 0, 0);
+        object->DisableRendering();
+    }
+    
 }

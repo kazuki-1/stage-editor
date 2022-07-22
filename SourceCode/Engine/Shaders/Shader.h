@@ -7,10 +7,14 @@
 //#include "OBJECT.h"
 #include "../DirectX11.h"
 #include "../Singleton.h"
+
 class OBJECT;
 class Shader
 {
 protected:
+    std::vector<OBJECT*>objects;
+
+
     ComPtr<ID3D11PixelShader>pixelShader;
     ComPtr<ID3D11VertexShader>vertexShader;
     ComPtr<ID3D11InputLayout>inputLayout;
@@ -35,10 +39,12 @@ public:
     Shader() {}
     Shader(std::wstring shader_path);
     virtual HRESULT Initialize();
-    virtual void SetShaders(ID3D11DeviceContext* dc, OBJECT* parent);
-    virtual void UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent) {};
-    virtual void SetConstantBuffers(ID3D11DeviceContext* dc) {};
-
+    virtual void SetShaders();
+    virtual void UpdateConstantBuffers(OBJECT* parent) {};
+    virtual void SetConstantBuffers() {};
+    virtual void Render();
+    void Register(OBJECT* object);
+    void Deregister(OBJECT* object);
 };
 
 

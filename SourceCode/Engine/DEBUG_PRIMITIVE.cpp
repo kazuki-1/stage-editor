@@ -3,7 +3,8 @@
 #include "Shaders/Shader.h"
 #include "Rasterizer.h"
 #include "SamplerStateManager.h"
-//#include "OBJECT.h"
+//#include "Shaders/ShaderManager.h"
+#include "MODEL.h"
 #pragma region DEBUG_PRIMITIVE
 
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -14,6 +15,9 @@
 void DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     model->Render(0.0f, colour.XMF4());
+    debugMeshData.colour = colour;
+    debugMeshData.world = model->Transform();
+
 }
 
 /*------------------------------------------DEBUG_PRIMITIVE Execute()------------------------------------------------------*/
@@ -138,13 +142,13 @@ void DEBUG_ARROWS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    xAxis->RegisterShader(ShaderTypes::Debug_3D);
+    yAxis->RegisterShader(ShaderTypes::Debug_3D);
+    zAxis->RegisterShader(ShaderTypes::Debug_3D);
 
-    xAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
-    yAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
-    zAxis->Resource()->RemoveShader(ShaderTypes::PhongShader);
+    xAxis->DeregisterShader(ShaderTypes::PhongShader);
+    yAxis->DeregisterShader(ShaderTypes::PhongShader);
+    zAxis->DeregisterShader(ShaderTypes::PhongShader);
 
 
 
@@ -184,10 +188,24 @@ void DEBUG_ARROWS::Execute()
 
 }
 
+/*------------------------------------------DEBUG_ARROWS Finalize()-----------------------------------------------------*/
+
+void DEBUG_ARROWS::Finalize()
+{
+    xAxis->Finalize();
+    yAxis->Finalize();
+    zAxis->Finalize();
+}
+
 /*------------------------------------------DEBUG_ARROWS Render()-----------------------------------------------------*/
 
 void DEBUG_ARROWS::Render(Vector4 colour)
 {
+
+    xAxis->EnableRendering();
+    yAxis->EnableRendering();
+    zAxis->EnableRendering();
+
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
@@ -239,9 +257,13 @@ void DEBUG_SCALARS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+    xAxis->RegisterShader(ShaderTypes::Debug_3D);
+    yAxis->RegisterShader(ShaderTypes::Debug_3D);
+    zAxis->RegisterShader(ShaderTypes::Debug_3D);
+
+    xAxis->DeregisterShader(ShaderTypes::PhongShader);
+    yAxis->DeregisterShader(ShaderTypes::PhongShader);
+    zAxis->DeregisterShader(ShaderTypes::PhongShader);
 
 }
 
@@ -284,9 +306,23 @@ void DEBUG_SCALARS::Execute()
 
 void DEBUG_SCALARS::Render(Vector4 colour)
 {
+    xAxis->EnableRendering();
+    yAxis->EnableRendering();
+    zAxis->EnableRendering();
+
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
+}
+
+/*------------------------------------------DEBUG_SCALARS Finalize()----------------------------------------------------*/
+
+void DEBUG_SCALARS::Finalize()
+{
+    xAxis->Finalize();
+    yAxis->Finalize();
+    zAxis->Finalize();
+
 }
 
 /*------------------------------------------DEBUG_SCALARS SetTarget()----------------------------------------------------*/
@@ -336,9 +372,14 @@ void DEBUG_DISCS::Initialize()
     zAxis->SetTake(0);
 
 
-    xAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    yAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
-    zAxis->Resource()->InsertShader(ShaderTypes::Base_3D);
+
+    xAxis->RegisterShader(ShaderTypes::Debug_3D);
+    yAxis->RegisterShader(ShaderTypes::Debug_3D);
+    zAxis->RegisterShader(ShaderTypes::Debug_3D);
+
+    xAxis->DeregisterShader(ShaderTypes::PhongShader);
+    yAxis->DeregisterShader(ShaderTypes::PhongShader);
+    zAxis->DeregisterShader(ShaderTypes::PhongShader);
 
 }
 
@@ -381,9 +422,23 @@ void DEBUG_DISCS::Execute()
 
 void DEBUG_DISCS::Render(Vector4 colour)
 {
+    xAxis->EnableRendering();
+    yAxis->EnableRendering();
+    zAxis->EnableRendering();
+
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
+}
+
+/*------------------------------------------DEBUG_ARROWS Finalize()-----------------------------------------------------*/
+
+void DEBUG_DISCS::Finalize()
+{
+    xAxis->Finalize();
+    yAxis->Finalize();
+    zAxis->Finalize();
+
 }
 
 /*------------------------------------------DEBUG_DISCS SetTarget()----------------------------------------------------*/
@@ -409,7 +464,6 @@ void DEBUG_DISCS::SetTarget(Vector3 p, Vector3 r)
 /*----------------------------------------------------------------------------------------------------------------------------------*/
 /*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE Initialize()----------------------------------------------------*/
 
-
 HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
 {
     // Vertex buffer and constant buffer creation
@@ -434,8 +488,9 @@ HRESULT DYNAMIC_DEBUG_PRIMITIVE::Initialize()
     vbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     vbd.ByteWidth = sizeof(CBUFFER_M);
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
-    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D);
-
+    
+    RegisterShader(ShaderTypes::LineShader);
+    EnableRendering();
     return hr;
 
 }
@@ -450,6 +505,8 @@ void DYNAMIC_DEBUG_PRIMITIVE::Execute()
 void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
 {
     // Transforms the vertices of the primitive to match the target
+    //XMStoreFloat4x4(&world, target);
+    XMStoreFloat4x4(&world, target);
     for (auto& v : vertices)
         v.position.Load(XMVector3TransformCoord(v.position.XMV(), target));
 
@@ -459,26 +516,28 @@ void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
 
 void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
-    ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-    shader->SetShaders(dc, nullptr);
+
+    debugMeshData.colour = colour;
+
+    //ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
 
     // Setup Dx required parameters and prepare to render
-    dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-    BlendStateManager::Instance()->Set(BlendModes::Alpha);
-    CBUFFER_M data;
-    data.colour = colour;
-    Vector4 q{};
-    q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
-    XMStoreFloat4x4(&data.world, XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(q.XMV()) *  XMMatrixTranslationFromVector(position.XMV()));
+    //dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    //BlendStateManager::Instance()->Set(BlendModes::Alpha);
+    //CBUFFER_M data;
+    //data.colour = colour;
+    //Vector4 q{};
+    //q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
+    //XMStoreFloat4x4(&data.world, XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(q.XMV()) *  XMMatrixTranslationFromVector(position.XMV()));
 
-    UINT stride{ sizeof(VERTEX) }, offset{};
+    //UINT stride{ sizeof(VERTEX) }, offset{};
 
-    dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
-    dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
-    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
-    dc->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-    dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    dc->DrawIndexed((UINT)indices.size(), 0, 0);
+    //dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
+    //dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
+    //dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
+    //dc->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    //dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+    //dc->DrawIndexed((UINT)indices.size(), 0, 0);
 }
 
 /*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE SetTarget()----------------------------------------------------*/
@@ -486,6 +545,11 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 void DYNAMIC_DEBUG_PRIMITIVE::SetTarget(Vector3 t)
 {
     position = t;
+}
+
+void DYNAMIC_DEBUG_PRIMITIVE::SetWorldTransform(XMMATRIX matrix)
+{
+    XMStoreFloat4x4(&world, matrix);
 }
 
 #pragma endregion
@@ -579,8 +643,9 @@ DYNAMIC_CUBE::DYNAMIC_CUBE()
     hr = dv->CreateBuffer(&vbd, nullptr, meshConstantBuffer.GetAddressOf());
 
     // Uses a debug shader since this only renders lines
-    shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D);
+    //shader = ShaderManager::Instance()->Retrieve(ShaderTypes::Debug_3D);
 
+    RegisterShader(ShaderTypes::LineShader);
 
 
 }
@@ -596,6 +661,7 @@ void DYNAMIC_CUBE::UpdateVertices(std::vector<Vector3>pos)
         vertices[ind].position = pos[ind];
     }
     D3D11_MAPPED_SUBRESOURCE res;
+    
     dc->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
     memcpy(res.pData, vertices.data(), sizeof(VERTEX) * vertices.size());
     dc->Unmap(vertexBuffer.Get(), 0);
@@ -676,7 +742,7 @@ void DYNAMIC_SPHERE::UpdateVertices(float rad, XMMATRIX* target)
     }
 
     // X axis Horizontal circle
-    for (int ind = vertices_count * 1; ind < vertices_count * 2; ++ind)
+    for (int ind = vertices_count * 1; ind < vertices_count * 2; ++ind) 
     {
         vertices[ind] = { { cosf(ToRadians(angle_per_vertex) * ind) * radius, 0.0f , sinf(ToRadians(angle_per_vertex) * ind) * radius } };
     }
@@ -984,7 +1050,7 @@ void DYNAMIC_CAPSULE::UpdateVertices(float rad, float height, XMMATRIX* target)
 }
 
 #pragma endregion
-
+#pragma region Dynamic_Plane
 
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------Dynamic_Plane Class--------------------------------------------------------------------------------*/
@@ -1078,3 +1144,5 @@ Vector3 Dynamic_Plane::GetCenter()
 {
     return (vertices[0].position + vertices[1].position) / 2;
 }
+
+#pragma endregion

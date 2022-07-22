@@ -8,6 +8,6 @@ class BaseShader3D : public Shader
 public:
 	BaseShader3D() {};
 	HRESULT Initialize() override;
-	void UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent);
-	void SetConstantBuffers(ID3D11DeviceContext* dc);
+	void UpdateConstantBuffers(OBJECT* parent) override;
+	void SetConstantBuffers() override;
 };

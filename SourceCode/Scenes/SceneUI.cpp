@@ -48,7 +48,9 @@ void SceneUI::Execute()
 void SceneUI::Render()
 {
     STAGE_UI::Instance()->Render();
+    ShaderManager::Instance()->Render();
     IMGUI::Instance()->Render();
+
 }
 
 /*--------------------------------------SceneUI Finalize()-----------------------------------------------------------*/

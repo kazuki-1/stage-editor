@@ -1,4 +1,3 @@
-#include "Base Classes/Component.h"
 #include "OBBCollider.h"
 #include "Transform3D.h"
 #include "Mesh.h"
@@ -50,6 +49,7 @@ void OBBCollider_Component::Execute()
 {
     Transform3D_Component* m{ GetComponent<Transform3D_Component>() };
     cube->SetTarget(m->GetTranslation());
+    cube->SetWorldTransform(m->TransformMatrix());
     // Attached to bone
     if (data->bone_name == "") 
     {
@@ -64,6 +64,7 @@ void OBBCollider_Component::Execute()
     }
     // Updates the vertices of the debug cube
     cube->UpdateVertices(collider->Points());
+    
 }
 
 /// <summary>
@@ -76,6 +77,7 @@ void OBBCollider_Component::Execute(XMMATRIX transform)
     XMMatrixDecompose(&s, &r, &t, transform);
     Vector3 target{};
     target.Load(t);
+    cube->SetWorldTransform(transform);
     if (data->bone_name == "")
     {
         collider->Execute(transform);
@@ -167,6 +169,15 @@ void OBBCollider_Component::UI()
         ImGui::TreePop();
     }
 
+}
+
+/*-------------------------------------------------OBBCollider_Component Finalize()--------------------------------------------*/
+/// <summary>
+/// Called when component is destroyed
+/// </summary>
+void OBBCollider_Component::Finalize()
+{
+    cube->Finalize();
 }
 
 /*-------------------------------------------------OBBCollider_Component DistanceToPlayer()--------------------------------------------*/

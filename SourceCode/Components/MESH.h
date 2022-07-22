@@ -47,6 +47,10 @@ public:
     /// </summary>
     void UI() override;
     /// <summary>
+    /// Called when component is destroyed
+    /// </summary>
+    void Finalize() override;
+    /// <summary>
     /// Returns the path of the model loaded
     /// </summary>
     /// <returns></returns>

@@ -111,6 +111,17 @@ void CapsuleCollider_Component::Render()
 
 }
 
+/*----------------------------------------------CAPSULE COLLIDER Finalize()------------------------------------------*/
+/// <summary>
+/// Called when object is being destroyed
+/// </summary>
+void CapsuleCollider_Component::Finalize()
+{
+    capsule->Finalize();
+}
+
+
+
 /*----------------------------------------------CAPSULE COLLIDER UI()------------------------------------------*/
 /// <summary>
 /// <para> Renders the UI for this component </para>

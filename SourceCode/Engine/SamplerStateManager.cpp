@@ -56,6 +56,25 @@ void SamplerStateManager::Initialize()
     Insert(SamplerStateType::Skybox, dsd);
 
 
+    dsd.MipLODBias = 0.0f;
+    dsd.MaxAnisotropy = 1;
+    dsd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    dsd.MinLOD = -FLT_MAX;
+    dsd.MaxLOD = FLT_MAX;
+    dsd.BorderColor[0] = 1.0f;
+    dsd.BorderColor[1] = 1.0f;
+    dsd.BorderColor[2] = 1.0f;
+    dsd.BorderColor[3] = 1.0f;
+    dsd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+    dsd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+    dsd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    dsd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+    Insert(SamplerStateType::ShadowMapper, dsd);
+
+
+
+
 }
 
 /*---------------------------------------------SamplerStateManager Set()------------------------------------------------------*/

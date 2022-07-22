@@ -1,9 +1,12 @@
 #include "SkyboxShader.h"
 #include "../SamplerStateManager.h"
 #include "../DepthStencilStateManager.h"
+#include "../BlendMode.h"
 #include "../Graphics.h"
 #include "../Camera.h"
-#include "../MODEL_RESOURCE.h"
+#include "../RASTERIZER.h"
+#include "../Sprite.h"
+
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------SkyboxShader Class----------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------*/
@@ -75,8 +78,10 @@ HRESULT SkyboxShader::Initialize()
 
 /*---------------------------------------SkyboxShader UpdateConstantBuffer()---------------------------------------------------------------*/
 
-void SkyboxShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
+void SkyboxShader::UpdateConstantBuffers(OBJECT* parent)
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     CBuffer_Skybox data{};
     XMMATRIX view = Camera::Instance()->ViewMatrix() ;
     XMMATRIX proj = DirectX11::Instance()->ProjectionMatrix() ;
@@ -94,8 +99,10 @@ void SkyboxShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent
 
 /*---------------------------------------SkyboxShader SetShaders()---------------------------------------------------------------*/
 
-void SkyboxShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
+void SkyboxShader::SetShaders()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetShader(vertexShader.Get(), 0, 0);
     dc->PSSetShader(pixelShader.Get(), 0, 0);
     dc->IASetInputLayout(inputLayout.Get());
@@ -103,10 +110,39 @@ void SkyboxShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
     SamplerStateManager::Instance()->Set(SamplerStateType::Skybox);
 }
 
+/*---------------------------------------SkyboxShader SetConstantBuffers()---------------------------------------------------------------*/
 
-void SkyboxShader::SetConstantBuffers(ID3D11DeviceContext* dc)
+void SkyboxShader::SetConstantBuffers()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetConstantBuffers(1, 1, skyboxConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, skyboxConstantBuffer.GetAddressOf());
 
 }
+
+/*---------------------------------------SkyboxShader Render()---------------------------------------------------------------*/
+
+void SkyboxShader::Render()
+{
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+    SetShaders();
+    SetConstantBuffers();
+    UpdateConstantBuffers(nullptr);
+    dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    for (auto& object : objects)
+    {
+        SPRITE* sprite = (SPRITE*)object;
+        sprite->Texture()->SetTexture(dc);
+
+        RasterizerManager::Instance()->Set(RasterizerTypes::Base_2D);
+        BlendStateManager::Instance()->Set(BlendModes::Alpha);
+
+        UINT stride{ sizeof(SPRITE::VERTEX) }, offset{};
+        dc->IASetVertexBuffers(0, 1, sprite->GetVertexBuffer().GetAddressOf(), &stride, &offset);
+        dc->IASetIndexBuffer(sprite->GetIndexBuffer().Get(), DXGI_FORMAT_R32_UINT, offset);
+        dc->DrawIndexed(6, 0, 0);
+    }
+}
+

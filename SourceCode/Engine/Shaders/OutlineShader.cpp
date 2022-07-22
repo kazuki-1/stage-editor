@@ -74,8 +74,10 @@ HRESULT OutlineShader::Initialize()
 
 }
 
-void OutlineShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
+void OutlineShader::SetShaders()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetShader(vertexShader.Get(), 0, 0);
     dc->PSSetShader(pixelShader.Get(), 0, 0);
     dc->IASetInputLayout(inputLayout.Get());
@@ -87,8 +89,10 @@ void OutlineShader::SetShaders(ID3D11DeviceContext* dc, OBJECT* parent)
 
 /*----------------------------------------------------OutlineShader UpdateConstantBuffers()-----------------------------------------*/
 
-void OutlineShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
+void OutlineShader::UpdateConstantBuffers(OBJECT* parent)
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     MODEL_RESOURCES* model = (MODEL_RESOURCES*)parent;
     MODEL_RESOURCES::MESH_CONSTANT_BUFFER data = model->data;
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
@@ -102,8 +106,10 @@ void OutlineShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* paren
 
 /*--------------------------------------------------------------OutlineShader SetConstantBuffers()---------------------------------*/
 
-void OutlineShader::SetConstantBuffers(ID3D11DeviceContext* dc)
+void OutlineShader::SetConstantBuffers()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     ID3D11Buffer* buffers[] = { meshConstantBuffer.Get(), outlineConstantBuffer.Get() };
     dc->VSSetConstantBuffers(1, 2, buffers);
     dc->PSSetConstantBuffers(1, 2, buffers);

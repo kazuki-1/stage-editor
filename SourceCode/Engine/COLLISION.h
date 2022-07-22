@@ -358,13 +358,21 @@ namespace COLLIDERS
     /// <para> Perform Raycasting </para>
     /// <para> レイーキャストを計算 </para>
     /// </summary>
-    /// <param name="s"> : Starting point of ray</param>
-    /// <param name="e"> : Direction of ray</param>
+    /// <param name="startOfRay"> : Starting point of ray</param>
+    /// <param name="endOfRay"> : Direction of ray</param>
     /// <param name="m"> : Target model</param>
     /// <param name="hr"> : Output. RayCastData is stored here. Create a new and put it here</param>
     /// <returns></returns>
-    bool RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, int mesh_index = -1);
-    bool RayCastToPlane(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastResults& results);
+    bool RayCast(Vector3& startOfRay, Vector3& endOfRay, MODEL* m, RayCastResults& hr, int mesh_index = -1);
+    /// <summary>
+    /// Performs raycast check on a plane
+    /// </summary>
+    /// <param name="starOfRay"></param>
+    /// <param name="endOfRay"></param>
+    /// <param name="plane"></param>
+    /// <param name="results"></param>
+    /// <returns></returns>
+    bool RayCast(Vector3& starOfRay, Vector3& endOfRay, Dynamic_Plane* plane, RayCastResults& results);
 
 }
 

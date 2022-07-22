@@ -1,6 +1,6 @@
 #pragma once
 #include "Base Classes/Component.h"
-
+#include "../Engine/DEBUG_PRIMITIVE.h"
 class SphereCollider_Data : public ComponentData
 {
 public:
@@ -57,6 +57,10 @@ public:
     /// <para> UIを描画する関数 </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// Called when component is destroyed
+    /// </summary>
+    void Finalize() override;
     /// <summary>
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>

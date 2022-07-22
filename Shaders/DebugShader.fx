@@ -5,6 +5,8 @@
 // cast the vertex properties by the bone influences
 // Light is unused here, but I left it here 
 // incase there are error in byte size of the constant buffer
+// This is also used on Debug primitives 
+
 
 // Vertex data
 struct VS_IN

@@ -2,6 +2,11 @@
 // This is the most used shader in the entire project
 // All models are by default loaded with a phongShader
 
+
+
+
+
+
 // Calculates the lambert diffuse value of the coordinates based on the position of the vertex and the light sources
 float3 CalculateLambertDiffuse(float3 normal, float3 lightDir, float3 lightColour, float3 kd)
 {
@@ -41,6 +46,8 @@ float3 CalculateToonDiffuse(Texture2D t2d, SamplerState tss, float3 normal, floa
     float c = t2d.Sample(tss, float2(u, 0.1f));
     return lightColour * c * kd;
 }
+
+
 
 // DirectionalLight data
 struct DLIGHT_DATA
@@ -97,6 +104,7 @@ struct VS_OUT
     float2 uv : UV;
 };
 
+#pragma endregion
 
 // Scene Constant Buffer (Light, camera etc)
 cbuffer CBUFFER_S : register(b0)

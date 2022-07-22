@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include "Input.h"
-#include "DEBUG_PRIMITIVE.h"
+//#include "DEBUG_PRIMITIVE.h"
 #include "AudioEngine.h"
 #include "IMGUI.h"
 using namespace DirectX;

@@ -77,16 +77,20 @@
     <ClCompile Include="SourceCode\Engine\Math.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp" />
+    <ClCompile Include="SourceCode\Engine\OBJECT.cpp" />
+    <ClCompile Include="SourceCode\Engine\PostProcessingRenderer.cpp" />
     <ClCompile Include="SourceCode\Engine\Rasterizer.cpp" />
     <ClCompile Include="SourceCode\Engine\ResourceManager.cpp" />
     <ClCompile Include="SourceCode\Engine\SamplerStateManager.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\BaseShader3D.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\DebugShader3D.cpp" />
+    <ClCompile Include="SourceCode\Engine\Shaders\LineShader.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\OutlineShader.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\PhongShader.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\Shader.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\Shader2D.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\ShaderManager.cpp" />
+    <ClCompile Include="SourceCode\Engine\Shaders\ShadowMapper.cpp" />
     <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp" />
     <ClCompile Include="SourceCode\Engine\Sprite.cpp" />
     <ClCompile Include="SourceCode\Engine\System.cpp" />
@@ -155,6 +159,7 @@
     <ClInclude Include="SourceCode\Engine\COLLISION.h" />
     <ClInclude Include="SourceCode\Engine\DEBUG_MANAGER.h" />
     <ClInclude Include="SourceCode\Engine\DEBUG_PRIMITIVE.h" />
+    <ClInclude Include="SourceCode\Engine\DepthStencil.h" />
     <ClInclude Include="SourceCode\Engine\DepthStencilStateManager.h" />
     <ClInclude Include="SourceCode\Engine\DirectX11.h" />
     <ClInclude Include="SourceCode\Engine\DROPMANAGER.h" />
@@ -168,16 +173,20 @@
     <ClInclude Include="SourceCode\Engine\MODEL_RESOURCE.h" />
     <ClInclude Include="SourceCode\Engine\OBJECT.h" />
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h" />
+    <ClInclude Include="SourceCode\Engine\PostProcessingRenderer.h" />
     <ClInclude Include="SourceCode\Engine\Rasterizer.h" />
+    <ClInclude Include="SourceCode\Engine\RenderBuffer.h" />
     <ClInclude Include="SourceCode\Engine\ResourceManager.h" />
     <ClInclude Include="SourceCode\Engine\SamplerStateManager.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\BaseShader3D.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\DebugShader3D.h" />
+    <ClInclude Include="SourceCode\Engine\Shaders\LineShader.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\OutlineShader.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\PhongShader.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\Shader.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\Shader2D.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\ShaderManager.h" />
+    <ClInclude Include="SourceCode\Engine\Shaders\ShadowMapper.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h" />
     <ClInclude Include="SourceCode\Engine\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
@@ -222,6 +231,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\SkyboxShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ShadowMapper.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

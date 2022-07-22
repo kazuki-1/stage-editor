@@ -133,6 +133,15 @@ void LocalizedCollider_SubComponent::UI()
     }
 }
 
+/*--------------------------------------------LocalizedCollider_SubComponent Finalize()--------------------------------------------------*/
+/// <summary>
+/// Called when object is being destroyed
+/// </summary>
+void LocalizedCollider_SubComponent::Finalize()
+{
+    collider->Finalize();
+}
+
 /*--------------------------------------------LocalizedCollider_SubComponent Collider()--------------------------------------------------*/
 
 std::shared_ptr<COLLIDERS::COLLIDER_BASE>LocalizedCollider_SubComponent::GetCollider()
@@ -451,6 +460,8 @@ void EnvironmentalAudio_Component::Finalize()
     if (audio->IsPlaying())
         audio->Stop();
     AudioEngine::Instance()->Delist(audio);
+    for (auto& c : colliders)
+        c->Finalize();
     audio = {};
 }
 

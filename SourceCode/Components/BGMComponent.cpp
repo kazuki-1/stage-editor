@@ -3,6 +3,7 @@
 #include "./Base Classes/ComponentCreator.h"
 #include "OBBCollider.h"
 #include "Transform3D.h"
+#include "../Engine/AudioEngine.h"
 #include "BGMComponent.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------------*/

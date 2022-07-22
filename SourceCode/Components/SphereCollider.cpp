@@ -157,6 +157,15 @@ void SphereCollider_Component::UI()
     }
 }
 
+/*---------------------------------------SphereCollider_Component Finalize()----------------------------------------------*/
+/// <summary>
+/// Called when component is destroyed
+/// </summary>
+void SphereCollider_Component::Finalize()
+{
+    sphere->Finalize();
+}
+
 /*---------------------------------------SphereCollider_Component DistanceToPlayer()----------------------------------------------*/
 /// <summary>
 /// <para> Calculates the distance to the player </para>

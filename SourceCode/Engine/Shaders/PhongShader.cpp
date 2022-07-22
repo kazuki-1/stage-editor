@@ -1,6 +1,7 @@
 #include "PhongShader.h"
 #include "../MODEL_RESOURCE.h"
 #include "../SamplerStateManager.h"
+#include "../MODEL.h"
 /*-----------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------PhongShader Class----------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------*/
@@ -85,19 +86,29 @@ HRESULT PhongShader::Initialize()
 
 /*--------------------------------------------------------------PhongShader UpdateConstantBuffer()---------------------------------*/
 
-void PhongShader::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
+void PhongShader::UpdateConstantBuffers(OBJECT* parent)
 {
-    MODEL_RESOURCES* model = (MODEL_RESOURCES*)parent;
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
+    MODEL* model = (MODEL*)parent;
+    MODEL_RESOURCES* resources = model->Resource().get();
 
 
-    MODEL_RESOURCES::MESH_CONSTANT_BUFFER *data = &model->data;
-    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, data, 0, 0);
+
+    MODEL_RESOURCES::MESH_CONSTANT_BUFFER data;
+    memcpy(&data, &resources->data, sizeof(MODEL_RESOURCES::MESH_CONSTANT_BUFFER));
+
+
+
+    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
 }
 
 /*--------------------------------------------------------------PhongShader SetConstantBuffers()---------------------------------*/
 
-void PhongShader::SetConstantBuffers(ID3D11DeviceContext* dc)
+void PhongShader::SetConstantBuffers()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
 }

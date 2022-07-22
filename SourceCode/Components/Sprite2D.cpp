@@ -86,7 +86,8 @@ void Sprite2D_Component::UI()
                 D3D11_TEXTURE2D_DESC desc{};
                 sprite->Texture()->QueryTextureDesc(&desc);
                 data->uvSize = { (float)desc.Width, (float)desc.Height };
-
+                browser->Close();
+                fileOpenS = false; 
             }
         }
         ImGui::DragFloat2("Image Size", &data->size.x, 0.05f);

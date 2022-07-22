@@ -81,6 +81,16 @@ void PointLight_Component::UI()
 
 }
 
+/*---------------------------------------PointLight_Component Finalize()--------------------------------------------------*/
+/// <summary>
+/// Called when deleting the component
+/// </summary>
+void PointLight_Component::Finalize()
+{
+    LightingManager::Instance()->Remove(GetParent()->Data()->Name());
+    sphere->Finalize();
+}
+
 /*---------------------------------------PointLight_Component Position()--------------------------------------------------*/
 
 Vector3 PointLight_Component::Position()

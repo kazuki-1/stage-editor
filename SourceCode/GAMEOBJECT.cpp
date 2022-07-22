@@ -346,6 +346,7 @@ void GameObjectManager::Remove(std::string n)
 void GameObjectManager::Remove(std::shared_ptr<GameObject>gameObject)
 {
     std::string target{ RetrieveName(gameObject) };
+    gameObject->Finalize();
     Remove(target);
 }
 

@@ -62,6 +62,13 @@ void RasterizerManager::Initialize()
     drd.FillMode = D3D11_FILL_WIREFRAME;
     Insert(RasterizerTypes::Wireframe, dv, drd);
 
+    drd.DepthClipEnable = true;
+    drd.MultisampleEnable = true;
+    drd.FillMode = D3D11_FILL_SOLID;
+    drd.CullMode = D3D11_CULL_BACK;
+    drd.FrontCounterClockwise = false;
+    Insert(RasterizerTypes::ShadowMapper, dv, drd);
+
 
 }
 

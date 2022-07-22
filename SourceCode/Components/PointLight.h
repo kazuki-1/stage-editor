@@ -47,6 +47,10 @@ public:
     /// <para> UI‚ð•`‰æ </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// Called when deleting the component
+    /// </summary>
+    void Finalize() override;
 
     Vector3 Position();
     Vector4 Colour();

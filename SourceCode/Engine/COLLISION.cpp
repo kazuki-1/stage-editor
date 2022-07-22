@@ -214,6 +214,17 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, in
     Vector3 world_RayVector{ worldEnd - worldStart };
     hr.distance = world_RayVector.Length();
 
+#ifdef LOCAL_SPACE
+
+    XMMATRIX worldTransform = m->TransformMatrix();
+    XMMATRIX inverseTransform = XMMatrixInverse(0, worldTransform);
+    Vector3 objectStart, objectEnd;
+    objectStart.Load(XMVector3TransformCoord(worldStart.XMV(), inverseTransform));
+    objectEnd.Load(XMVector3TransformCoord(worldEnd.XMV(), inverseTransform));
+
+#endif
+
+
 
 
     bool hit{};
@@ -250,9 +261,13 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, in
                 Vector3 C = b.position;
 
                 // Cast the vertices to the world transform
+#ifndef LOCAL_SPACE
+
                 A.Load(XMVector3TransformCoord(A.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
                 B.Load(XMVector3TransformCoord(B.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
                 C.Load(XMVector3TransformCoord(C.XMV(), XMLoadFloat4x4(&resources->Axises.AxisCoords) * world_Transform));
+
+#endif
 
                 // Vector of triangle
                 Vector3 AB = B - A;
@@ -493,7 +508,7 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, MODEL* m, RayCastResults& hr, in
 
 /*---------------------------------------------------RayCastToPlane()---------------------------------------------------*/
 
-bool COLLIDERS::RayCastToPlane(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastResults& results)
+bool COLLIDERS::RayCast(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastResults& results)
 {
     Vector3 start{ s }, end{ e };
     Vector3 light_vector{ end - start };
@@ -532,11 +547,12 @@ bool COLLIDERS::RayCastToPlane(Vector3& s, Vector3& e, Dynamic_Plane* plane, Ray
 
         float dot = Vector3::Dot(direction, normal);
 
+        // Find the intersection point
         Vector3 dist{ A - start };
         float distance_to_contact{ Vector3::Dot(normal, dist) / dot };
         Vector3 intersection = direction * distance_to_contact + start;
 
-
+        // Continue if intersection is beyond end point
         Vector3 end_to_intersection{ end - intersection };
         if (Vector3::Dot(end_to_intersection, direction) < 0)
             continue;

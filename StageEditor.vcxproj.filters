@@ -198,6 +198,18 @@
     <Filter Include="Components\SoundObstructors">
       <UniqueIdentifier>{7bddcccd-f4a4-4aaa-a024-d849f9bfdc2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PostProcessing">
+      <UniqueIdentifier>{2e2fb639-e964-4185-b664-c2f1c993141e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\ShadowMapper">
+      <UniqueIdentifier>{998903bd-415c-43c5-b824-8eeb8a43245d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Individual shaders\LineShader">
+      <UniqueIdentifier>{3ec01b5d-4907-4212-bb62-a550d9c661b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\OBJECT">
+      <UniqueIdentifier>{fbbbd891-747d-4471-af9a-4e7b3f4aa308}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\GUI.cpp">
@@ -449,6 +461,18 @@
     <ClCompile Include="SourceCode\Engine\AudioEngine.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\PostProcessingRenderer.cpp">
+      <Filter>Engine\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\ShadowMapper.cpp">
+      <Filter>Engine\Shaders\Individual shaders\ShadowMapper</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Shaders\LineShader.cpp">
+      <Filter>Engine\Shaders\Individual shaders\LineShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\OBJECT.cpp">
+      <Filter>Engine\OBJECT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\GUI.h">
@@ -509,9 +533,6 @@
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Singleton.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\OBJECT.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\CerealHeaders.h">
@@ -727,6 +748,24 @@
     <ClInclude Include="SourceCode\Engine\AudioEngine.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\PostProcessingRenderer.h">
+      <Filter>Engine\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\ShadowMapper.h">
+      <Filter>Engine\Shaders\Individual shaders\ShadowMapper</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\RenderBuffer.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\DepthStencil.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Shaders\LineShader.h">
+      <Filter>Engine\Shaders\Individual shaders\LineShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\OBJECT.h">
+      <Filter>Engine\OBJECT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
@@ -745,6 +784,9 @@
       <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
     <None Include="Shaders\SkyboxShader.fx">
+      <Filter>Engine\Shaders\Shaders Files</Filter>
+    </None>
+    <None Include="Shaders\ShadowMapper.fx">
       <Filter>Engine\Shaders\Shaders Files</Filter>
     </None>
   </ItemGroup>

@@ -29,6 +29,7 @@ public:
 	void Execute() override;
 	void Render() override;
 	void UI() override;
+	void Finalize() override;
 
 	COMPONENT_TYPE GetComponentType() override;
 

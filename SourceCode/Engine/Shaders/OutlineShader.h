@@ -13,7 +13,7 @@ class OutlineShader : public Shader
 	ComPtr<ID3D11Buffer>outlineConstantBuffer;
 public:
 	HRESULT Initialize() override;
-	void SetShaders(ID3D11DeviceContext* dc, OBJECT* parent) override;
-	void UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent) override;
-	void SetConstantBuffers(ID3D11DeviceContext* dc);
+	void SetShaders() override;
+	void UpdateConstantBuffers(OBJECT* parent) override;
+	void SetConstantBuffers() override;
 };

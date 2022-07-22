@@ -20,7 +20,7 @@ HRESULT AudioEngine::Initialize()
 
 
 
-    hr = xAudio->CreateMasteringVoice(&masteringVoice, 2, 48000);
+    hr = xAudio->CreateMasteringVoice(&masteringVoice, INPUT_CHANNELS, SAMPLING_RATE);
     assert(hr == S_OK);
     Insert("Empty", L"./Data/Audio/empty_sound.wav");
 

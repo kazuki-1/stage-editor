@@ -10,6 +10,7 @@ enum class DepthStencilStateTypes
 {
 	Default, 
 	Skybox, 
+	ShadowMapper, 
 	End
 };
 

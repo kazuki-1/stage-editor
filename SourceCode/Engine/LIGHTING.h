@@ -6,14 +6,14 @@
 #include <fstream>
 #include <memory>
 #include <string>
-#include "DEBUG_PRIMITIVE.h"
+//#include "DEBUG_PRIMITIVE.h"
 using namespace Math;
 static std::string input{ "" };
 static std::string output_file{ "" }, input_file{ "" };
 class DirectionalLight_Component;
 class PointLight_Component;
 class SpotLight_Component;
-
+class DEBUG_PRIMITIVE;
 
 
 

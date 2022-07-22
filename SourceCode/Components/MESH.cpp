@@ -40,6 +40,7 @@ HRESULT Mesh_Component::Initialize()
         model->Initialize(data->model_path);
         model->SetTake(data->animationTake);
         model->SetScale({ 1, 1, 1 });
+        model->EnableRendering();
     }
     return S_OK;
 }
@@ -68,6 +69,7 @@ void Mesh_Component::Render()
 {
     if (!model)
         return;
+    model->EnableRendering();
     model->Render();
 }
 
@@ -84,7 +86,6 @@ void Mesh_Component::UI()
         // ImGui FileBrowser
         ImGui::FileBrowser* browser{ IMGUI::Instance()->FileBrowser() };
         static bool fileOpenM{};
-        IMGUI::Instance()->InputText("Model Path", &data->model_path);
         if (ImGui::Button("Load Model"))
         {
             if (data->model_path == "")
@@ -113,6 +114,7 @@ void Mesh_Component::UI()
                 model = std::make_shared<MODEL>();
 
                 model->Initialize(data->model_path);
+                model->EnableRendering();
                 browser->Close();
                 fileOpenM = false;
 
@@ -143,6 +145,15 @@ void Mesh_Component::UI()
 
         ImGui::TreePop();
     }
+}
+
+/*----------------------------------------------------------Mesh_Component Finalize()-----------------------------------------------------------*/
+/// <summary>
+/// Called when component is destroyed
+/// </summary>
+void Mesh_Component::Finalize()
+{
+    model->Finalize();
 }
 
 /*----------------------------------------------------------Mesh_Component ModelPath()-----------------------------------------------------------*/

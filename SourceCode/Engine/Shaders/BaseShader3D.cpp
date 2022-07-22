@@ -72,8 +72,11 @@ HRESULT BaseShader3D::Initialize()
 
 /*------------------------------------------------BaseShader3D UpdateConstantBuffers()--------------------------------------------*/
 
-void BaseShader3D::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent)
+void BaseShader3D::UpdateConstantBuffers(OBJECT* parent)
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
+
     MODEL_RESOURCES* model = (MODEL_RESOURCES*)parent;
     MODEL_RESOURCES::MESH_CONSTANT_BUFFER data = model->data;
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
@@ -82,8 +85,10 @@ void BaseShader3D::UpdateConstantBuffers(ID3D11DeviceContext* dc, OBJECT* parent
 
 /*------------------------------------------------BaseShader3D SetConstantBuffers()------------------------------------------------*/
 
-void BaseShader3D::SetConstantBuffers(ID3D11DeviceContext* dc)
+void BaseShader3D::SetConstantBuffers()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
 

@@ -13,17 +13,11 @@ enum class RasterizerTypes
     Base_3D, 
     Wireframe, 
     Skybox, 
-
+    ShadowMapper, 
 
     End
 
 };
-
-
-
-
-
-
 
 class Rasterizer
 {

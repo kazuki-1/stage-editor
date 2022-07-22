@@ -1,25 +1,35 @@
 #pragma once
-//#include "MODEL.h"
-//#include "OBJECT.h"
 #include <wrl.h>
 #include <d3d11.h>
-//#include "Shader.h"
+#include "OBJECT.h"
 #include "Math.h"
-
 using namespace Microsoft::WRL;
 using namespace Math;
-class Shader;
+
+
+
+//class MODEL;
+class OBJECT;
 class MODEL;
 class DebugController;
-class DEBUG_PRIMITIVE /*: public OBJECT*/
+class DEBUG_PRIMITIVE : public OBJECT
 {
 protected:
+    struct CBuffer_DebugMesh
+    {
+        XMFLOAT4X4 world;
+        Math::Vector4 colour;
+    };
+
+
+
+
     std::shared_ptr<MODEL>model;
     Vector3 scale;
     Vector3 position;
     Vector3 rotation;
 public:
-
+    CBuffer_DebugMesh debugMeshData{};
     virtual void Execute();
     virtual void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f });
 
@@ -68,6 +78,7 @@ public:
     DEBUG_ARROWS() {};
     void Initialize();
     void Execute() override;
+    void Finalize() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
@@ -86,6 +97,7 @@ public:
     void Initialize();
     void Execute() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void Finalize() override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
 };
@@ -102,6 +114,7 @@ public:
     DEBUG_DISCS() {};
     void Initialize();
     void Execute() override;
+    void Finalize() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
@@ -112,11 +125,15 @@ public:
 /// </summary>
 class DYNAMIC_DEBUG_PRIMITIVE : public DEBUG_PRIMITIVE
 {
-protected:
+
+
+public:
     struct VERTEX
     {
         Vector3 position{};
     };
+
+protected:
     struct CBUFFER_M
     {
         XMFLOAT4X4 world{};
@@ -124,14 +141,15 @@ protected:
     };
     std::vector<VERTEX>vertices;
     std::vector<int>indices;
-    std::shared_ptr<Shader> shader;
     ComPtr<ID3D11Buffer>vertexBuffer;
     ComPtr<ID3D11Buffer>indexBuffer;
     ComPtr<ID3D11Buffer>meshConstantBuffer;
     XMFLOAT4X4 world{};
-protected:
+
+
     virtual HRESULT Initialize();
 public:
+
     /// <summary>
     /// Virtual execute function. Called every frame, usually to update the position of the primitive
     /// </summary>
@@ -148,6 +166,16 @@ public:
     virtual void Render(Vector4 colour = {1.0f, 1.0f, 1.0f, 1.0f});
     virtual void SetTarget(Vector3 target);
     virtual void SetTransform(Vector3 pos, Vector3 rot) { position = pos; rotation = rot; }
+
+    XMFLOAT4X4 GetWorldTransform() { return world; }
+    /// <summary>
+    /// <para>Sets the world transform. </para>
+    /// <para> DO NOT USE IF YOU DONT KNOW WHAT YOURE DOIN</para>
+    /// </summary>
+    void SetWorldTransform(XMMATRIX matrix);
+    ComPtr<ID3D11Buffer>GetVertexBuffer() { return vertexBuffer; }
+    ComPtr<ID3D11Buffer>GetIndexBuffer() { return indexBuffer; }
+    virtual std::vector<int>GetIndices() { return indices; }
     virtual std::vector<VERTEX>GetVertices() { return vertices; }
 };
 

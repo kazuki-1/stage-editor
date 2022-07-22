@@ -8,7 +8,8 @@
 #include "IMGUI.h"
 #include "PERFORMANCE_COUNTER.h"
 #include "AudioEngine.h"
-
+#include <xaudio2fx.h>
+#include "DEBUG_PRIMITIVE.h"
 
 
 //#pragma comment(lib, "x3daudio")
@@ -31,9 +32,10 @@
 #endif
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------Audio Class----------------------------------------------------*/
+/*---------------------------------------------Audio Class-----------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------Audio Contructor----------------------------------------------------*/
+/*---------------------------------------------Audio Contructor------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------*/
 
 Audio::Audio(std::wstring path) : file_path(path)
 {
@@ -108,6 +110,7 @@ HRESULT Audio::ReadChunk(HANDLE h, void* buffer, DWORD buffer_Size, DWORD offset
 /// <returns></returns>
 HRESULT Audio::Initialize()
 {
+
     // File creation
     HANDLE h = CreateFile(file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
     if (INVALID_HANDLE_VALUE == h)
@@ -135,22 +138,49 @@ HRESULT Audio::Initialize()
 
     
 
-
+    AudioEngine* audioEngine = AudioEngine::Instance();
 
     XAUDIO2_BUFFER buf{};
     buf.AudioBytes = dwChunkSize;
     buf.pAudioData = buffer;
     buf.Flags = XAUDIO2_END_OF_STREAM;
 
-    XAUDIO2_SEND_DESCRIPTOR descriptor[1]{};
+    XAUDIO2_SEND_DESCRIPTOR descriptor[2]{};
     descriptor[0].Flags = XAUDIO2_SEND_USEFILTER;
-    descriptor[0].pOutputVoice = AudioEngine::Instance()->masteringVoice;
+    descriptor[0].pOutputVoice = audioEngine->masteringVoice;
+    //descriptor[1].Flags = XAUDIO2_SEND_USEFILTER;
+    //descriptor[1].pOutputVoice = submixVoice;
 
+    // Reverb submix voice
+    UINT reverb_flags{};
+
+#ifdef _DEBUG && defined(USING_XAUDIO2_7_DIRECTX)
+
+    reverb_flags |= 1;
+
+#endif
+    assert(XAudio2CreateReverb(reverbEffect.GetAddressOf(), reverb_flags) == S_OK);
+    XAUDIO2_EFFECT_DESCRIPTOR effect_desc[] = { {reverbEffect.Get(), true, 1} };
+    XAUDIO2_EFFECT_CHAIN effect_chain = { 1, effect_desc };
+
+    assert(audioEngine->XAudio()->CreateSubmixVoice(&submixVoice, INPUT_CHANNELS, SAMPLING_RATE, 0, 0, 0, &effect_chain) == S_OK);
+    XAUDIO2FX_REVERB_PARAMETERS reverb_param{};
+    //ReverbConvertI3DL2ToNative(&REVERB_PRESETS[0], &reverb_param);
+    //submixVoice->SetEffectParameters(0, &reverb_param, sizeof(reverb_param));
+
+    
+
+
+
+
+    // Source voice creation
     XAUDIO2_VOICE_SENDS sendList{ 1, descriptor };
-
-    HRESULT hr = AudioEngine::Instance()->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format, 0, 2.0f, 0, &sendList);
+    HRESULT hr = audioEngine->XAudio()->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&format, 0, 2.0f, 0, &sendList);
     assert(hr == S_OK);
     this->buffer = buf;
+
+
+
 
     // AudioStateMachine initialization
     stateMachine = std::make_shared<AUDIO_STATES::AudioStateMachine>(this);
@@ -326,9 +356,10 @@ void Audio::StopDucking()
 }
 
 /*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
-// TODO : Change to plane, mesh calculation too heavy
+
 void Audio::PerformObstructionCalculation()
 {
+
     if (!audioEmitter)
         return;
     AudioListener* listener = AudioEngine::Instance()->GetAudioListener();
@@ -340,7 +371,7 @@ void Audio::PerformObstructionCalculation()
     {
         Dynamic_Plane* plane = obstructor.plane;
         COLLIDERS::RayCastResults results;
-        if (!COLLIDERS::RayCastToPlane(start, end, plane, results))
+        if (!COLLIDERS::RayCast(start, end, plane, results))
             continue;
 
         float max_influence = { plane->GetSize() };
@@ -438,8 +469,7 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
     if (flags & AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS)
     {
         // Emitter parameters
-        Vector3  e_Position;
-        e_Position = emitter.position;
+        Vector3  e_Position = emitter.position;
 
         // Listener parameters
         Vector3 l_Top, l_Front, l_Back, l_Left, l_Right, l_Position;
@@ -479,7 +509,7 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
 
             // Calculate the outputted volume based on the distance
             float distance_length{ distance.Length() };
-            float volume = 1.0f - (distance_length / emitter.size);
+            float volume = this->volume - (distance_length / emitter.size);
 
             // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
             if (left_Difference > 1)
@@ -512,7 +542,7 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
 
             // Calculate the outputted volume based on the distance
             float distance_length{ distance.Length() };
-            float volume = 1.0f - (distance_length / emitter.size);
+            float volume = this->volume - (distance_length / emitter.size);
 
             // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
             if (left_Difference > 1)
@@ -567,10 +597,8 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
         if (distance.Length() == 0)
             emitter.doppler_factor = DEFAULT_FREQUENCY;
 
-        else {
-
-
-
+        else 
+        {
             // Determine if the listener is going towards or away from the source
             float listener_factor{ 1 }, emitter_factor{ 1 };
             Vector3 l_VelocityNormal{ listener.velocity }, e_VelocityNormal{emitter.velocity};

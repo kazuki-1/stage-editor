@@ -1,6 +1,6 @@
 #pragma once
 #include "Base Classes/Component.h"
-
+#include "../Engine/DEBUG_PRIMITIVE.h"
 class CapsuleCollider_Data : public ComponentData
 {
 public:
@@ -54,6 +54,10 @@ public:
     /// <para> UIを描画 </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// Called when object is being destroyed
+    /// </summary>
+    void Finalize() override;
     /// <summary>
     /// <para> Calculates the distance to the player </para>
     /// <para> プレイヤーとの距離を計算する </para>    

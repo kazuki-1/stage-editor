@@ -35,11 +35,10 @@ void SceneDemo::Render()
 {
     GAMEOBJECTS->Render();  
     STAGE_UI::Instance()->PlayUI();
-    // For debugging
-    //AudioController::Instance()->DebugUI();
+    ShaderManager::Instance()->Render();
+
     DialogueController::Instance()->Render();
     IMGUI::Instance()->Render();
-
 }
 
 /*--------------------------------------------------SceneDemo Finalize()-------------------------------------*/

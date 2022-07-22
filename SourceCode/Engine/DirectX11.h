@@ -21,12 +21,12 @@ class DirectX11 : public Graphics
     ComPtr<ID3D11Device>dxDevice;
     ComPtr<ID3D11DeviceContext>dxDeviceContext;
     ComPtr<IDXGISwapChain>dxSwapChain;
-    ComPtr<ID3D11Texture2D>dxDepthStencilBuffer;
     ComPtr<ID3D11RenderTargetView>dxRenderTargetView;
-    ComPtr<ID3D11DepthStencilState>dxDepthStencilState;
     ComPtr<ID3D11DepthStencilView>dxDepthStencilView;
-    //ComPtr<ID3D11RasterizerState>dxRasterizerState;
+    ComPtr<ID3D11Texture2D>dxDepthStencilBuffer;
+    D3D11_VIEWPORT viewport{};
 
+    Vector2 screen_dimension;
 
 
 public:
@@ -70,6 +70,12 @@ public:
     {
         return WO;
     }
+    D3D11_VIEWPORT* GetViewport() { return &viewport; }
+    ComPtr<ID3D11RenderTargetView>GetRenderTargetView() { return dxRenderTargetView; }
+    ComPtr<ID3D11DepthStencilView>GetDepthStencilView() { return dxDepthStencilView; }
 
 
+
+
+    Vector2 GetScreenDimension() { return screen_dimension; }
 };

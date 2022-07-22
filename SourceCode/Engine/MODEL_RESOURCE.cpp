@@ -25,7 +25,6 @@ MODEL_RESOURCES::MODEL_RESOURCES(ID3D11Device* dv, std::string model_path, bool 
     cereal::BinaryInputArchive in(ifs);
     in(Scenes, Axises, Meshes, Materials, Animations);
     CreateBuffers(dv, model_path.c_str());
-    InsertShader(ShaderTypes::PhongShader);
 
 }
 
@@ -156,31 +155,27 @@ void MODEL_RESOURCES::BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYF
 void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf)
 {
 
-
-    for (auto& shader : shaders)
-    {
-        shader.second->SetShaders(dc, this);
-        shader.second->SetConstantBuffers(dc);
+    world_transform = XMLoadFloat4x4(&world);
 
         for (auto& m : Meshes)
         {
-
-            dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
-            BlendStateManager::Instance()->Set(BlendModes::Alpha);
+            // move to shader
+            //dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+            //RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
+            //BlendStateManager::Instance()->Set(BlendModes::Alpha);
             // Updating Object Constant buffers (World and colour)
             // For some reason, the normals and coordinates are all flipped in release build
-#ifdef _DEBUG
+//#ifdef _DEBUG
             XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
 
-#else     
-            XMMATRIX mat = { -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-            XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * XMLoadFloat4x4(&world) };       // Converting  Axis Systems to Base Axis
-#endif
+//#else     
+//            XMMATRIX mat = { -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+//            XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * XMLoadFloat4x4(&world) };       // Converting  Axis Systems to Base Axis
+//#endif
 
 
 
-
+            XMStoreFloat4x4(&data.world, f_World);
             data.colour = colour;               // Incase model has no subsets
 
             const size_t b_Count{ m.Bind_Pose.Bones.size() };
@@ -188,7 +183,6 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
             {
                 const SKELETON::BONE& b{ m.Bind_Pose.Bones.at(b_Index) };
                 const ANIMATION::KEYFRAME::NODE& bNode{ kf->Nodes.at(b.n_Index) };
-                XMStoreFloat4x4(&data.world, f_World);
 
 
                 XMStoreFloat4x4(&data.b_Transform[b_Index],
@@ -198,34 +192,37 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
 
             }
 
-            for (const auto& s : m.Subsets)
-            {
-                UINT stride{ sizeof(VERTEX) }, offset{ 0 };
-                dc->IASetIndexBuffer(s.subsetIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
-                dc->IASetVertexBuffers(0, 1, m.dxVertexBuffer.GetAddressOf(), &stride, &offset);
+            //for (const auto& s : m.Subsets)
+            //{
+            //    //MATERIAL& ms{ Materials.at(s.m_UID) };
+            //    //XMStoreFloat4(&data.colour, XMLoadFloat4(&colour) * XMLoadFloat4(&ms.Kd));
+            //    //shader.second->UpdateConstantBuffers(dc, this);
 
-                MATERIAL& ms{ Materials.at(s.m_UID) };
-                XMStoreFloat4(&data.colour, XMLoadFloat4(&colour) * XMLoadFloat4(&ms.Kd));
-                shader.second->UpdateConstantBuffers(dc, this);
 
-                std::vector<ID3D11ShaderResourceView*>ts;
-                for (int a = 0; a < 4; ++a)
-                {
-                    if (ms.texture_path[a] != "")
-                        ts.push_back(ms.Textures[a]->GetSRV().Get());
-                }
+            //    //ID3D11ShaderResourceView* textures[] =
+            //    //{
+            //    //ms.Textures[0]->GetSRV().Get(),
+            //    //ms.Textures[1]->GetSRV().Get() ,
+            //    //ms.Textures[2]->GetSRV().Get() ,
+            //    //ms.Textures[3]->GetSRV().Get()
+            //    //};
 
-                int ind{};
-                for (auto& t : ms.Textures)
-                {
-                    dc->PSSetShaderResources(ind, 1, t->GetSRV().GetAddressOf());
-                    ++ind;
-                }
+            //    //// move to shader
+            //    //dc->PSSetShaderResources(0, (UINT)ARRAYSIZE(textures), textures);
 
-                dc->DrawIndexed((UINT)(s.indices.size()), 0, 0);
-            }
+            //    //dc->PSSetShaderResources(0, ts.size(), ts.data());
+            //    //int ind{};
+            //    //for (auto& t : ms.Textures)
+            //    //{
+            //    //    dc->PSSetShaderResources(ind, 1, t->GetSRV().GetAddressOf());
+            //    //    ++ind;
+            //    //}
+
+            //    // move to shader
+            //    //dc->DrawIndexed((UINT)(s.indices.size()), 0, 0);
+            //}
         }
-    }
+    //}
 }
 
 /*-------------------------------------------MODEL_RESOURCES Recreate()---------------------------------------------------------------*/

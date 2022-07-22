@@ -6,8 +6,16 @@
 #include "Input.h"
 #include "Camera.h"
 bool scaling{}, moving{ true }, rotating{};
+bool x{}, y{}, z{};
 bool start;
 Vector2 clicked_pos, movement;
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------DebugController Class--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------DebugController Initialize()-------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 HRESULT DebugController::Initialize()
 {
@@ -20,6 +28,9 @@ HRESULT DebugController::Initialize()
     return S_OK;
 
 }
+
+/*---------------------------------------------------------------DebugController Execute()-------------------------------------------------------------------*/
+
 void DebugController::Execute()
 {
     if (!hasTarget)
@@ -36,13 +47,6 @@ void DebugController::Execute()
 
     //if (moving)
     //    TranslateArrows();
-
-
-
-
-
-
-
 
 
     std::shared_ptr<InputManager::KEYBOARD>k{ InputManager::Instance()->Keyboard() };
@@ -68,6 +72,9 @@ void DebugController::Execute()
     }
 
 }
+
+/*---------------------------------------------------------------DebugController Render()-------------------------------------------------------------------*/
+
 void DebugController::Render()
 {
     if (!hasTarget)
@@ -80,16 +87,32 @@ void DebugController::Render()
         arrows->Render();
 
 }
+
+void DebugController::Finalize()
+{
+    scalars->Finalize();
+    discs->Finalize();
+    arrows->Finalize();
+}
+
+/*---------------------------------------------------------------DebugController SetTarget()-------------------------------------------------------------------*/
+
 void DebugController::SetTarget(GameObject* g)
 {
     target = g;
     hasTarget = true;
 }
+
+/*---------------------------------------------------------------DebugController ClearTarget()-------------------------------------------------------------------*/
+
 void DebugController::ClearTarget()
 {
     target = {};
     hasTarget = false;
 }
+
+/*---------------------------------------------------------------DebugController MouseControl()-------------------------------------------------------------------*/
+
 void DebugController::MouseControl()
 {
     Vector2 pos;
@@ -122,8 +145,7 @@ void DebugController::MouseControl()
     DirectX11::Instance()->DeviceContext()->RSGetViewports(&num, &vp);
 }
 
-bool x{}, y{}, z{};
-
+/*---------------------------------------------------------------DebugController TranslateArrows()-------------------------------------------------------------------*/
 
 void DebugController::TranslateArrows()
 {

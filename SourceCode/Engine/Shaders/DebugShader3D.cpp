@@ -1,7 +1,7 @@
 #include "DebugShader3D.h"
 #include "../MODEL_RESOURCE.h"
-
-
+#include "../MODEL.h"
+#include "../DEBUG_PRIMITIVE.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------DebugShader3D Class----------------------------------------------*/
@@ -58,7 +58,7 @@ HRESULT DebugShader3D::Initialize()
     ps->Release();
 
     D3D11_BUFFER_DESC cbd{};
-    cbd.ByteWidth = sizeof(MODEL_RESOURCES::MESH_CONSTANT_BUFFER);
+    cbd.ByteWidth = sizeof(CBuffer_Mesh);
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     return dv->CreateBuffer(&cbd, 0, meshConstantBuffer.GetAddressOf());
@@ -68,21 +68,24 @@ HRESULT DebugShader3D::Initialize()
 
 /*---------------------------------------------------DebugShader3D UpdateConstantBuffers()---------------------------------------*/
 
-void DebugShader3D::UpdateConstantBuffer(ID3D11DeviceContext* dc, OBJECT* parent)
+void DebugShader3D::UpdateConstantBuffers(OBJECT* parent)
 {
-    
-    MODEL_RESOURCES* model = (MODEL_RESOURCES*)parent;
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
+    DEBUG_PRIMITIVE* debugModel = ((DEBUG_PRIMITIVE*)parent);
 
 
-    MODEL_RESOURCES::MESH_CONSTANT_BUFFER data = model->data;
+    CBuffer_Mesh data = { debugModel->debugMeshData.world, debugModel->debugMeshData.colour };
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
 
 }
 
 /*---------------------------------------------------DebugShader3D SetConstantBuffers()---------------------------------------*/
 
-void DebugShader3D::SetConstantBuffers(ID3D11DeviceContext* dc)
+void DebugShader3D::SetConstantBuffers()
 {
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+
     dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
 

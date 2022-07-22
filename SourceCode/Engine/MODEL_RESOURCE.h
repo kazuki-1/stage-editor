@@ -122,7 +122,7 @@ namespace SystemTransformation
 }
 #pragma endregion
 
-class MODEL_RESOURCES : public OBJECT
+class MODEL_RESOURCES /*: public OBJECT*/
 {
 public:
     struct MESH_CONSTANT_BUFFER
@@ -135,9 +135,10 @@ public:
     // Vertex data
     struct VERTEX
     {
-        Vector3 position, normal;
-        Vector4 tangent;
-        Vector2 UV;
+        Vector3 position{};
+        Vector3 normal{0, 1, 0};
+        Vector4 tangent{};
+        Vector2 UV{};
         struct BONE
         {
             float Weights[BONE_INFL]{ 1, 0, 0, 0 };
@@ -234,7 +235,7 @@ public:
     // will have a float4x4 to transpose it back to LH coords
     struct AXISES
     {
-        XMFLOAT4X4 AxisCoords;
+        XMFLOAT4X4 AxisCoords{ Convert::Identity() };
 
         template<class T>
         void serialize(T& t)
@@ -393,7 +394,7 @@ public:
     std::vector<MESH>Meshes;
     std::vector<ANIMATION>Animations;
     std::unordered_map<uint64_t, MATERIAL>Materials;
-
+    XMMATRIX world_transform;
 
 
 
@@ -406,6 +407,8 @@ public:
     void UpdateAnimation(ANIMATION::KEYFRAME* kf);
     void BlendAnimation(ANIMATION::KEYFRAME* start, ANIMATION::KEYFRAME* end, float factor, ANIMATION::KEYFRAME* output);
     void Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4 colour, const ANIMATION::KEYFRAME* kf);
+    MESH_CONSTANT_BUFFER GenerateConstantBufferData();
+
     template <class T>
     void serialize(T& t)
     {

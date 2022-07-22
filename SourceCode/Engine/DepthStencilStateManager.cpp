@@ -35,7 +35,10 @@ HRESULT DepthStencilStateManager::Initialize()
     dsd.DepthEnable = false;
     Insert(DepthStencilStateTypes::Skybox, dsd);
 
-
+    dsd.DepthEnable = true;
+    dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+    Insert(DepthStencilStateTypes::ShadowMapper, dsd);
 
     dsd.DepthEnable = true;
     dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -57,6 +60,7 @@ HRESULT DepthStencilStateManager::Initialize()
     dsd.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
     Insert(DepthStencilStateTypes::Default, dsd);
+    Set(DepthStencilStateTypes::Default);
     return S_OK;
 }
 

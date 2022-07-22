@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include "MODEL.h"
+#include <filesystem>
 
 /*--------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------ModelResourceManager Class----------------------------------------------------------------*/
@@ -38,7 +39,7 @@ std::shared_ptr<MODEL_RESOURCES>ModelResourceManager::Generate(std::string model
 
 HRESULT ModelResourceManager::Recreate(MODEL* m, std::string new_file_name)
 {
-    std::filesystem::path path{ new_file_name };
+    std::filesystem::path path( new_file_name );
     path.replace_extension(".mrs");
     m->Resource()->Recreate(path.string());
     return S_OK;

@@ -1,5 +1,7 @@
 #include <time.h>
 #include "Graphics.h"
+#include "Shaders/ShadowMapper.h"
+#include "Shaders/ShaderManager.h"
 #include "DirectX11.h"
 #include "Input.h"
 #include "Camera.h"
@@ -42,7 +44,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
 
     // Insert a directional light into the map for preview
     std::shared_ptr<LIGHTING>data = std::make_shared<LIGHTING>(LIGHTING::L_TYPE::DIRECTIONAL);
-    data->SetDirection({ 0, -1, 1 });
+    data->SetDirection({ 0, -1, -1 });
     data->SetColour({ 1.0f, 1.0f, 1.0f, 1.0f });
 
     LightingManager::Instance()->Insert("Default", data);
@@ -65,8 +67,8 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     // Initializes the skybox
     skybox = std::make_shared<SPRITE>();
     skybox->Initialize(L"./Data/Images/skybox.png");
-    skybox->RemoveShader(ShaderTypes::Shader_2D);
-    skybox->InsertShader(ShaderTypes::Skybox);
+    skybox->DeregisterShader(ShaderTypes::Shader_2D);
+    skybox->RegisterShader(ShaderTypes::Skybox);
 
 
 
@@ -148,14 +150,13 @@ bool Graphics::Render()
 
 
     skybox->Render({}, { 1, 1 }, {}, { 1920, 1080 });
-
+    //ShaderManager::Instance()->Retrieve(ShaderTypes::Skybox)->Render();
     Camera::Instance()->Render();
     SceneManager::Instance()->Render();
     LightingManager::Instance()->RenderDebug();
 #pragma endregion
 
     InputManager::Instance()->Execute();
-
 
     DirectX11::Instance()->End();
 
@@ -169,4 +170,5 @@ void Graphics::Finalize()
 {
     // Destroys any instances of temp.stg data if there are any
     DataManager::Instance()->DestroyTemporaryData();
+    DebugController::Instance()->Finalize();
 }

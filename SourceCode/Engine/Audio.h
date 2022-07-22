@@ -11,13 +11,12 @@
 #include "AudioStates/AudioStates.h"
 // Input channels used in 3d Audio
 #define MAX_OUTPUT_CHANNELS 8
-#define INPUT_CHANNELS 1
+#define INPUT_CHANNELS 2
+#define SPEED_OF_SOUND X3DAUDIO_SPEED_OF_SOUND
 #define SPEED_OF_SOUND_PER_FRAME SPEED_OF_SOUND / PerformanceCounter::Instance()->FPS()
 #define SAMPLING_RATE 48000
 #define OBTUSE_ANGLE Math::ToRadians(180)
-#define SPEED_OF_SOUND X3DAUDIO_SPEED_OF_SOUND
 #define DEFAULT_FREQUENCY 1.0f
-#define VELOCITY_OF_SOUND 5.0f
 
 enum AUDIO_CALCULATION_FLAGS
 {
@@ -56,6 +55,7 @@ public:
     float size{};
     float doppler_factor{};
 };
+
 class AudioListener
 {
 public:
@@ -71,7 +71,9 @@ public:
 class Audio
 {
 protected:
+    ComPtr<IUnknown>reverbEffect{};
     IXAudio2SourceVoice* sourceVoice{};
+    IXAudio2SubmixVoice* submixVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
     AudioEmitter* audioEmitter;

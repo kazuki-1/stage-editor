@@ -77,6 +77,10 @@ public:
     /// <para> UI‚ð•`‰æ </para>
     /// </summary>
     void UI();
+    /// <summary>
+    /// Called when object is being destroyed
+    /// </summary>
+    void Finalize();
 
     /// <summary>
     /// Returns the collider objects from COLLISION.h, where collision detection is calculated

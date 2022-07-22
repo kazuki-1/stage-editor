@@ -110,7 +110,7 @@ void Transform3D_Component::UI()
 /// <returns></returns>
 Vector3 Transform3D_Component::Scale()
 {
-    return scale;
+    return data->scale;
 }
 
 /*---------------------------------------Transform3D_Component Rotation()-------------------------------------------------*/

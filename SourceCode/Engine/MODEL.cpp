@@ -9,8 +9,13 @@
 HRESULT MODEL::Initialize(std::string model_path)
 {
     resource = ModelResourceManager::Instance()->Load(model_path);
+
+    ShaderManager::Instance()->Register(ShaderTypes::PhongShader, this);
+
     if (!resource)
         return E_FAIL;
+
+
     animationTakes.resize(resource->Animations.size());
     for (int a = 0; a < animationTakes.size(); ++a)
         animationTakes[a] = resource->Animations[a].Name;
@@ -37,8 +42,6 @@ HRESULT MODEL::Initialize(std::string model_path)
 void MODEL::UpdateTransform()
 {
     XMMATRIX S, R, T;
-    //S = XMMatrixScaling(scale.x, scale.y, scale.z);
-    //T = XMMatrixTranslation(translation.x, translation.y, translation.z);
     S = XMMatrixScalingFromVector(scale.XMV());
     R = XMMatrixRotationQuaternion(quaternion.XMV());
     T = XMMatrixTranslationFromVector(translation.XMV());

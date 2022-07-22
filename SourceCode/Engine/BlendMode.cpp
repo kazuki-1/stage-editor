@@ -114,5 +114,6 @@ void BlendStateManager::Insert(BlendModes mode, D3D11_BLEND_DESC dbd)
 
 void BlendStateManager::Set(BlendModes mode)
 {
-    DirectX11::Instance()->DeviceContext()->OMSetBlendState(states.find(mode)->second->Get(), 0, 0xFFFFFFFFF);
+    float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    DirectX11::Instance()->DeviceContext()->OMSetBlendState(states.find(mode)->second->Get(), blend_factor, 0XFFFFFFFFF);
 }

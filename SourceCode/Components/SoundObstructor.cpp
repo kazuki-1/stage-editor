@@ -51,42 +51,20 @@ void SoundObstructor_Component::Render()
 
 void SoundObstructor_Component::UI()
 {
-
-
 	if (ImGui::TreeNode("Sound Obstruction"))
 	{
+		// Parameters
 		ImGui::DragFloat3("Size", &data->size.x, 0.1f, 0.0f);
 		ImGui::DragFloat("Obstruction rate", &data->obstruction_rate, 0.1f, 0.0f);
 		ImGui::TreePop();
 	}
+}
 
+/*---------------------------------------------------SoundObstructor_Component Finalize()--------------------------------------------------------*/
 
-	//if (!GetComponent<Mesh_Component>())
-	//	return;
-
-	//std::shared_ptr<MODEL_RESOURCES> model = GetComponent<Mesh_Component>()->Model()->Resource();
-	//if (ImGui::TreeNode("Sound Obstruction"))
-	//{
-
-	//	int index{};
-	//	if (ImGui::BeginCombo("Mesh", model->Meshes[data->mesh_index].Name.c_str()))
-	//	{
-	//		for (auto& mesh : model->Meshes)
-	//		{
-	//			if (ImGui::Selectable(mesh.Name.c_str()))
-	//				data->mesh_index = index;
-	//			++index;
-	//		}
-	//		ImGui::EndCombo();
-	//	}
-
-	//	ImGui::DragFloat("Obstruction rate", &data->obstruction_rate, 0.05f, 0.0f, 1.0f);
-
-
-
-
-	//	ImGui::TreePop();
-	//}
+void SoundObstructor_Component::Finalize()
+{
+	plane->Finalize();
 }
 
 /*---------------------------------------------------SoundObstructor_Component GetComponentType()--------------------------------------------------------*/

@@ -4,6 +4,7 @@
 #include "../Components/DirectionalLight.h"
 #include "../Components/PointLight.h"
 #include "../Components/SpotLight.h"
+#include "DEBUG_PRIMITIVE.h"
 #include <filesystem>
 #pragma region LIGHTING
 

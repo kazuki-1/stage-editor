@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "DirectX11.h"
 #include "../../External/ImGui/imgui.h"
+#include "OBJECT.h"
 #include "Math.h"
 #define FRAMETIME 0.0166f
 using namespace Math;
@@ -11,7 +12,7 @@ typedef MODEL_RESOURCES::ANIMATION AN;
 /// <summary>
 /// Model class, used for applying a model
 /// </summary>
-class MODEL
+class MODEL : public OBJECT
 {
 #pragma region VARIABLES
     float factor{};
@@ -49,7 +50,6 @@ class MODEL
 #pragma endregion
 public:
     MODEL() {};
-
 #pragma region MAIN FUNCTIONS
 
     /// <summary>
@@ -96,7 +96,6 @@ public:
     /// Resumes the animation if paused
     /// </summary>
     void ResumeAnim();
-
 #pragma endregion
 
 #pragma region PARAMATER SETTING

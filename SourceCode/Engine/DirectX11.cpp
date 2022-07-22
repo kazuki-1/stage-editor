@@ -107,31 +107,31 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     hr = dxDevice->CreateTexture2D(&dbd, NULL, dxDepthStencilBuffer.GetAddressOf());
     assert(hr == S_OK);
 
-    // Depth Stencil Desc
-    D3D11_DEPTH_STENCIL_DESC dsd{};
-    dsd.DepthEnable = true;
-    dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-    dsd.StencilEnable = false;
-    dsd.StencilReadMask = 0xFF;
-    dsd.StencilWriteMask = 0xFF;
+    //// Depth Stencil Desc
+    //D3D11_DEPTH_STENCIL_DESC dsd{};
+    //dsd.DepthEnable = true;
+    //dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    //dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+    //dsd.StencilEnable = false;
+    //dsd.StencilReadMask = 0xFF;
+    //dsd.StencilWriteMask = 0xFF;
 
 
-    dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-    dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-    dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-    dsd.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+    //dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    //dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    //dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+    //dsd.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 
-    dsd.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-    dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-    dsd.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-    dsd.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+    //dsd.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    //dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    //dsd.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+    //dsd.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    hr = dxDevice->CreateDepthStencilState(&dsd, dxDepthStencilState.GetAddressOf());
-    assert(hr == S_OK);
+    //hr = dxDevice->CreateDepthStencilState(&dsd, dxDepthStencilState.GetAddressOf());
+    //assert(hr == S_OK);
 
-    dxDeviceContext->OMSetDepthStencilState(dxDepthStencilState.Get(), 0);
+    //dxDeviceContext->OMSetDepthStencilState(dxDepthStencilState.Get(), 0);
 
     D3D11_DEPTH_STENCIL_VIEW_DESC dsvd{};
     dsvd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -139,6 +139,19 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     dsvd.Texture2D.MipSlice = 0;
     hr = dxDevice->CreateDepthStencilView(dxDepthStencilBuffer.Get(), &dsvd, dxDepthStencilView.GetAddressOf());
     dxDeviceContext->OMSetRenderTargets(1, dxRenderTargetView.GetAddressOf(), dxDepthStencilView.Get());
+
+
+    // Viewport
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
+    viewport.Width = (float)Width;
+    viewport.Height = (float)Height;
+    dxDeviceContext->RSSetViewports(1, &viewport);
+
+
+    screen_dimension = { (float)Width, (float)Height };
 
 
     // Creates used rasterizers
@@ -160,15 +173,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     AudioEngine::Instance()->Initialize();
 
 
-    // Viewport
-    D3D11_VIEWPORT vp{};
-    vp.TopLeftX = 0;
-    vp.TopLeftY = 0;
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.Width = (float)Width;
-    vp.Height = (float)Height;
-    dxDeviceContext->RSSetViewports(1, &vp);
+
 
     float fov = XM_PI / 4.0f;
     float aspect = (float)Width / (float)Height;

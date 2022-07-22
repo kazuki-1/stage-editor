@@ -26,6 +26,7 @@ public:
     HRESULT Initialize();
     void Execute();
     void Render();
+    void Finalize();
     //void SetTarget(Transform3D_Component* t);
     void SetTarget(GameObject* g);
     void ClearTarget();
