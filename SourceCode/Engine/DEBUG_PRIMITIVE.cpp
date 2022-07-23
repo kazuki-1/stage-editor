@@ -15,6 +15,14 @@
 void DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
     model->Render(0.0f, colour.XMF4());
+
+    debugMeshData.colour.x = debugMeshData.colour.x > 0.1f ? 1.0f : 0.0f;
+    debugMeshData.colour.y = debugMeshData.colour.y > 0.1f ? 1.0f : 0.0f;
+    debugMeshData.colour.z = debugMeshData.colour.z > 0.1f ? 1.0f : 0.0f;
+    debugMeshData.colour.w = debugMeshData.colour.w > 0.1f ? 1.0f : 0.0f;
+
+
+
     debugMeshData.colour = colour;
     debugMeshData.world = model->Transform();
 
@@ -211,6 +219,15 @@ void DEBUG_ARROWS::Render(Vector4 colour)
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
 
+/*------------------------------------------DEBUG_ARROWS Render()-----------------------------------------------------*/
+
+void DEBUG_ARROWS::DisableRendering()
+{
+    xAxis->DisableRendering();
+    yAxis->DisableRendering();
+    zAxis->DisableRendering();
+}
+
 /*------------------------------------------DEBUG_ARROWS SetTarget()-----------------------------------------------------*/
 
 void DEBUG_ARROWS::SetTarget(XMMATRIX t)
@@ -313,6 +330,15 @@ void DEBUG_SCALARS::Render(Vector4 colour)
     xAxis->Render(0.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
     yAxis->Render(0.0f, { 0.0f, 1.0f, 0.0f, 1.0f });
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
+}
+
+/*------------------------------------------DEBUG_SCALARS Render()-----------------------------------------------------*/
+
+void DEBUG_SCALARS::DisableRendering()
+{
+    xAxis->DisableRendering();
+    yAxis->DisableRendering();
+    zAxis->DisableRendering();
 }
 
 /*------------------------------------------DEBUG_SCALARS Finalize()----------------------------------------------------*/
@@ -431,6 +457,15 @@ void DEBUG_DISCS::Render(Vector4 colour)
     zAxis->Render(0.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
 
+/*------------------------------------------DEBUG_DISCS Render()-----------------------------------------------------*/
+
+void DEBUG_DISCS::DisableRendering()
+{
+    xAxis->DisableRendering();
+    yAxis->DisableRendering();
+    zAxis->DisableRendering();
+}
+
 /*------------------------------------------DEBUG_ARROWS Finalize()-----------------------------------------------------*/
 
 void DEBUG_DISCS::Finalize()
@@ -516,7 +551,7 @@ void DYNAMIC_DEBUG_PRIMITIVE::Execute(XMMATRIX target)
 
 void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
 {
-
+    EnableRendering();
     debugMeshData.colour = colour;
 
     //ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };

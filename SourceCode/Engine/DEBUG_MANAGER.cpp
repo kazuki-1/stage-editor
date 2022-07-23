@@ -79,6 +79,13 @@ void DebugController::Render()
 {
     if (!hasTarget)
         return;
+
+    // Disable rendering than enable them based on their flags
+    scalars->DisableRendering();
+    discs->DisableRendering();
+    arrows->DisableRendering();
+
+
     if (scaling)
         scalars->Render();
     else if (rotating)

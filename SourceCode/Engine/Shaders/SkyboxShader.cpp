@@ -144,5 +144,6 @@ void SkyboxShader::Render()
         dc->IASetIndexBuffer(sprite->GetIndexBuffer().Get(), DXGI_FORMAT_R32_UINT, offset);
         dc->DrawIndexed(6, 0, 0);
     }
+    CleanupShaders();
 }
 

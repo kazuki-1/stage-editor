@@ -20,7 +20,7 @@ public:
     void EnableRendering();
 
     // Disables rendering for the object
-    void DisableRendering();
+    virtual void DisableRendering();
 
     // Returns true if render is to be rendered
     bool GetRenderState();

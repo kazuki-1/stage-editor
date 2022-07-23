@@ -92,15 +92,7 @@ void PhongShader::UpdateConstantBuffers(OBJECT* parent)
 
     MODEL* model = (MODEL*)parent;
     MODEL_RESOURCES* resources = model->Resource().get();
-
-
-
-    MODEL_RESOURCES::MESH_CONSTANT_BUFFER data;
-    memcpy(&data, &resources->data, sizeof(MODEL_RESOURCES::MESH_CONSTANT_BUFFER));
-
-
-
-    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
+    dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &resources->data, 0, 0);
 }
 
 /*--------------------------------------------------------------PhongShader SetConstantBuffers()---------------------------------*/

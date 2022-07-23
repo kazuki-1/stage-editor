@@ -153,6 +153,7 @@ void Mesh_Component::UI()
 /// </summary>
 void Mesh_Component::Finalize()
 {
+    if(model)
     model->Finalize();
 }
 

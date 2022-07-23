@@ -100,7 +100,7 @@ bool Graphics::Render()
 {
     // Prepares the viewport
     ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-    DirectX11::Instance()->Begin({ .0f, .0f, .0f, 1.0f });
+    DirectX11::Instance()->Begin({ .0f, .0f, .0f, .0f });
     
     // Perform execution of camera
     Camera::Instance()->Execute();

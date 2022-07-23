@@ -11,10 +11,10 @@
 #include "Scenes/SCENEMANAGER.h"
 #include "Engine/Text.h"
 static int cur{};
-std::shared_ptr<GameObject>selected_model;
-std::shared_ptr<GameObject>selected_item;
-std::string load_file_path;
-std::string output;
+std::shared_ptr<GameObject>selected_model{};
+std::shared_ptr<GameObject>selected_item{};
+std::string load_file_path{};
+std::string output{};
 char input_test[256] = { "" };
 std::string gameObjectTypes[] = { "GameObject", "GameObject2D" };
 
@@ -234,7 +234,7 @@ void STAGE_UI::Render()
 
     //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
     DebugController::Instance()->Execute();
-    DebugController::Instance()->Render();
+    //DebugController::Instance()->Render();
 
 }
 

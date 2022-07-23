@@ -70,7 +70,7 @@ cbuffer CBUFFER_S : register(b0)
 // Mesh Constant Buffer
 cbuffer CBUFFER_M : register(b1)
 {
-    row_major float4x4 world;
+    float4x4 world;
     float4 colour;
 }
 
@@ -78,8 +78,8 @@ cbuffer CBUFFER_M : register(b1)
 VS_OUT VS_MAIN(VS_IN vin)
 {
     VS_OUT vout;
-    vout.position = mul(float4(vin.position, 1.0f), world);
-    vout.position = mul(vout.position, view_proj);
+    //vout.position = mul(float4(vin.position, 1.0f), world);
+    vout.position = mul(float4(vin.position, 1.0f), view_proj);
     return vout;
 }
 

@@ -43,6 +43,10 @@ public:
     virtual void UpdateConstantBuffers(OBJECT* parent) {};
     virtual void SetConstantBuffers() {};
     virtual void Render();
+    /// <summary>
+    /// Call this at the end of the render process to remove all shaders, which will be set before rendering again
+    /// </summary>
+    virtual void CleanupShaders();
     void Register(OBJECT* object);
     void Deregister(OBJECT* object);
 };

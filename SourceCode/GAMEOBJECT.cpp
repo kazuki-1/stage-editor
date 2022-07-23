@@ -276,6 +276,7 @@ void GameObject::AddComponent(COMPONENT_TYPE t)
 
 void GameObject::RemoveComponent(int id)
 {
+    components[id]->Finalize();
     components.erase(components.begin() + id);
     data->Remove(id);
 }

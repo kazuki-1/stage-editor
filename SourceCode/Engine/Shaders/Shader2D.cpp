@@ -95,5 +95,4 @@ void Shader2D::Render()
         dc->DrawIndexed(6, 0, 0);
         object->DisableRendering();
     }
-    
 }

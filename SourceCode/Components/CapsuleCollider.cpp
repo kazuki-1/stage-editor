@@ -65,7 +65,7 @@ void CapsuleCollider_Component::Execute()
     else
     {
         // If attached to bone
-        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
+        collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
     capsule->UpdateVertices(data->radius, data->height, &world);
@@ -82,13 +82,13 @@ void CapsuleCollider_Component::Execute(XMMATRIX transform)
     {
         // If not attached to bone
         collider->Execute(transform);
-        world = collider->MatrixOffset() * transform;
+        world = transform * collider->MatrixOffset() ;
         Vector3 t = ((COLLIDERS::CAPSULE*)collider.get())->Top();
     }
     else
     {
         // If attached to bone
-        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
+        collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
 
@@ -136,17 +136,17 @@ void CapsuleCollider_Component::UI()
         // Parameters
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Center : ", &data->center.x, 0.05f);
-        ImGui::DragFloat3("Rotation : ", &data->rotation.x, 0.05f);
+        ImGui::DragFloat3("Rotation : ", &data->rotation.x, 0.3f);
         ImGui::DragFloat("Height : ", &data->height, 0.05f, 0.0f);
         ImGui::DragFloat("Radius", &data->radius, 0.05f, 0.0f);
-        if (ImGui::Button("Set Data to collider"))
-        {
+        //if (ImGui::Button("Set Data to collider"))
+        //{
 
             collider->SetRadius(data->radius);
             collider->SetHeight(data->height);
             collider->OffsetCollider(data->center);
             collider->RotateCollider(Vector3::ToRadians(data->rotation));
-        }
+        //}
 
         // Bind to bone
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
@@ -179,8 +179,10 @@ void CapsuleCollider_Component::UI()
             }
 
             if (ImGui::Button("Set To Bone"))
+            {
+                data->mesh_index = selected_mesh_c;
                 data->bone_name = bs.Bones[selected_bone_c].Name;
-
+            }
 
         }
         ImGui::TreePop();

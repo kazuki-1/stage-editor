@@ -47,6 +47,8 @@ void LineShader::Render()
 
     }
 
+    CleanupShaders();
+
 }
 
 /*--------------------------------------------------------------LineShader UpdateConstantBuffers()---------------------------------------------*/

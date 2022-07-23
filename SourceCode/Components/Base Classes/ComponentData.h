@@ -36,7 +36,7 @@ class ComponentData
 {
 public:
     int id{};
-    COMPONENT_TYPE type;
+    COMPONENT_TYPE type{COMPONENT_TYPE::BASE};
 
     ComponentData() { type = COMPONENT_TYPE::BASE; }
     virtual ~ComponentData() {}

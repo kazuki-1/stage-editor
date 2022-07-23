@@ -38,7 +38,7 @@ class MODEL : public OBJECT
     int cur_Keyframe{};
     int next_Keyframe{};
     MODEL_RESOURCES::ANIMATION::KEYFRAME* kfs{};
-
+    MODEL_RESOURCES::ANIMATION::KEYFRAME* current_keyframe{};
     struct BOUNDING_BOX
     {
         XMFLOAT3 Min, Max;
@@ -208,6 +208,7 @@ public:
     /// Stops the UV scrolling performed on this model
     /// </summary>
     void StopUVScrolling();
+    MODEL_RESOURCES::ANIMATION::KEYFRAME* GetCurrentAnimationKeyframe() { return current_keyframe; }
 
 #pragma endregion
 

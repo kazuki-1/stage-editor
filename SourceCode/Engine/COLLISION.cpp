@@ -148,6 +148,23 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
     if (!ori->Status() || !tar->Status())
         return false;
 
+    std::vector<Vector3>ori_points, tar_points;
+
+
+    ori_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize());
+    tar_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize());
+
+
+
+
+
+
+
+
+
+
+
+
     // Check both OBB for their minimum and maximum points
     // 両方のOBBの最小と最大点をチェック
     Vector3 min1, max1, min2, max2;
@@ -600,20 +617,39 @@ bool COLLIDERS::RayCast(Vector3& s, Vector3& e, Dynamic_Plane* plane, RayCastRes
 /// </summary>
 /// <param name="name"> : Name of bone</param>
 /// <param name="m"> : Pointer of model</param>
-void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
+void COLLIDER_BASE::FitToBone(std::string bone_name, int mesh_index, MODEL* m)
 {
     // Search for bone in list
     int64_t index{ -1 };
-    XMMATRIX bone, global;
-    for (auto& m : m->Resource()->Meshes)
+    XMMATRIX bone{XMMatrixIdentity()}, global{ XMMatrixIdentity() };
+    MODEL_RESOURCES* resource = m->Resource().get();
+
+    int cur_mesh_index{};
+
+    if (mesh_index < resource->Meshes.size())
     {
-        for (auto& b : m.Bind_Pose.Bones)
+        for (auto& mesh : resource->Meshes)
         {
-            if (b.Name == bone_name)
+            // Matches the mesh
+            if (mesh_index != cur_mesh_index)
+                continue;
+
+            // Searching the bone
+            for (auto& b : mesh.Bind_Pose.Bones)
             {
-                index = b.n_Index;
-                break;
+                if (b.Name == bone_name)
+                {
+                    index = b.n_Index;
+                    break;
+                }
             }
+            
+            // No need to continue if bone is found
+            if (index >= 0)
+                break;
+
+
+            ++cur_mesh_index;
         }
     }
     if (index != -1)
@@ -629,10 +665,14 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
     }
     // Transform to global transform
     global = m->TransformMatrix();
-    XMFLOAT4X4 temp{ m->Resource()->Axises.AxisCoords };
+    XMFLOAT4X4 axisCoord{ m->Resource()->Axises.AxisCoords };
+    XMFLOAT4X4 mesh_transform{ resource->Meshes[mesh_index].BaseTransform };
 
-    bone *= XMLoadFloat4x4(&temp);
-    bone *= MatrixOffset() * global;
+    bone *= XMLoadFloat4x4(&mesh_transform);
+    //bone *= XMLoadFloat4x4(&axisCoord);
+    bone = MatrixOffset() * bone * global ;
+
+
     bone_World = bone;
     Execute(bone);
 
@@ -643,7 +683,7 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, MODEL* m)
 
 XMMATRIX COLLIDER_BASE::MatrixOffset()
 {
-    return XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(Vector4::Quaternion(rotation).XMV()) * XMMatrixTranslationFromVector(offset.XMV());
+    return XMMatrixScaling(1, 1, 1) * /*XMMatrixRotationQuaternion(Vector4::Quaternion(rotation).XMV()) */XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) * XMMatrixTranslationFromVector(offset.XMV());
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -743,31 +783,39 @@ OBB::OBB()
 {
     *this = OBB({}, {});
 }
-OBB::OBB(Vector3 vMin, Vector3 vMax)
+//OBB::OBB(Vector3 vMin, Vector3 vMax)
+//{
+//
+//    oriMin = vMin;
+//    oriMax = vMax;
+//
+//    // Sets each point
+//    Vector3& p = points.emplace_back();
+//    p = vMin;
+//    Vector3& p2 = points.emplace_back();
+//    p2 = { vMax.x, vMin.y, vMin.z };
+//    Vector3& p3 = points.emplace_back();
+//    p3 = { vMin.x, vMax.y, vMin.z };
+//    Vector3& p4 = points.emplace_back();
+//    p4 = { vMax.x, vMax.y, vMin.z };
+//    Vector3& p5 = points.emplace_back();
+//    p5 = { vMin.x, vMin.y, vMax.z };
+//    Vector3& p6 = points.emplace_back();
+//    p6 = { vMax.x, vMin.y, vMax.z };
+//    Vector3& p7 = points.emplace_back();
+//    p7 = { vMin.x, vMax.y, vMax.z };
+//    Vector3& p8 = points.emplace_back();
+//    p8 = vMax;
+//    Initialize();
+//
+//}
+
+OBB::OBB(Vector3 mid, Vector3 sz)
 {
-    oriMin = vMin;
-    oriMax = vMax;
-
-    // Sets each point
-    Vector3& p = points.emplace_back();
-    p = vMin;
-    Vector3& p2 = points.emplace_back();
-    p2 = { vMax.x, vMin.y, vMin.z };
-    Vector3& p3 = points.emplace_back();
-    p3 = { vMin.x, vMax.y, vMin.z };
-    Vector3& p4 = points.emplace_back();
-    p4 = { vMax.x, vMax.y, vMin.z };
-    Vector3& p5 = points.emplace_back();
-    p5 = { vMin.x, vMin.y, vMax.z };
-    Vector3& p6 = points.emplace_back();
-    p6 = { vMax.x, vMin.y, vMax.z };
-    Vector3& p7 = points.emplace_back();
-    p7 = { vMin.x, vMax.y, vMax.z };
-    Vector3& p8 = points.emplace_back();
-    p8 = vMax;
-    Initialize();
-
+    center = mid;
+    size = sz;
 }
+
 
 /*-----------------------------------------------------OBB Initialize()--------------------------------------------------------------*/\
 
@@ -818,7 +866,8 @@ void OBB::Update(Vector3 pos, Vector3 rot)
 
 void OBB::Execute(XMMATRIX mat)
 {
-    UpdatePosition(mat);
+    world = mat;
+    //UpdatePosition(mat);
 }
 
 /*-----------------------------------------------------OBB Render()--------------------------------------------------------------*/\
@@ -866,10 +915,11 @@ Vector3 OBB::Center()
 
 /*-----------------------------------------------------OBB Size()--------------------------------------------------------------*/\
 
-float OBB::GetSize()
+Vector3 OBB::GetOBBSize()
 {
-    Vector3 center{ Center() };
-    return (points[0] - center).Length();
+    return size;
+    //Vector3 center{ Center() };
+    //return (points[0] - center).Length();
 }
 
 /*-----------------------------------------------------OBB Status()--------------------------------------------------------------*/\
@@ -879,27 +929,59 @@ bool OBB::Status()
     return isActive;
 }
 
-/*-----------------------------------------------------OBB SetMin()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB GeneratePoints()--------------------------------------------------------------*/\
+
+std::vector<Vector3> OBB::GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size)
+{
+    std::vector<Vector3>output;
+
+    output.push_back(Vector3{ center.x - size.x / 2, center.y + size.y / 2, center.z + size.z / 2 });   // Front Top Left
+    output.push_back(Vector3{ center.x + size.x / 2, center.y + size.y / 2, center.z + size.z / 2 });   // Front Top Right
+    output.push_back(Vector3{ center.x - size.x / 2, center.y - size.y / 2, center.z + size.z / 2 });   // Front Bottom Left
+    output.push_back(Vector3{ center.x + size.x / 2, center.y - size.y / 2, center.z + size.z / 2 });   // Front Bottom Right
+
+    output.push_back(Vector3{ center.x - size.x / 2, center.y + size.y / 2, center.z - size.z / 2 });   // Back Top Left
+    output.push_back(Vector3{ center.x + size.x / 2, center.y + size.y / 2, center.z - size.z / 2 });   // Back Top Right
+    output.push_back(Vector3{ center.x - size.x / 2, center.y - size.y / 2, center.z - size.z / 2 });   // Back Bottom Left
+    output.push_back(Vector3{ center.x + size.x / 2, center.y - size.y / 2, center.z - size.z / 2 });   // Back Bottom Right
+
+    for (auto& p : output)
+        XMVector3TransformCoord(p.XMV(), world);
+
+    return output;
+
+
+}
+
+/*-----------------------------------------------------OBB SetMin()--------------------------------------------------------------*/
 
 void OBB::SetMin(Vector3 min)
 {
     oriMin = min;
 }
 
-/*-----------------------------------------------------OBB SetMax()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB SetMax()--------------------------------------------------------------*/
 
 void OBB::SetMax(Vector3 max)
 {
     oriMax = max;
+
 }
 
-/*-----------------------------------------------------OBB SetData()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB SetSize()--------------------------------------------------------------*/
+
+void OBB::SetSize(Vector3 sz)
+{
+    size = sz;
+}
+/*-----------------------------------------------------OBB SetData()--------------------------------------------------------------*/
 
 void OBB::SetData(ComponentData* d)
 {
     OBBCollider_Data* od{ static_cast<OBBCollider_Data*>(d) };
-    SetMin(od->min);
-    SetMax(od->max);
+    SetSize(od->size);
+    //SetMin(od->min);
+    //SetMax(od->max);
 }
 
 #pragma endregion
@@ -1003,7 +1085,11 @@ HRESULT CAPSULE::Initialize()
 
 void CAPSULE::Execute(XMMATRIX mat)
 {
-    world = MatrixOffset() * mat;
+    //XMMATRIX rot{ XMMatrixScaling(1, 1,1) * XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
+
+
+
+    world = MatrixOffset()  * mat;
 }
 
 /*-----------------------------------------------------CAPSULE Render()--------------------------------------------------------------*/
@@ -1045,6 +1131,8 @@ bool CAPSULE::Collide(Vector3 p)
 
 Vector3 CAPSULE::Top()
 {
+
+
     Vector3 center_point{};
     center_point.Load(XMVector3TransformCoord(center.XMV(), world));
     Vector3 top = { center.x, center.y + height / 2, center.z };

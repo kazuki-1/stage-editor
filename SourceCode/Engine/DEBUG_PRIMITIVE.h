@@ -80,6 +80,7 @@ public:
     void Execute() override;
     void Finalize() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void DisableRendering() override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
 };
@@ -97,6 +98,7 @@ public:
     void Initialize();
     void Execute() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void DisableRendering() override;
     void Finalize() override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
@@ -116,6 +118,7 @@ public:
     void Execute() override;
     void Finalize() override;
     void Render(Vector4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }) override;
+    void DisableRendering() override;
     void SetTarget(XMMATRIX t);
     void SetTarget(Vector3 p, Vector3 r);
 };

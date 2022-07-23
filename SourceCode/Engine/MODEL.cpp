@@ -10,8 +10,9 @@ HRESULT MODEL::Initialize(std::string model_path)
 {
     resource = ModelResourceManager::Instance()->Load(model_path);
 
-    ShaderManager::Instance()->Register(ShaderTypes::PhongShader, this);
 
+    RegisterShader(ShaderTypes::PhongShader);
+    current_keyframe = new MODEL_RESOURCES::ANIMATION::KEYFRAME();
     if (!resource)
         return E_FAIL;
 
@@ -123,10 +124,9 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 
 
 
-    resource->BlendAnimation(cur_kf, next_kf, factor, &output);
-
-    resource->UpdateAnimation(&output);
-    resource->Render(DirectX11::Instance()->DeviceContext(), transform, colour, &output);
+    resource->BlendAnimation(cur_kf, next_kf, factor, current_keyframe);
+    resource->UpdateAnimation(current_keyframe);
+    resource->Render(DirectX11::Instance()->DeviceContext(), transform, colour, current_keyframe);
 
 
 
@@ -192,6 +192,8 @@ void MODEL::SetTranslation(Vector3 t)
 void MODEL::SetRotation(Vector3 r)
 {
     rotation = r;
+    quaternion.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
+
 }
 
 /*--------------------------------MODEL SetScale()--------------------------------------------*/
@@ -287,10 +289,10 @@ XMFLOAT4X4 MODEL::Transform()
 XMMATRIX MODEL::TransformMatrix()
 {
     Vector4 q;
-    Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
-    q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
+    //Vector3 r{ ToRadians(rotation.x), ToRadians(rotation.y), ToRadians(rotation.z) };
+    //q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
 
-    return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
+    return XMMatrixScalingFromVector(scale.XMV()) * XMMatrixRotationQuaternion(quaternion.XMV()) * XMMatrixTranslationFromVector(translation.XMV());
 }
 
 /*--------------------------------MODEL AnimationTakes()--------------------------------------------*/

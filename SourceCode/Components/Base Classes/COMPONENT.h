@@ -86,7 +86,7 @@ class BASE_AUDIO_COMPONENT : public Component
 {
 protected:
     //std::shared_ptr<AUDIO>audio;
-    std::shared_ptr<Audio> audio;
+    std::shared_ptr<Audio> audio{};
     //AudioData* data;
 public:
     BASE_AUDIO_COMPONENT() {};

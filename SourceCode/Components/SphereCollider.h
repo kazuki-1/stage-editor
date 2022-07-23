@@ -7,12 +7,13 @@ public:
     char name[256] = "";
     std::string bone_name{};
     Vector3 center{};
+    int mesh_index{};
     float radius{};
     SphereCollider_Data();
     template <class T>
     void serialize(T& t)
     {
-        t(name, bone_name, center, radius);
+        t(name, bone_name, center, mesh_index, radius);
     }
 };
 

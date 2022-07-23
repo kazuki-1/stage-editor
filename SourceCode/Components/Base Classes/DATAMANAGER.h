@@ -10,7 +10,7 @@
 class DataManager : public Singleton<DataManager>
 {
     std::vector<std::shared_ptr<OBJECT_DATA>>dataset;
-    std::string file_path;
+    std::string file_path{};
 
 
     friend class OBJECT_DATA;

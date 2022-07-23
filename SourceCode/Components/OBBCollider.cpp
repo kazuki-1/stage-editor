@@ -36,7 +36,7 @@ OBBCollider_Component::OBBCollider_Component(GameObject* t, ComponentData* data)
 HRESULT OBBCollider_Component::Initialize()
 {
     cube = std::make_shared<DYNAMIC_CUBE>();
-    collider = std::make_shared<COLLIDERS::OBB>(data->min, data->max);
+    collider = std::make_shared<COLLIDERS::OBB>(Vector3{}, Vector3{});
     return collider ? S_OK : E_FAIL;
 }
 
@@ -59,11 +59,11 @@ void OBBCollider_Component::Execute()
     else 
     {
         std::shared_ptr<MODEL> m = GetComponent<Mesh_Component>()->Model();
-        collider->FitToBone(data->bone_name, m.get());
+        collider->FitToBone(data->bone_name, data->mesh_index, m.get());
         cube->Execute(collider->WorldMatrix());
     }
     // Updates the vertices of the debug cube
-    cube->UpdateVertices(collider->Points());
+    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(m->TransformMatrix(), m->GetTranslation(), data->size));
     
 }
 
@@ -73,6 +73,10 @@ void OBBCollider_Component::Execute()
 /// </summary>
 void OBBCollider_Component::Execute(XMMATRIX transform)
 {
+
+    
+
+
     XMVECTOR s, r, t;
     XMMatrixDecompose(&s, &r, &t, transform);
     Vector3 target{};
@@ -86,10 +90,10 @@ void OBBCollider_Component::Execute(XMMATRIX transform)
     else 
     {
         MODEL* m = GetComponent<Mesh_Component>()->Model().get();
-        collider->FitToBone(data->bone_name, m);
+        collider->FitToBone(data->bone_name, data->mesh_index, m);
         cube->Execute(collider->WorldMatrix());
     }
-    cube->UpdateVertices(collider->Points());
+    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform, data->offset, data->size));
 
 }
 
@@ -114,19 +118,20 @@ void OBBCollider_Component::Render()
 /// </summary>
 void OBBCollider_Component::UI()
 {
+    Transform3D_Component* transform = GetComponent<Transform3D_Component>();
+
+
     if (!collider)
-        collider = std::make_shared<COLLIDERS::OBB>(data->min, data->max);
+        collider = std::make_shared<COLLIDERS::OBB>(transform->GetTranslation(), Vector3());
     if (ImGui::TreeNode("OBB Collider"))
     {
         // Parameters
         ImGui::InputText("Collider Name", data->name, 256);
-        ImGui::DragFloat3("Min", &data->min.x, 0.05f);
-        ImGui::DragFloat3("Max", &data->max.x, 0.05f);
+        ImGui::DragFloat3("Size", &data->size.x, 0.05f, 0.0f);
         ImGui::DragFloat3("Offset : ", &data->offset.x, 0.05f);
         if (ImGui::Button("Set Data to collider"))
         {
-            collider->SetMin(data->min);
-            collider->SetMax(data->max);
+            collider->SetSize(data->size);
             collider->OffsetCollider(data->offset);
 
         }
@@ -164,7 +169,10 @@ void OBBCollider_Component::UI()
             }
 
             if (ImGui::Button("Set To Bone"))
+            {
                 data->bone_name = bs.Bones[selected_bone_o].Name;
+                data->mesh_index = selected_mesh_o;
+            }
         }
         ImGui::TreePop();
     }
@@ -250,7 +258,7 @@ std::shared_ptr<COLLIDERS::COLLIDER_BASE>OBBCollider_Component::Collider()
 /// <returns></returns>
 Vector3 OBBCollider_Component::Min()
 {
-    return data->min;
+    return data->size;
 }
 
 /*-------------------------------------------------OBBCollider_Component Max()--------------------------------------------*/
@@ -260,7 +268,7 @@ Vector3 OBBCollider_Component::Min()
 /// <returns></returns>
 Vector3 OBBCollider_Component::Max()
 {
-    return data->max;
+    return data->size;
 }
 
 /*-------------------------------------------------OBBCollider_Component Data()--------------------------------------------*/

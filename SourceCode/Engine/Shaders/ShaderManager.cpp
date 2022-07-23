@@ -19,11 +19,11 @@ HRESULT ShaderManager::Initialize()
     shaders.emplace(ShaderTypes::Skybox, std::make_shared<SkyboxShader>());
     shaders.emplace(ShaderTypes::Shader_2D, std::make_shared<Shader2D>());
     shaders.emplace(ShaderTypes::PhongShader, std::make_shared<PhongShader>());
-    shaders.emplace(ShaderTypes::Base_3D, std::make_shared<BaseShader3D>());
+    //shaders.emplace(ShaderTypes::Base_3D, std::make_shared<BaseShader3D>());
     shaders.emplace(ShaderTypes::Debug_3D, std::make_shared<DebugShader3D>());
     shaders.emplace(ShaderTypes::LineShader, std::make_shared<LineShader>());
-    shaders.emplace(ShaderTypes::Outline, std::make_shared<OutlineShader>());
-    shaders.emplace(ShaderTypes::ShadowMapper, std::make_shared<ShadowMapper>());
+    //shaders.emplace(ShaderTypes::Outline, std::make_shared<OutlineShader>());
+    //shaders.emplace(ShaderTypes::ShadowMapper, std::make_shared<ShadowMapper>());
 
     for (auto& shader : shaders)
         shader.second->Initialize();

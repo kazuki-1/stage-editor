@@ -42,13 +42,13 @@ struct VS_IN
 };
 
 // Scene Constant Buffer (Light, camera etc)
-cbuffer CBUFFER_S : register(b0)
+cbuffer CBUFFER_S : register(b1)
 {
     row_major float4x4 view_proj;
 }
 
 // Mesh Constant buffer
-cbuffer CBUFFER_M : register(b1)
+cbuffer CBUFFER_M : register(b2)
 {
     row_major float4x4 world;
     row_major float4x4 b_Transform[256];

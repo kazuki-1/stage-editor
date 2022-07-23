@@ -156,6 +156,8 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
 {
 
     world_transform = XMLoadFloat4x4(&world);
+    data.world = world;
+    data.colour = colour;               // Incase model has no subsets
 
         for (auto& m : Meshes)
         {
@@ -166,31 +168,39 @@ void MODEL_RESOURCES::Render(ID3D11DeviceContext* dc, XMFLOAT4X4 world, XMFLOAT4
             // Updating Object Constant buffers (World and colour)
             // For some reason, the normals and coordinates are all flipped in release build
 //#ifdef _DEBUG
-            XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * (XMLoadFloat4x4(&Axises.AxisCoords) * XMLoadFloat4x4(&world)) };       // Converting  Axis Systems to Base Axis
-
+            //data.world = world;
 //#else     
 //            XMMATRIX mat = { -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 //            XMMATRIX f_World{ XMLoadFloat4x4(&m.BaseTransform) * XMLoadFloat4x4(&world) };       // Converting  Axis Systems to Base Axis
 //#endif
 
 
+              // Converting  Axis Systems to Base Axis
+            //XMMATRIX f_World
+            //{ 
+            //    XMLoadFloat4x4(&m.BaseTransform) * 
+            //    
+            //        XMLoadFloat4x4(&Axises.AxisCoords) *
+            //        XMLoadFloat4x4(&world)
+            //     
+            //}; 
 
-            XMStoreFloat4x4(&data.world, f_World);
-            data.colour = colour;               // Incase model has no subsets
 
-            const size_t b_Count{ m.Bind_Pose.Bones.size() };
-            for (size_t b_Index = 0; b_Index < b_Count; ++b_Index)
-            {
-                const SKELETON::BONE& b{ m.Bind_Pose.Bones.at(b_Index) };
-                const ANIMATION::KEYFRAME::NODE& bNode{ kf->Nodes.at(b.n_Index) };
+            //XMStoreFloat4x4(&data.world, f_World);
+
+            //const size_t b_Count{ m.Bind_Pose.Bones.size() };
+            //for (size_t b_Index = 0; b_Index < b_Count; ++b_Index)
+            //{
+            //    const SKELETON::BONE& b{ m.Bind_Pose.Bones.at(b_Index) };
+            //    const ANIMATION::KEYFRAME::NODE& bNode{ kf->Nodes.at(b.n_Index) };
 
 
-                XMStoreFloat4x4(&data.b_Transform[b_Index],
-                    XMLoadFloat4x4(&b.o_Transform)
-                    * XMLoadFloat4x4(&bNode.g_Transform)
-                    * XMMatrixInverse(nullptr, XMLoadFloat4x4(&m.BaseTransform)));
+            //    XMStoreFloat4x4(&data.b_Transform[b_Index],
+            //        XMLoadFloat4x4(&b.o_Transform)
+            //        * XMLoadFloat4x4(&bNode.g_Transform)
+            //        * XMMatrixInverse(nullptr, XMLoadFloat4x4(&m.BaseTransform)));
 
-            }
+            //}
 
             //for (const auto& s : m.Subsets)
             //{

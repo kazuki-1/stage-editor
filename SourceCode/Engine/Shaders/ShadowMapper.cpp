@@ -114,8 +114,21 @@ void ShadowMapper::SetConstantBuffers()
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
 
     ID3D11Buffer* buffers[] = { sceneConstantBuffer.Get(), meshConstantBuffer.Get() };
-    dc->VSSetConstantBuffers(0, 2, buffers);
+    dc->VSSetConstantBuffers(1, 2, buffers);
 }
+
+/*----------------------------------------------------ShadowMapper CleanupShaders()---------------------------------------------------*/
+
+void ShadowMapper::CleanupShaders()
+{
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+    dc->PSSetShader(0, 0, 0);
+    dc->VSSetShader(0, 0, 0);
+    dc->PSSetConstantBuffers(1, 2, 0);
+    dc->VSSetConstantBuffers(1, 2, 0);
+
+}
+
 
 /*----------------------------------------------------ShadowMapper Render()---------------------------------------------------*/
 
@@ -177,5 +190,5 @@ void ShadowMapper::Render()
     // Reset to default viewport
     dc->RSSetViewports(1, DirectX11::Instance()->GetViewport());
     dc->OMSetRenderTargets(0, &former_rtv, former_dsv);
-
+    CleanupShaders();
 }

@@ -75,7 +75,9 @@ void DebugShader3D::UpdateConstantBuffers(OBJECT* parent)
     DEBUG_PRIMITIVE* debugModel = ((DEBUG_PRIMITIVE*)parent);
 
 
-    CBuffer_Mesh data = { debugModel->debugMeshData.world, debugModel->debugMeshData.colour };
+    CBuffer_Mesh data;
+    data.world = debugModel->debugMeshData.world;
+    data.colour = debugModel->debugMeshData.colour;
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
 
 }

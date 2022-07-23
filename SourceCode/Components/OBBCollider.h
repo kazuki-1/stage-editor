@@ -6,15 +6,17 @@ class OBBCollider_Data : public ComponentData
 public:
     char name[256] = "";
     std::string bone_name{};
+    int mesh_index;
     Vector3 offset{};
-    Vector3 min{};
-    Vector3 max{};
+    Vector3 size{};
+    // Vector3 min{};
+    // Vector3 max{};
 
     OBBCollider_Data();
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<ComponentData>(this), name, bone_name, min, max);
+        t(cereal::base_class<ComponentData>(this), name, bone_name, mesh_index, offset, size);
     }
 };
 

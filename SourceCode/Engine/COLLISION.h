@@ -85,7 +85,7 @@ namespace COLLIDERS
         /// </summary>
         /// <param name="name"> : Name of bone</param>
         /// <param name="m"> : Pointer of model</param>
-        virtual void FitToBone(std::string name, MODEL* m);
+        virtual void FitToBone(std::string name, int mesh_index, MODEL* m);
         virtual void SetData(ComponentData* data) {}
         /// <summary>
         /// Offsets the collider 
@@ -182,7 +182,8 @@ namespace COLLIDERS
         std::vector<Vector3>points;
         Vector3 oriMin, oriMax;
         Vector3 rotation;
-
+        Vector3 center{};
+        Vector3 size{};
         /// <summary>
         /// Update the coordinates of each of the points
         /// </summary>
@@ -192,7 +193,8 @@ namespace COLLIDERS
 
         // Main Functions
         OBB();
-        OBB(Vector3 vMin, Vector3 vMax);
+        //OBB(Vector3 vMin, Vector3 vMax);
+        OBB(Vector3 center, Vector3 size);
         /// <summary>
         /// Initializes the collider. Call after creating 
         /// </summary>
@@ -208,15 +210,17 @@ namespace COLLIDERS
 
         void SetMin(Vector3 min);
         void SetMax(Vector3 max);
+        void SetSize(Vector3 size);
         void SetData(ComponentData* d)override;
 
         std::vector<Vector3>Points();
         Vector3 Rotation();
         Vector3 Center();
-        float GetSize() override;
-
-
+        Vector3 GetOBBSize();
         bool Status();
+
+        static std::vector<Vector3>GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size);
+
     };
 
 #pragma endregion

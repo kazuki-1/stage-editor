@@ -115,3 +115,14 @@ void OutlineShader::SetConstantBuffers()
     dc->PSSetConstantBuffers(1, 2, buffers);
 
 }
+
+/*--------------------------------------------------------------OutlineShader CleanupShaders()---------------------------------*/
+
+void OutlineShader::CleanupShaders()
+{
+    ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
+    dc->VSSetShader(0, 0, 0);
+    dc->PSSetShader(0, 0, 0);
+    dc->VSSetConstantBuffers(1, 0, 0);
+    dc->PSSetConstantBuffers(1, 0, 0);
+}

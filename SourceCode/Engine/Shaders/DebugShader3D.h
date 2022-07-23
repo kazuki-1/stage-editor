@@ -6,8 +6,8 @@ class DebugShader3D : public Shader
 protected:
 	struct CBuffer_Mesh
 	{
-		XMFLOAT4X4 world;
-		Math::Vector4 colour;
+		XMFLOAT4X4 world{};
+		Math::Vector4 colour{};
 	};
 	ComPtr<ID3D11Buffer>meshConstantBuffer;
 public:

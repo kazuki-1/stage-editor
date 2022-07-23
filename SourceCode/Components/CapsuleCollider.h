@@ -9,6 +9,7 @@ public:
     Vector3 center{};
     //VECTOR3 offset{};
     Vector3 rotation{};
+    int mesh_index{};
     float height{ 1.0f };
     float radius{ 0.5f };
 
@@ -16,7 +17,7 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<ComponentData>(this), name, bone_name, rotation, center, height, radius);
+        t(cereal::base_class<ComponentData>(this), name, bone_name, rotation, center, mesh_index, height, radius);
     }
 };
 

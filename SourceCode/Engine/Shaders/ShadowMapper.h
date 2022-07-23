@@ -25,7 +25,7 @@ public:
 	void SetShaders() override;;
 	void UpdateConstantBuffers(OBJECT* object) override;
 	void SetConstantBuffers() override;
-
+	void CleanupShaders() override;
 	void Render();
 
 };

@@ -60,7 +60,7 @@ void SphereCollider_Component::Execute()
     }
     else
     {
-        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
+        collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = { collider->MatrixOffset() * collider->WorldMatrix() };
     }
     sphere->UpdateVertices(data->radius, &world);
@@ -81,7 +81,7 @@ void SphereCollider_Component::Execute(XMMATRIX transform)
     }
     else
     {
-        collider->FitToBone(data->bone_name, GetComponent<Mesh_Component>()->Model().get());
+        collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = { collider->MatrixOffset() * collider->WorldMatrix() };
     }
     sphere->UpdateVertices(data->radius, &world);
@@ -145,18 +145,18 @@ void SphereCollider_Component::UI()
                     ++ind;
                 }
                 ImGui::EndCombo();
+
+
+                if (ImGui::Button("Set To Bone"))
+                {
+                    data->mesh_index = selected_mesh_s;
+                    data->bone_name = bs.Bones[selected_bone_s].Name;
+                }
             }
-
-            if (ImGui::Button("Set To Bone"))
-                data->bone_name = bs.Bones[selected_bone_s].Name;
-
-
+            ImGui::TreePop();
         }
-        ImGui::TreePop();
-
     }
 }
-
 /*---------------------------------------SphereCollider_Component Finalize()----------------------------------------------*/
 /// <summary>
 /// Called when component is destroyed
