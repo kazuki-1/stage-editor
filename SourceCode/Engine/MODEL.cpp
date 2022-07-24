@@ -54,6 +54,7 @@ void MODEL::UpdateTransform()
 
 void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
 {
+    this->colour = colour;
     static const int transition_delay{ 15 };
     
     AN::KEYFRAME* cur_kf, * next_kf, output;

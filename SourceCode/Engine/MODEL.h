@@ -24,7 +24,7 @@ class MODEL : public OBJECT
     Vector3 scale{ 1, 1, 1 };        // Scale
     Vector3 rotation{};            // Rotation
     Vector3 translation{};         // Position
-
+    Vector4 colour{};
 
     Vector4 quaternion;
     XMFLOAT4X4 transform{};         // Float4X4 Transform Matrix
@@ -208,6 +208,7 @@ public:
     /// Stops the UV scrolling performed on this model
     /// </summary>
     void StopUVScrolling();
+    Vector4 GetColours() { return colour; }
     MODEL_RESOURCES::ANIMATION::KEYFRAME* GetCurrentAnimationKeyframe() { return current_keyframe; }
 
 #pragma endregion

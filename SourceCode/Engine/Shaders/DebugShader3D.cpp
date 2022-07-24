@@ -1,6 +1,8 @@
 #include "DebugShader3D.h"
 #include "../MODEL_RESOURCE.h"
 #include "../MODEL.h"
+#include "../BlendMode.h"
+#include "../RASTERIZER.h"
 #include "../DEBUG_PRIMITIVE.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -72,12 +74,17 @@ void DebugShader3D::UpdateConstantBuffers(OBJECT* parent)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
 
-    DEBUG_PRIMITIVE* debugModel = ((DEBUG_PRIMITIVE*)parent);
+    MODEL* model = ((MODEL*)parent);
+    MODEL_RESOURCES* resource = model->Resource().get();
+
+
+    XMMATRIX world = XMLoadFloat4x4(&resource->Axises.AxisCoords) * model->TransformMatrix() ;
+
 
 
     CBuffer_Mesh data;
-    data.world = debugModel->debugMeshData.world;
-    data.colour = debugModel->debugMeshData.colour;
+    XMStoreFloat4x4(&data.world, world);
+    data.colour = model->GetColours();
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
 
 }
@@ -91,4 +98,61 @@ void DebugShader3D::SetConstantBuffers()
     dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
     dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
 
+}
+
+/*---------------------------------------------------DebugShader3D Render()---------------------------------------*/
+
+void DebugShader3D::Render()
+{
+    ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
+    SetShaders();
+    SetConstantBuffers();
+
+    dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    RasterizerManager::Instance()->Set(RasterizerTypes::Base_3D);
+    BlendStateManager::Instance()->Set(BlendModes::Alpha);
+    UINT stride{ sizeof(MODEL_RESOURCES::VERTEX) }, offset{ 0 };
+
+    int ind{};      // Checks if object is still a living pointer and erases if dead
+    for (auto& object : objects)
+    {
+        if (!object->GetRenderState())
+            continue;
+        if (!object)
+        {
+            objects.erase(objects.begin() + ind);
+            continue;
+        }
+
+        MODEL* model = (MODEL*)object;
+        MODEL_RESOURCES* resource = model->Resource().get();
+        XMFLOAT4X4 object_world_transform = model->Transform();
+
+        for (auto& mesh : resource->Meshes)
+        {
+            dc->IASetVertexBuffers(0, 1, mesh.dxVertexBuffer.GetAddressOf(), &stride, &offset);
+            //XMMATRIX f_World{
+            //XMLoadFloat4x4(&mesh.BaseTransform) * 
+            //XMLoadFloat4x4(&resource->Axises.AxisCoords) *
+            //XMLoadFloat4x4(&object_world_transform) };
+
+            //XMStoreFloat4x4(&resource->data.world, f_World);
+
+            
+
+
+
+
+            for (auto& subset : mesh.Subsets)
+            {
+
+                dc->IASetIndexBuffer(subset.subsetIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
+                UpdateConstantBuffers(object);
+                dc->DrawIndexed((UINT)subset.indices.size(), 0, 0);
+            }
+
+        }
+        resource->data.world = object_world_transform;
+        ++ind;
+    }
 }

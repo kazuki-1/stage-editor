@@ -234,7 +234,7 @@ void STAGE_UI::Render()
 
     //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
     DebugController::Instance()->Execute();
-    //DebugController::Instance()->Render();
+    DebugController::Instance()->Render();
 
 }
 

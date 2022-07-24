@@ -63,7 +63,8 @@ void OBBCollider_Component::Execute()
         cube->Execute(collider->WorldMatrix());
     }
     // Updates the vertices of the debug cube
-    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(m->TransformMatrix(), m->GetTranslation(), data->size));
+    XMMATRIX transform = XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(m->Quaternion().XMV());
+    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform, data->offset, data->size, Vector3::ToRadians(data->rotation)));
     
 }
 
@@ -93,7 +94,7 @@ void OBBCollider_Component::Execute(XMMATRIX transform)
         collider->FitToBone(data->bone_name, data->mesh_index, m);
         cube->Execute(collider->WorldMatrix());
     }
-    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform, data->offset, data->size));
+    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform, data->offset, data->size, Vector3::ToRadians(data->rotation)));
 
 }
 
@@ -129,12 +130,10 @@ void OBBCollider_Component::UI()
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Size", &data->size.x, 0.05f, 0.0f);
         ImGui::DragFloat3("Offset : ", &data->offset.x, 0.05f);
-        if (ImGui::Button("Set Data to collider"))
-        {
+        ImGui::DragFloat3("Rotation", &data->rotation.x, 0.1f);
             collider->SetSize(data->size);
             collider->OffsetCollider(data->offset);
-
-        }
+            collider->RotateCollider(Vector3::ToRadians(data->rotation));
         Mesh_Component* m{ GetComponent<Mesh_Component>() };
 
 

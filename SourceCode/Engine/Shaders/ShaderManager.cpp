@@ -60,8 +60,9 @@ void ShaderManager::Render()
     shaders.find(ShaderTypes::Skybox)->second->Render();
     for (auto& shader : shaders)
     {
-        if (shader.first == ShaderTypes::ShadowMapper || shader.first == ShaderTypes::Skybox)
+        if (shader.first == ShaderTypes::ShadowMapper || shader.first == ShaderTypes::Skybox || shader.first == ShaderTypes::Debug_3D)
             continue;
         shader.second->Render();
     }
+    shaders.find(ShaderTypes::Debug_3D)->second->Render();
 }

@@ -151,8 +151,8 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
     std::vector<Vector3>ori_points, tar_points;
 
 
-    ori_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize());
-    tar_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize());
+    ori_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize(), ori->Rotation());
+    tar_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize(), tar->Rotation());
 
 
 
@@ -669,7 +669,7 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, int mesh_index, MODEL* m)
     XMFLOAT4X4 mesh_transform{ resource->Meshes[mesh_index].BaseTransform };
 
     bone *= XMLoadFloat4x4(&mesh_transform);
-    //bone *= XMLoadFloat4x4(&axisCoord);
+    bone *= XMLoadFloat4x4(&axisCoord);
     bone = MatrixOffset() * bone * global ;
 
 
@@ -683,7 +683,7 @@ void COLLIDER_BASE::FitToBone(std::string bone_name, int mesh_index, MODEL* m)
 
 XMMATRIX COLLIDER_BASE::MatrixOffset()
 {
-    return XMMatrixScaling(1, 1, 1) * /*XMMatrixRotationQuaternion(Vector4::Quaternion(rotation).XMV()) */XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) * XMMatrixTranslationFromVector(offset.XMV());
+    return XMMatrixScaling(1, 1, 1) * XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) * XMMatrixTranslationFromVector(offset.XMV());
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -866,7 +866,7 @@ void OBB::Update(Vector3 pos, Vector3 rot)
 
 void OBB::Execute(XMMATRIX mat)
 {
-    world = mat;
+    world = MatrixOffset() * mat;
     //UpdatePosition(mat);
 }
 
@@ -931,23 +931,36 @@ bool OBB::Status()
 
 /*-----------------------------------------------------OBB GeneratePoints()--------------------------------------------------------------*/\
 
-std::vector<Vector3> OBB::GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size)
+std::vector<Vector3> OBB::GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size, Vector3 rotation)
 {
     std::vector<Vector3>output;
 
-    output.push_back(Vector3{ center.x - size.x / 2, center.y + size.y / 2, center.z + size.z / 2 });   // Front Top Left
-    output.push_back(Vector3{ center.x + size.x / 2, center.y + size.y / 2, center.z + size.z / 2 });   // Front Top Right
-    output.push_back(Vector3{ center.x - size.x / 2, center.y - size.y / 2, center.z + size.z / 2 });   // Front Bottom Left
-    output.push_back(Vector3{ center.x + size.x / 2, center.y - size.y / 2, center.z + size.z / 2 });   // Front Bottom Right
+    output.push_back(Vector3{ - size.x / 2, + size.y / 2, + size.z / 2 });   // Front Top Left
+    output.push_back(Vector3{ + size.x / 2, + size.y / 2, + size.z / 2 });   // Front Top Right
+    output.push_back(Vector3{ - size.x / 2, - size.y / 2, + size.z / 2 });   // Front Bottom Left
+    output.push_back(Vector3{ + size.x / 2, - size.y / 2, + size.z / 2 });   // Front Bottom Right
 
-    output.push_back(Vector3{ center.x - size.x / 2, center.y + size.y / 2, center.z - size.z / 2 });   // Back Top Left
-    output.push_back(Vector3{ center.x + size.x / 2, center.y + size.y / 2, center.z - size.z / 2 });   // Back Top Right
-    output.push_back(Vector3{ center.x - size.x / 2, center.y - size.y / 2, center.z - size.z / 2 });   // Back Bottom Left
-    output.push_back(Vector3{ center.x + size.x / 2, center.y - size.y / 2, center.z - size.z / 2 });   // Back Bottom Right
+    output.push_back(Vector3{ - size.x / 2, + size.y / 2, - size.z / 2 });   // Back Top Left
+    output.push_back(Vector3{ + size.x / 2, + size.y / 2, - size.z / 2 });   // Back Top Right
+    output.push_back(Vector3{ - size.x / 2, - size.y / 2, - size.z / 2 });   // Back Bottom Left
+    output.push_back(Vector3{ + size.x / 2, - size.y / 2, - size.z / 2 });   // Back Bottom Right
+
+
+    XMMATRIX rotation_matrix = 
+        (
+            XMMatrixScaling(1, 1, 1) * 
+            XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) * 
+            XMMatrixTranslationFromVector(center.XMV())
+        ) * 
+        world;
+
+
 
     for (auto& p : output)
-        XMVector3TransformCoord(p.XMV(), world);
-
+    {
+        p.Load(XMVector3TransformCoord(p.XMV(), rotation_matrix));
+        int test = 0;
+    }
     return output;
 
 
@@ -1085,10 +1098,6 @@ HRESULT CAPSULE::Initialize()
 
 void CAPSULE::Execute(XMMATRIX mat)
 {
-    //XMMATRIX rot{ XMMatrixScaling(1, 1,1) * XMMatrixRotationRollPitchYawFromVector(rotation.XMV()) };
-
-
-
     world = MatrixOffset()  * mat;
 }
 

@@ -69,8 +69,7 @@ void Shader::Render()
 
         Vector4 object_colour = resource->data.colour;
         XMFLOAT4X4 object_world_transform{};
-        //XMStoreFloat4x4(&object_world_transform, model->TransformMatrix())
-        object_world_transform = resource->data.world;
+        object_world_transform = model->Transform();
 
 
         for (auto& mesh : model->Resource()->Meshes)

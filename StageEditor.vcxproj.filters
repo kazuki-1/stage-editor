@@ -171,9 +171,6 @@
     <Filter Include="Engine\Shaders\Base">
       <UniqueIdentifier>{36f241ee-ceb0-4553-a6ce-da5fd3f2cb86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Shaders\Base\ShaderManager">
-      <UniqueIdentifier>{171af6d9-6cbb-443d-b9cd-98eaa097564e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shaders\Individual shaders\BaseShader3D">
       <UniqueIdentifier>{d2203027-e922-44b3-a786-f43c0e7944b1}</UniqueIdentifier>
     </Filter>
@@ -209,6 +206,9 @@
     </Filter>
     <Filter Include="Engine\OBJECT">
       <UniqueIdentifier>{fbbbd891-747d-4471-af9a-4e7b3f4aa308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\ShaderManager">
+      <UniqueIdentifier>{171af6d9-6cbb-443d-b9cd-98eaa097564e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -441,7 +441,7 @@
       <Filter>Engine\Shaders\Individual shaders\OutlineShader 3D</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\Shaders\ShaderManager.cpp">
-      <Filter>Engine\Shaders\Base\ShaderManager</Filter>
+      <Filter>Engine\Shaders\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Engine\DepthStencilStateManager.cpp">
       <Filter>Engine\DepthStencilState Manager</Filter>
@@ -725,7 +725,7 @@
       <Filter>Engine\Shaders\Individual shaders\OutlineShader 3D</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\Shaders\ShaderManager.h">
-      <Filter>Engine\Shaders\Base\ShaderManager</Filter>
+      <Filter>Engine\Shaders\ShaderManager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\DepthStencilStateManager.h">
       <Filter>Engine\DepthStencilState Manager</Filter>

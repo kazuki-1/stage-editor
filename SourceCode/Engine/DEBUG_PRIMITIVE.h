@@ -35,6 +35,7 @@ public:
 
     Vector3 Position() { return position; }
     Vector3 Rotation() { return rotation; }
+    std::shared_ptr<MODEL> GetModel() { return model; }
 
     void SetPosition(Vector3 p) { position = p; }
     void SetRotation(Vector3 r) { rotation = r; }

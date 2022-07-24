@@ -177,13 +177,13 @@ void DEBUG_ARROWS::Execute()
     Vector4 q;
     q.Load(XMQuaternionRotationRollPitchYawFromVector(r.XMV()));
 
-    target = XMMatrixScaling(0, 0, 0) * XMMatrixRotationQuaternion(q.XMV()) * XMMatrixTranslationFromVector(position.XMV());
+    target = XMMatrixTranslationFromVector(position.XMV());
     Vector3 x;
-    x.Load({ XMVector3TransformCoord(xAxis->Translation().XMV(), target) });
+    x.Load({ XMVector3TransformCoord(XMVECTOR(), target)});
     Vector3 y;
-    y.Load({ XMVector3TransformCoord(yAxis->Translation().XMV(), target) });
+    y.Load({ XMVector3TransformCoord(XMVECTOR(), target) });
     Vector3 z;
-    z.Load({ XMVector3TransformCoord(zAxis->Translation().XMV(), target) });
+    z.Load({ XMVector3TransformCoord(XMVECTOR(), target) });
 
     xAxis->SetTranslation(x);
     yAxis->SetTranslation(y);
@@ -554,25 +554,6 @@ void DYNAMIC_DEBUG_PRIMITIVE::Render(Vector4 colour)
     EnableRendering();
     debugMeshData.colour = colour;
 
-    //ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-
-    // Setup Dx required parameters and prepare to render
-    //dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-    //BlendStateManager::Instance()->Set(BlendModes::Alpha);
-    //CBUFFER_M data;
-    //data.colour = colour;
-    //Vector4 q{};
-    //q.Load(XMQuaternionRotationRollPitchYawFromVector(rotation.XMV()));
-    //XMStoreFloat4x4(&data.world, XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(q.XMV()) *  XMMatrixTranslationFromVector(position.XMV()));
-
-    //UINT stride{ sizeof(VERTEX) }, offset{};
-
-    //dc->VSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
-    //dc->PSSetConstantBuffers(1, 1, meshConstantBuffer.GetAddressOf());
-    //dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &data, 0, 0);
-    //dc->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-    //dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    //dc->DrawIndexed((UINT)indices.size(), 0, 0);
 }
 
 /*------------------------------------------DYNAMIC_DEBUG_PRIMITIVE SetTarget()----------------------------------------------------*/

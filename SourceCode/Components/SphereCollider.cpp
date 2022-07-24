@@ -55,7 +55,6 @@ void SphereCollider_Component::Execute()
     if (data->bone_name == "")
     {
         collider->Execute(transform->TransformMatrix());
-        sphere->Execute(collider->MatrixOffset() * transform->TransformMatrix());
         world = { collider->MatrixOffset() * transform->TransformMatrix() };
     }
     else
@@ -63,7 +62,7 @@ void SphereCollider_Component::Execute()
         collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = { collider->MatrixOffset() * collider->WorldMatrix() };
     }
-    sphere->UpdateVertices(data->radius, &world);
+    sphere->Execute(world);
 }
 /// <summary>
 /// <para> Called each frame </para>
@@ -84,7 +83,7 @@ void SphereCollider_Component::Execute(XMMATRIX transform)
         collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = { collider->MatrixOffset() * collider->WorldMatrix() };
     }
-    sphere->UpdateVertices(data->radius, &world);
+    //sphere->UpdateVertices(data->radius, &world);
 
 }
 
@@ -111,12 +110,10 @@ void SphereCollider_Component::UI()
         ImGui::InputText("Collider Name", data->name, 256);
         ImGui::DragFloat3("Center : ", &data->center.x, 0.05f);
         ImGui::DragFloat("Radius", &data->radius, 0.05f);
-        if (ImGui::Button("Set Data to collider"))
-        {
             collider->SetCenter(data->center);
             collider->SetRadius(data->radius);
             collider->OffsetCollider(data->center);
-        }
+            sphere->UpdateVertices(data->radius);
         // Bind to bone
         if (GetComponent<Mesh_Component>() != nullptr && GetComponent<Mesh_Component>()->Model() != nullptr)
         {
@@ -141,20 +138,23 @@ void SphereCollider_Component::UI()
                 {
                     bool s{};
                     if (ImGui::Selectable(b.Name.c_str(), &s))
+                    {
                         selected_bone_s = ind;
+                        data->mesh_index = selected_mesh_s;
+                        data->bone_name = bs.Bones[selected_bone_s].Name;
+                    }
                     ++ind;
                 }
                 ImGui::EndCombo();
-
-
-                if (ImGui::Button("Set To Bone"))
-                {
-                    data->mesh_index = selected_mesh_s;
-                    data->bone_name = bs.Bones[selected_bone_s].Name;
-                }
             }
-            ImGui::TreePop();
+            //if (ImGui::Button("Set To Bone"))
+            //{
+            //    data->mesh_index = selected_mesh_s;
+            //    data->bone_name = bs.Bones[selected_bone_s].Name;
+            //}
+
         }
+    ImGui::TreePop();
     }
 }
 /*---------------------------------------SphereCollider_Component Finalize()----------------------------------------------*/

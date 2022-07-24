@@ -42,6 +42,8 @@ HRESULT CapsuleCollider_Component::Initialize()
     collider->SetHeight(data->height);
     collider->OffsetCollider(data->center);
     collider->RotateCollider(Vector3::ToRadians(data->rotation));
+    capsule->UpdateVertices(data->radius, data->height);
+
     return collider ? S_OK : E_FAIL;
 }
 
@@ -68,7 +70,7 @@ void CapsuleCollider_Component::Execute()
         collider->FitToBone(data->bone_name, data->mesh_index, GetComponent<Mesh_Component>()->Model().get());
         world = collider->MatrixOffset() * collider->WorldMatrix();
     }
-    capsule->UpdateVertices(data->radius, data->height, &world);
+    capsule->Execute(world);
 }
 /// <summary>
 /// <para> Called each frame </para>
@@ -93,7 +95,7 @@ void CapsuleCollider_Component::Execute(XMMATRIX transform)
     }
 
     // Line rendered capsule
-    capsule->UpdateVertices(data->radius, data->height, &world);
+    capsule->Execute(world);
 
 }
 
@@ -146,6 +148,7 @@ void CapsuleCollider_Component::UI()
             collider->SetHeight(data->height);
             collider->OffsetCollider(data->center);
             collider->RotateCollider(Vector3::ToRadians(data->rotation));
+            capsule->UpdateVertices(data->radius, data->height);
         //}
 
         // Bind to bone

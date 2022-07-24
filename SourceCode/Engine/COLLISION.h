@@ -219,7 +219,7 @@ namespace COLLIDERS
         Vector3 GetOBBSize();
         bool Status();
 
-        static std::vector<Vector3>GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size);
+        static std::vector<Vector3>GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size, Vector3 rotation);
 
     };
 

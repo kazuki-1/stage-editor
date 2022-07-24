@@ -9,14 +9,13 @@ public:
     int mesh_index;
     Vector3 offset{};
     Vector3 size{};
-    // Vector3 min{};
-    // Vector3 max{};
+    Vector3 rotation{};
 
     OBBCollider_Data();
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<ComponentData>(this), name, bone_name, mesh_index, offset, size);
+        t(cereal::base_class<ComponentData>(this), name, bone_name, mesh_index, offset, size, rotation);
     }
 };
 
