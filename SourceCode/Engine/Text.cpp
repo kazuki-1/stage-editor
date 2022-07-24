@@ -57,6 +57,7 @@ void TextTexture::PrintOut(std::string text, Vector2 position, Vector2 scale)
 /// <param name="scale"> : Scale of text</param>
 void TextTexture::PrintOut(std::wstring text, Vector2 position, Vector2 scale)
 {
+	font_texture->EnableRendering();
 	int x{}, y{};		// For offsetting
 	for (auto& character : text)
 	{
@@ -131,6 +132,7 @@ void TextManager::PrintOutSequence(std::string string_of_text, Vector2 position,
 
 	if(cur_index < string_of_text.size())
 	++cur_index;
+	
 
 
 }
