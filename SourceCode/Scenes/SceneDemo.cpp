@@ -34,8 +34,8 @@ void SceneDemo::Execute()
 void SceneDemo::Render()
 {
     GAMEOBJECTS->Render();  
-    STAGE_UI::Instance()->PlayUI();
     ShaderManager::Instance()->Render();
+    STAGE_UI::Instance()->PlayUI();
 
     DialogueController::Instance()->Render();
     IMGUI::Instance()->Render();

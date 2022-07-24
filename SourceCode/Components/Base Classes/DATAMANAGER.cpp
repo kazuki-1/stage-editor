@@ -97,10 +97,7 @@ void DataManager::Insert(std::shared_ptr<OBJECT_DATA>d)
     for (auto& d : dataset)
     {
         if (cur_id == d->id)
-        {
             ++cur_id;
-            break;
-        }
     }
     d->id = cur_id;
     d->name += "##" + std::to_string(cur_id);

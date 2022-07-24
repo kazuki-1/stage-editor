@@ -45,7 +45,7 @@ void PlayerController_Component::MovementInput()
     }
     if (k_Axis.x || k_Axis.y)
         move += 0.005f;
-    move = Math::Clamp(move, 0, 1.0f);
+    move = Math::Clamp(move, 0, 0.1f);
     fabs(move) < 0.0001f ? move = 0 : move = move;
     Vector3 f;
     f = GetComponent<Transform3D_Component>()->Forward();
@@ -106,7 +106,7 @@ void PlayerController_Component::JumpInput()
     {
         Vector3 velocity{ transform->GetVelocity() };
         Vector3 position{ transform->GetTranslation() };
-        velocity.y += 5.0f;
+        velocity.y += 2.0f;
         position.y += 0.3f;
         transform->SetTranslation(position);
         transform->SetVelocity(velocity);

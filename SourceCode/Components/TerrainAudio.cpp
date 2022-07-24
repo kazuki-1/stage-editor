@@ -408,7 +408,7 @@ void TerrainAudio_Component::ExecuteReceiver()
         // Error compensation
         start.y += 0.092f;
         end = start;
-        end.y -= 0.022f;
+        end.y -= 0.003f;
         // Perform rayCasting collision check
         COLLIDERS::RayCastResults rcd{};
         bool collided;

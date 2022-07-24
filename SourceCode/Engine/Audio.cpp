@@ -374,16 +374,20 @@ void Audio::PerformObstructionCalculation()
         if (!COLLIDERS::RayCast(start, end, plane, results))
             continue;
 
-        float max_influence = { plane->GetSize() };
+        // Horizontal influence
+        // The further the listener is away from the center point on a horizontal plane
+        // The weaker the obstruction
+        float max_influence = { plane->GetSize().Length() / 2};
         float point_influence = { fabsf((plane->GetCenter() - results.position).Length()) };
-        point_influence = max_influence - point_influence;
+        point_influence = fabsf(max_influence - point_influence);
         point_influence = point_influence / max_influence;
         point_influence = obstructor.obstruction_rate * point_influence;
 
+        // Depth influence
         // The further away the listener is away from the obstructor
         // The weaker the obstruction
         float depth_influence = (end - results.position).Length();
-        depth_influence = 1.0f - depth_influence / plane->GetSize();
+        depth_influence = 1.0f - depth_influence / plane->GetSize().x;
         depth_influence = min(depth_influence, 1.0f);
 
 
@@ -509,7 +513,9 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
 
             // Calculate the outputted volume based on the distance
             float distance_length{ distance.Length() };
-            float volume = this->volume - (distance_length / emitter.size);
+            float difference = distance_length / emitter.size;
+            difference = Math::Clamp(difference, 0.0f, 1.0f);
+            float volume = this->volume - difference;
 
             // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
             if (left_Difference > 1)
@@ -542,7 +548,9 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
 
             // Calculate the outputted volume based on the distance
             float distance_length{ distance.Length() };
-            float volume = this->volume - (distance_length / emitter.size);
+            float difference = distance_length / emitter.size;
+            difference = Math::Clamp(difference, 0.0f, 1.0f);
+            float volume = this->volume - difference;
 
             // if the difference is 1, it means that it is directly facing the source, so it will output the maximum volume
             if (left_Difference > 1)
@@ -625,6 +633,11 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
             emitter.doppler_factor = Math::Lerp(emitter.doppler_factor, cur_freq, 0.3f);
         }
     }
+
+    for (auto& vol : output)
+        vol = Math::Clamp(vol, 0.0f, 1.0f);
+
+
     return output;
 }
 

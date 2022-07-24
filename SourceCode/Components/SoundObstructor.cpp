@@ -34,9 +34,12 @@ void SoundObstructor_Component::Execute()
 {
 	Transform3D_Component* transform = GetComponent< Transform3D_Component>();
 
-	XMMATRIX matrix{ transform->TransformMatrix() };
+	XMMATRIX matrix{ XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(transform->Quaternion().XMV()) * XMMatrixTranslationFromVector(transform->GetTranslation().XMV())};
+	XMMATRIX rot = XMMatrixRotationRollPitchYawFromVector(Vector3::ToRadians(data->rotation).XMV());
 
-	plane->UpdateVertices(data->size, &matrix);
+	plane->UpdateVertices(data->size, &rot);
+
+	plane->Execute(matrix);
 }
 
 /*---------------------------------------------------SoundObstructor_Component Render()--------------------------------------------------------*/
@@ -55,7 +58,8 @@ void SoundObstructor_Component::UI()
 	{
 		// Parameters
 		ImGui::DragFloat3("Size", &data->size.x, 0.1f, 0.0f);
-		ImGui::DragFloat("Obstruction rate", &data->obstruction_rate, 0.1f, 0.0f);
+		ImGui::DragFloat3("Rotation", &data->rotation.x, 0.1f);
+		ImGui::DragFloat("Obstruction rate", &data->obstruction_rate, 0.05f, 0.0f, 1.0f);
 		ImGui::TreePop();
 	}
 }

@@ -7,12 +7,13 @@ class SoundObstructor_Data : public ComponentData
 public:
 	SoundObstructor_Data() { type = COMPONENT_TYPE::SOUND_OBSTRUCTOR; }
 	Vector3 size{ 1, 1, 0 };		// Only the X and Y axis are used
+	Vector3 rotation{};
 	float obstruction_rate{ 0.5f };
 
 	template <class T>
 	void serialize(T& t)
 	{
-		t(cereal::base_class<ComponentData>(this), size, obstruction_rate);
+		t(cereal::base_class<ComponentData>(this), size, rotation, obstruction_rate);
 	}
 };
 

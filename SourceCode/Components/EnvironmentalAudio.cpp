@@ -253,12 +253,12 @@ HRESULT EnvironmentalAudio_Component::Initialize()
 /// </summary>
 void EnvironmentalAudio_Component::Execute()
 {
-    if (!audio)
-        return;
-    if (colliders.size() < 1)
-        return;
     for (auto& c : colliders)
         c->Execute();
+    if (!audio)
+        return;
+    //if (colliders.size() < 1)
+    //    return;
     if (SceneManager::Instance()->PauseState())
     {
         audio->Stop();
@@ -280,6 +280,7 @@ void EnvironmentalAudio_Component::Execute()
     for (auto& collider : colliders)
     {
         Vector3 closest = collider->GetColliderComponent()->GetClosestPoint(AudioEngine::Instance()->GetAudioListener()->position);
+        audioEmitter.size = collider->GetCollider()->GetSize();
         if (closest.Length() < closest_point.Length())
             closest_point = closest;
     }
@@ -289,7 +290,7 @@ void EnvironmentalAudio_Component::Execute()
     Vector3 velocity = cur_pos - last_pos;
 
 
-
+    
     audioEmitter.position = closest_point;
     audioEmitter.velocity = velocity;
     audioEmitter.vFrontVector = forward;

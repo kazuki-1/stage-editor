@@ -295,7 +295,7 @@ void Transform3D_Component::SetRotation(Vector3 r)
 
 void Transform3D_Component::SetTranslation(Vector3 t)
 {
-    translation = t;
+    data->translation = t;
 }
 
 /*---------------------------------------Transform3D_Component OffsetTranslation()-------------------------------------------------*/

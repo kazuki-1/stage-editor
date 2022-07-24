@@ -259,6 +259,6 @@ class Dynamic_Plane : public DYNAMIC_DEBUG_PRIMITIVE
 public:
     Dynamic_Plane(Vector3 size);
     void UpdateVertices(Vector3 s, XMMATRIX* target = nullptr);
-    float GetSize();        // Retrieves the size length
+    Vector2 GetSize();        // Retrieves the size length
     Vector3 GetCenter();    // Retrieves the center point
 };

@@ -1146,19 +1146,19 @@ void Dynamic_Plane::UpdateVertices(Vector3 s, XMMATRIX* target)
 
 /*---------------------------------------------------------------------Dynamic_Plane GetSize()----------------------------------------------------------------------*/
 
-float Dynamic_Plane::GetSize()
+Vector2 Dynamic_Plane::GetSize()
 {
     float x{ fabsf(size.x * 2) };
     float y{ fabsf(size.y * 2) };
     Vector2 vec{ x, y };
-    return Vector2::Length(vec);
+    return vec;
 }
 
 /*---------------------------------------------------------------------Dynamic_Plane GetCenter()----------------------------------------------------------------------*/
 
 Vector3 Dynamic_Plane::GetCenter()
 {
-    return (vertices[0].position + vertices[1].position) / 2;
+    return (vertices[0].position + vertices[3].position) / 2;
 }
 
 #pragma endregion
