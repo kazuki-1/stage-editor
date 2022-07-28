@@ -123,7 +123,7 @@ void STAGE_UI::SceneUI()
     if (ImGui::Begin("Scene Settings"))
     {
         // ImGui file browsers
-        static bool fileLoad{}, fileSave{};
+        static bool fileLoad{}, create_new{};
         ImGui::FileBrowser* creator, * browser;
         creator = IMGUI::Instance()->FileCreator();
         browser = IMGUI::Instance()->FileBrowser();
@@ -154,24 +154,58 @@ void STAGE_UI::SceneUI()
         {
             creator->Open();
             creator->SetTitle("Save scene as");
-            fileSave = true;
         }
-        if (fileSave)
-        {
-            creator->Display();
-            if (creator->HasSelected())
+		creator->Display();
+		if (creator->HasSelected())
+		{
+			std::string file_path = creator->GetSelected().string();
+			DataManager::Instance()->OutputFile(file_path);
+			creator->Close();
+            if (create_new = true)
             {
-                std::string file_path = creator->GetSelected().string();
-                DataManager::Instance()->OutputFile(file_path);
-                creator->Close();
+                CreateNewScene();
+                create_new = false;
             }
+		}
+
+
+
+		if (ImGui::Button("Create new scene"))
+        {
+            ImGui::OpenPopup("Warning");
+        }
+        if (ImGui::BeginPopup("Warning"))
+        {
+            ImGui::Text("Would you like to save before creating a new scene ? ");
+            ImGui::NewLine();
+            if (ImGui::Button("Yes"))
+            {
+                creator->Open();
+                creator->SetTitle("Save scene as");
+                create_new = true;
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("No"))
+            {
+                CreateNewScene();
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
         }
 
+        
 
         //if (ImGui::Button("Create text"))
         //    text_test = text_test ? false : true;
         ImGui::End();
     }
+
+
+
+
+
+
 
     if (!selected_item)
         DebugController::Instance()->ClearTarget();
@@ -251,6 +285,14 @@ void STAGE_UI::OutputFile(std::string file_name)
     cereal::BinaryOutputArchive out(ofs);
     out(objectDataset);
 
+}
+
+/*--------------------------------------------------------STAGE_UI CreateNewScene()--------------------------------------------------------------------*/
+
+void STAGE_UI::CreateNewScene()
+{
+    DataManager::Instance()->Finalize();
+    GameObjectManager::Instance()->Finalize();
 }
 
 /*--------------------------------------------------------STAGE_UI MouseSelect()--------------------------------------------------------------------*/

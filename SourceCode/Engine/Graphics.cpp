@@ -12,6 +12,7 @@
 #include "../Scenes/SCENEMANAGER.h"
 #include "../Components/Base Classes/DATAMANAGER.h"
 #include "../Components/Base Classes/ComponentCreator.h"
+#include "../DialogueController.h"
 using namespace DirectX;
 std::shared_ptr<SPRITE>skybox;
 
@@ -62,7 +63,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     // Debug primitive initialization
     DebugController::Instance()->Initialize();
 
-    
+    DialogueController::Instance()->Initialize(L"./Data/Images/text_box.png", { 50, 600 }, { 800, 200 });
 
     // Initializes the skybox
     skybox = std::make_shared<SPRITE>();

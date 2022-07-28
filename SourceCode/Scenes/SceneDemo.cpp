@@ -13,7 +13,7 @@
 
 HRESULT SceneDemo::Initialize()
 {
-    DialogueController::Instance()->Initialize(L"./Data/Images/text_box.png", {50, 600}, {800, 200});
+    
     DataManager::Instance()->InsertAndInitialize();
     AudioController::Instance()->Initialize();
     return S_OK;

@@ -14,6 +14,7 @@ public:
     void SceneUI();
     void HierarchyUI();
     void LightingUI();
+    void CreateNewScene();
     void OutputFile(std::string file_name);
     void MouseSelect();
     void MoveToTarget();
