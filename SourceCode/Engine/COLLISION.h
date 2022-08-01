@@ -179,8 +179,6 @@ namespace COLLIDERS
 
     class OBB : public BOUNDING_BOX
     {
-        std::vector<Vector3>points;
-        Vector3 oriMin, oriMax;
         Vector3 rotation;
         Vector3 center{};
         Vector3 size{};
@@ -205,15 +203,18 @@ namespace COLLIDERS
         void Render() override;
         bool Collide(COLLIDER_BASE* other) override;
         bool Collide(Vector3 p) override;
+        static bool Collide(OBB* ori, OBB* tar);
+        static bool Collide(Vector3 ori_point, OBB* tar);
 
         // Sub Functions
 
-        void SetMin(Vector3 min);
-        void SetMax(Vector3 max);
+        // void SetMin(Vector3 min);
+        // void SetMax(Vector3 max);
+        void SetCenter(Vector3 point);
         void SetSize(Vector3 size);
         void SetData(ComponentData* d)override;
 
-        std::vector<Vector3>Points();
+        //std::vector<Vector3>Points();
         Vector3 Rotation();
         Vector3 Center();
         Vector3 GetOBBSize();

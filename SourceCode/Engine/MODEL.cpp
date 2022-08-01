@@ -12,6 +12,7 @@ HRESULT MODEL::Initialize(std::string model_path)
 
 
     RegisterShader(ShaderTypes::PhongShader);
+    //RegisterShader(ShaderTypes::ShadowMapper);
     current_keyframe = new MODEL_RESOURCES::ANIMATION::KEYFRAME();
     if (!resource)
         return E_FAIL;
@@ -119,6 +120,9 @@ void MODEL::Render(float SamplingRate, XMFLOAT4 colour)
     {
         isTransitioning = false;
         cur_AnimationTake = next_AnimationTake;
+        cur_Keyframe = next_Keyframe;
+        cur_AnimTimer = next_AnimTimer;
+        
     }
 
 

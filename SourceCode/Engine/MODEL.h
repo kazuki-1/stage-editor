@@ -8,7 +8,7 @@
 #define FRAMETIME 0.0166f
 using namespace Math;
 typedef MODEL_RESOURCES::ANIMATION AN;
-
+class Mesh_Component;
 /// <summary>
 /// Model class, used for applying a model
 /// </summary>
@@ -47,6 +47,7 @@ class MODEL : public OBJECT
     std::vector<std::shared_ptr<BOUNDING_BOX>>Boxes;
     std::vector<std::string>animationTakes;
 
+    friend class Mesh_Component;
 #pragma endregion
 public:
     MODEL() {};

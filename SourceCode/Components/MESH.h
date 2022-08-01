@@ -7,7 +7,7 @@ public:
     std::string model_path{};
     std::string model_name{};
     int animationTake{};
-    bool playAnimationFlag{ true };
+    bool playAnimationFlag{ false };
 
     Mesh_Data();
     template <class T>
@@ -23,6 +23,7 @@ class Mesh_Component : public Component
     std::shared_ptr<MODEL>model{};
     Mesh_Data* data{};
 public:
+    friend class MODEL;
     Mesh_Component() {};
     Mesh_Component(GameObject* t, ComponentData* data);
     /// <summary>

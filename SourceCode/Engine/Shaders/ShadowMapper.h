@@ -20,6 +20,7 @@ class ShadowMapper : public Shader
 	ComPtr<ID3D11Buffer>sceneConstantBuffer{};
 	ComPtr<ID3D11Buffer>meshConstantBuffer{};
 	D3D11_VIEWPORT viewport{};
+	CBuffer_Scene scene_data{};
 public:
 	HRESULT Initialize() override;
 	void SetShaders() override;;

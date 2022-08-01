@@ -6,7 +6,7 @@ class OBBCollider_Data : public ComponentData
 public:
     char name[256] = "";
     std::string bone_name{};
-    int mesh_index;
+    int mesh_index{};
     Vector3 offset{};
     Vector3 size{};
     Vector3 rotation{};

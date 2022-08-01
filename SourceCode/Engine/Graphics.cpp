@@ -54,11 +54,12 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     TextManager::Instance()->Initialize();
     TextManager::Instance()->SetCurrentFont("Font1");
 
+    // Initializes the component creator by inserting used component constructors into the map
+    ComponentCreator::Instance()->Initialize();
+
     // Initializes the scene manager by inserting used scenes into the map
     SceneManager::Instance()->Initialize();
 
-    // Initializes the component creator by inserting used component constructors into the map
-    ComponentCreator::Instance()->Initialize();
 
     // Debug primitive initialization
     DebugController::Instance()->Initialize();

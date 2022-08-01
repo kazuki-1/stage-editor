@@ -13,7 +13,7 @@ public:
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<ComponentData>(this), position, colour, range, placeholder);
+        t(cereal::base_class<ComponentData>(this), position, colour, range, intensity, placeholder);
     }
 };
 

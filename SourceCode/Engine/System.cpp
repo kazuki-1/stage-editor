@@ -84,10 +84,13 @@ LRESULT CALLBACK System::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
     switch (umsg)
     {
     case WM_CREATE:
+    {
         RECT r;
         GetClientRect(hwnd, &r);
-        Graphics::Instance()->Initialize(r.right - r.left, r.bottom - r.top, hwnd);
+        int width = r.right - r.left, height = r.bottom - r.top;
+        Graphics::Instance()->Initialize(width, height, hwnd);
         break;
+    }
     case WM_CLOSE:
         System::Instance()->Shutdown();
         PostQuitMessage(0);

@@ -47,6 +47,39 @@ float3 CalculateToonDiffuse(Texture2D t2d, SamplerState tss, float3 normal, floa
     return lightColour * c * kd;
 }
 
+float3 CalculateShadowUV(float3 world, matrix light)
+{
+    float4 wvp_position = mul(float4(world, 1), light);
+    wvp_position /= wvp_position.w;
+    wvp_position.x = (wvp_position.x + 1) * 0.5;
+    wvp_position.y = (wvp_position.y * -1 + 1) * 0.5;
+
+    return wvp_position.xyz;
+}
+
+float3 CalculateShadowColour(Texture2D tex, SamplerState samp, float3 uv, float3 colour, float bias)
+{
+    float2 texelSize;
+    uint width, height;
+    tex.GetDimensions(width, height);
+    texelSize = float2(1.0f / width, 1.0f / height);
+
+
+    float factor = 0;
+    static const int PCFkernalSize = 5;
+    for (int x = (-PCFkernalSize / 2); x <= PCFkernalSize / 2; ++x)
+    {
+        for (int y = (-PCFkernalSize / 2); y <= PCFkernalSize / 2; ++y)
+        {
+
+            float depth = tex.Sample(samp, uv.xy + texelSize * float2(x, y)).r;
+            factor += step(uv.z - depth, bias);
+        }
+    }
+
+    return lerp(colour, 1, factor / (PCFkernalSize * PCFkernalSize));
+}
+
 
 
 // DirectionalLight data
@@ -117,7 +150,7 @@ cbuffer CBUFFER_S : register(b0)
     SLIGHT_DATA spotlights[SLIGHT_MAX];
     int pLightCount;
     int sLightCount;
-    float2 temp;
+    float2 placeholder;
 }
 
 // Mesh Constant buffer
@@ -141,7 +174,7 @@ VS_OUT VS_MAIN(VS_IN vin)
     for (int ind = 0; ind < 4; ++ind)
     {
         n_Pos += vin.weights[ind] * mul(float4(vin.position.xyz, 1.0f), b_Transform[vin.bones[ind]]);
-        n_Normal += vin.weights[ind] * mul(float4(vin.normal, 0.0f), b_Transform[vin.bones[ind]]);
+        n_Normal += vin.weights[ind] * mul(float4(vin.normal.xyz, 0.0f), b_Transform[vin.bones[ind]]);
         n_Tangent += vin.weights[ind] * mul(float4(vin.tangent.xyz, 0.0f), b_Transform[vin.bones[ind]]);
 
     }
@@ -159,7 +192,9 @@ VS_OUT VS_MAIN(VS_IN vin)
 
 Texture2D diffuseM : register(t0);
 Texture2D normalM : register(t1);
+Texture2D shadowM : register(t4);
 SamplerState Sampler : register(s0);
+
 
 
 float4 PS_MAIN(VS_OUT pin) : SV_TARGET

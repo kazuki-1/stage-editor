@@ -141,6 +141,7 @@ void Mesh_Component::UI()
         ImGui::ListBoxFooter();
         model->SetTake(data->animationTake);
         ImGui::Checkbox("Plays Animation", &data->playAnimationFlag);
+        ImGui::SliderInt("Animation", &model->cur_Keyframe, 0, model->resource->Animations[model->cur_AnimationTake].Keyframes.size() - 1);
         data->playAnimationFlag ? model->ResumeAnim() : model->PauseAnim();
 
         ImGui::TreePop();

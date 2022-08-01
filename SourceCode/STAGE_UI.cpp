@@ -128,10 +128,38 @@ void STAGE_UI::SceneUI()
         creator = IMGUI::Instance()->FileCreator();
         browser = IMGUI::Instance()->FileBrowser();
 
-        // File loading
-        if (ImGui::Button("Load file"))
+        // New Scene
+        if (ImGui::Button("Create new scene"))
         {
-            browser->SetTitle("Open file");
+            ImGui::OpenPopup("Warning");
+        }
+        if (ImGui::BeginPopup("Warning"))
+        {
+            ImGui::Text("Would you like to save before creating a new scene ? ");
+            ImGui::NewLine();
+            if (ImGui::Button("Yes"))
+            {
+                creator->Open();
+                creator->SetTitle("Save scene as");
+                create_new = true;
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("No"))
+            {
+                CreateNewScene();
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+
+
+
+
+        // File loading
+        if (ImGui::Button("Load scene"))
+        {
+            browser->SetTitle("Open scene");
             browser->SetTypeFilters({ ".stg" , ".*"});
             browser->Open();
             fileLoad = true;
@@ -161,7 +189,7 @@ void STAGE_UI::SceneUI()
 			std::string file_path = creator->GetSelected().string();
 			DataManager::Instance()->OutputFile(file_path);
 			creator->Close();
-            if (create_new = true)
+            if (create_new == true)
             {
                 CreateNewScene();
                 create_new = false;
@@ -170,29 +198,6 @@ void STAGE_UI::SceneUI()
 
 
 
-		if (ImGui::Button("Create new scene"))
-        {
-            ImGui::OpenPopup("Warning");
-        }
-        if (ImGui::BeginPopup("Warning"))
-        {
-            ImGui::Text("Would you like to save before creating a new scene ? ");
-            ImGui::NewLine();
-            if (ImGui::Button("Yes"))
-            {
-                creator->Open();
-                creator->SetTitle("Save scene as");
-                create_new = true;
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("No"))
-            {
-                CreateNewScene();
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::EndPopup();
-        }
 
         
 

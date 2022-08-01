@@ -27,7 +27,6 @@ HRESULT SceneUI::Initialize()
     }
 
     // Loads pre existing data if it exists
-    
     DataManager::Instance()->InsertAndInitialize();
 
     return S_OK;

@@ -96,12 +96,10 @@ void ShadowMapper::UpdateConstantBuffers(OBJECT* object)
 {
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
 
-    CBuffer_Scene scene_data{};
     MODEL* model = (MODEL*)object;
     MODEL_RESOURCES* resource = model->Resource().get();
 
 
-    scene_data.view_projection = Graphics::Instance()->scene_data.view_proj;
     dc->UpdateSubresource(sceneConstantBuffer.Get(), 0, 0, &scene_data, 0, 0);
     dc->UpdateSubresource(meshConstantBuffer.Get(), 0, 0, &resource->data, 0, 0);
 
@@ -124,8 +122,8 @@ void ShadowMapper::CleanupShaders()
     ID3D11DeviceContext* dc = DirectX11::Instance()->DeviceContext();
     dc->PSSetShader(0, 0, 0);
     dc->VSSetShader(0, 0, 0);
-    dc->PSSetConstantBuffers(1, 2, 0);
-    dc->VSSetConstantBuffers(1, 2, 0);
+    dc->PSSetConstantBuffers(1, 0, 0);
+    dc->VSSetConstantBuffers(1, 0, 0);
 
 }
 
@@ -140,31 +138,32 @@ void ShadowMapper::Render()
 
 
 
-    ID3D11RenderTargetView* rtv{ renderBuffer->GetRTV().Get() }, *former_rtv{};
-    ID3D11DepthStencilView* dsv{ depthStencil->GetDSV().Get() }, *former_dsv{};
+    ID3D11RenderTargetView* rtv{  }, * former_rtv{ DirectX11::Instance()->GetRenderTargetView().Get() };
+    ID3D11DepthStencilView* dsv{ depthStencil->GetDSV().Get() }, *former_dsv{ DirectX11::Instance()->GetDepthStencilView().Get()};
 
-    dc->OMGetRenderTargets(1, &former_rtv, &former_dsv);
+    //dc->OMGetRenderTargets(1, &former_rtv, &former_dsv);
+    D3D11_VIEWPORT former_viewport{};
 
+    dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    dc->OMSetRenderTargets(0, &rtv, dsv);
 
-
-    //dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-    //dc->OMSetRenderTargets(0, &rtv, dsv);
-
-    // Create a viewport from the depth stencil
-    
-    
-    
-    
-    
+    // Sets the temporary viewport
     dc->RSSetViewports(1, &viewport);
+    
+    
+    
+    
+    
 
     // Create a scene constant buffer with a mode
     CBuffer_Scene data{};
     Vector4 light_pos = Graphics::Instance()->scene_data.directional.direction;
     light_pos.Load(XMVectorScale(light_pos.XMV(), -250.0f));
+
     XMMATRIX lookAt{ XMMatrixLookAtLH(light_pos.XMV(), {0, 0, 0, 0}, {0, 1, 0, 0}) };
     XMMATRIX projection{ XMMatrixOrthographicLH(ShadowMapDimensions, ShadowMapDimensions, 0.1f, 1000.0f) };
-    XMStoreFloat4x4(&data.view_projection, lookAt * projection);
+    XMStoreFloat4x4(&scene_data.view_projection, lookAt * projection);
+    
     UINT stride{ sizeof(MODEL_RESOURCES::VERTEX) }, offset{};
     SetShaders();
 
@@ -177,18 +176,21 @@ void ShadowMapper::Render()
         for (auto& mesh : resource->Meshes)
         {
             dc->IASetVertexBuffers(0, 1, mesh.dxVertexBuffer.GetAddressOf(), &stride, &offset);
-            dc->IASetIndexBuffer(mesh.dxIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
             dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
 
             for (auto& subset : mesh.Subsets)
-                dc->DrawIndexed((UINT)subset.indices.size(), subset.first_index, 0);
+            {
+
+                dc->IASetIndexBuffer(subset.subsetIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, offset);
+                dc->DrawIndexed((UINT)subset.indices.size(), 0, 0);
+            }
         }
     }
     
     // Reset to default viewport
-    dc->RSSetViewports(1, DirectX11::Instance()->GetViewport());
-    dc->OMSetRenderTargets(0, &former_rtv, former_dsv);
+    //dc->RSSetViewports(1, &former_viewport);
+    //dc->OMSetRenderTargets(0, &former_rtv, former_dsv);
     CleanupShaders();
 }

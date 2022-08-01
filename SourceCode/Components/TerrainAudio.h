@@ -1,7 +1,11 @@
 #pragma once
 #include "Base Classes/Component.h"
-
+#include "OBBCollider.h"
 class TerrainAudio_Component;
+
+
+
+
 enum class TerrainAudio_Property
 {
     MIN = -1,
@@ -24,13 +28,13 @@ public:
 class TerrainAudio_Data_Emitter : public TerrainAudio_Data_Base
 {
 public:
-    int mesh_index{ -1 };
+    std::shared_ptr<OBBCollider_Data>collider_data;
     std::shared_ptr<AudioData>audio_data;
-    TerrainAudio_Data_Emitter() { audio_data = std::make_shared<AudioData>(); };
+    TerrainAudio_Data_Emitter() { audio_data = std::make_shared<AudioData>(); collider_data = std::make_shared<OBBCollider_Data>(); };
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<TerrainAudio_Data_Base>(this), mesh_index, audio_data);
+        t(cereal::base_class<TerrainAudio_Data_Base>(this), collider_data, audio_data);
     }
 };
 
@@ -38,11 +42,22 @@ class TerrainAudio_Data_Receiver : public TerrainAudio_Data_Base
 {
 public:
     TerrainAudio_Data_Receiver() {};
-    std::vector<std::string>receiver_bones;
+    struct Parameter
+    {
+        int animation_take{ 0 };
+        int animation_frame{ 0 };
+        template <class T>
+        void serialize(T& t)
+        {
+            t(animation_take, animation_frame);
+        }
+    };
+    std::vector<Parameter>parameters;
+
     template <class T>
     void serialize(T& t)
     {
-        t(cereal::base_class<TerrainAudio_Data_Base>(this), receiver_bones);
+        t(cereal::base_class<TerrainAudio_Data_Base>(this), parameters);
     };
 };
 
@@ -64,13 +79,19 @@ public:
 
 class TerrainAudio_Internal_Base
 {
+public:
     friend class TerrainAudio_Component;
+    virtual void Initialize(TerrainAudio_Component* parent, TerrainAudio_Data_Base* data) {}
+    virtual void Finalize() {};
 };
 
 
 class TerrainAudio_Emitter : public TerrainAudio_Internal_Base
 {
     friend class TerrainAudio_Component;
+
+
+    std::shared_ptr<OBBCollider_Component>collider;
     struct AUDIO_BUFFER
     {
         std::shared_ptr<Audio>buffer;
@@ -79,20 +100,16 @@ class TerrainAudio_Emitter : public TerrainAudio_Internal_Base
     };
     std::vector<AUDIO_BUFFER>buffers;
 
+public:
+    void Initialize(TerrainAudio_Component* parent, TerrainAudio_Data_Base* data);
+    void Finalize() override;;
 };
 
 
 class TerrainAudio_Receiver : public TerrainAudio_Internal_Base
 {
-    friend class TerrainAudio_Component;
-    struct Parameter
-    {
-        int collided_mesh_index{ -1 };
-        int previous_collided_mesh_index{ -1 };
-        bool status{};
-    };
-    std::vector<Parameter>parameters{};
-    std::vector<TerrainAudio_Component*>list_of_emitters;
+public:
+    int timer{};
 };
 
 class TerrainAudio_Component : public Component
@@ -104,7 +121,7 @@ class TerrainAudio_Component : public Component
     void ExecuteReceiver();
 
     TerrainAudio_Data* data{};
-    std::shared_ptr<TerrainAudio_Internal_Base> parameters;
+    std::shared_ptr<TerrainAudio_Internal_Base> internal_component;
 public:
     TerrainAudio_Component() {};
     TerrainAudio_Component(GameObject* g, ComponentData* d);
@@ -120,6 +137,10 @@ public:
     /// </summary>
     void Execute() override;
     /// <summary>
+    /// Called only when in UI
+    /// </summary>
+    void ExecuteUI();
+    /// <summary>
     /// <para> Called after Execute() to perform any render functions </para>
     /// <para> Execute()後にレンダー関数を実行するように毎フレームに呼び出す </para>
     /// </summary>
@@ -129,6 +150,10 @@ public:
     /// <para> UIを描画 </para>
     /// </summary>
     void UI() override;
+    /// <summary>
+    /// Called when component is destroyed
+    /// </summary>
+    void Finalize();
     /// <summary>
     /// <para> Cycles through the buffer for unplayed audio and play it</para>
     /// <para> バッファーの中にプレイしてないサウンドを探しプレイする</para>

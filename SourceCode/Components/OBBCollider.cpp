@@ -47,14 +47,25 @@ HRESULT OBBCollider_Component::Initialize()
 /// </summary>
 void OBBCollider_Component::Execute()
 {
-    Transform3D_Component* m{ GetComponent<Transform3D_Component>() };
-    cube->SetTarget(m->GetTranslation());
-    cube->SetWorldTransform(m->TransformMatrix());
+    Transform3D_Component* transform{ GetComponent<Transform3D_Component>() };
+
+
+    Vector3 s{ data->size };
+    s.Load(XMVector3Transform(s.XMV(), XMMatrixScalingFromVector(transform->Scale().XMV())));
+
+
+    collider->SetSize(s);
+    collider->OffsetCollider(data->offset);
+    collider->RotateCollider(Vector3::ToRadians(data->rotation));
+
+
+    cube->SetTarget(transform->GetTranslation());
+    cube->SetWorldTransform(transform->TransformMatrix());
     // Attached to bone
     if (data->bone_name == "") 
     {
-        collider->Execute(m->TransformMatrix());
-        cube->Execute(m->TransformMatrix());
+        collider->Execute(transform->TransformMatrix());
+        cube->Execute(transform->TransformMatrix());
     }
     else 
     {
@@ -63,8 +74,8 @@ void OBBCollider_Component::Execute()
         cube->Execute(collider->WorldMatrix());
     }
     // Updates the vertices of the debug cube
-    XMMATRIX transform = XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(m->Quaternion().XMV());
-    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform, data->offset, data->size, Vector3::ToRadians(data->rotation)));
+    XMMATRIX transform_matrix = XMMatrixScaling(1, 1, 1) * XMMatrixRotationQuaternion(transform->Quaternion().XMV());
+    cube->UpdateVertices(COLLIDERS::OBB::GeneratePoints(transform_matrix, data->offset, data->size, Vector3::ToRadians(data->rotation)));
     
 }
 
@@ -131,9 +142,6 @@ void OBBCollider_Component::UI()
         ImGui::DragFloat3("Size", &data->size.x, 0.05f, 0.0f);
         ImGui::DragFloat3("Offset : ", &data->offset.x, 0.05f);
         ImGui::DragFloat3("Rotation", &data->rotation.x, 0.1f);
-            collider->SetSize(data->size);
-            collider->OffsetCollider(data->offset);
-            collider->RotateCollider(Vector3::ToRadians(data->rotation));
         Mesh_Component* m{ GetComponent<Mesh_Component>() };
 
 

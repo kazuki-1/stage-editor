@@ -101,17 +101,15 @@ void COLLIDERS::AxisCasting(Vector3 oriMin, Vector3 oriMax, Vector3 tarMin, Vect
     XMStoreFloat3(&f, tempM.r[2]);
     Vector3 Right{ r }, Top{ t }, Front{ f };
 
-    float ori_x1, ori_y1, ori_z1, ori_x2, ori_y2, ori_z2;
+    //float ori_x1, ori_y1, ori_z1, ori_x2, ori_y2, ori_z2;
+    float ori_x, ori_y, ori_z;
     float tar_x1, tar_y1, tar_z1, tar_x2, tar_y2, tar_z2;
 
     // Perform dot on each points to check if they are within range
     // 各座標を内積して範囲内チェック
-    ori_x1 = Right.Dot(oriMin);
-    ori_x2 = Right.Dot(oriMax);
-    ori_y1 = Top.Dot(oriMin);
-    ori_y2 = Top.Dot(oriMax);
-    ori_z1 = Front.Dot(oriMin);
-    ori_z2 = Front.Dot(oriMax);
+    ori_x = Right.Dot(oriMin);
+    ori_y = Top.Dot(oriMin);
+    ori_z = Front.Dot(oriMin);
 
     tar_x1 = Right.Dot(tarMin);
     tar_x2 = Right.Dot(tarMax);
@@ -122,11 +120,11 @@ void COLLIDERS::AxisCasting(Vector3 oriMin, Vector3 oriMax, Vector3 tarMin, Vect
 
 
     // Perform Comparison on each axis
-    if (ori_x1 > tar_x2 || ori_x2 < tar_x1)
+    if (ori_x > tar_x2 || ori_x < tar_x1)
         return;
-    if (ori_y1 > tar_y2 || ori_y2 < tar_y1)
+    if (ori_y > tar_y2 || ori_y < tar_y1)
         return;
-    if (ori_z1 > tar_z2 || ori_z2 < tar_z1)
+    if (ori_z > tar_z2 || ori_z < tar_z1)
         return;
     *colCount += 3;
 
@@ -155,22 +153,12 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
     tar_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize(), tar->Rotation());
 
 
-
-
-
-
-
-
-
-
-
-
     // Check both OBB for their minimum and maximum points
     // 両方のOBBの最小と最大点をチェック
     Vector3 min1, max1, min2, max2;
-    for (auto& v : ori->Points())
+    for (auto& v : ori_points)
     {
-        if (v == ori->Points().at(0))
+        if (v == ori_points.at(0))
         {
             min1 = v;
             max1 = v;
@@ -184,9 +172,9 @@ bool COLLIDERS::OBBCollision(OBB* ori, OBB* tar)
         max1.y = max(max1.y, v.y);
         max1.z = max(max1.z, v.z);
     }
-    for (auto& v : tar->Points())
+    for (auto& v : tar_points)
     {
-        if (v == tar->Points().at(0))
+        if (v == tar_points.at(0))
         {
             min2 = v;
             max2 = v;
@@ -817,40 +805,40 @@ OBB::OBB(Vector3 mid, Vector3 sz)
 }
 
 
-/*-----------------------------------------------------OBB Initialize()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Initialize()--------------------------------------------------------------*/
 
 HRESULT OBB::Initialize()
 {
     return S_OK;
 }
 
-/*-----------------------------------------------------OBB UpdatePosition()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB UpdatePosition()--------------------------------------------------------------*/
 
 void OBB::UpdatePosition(XMMATRIX mat)
 {
-    std::vector<Vector3>& ps(points);
+    //std::vector<Vector3>& ps(points);
 
-    // Defaults the point
-    ps[0] = oriMin;
-    ps[1] = Vector3{ oriMax.x, oriMin.y, oriMin.z };
-    ps[2] = Vector3{ oriMin.x, oriMax.y, oriMin.z };
-    ps[3] = Vector3{ oriMax.x, oriMax.y, oriMin.z };
-    ps[4] = Vector3{ oriMin.x, oriMin.y, oriMax.z };
-    ps[5] = Vector3{ oriMax.x, oriMin.y, oriMax.z };
-    ps[6] = Vector3{ oriMin.x, oriMax.y, oriMax.z };
-    ps[7] = oriMax;
+    //// Defaults the point
+    //ps[0] = oriMin;
+    //ps[1] = Vector3{ oriMax.x, oriMin.y, oriMin.z };
+    //ps[2] = Vector3{ oriMin.x, oriMax.y, oriMin.z };
+    //ps[3] = Vector3{ oriMax.x, oriMax.y, oriMin.z };
+    //ps[4] = Vector3{ oriMin.x, oriMin.y, oriMax.z };
+    //ps[5] = Vector3{ oriMax.x, oriMin.y, oriMax.z };
+    //ps[6] = Vector3{ oriMin.x, oriMax.y, oriMax.z };
+    //ps[7] = oriMax;
 
-    // Changing points to global transfrom
-    XMMATRIX world{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(offset.XMV()) };
-    for (auto& p : points)
-    {
-        XMVECTOR pss = XMVector3TransformCoord(p.XMV(), world);
-        pss = XMVector3TransformCoord(pss, mat);
-        p.Load(pss);
-    }
+    //// Changing points to global transfrom
+    //XMMATRIX world{ XMMatrixScaling(1, 1, 1) * XMMatrixTranslationFromVector(offset.XMV()) };
+    //for (auto& p : points)
+    //{
+    //    XMVECTOR pss = XMVector3TransformCoord(p.XMV(), world);
+    //    pss = XMVector3TransformCoord(pss, mat);
+    //    p.Load(pss);
+    //}
 }
 
-/*-----------------------------------------------------OBB Update()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Update()--------------------------------------------------------------*/
 
 void OBB::Update(Vector3 pos, Vector3 rot)
 {
@@ -862,58 +850,167 @@ void OBB::Update(Vector3 pos, Vector3 rot)
 
 }
 
-/*-----------------------------------------------------OBB Execute()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Execute()--------------------------------------------------------------*/
 
 void OBB::Execute(XMMATRIX mat)
 {
     world = MatrixOffset() * mat;
+    Vector3 pos;
+    pos.Load(XMVector3TransformCoord(XMVECTOR(), world));
+    SetCenter(pos);
     //UpdatePosition(mat);
 }
 
-/*-----------------------------------------------------OBB Render()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Render()--------------------------------------------------------------*/
 
 void OBB::Render()
 {
 
 }
 
-/*-----------------------------------------------------OBB Collide()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Collide()--------------------------------------------------------------*/
 
 bool OBB::Collide(COLLIDER_BASE* other)
 {
     return OBBCollision(this, static_cast<OBB*>(other));
 }
+
 bool OBB::Collide(Vector3 p)
 {
-    float size = (points[0] - points[8]).Length();
-    return (Center() - p).Length() < size;
+    return OBB::Collide(p, this);
 }
 
-/*-----------------------------------------------------OBB Points()--------------------------------------------------------------*/\
+/*-----------------------------------------------------Static OBB Collide()--------------------------------------------------------------*/
 
-std::vector<Vector3>OBB::Points()
+bool OBB::Collide(OBB* ori, OBB* tar)
 {
-    return points;
+    // Check if colliders are activated
+    // コライダーのステータスチェック
+    if (!ori->Status() || !tar->Status())
+        return false;
+
+    std::vector<Vector3>ori_points, tar_points;
+
+
+    ori_points = OBB::GeneratePoints(ori->WorldMatrix(), ori->Center(), ori->GetOBBSize(), ori->Rotation());
+    tar_points = OBB::GeneratePoints(tar->WorldMatrix(), tar->Center(), tar->GetOBBSize(), tar->Rotation());
+
+
+    // Check both OBB for their minimum and maximum points
+    // 両方のOBBの最小と最大点をチェック
+    Vector3 min1, max1, min2, max2;
+    for (auto& v : ori_points)
+    {
+        if (v == ori_points.at(0))
+        {
+            min1 = v;
+            max1 = v;
+        }
+
+        min1.x = min(min1.x, v.x);
+        min1.y = min(min1.y, v.y);
+        min1.z = min(min1.z, v.z);
+
+        max1.x = max(max1.x, v.x);
+        max1.y = max(max1.y, v.y);
+        max1.z = max(max1.z, v.z);
+    }
+    for (auto& v : tar_points)
+    {
+        if (v == tar_points.at(0))
+        {
+            min2 = v;
+            max2 = v;
+        }
+
+        min2.x = min(min2.x, v.x);
+        min2.y = min(min2.y, v.y);
+        min2.z = min(min2.z, v.z);
+
+        max2.x = max(max2.x, v.x);
+        max2.y = max(max2.y, v.y);
+        max2.z = max(max2.z, v.z);
+    }
+
+    // Perform axis casting to see if all points are within range
+    // Axis Castを使ってすべての座標は範囲内チェック
+    int count{};
+    AxisCasting(min1, max1, min2, max2, ori->Rotation(), &count);
+    AxisCasting(min1, max1, min2, max2, tar->Rotation(), &count);
+    return count == 6;
+
 }
 
-/*-----------------------------------------------------OBB Rotation()--------------------------------------------------------------*/\
+bool OBB::Collide(Vector3 ori_point, OBB* tar)
+{
+    if (!tar->Status())
+        return false;
+
+    std::vector<Vector3>tar_points;
+
+
+    tar_points = OBB::GeneratePoints(tar->WorldMatrix(), tar->Center(), tar->GetOBBSize(), tar->Rotation());
+
+
+    // Check both OBB for their minimum and maximum points
+    // 両方のOBBの最小と最大点をチェック
+    Vector3 tar_min, tar_max;
+    for (auto& v : tar_points)
+    {
+        if (v == tar_points.at(0))
+        {
+            tar_min = v;
+            tar_max = v;
+        }
+
+        tar_min.x = min(tar_min.x, v.x);
+        tar_min.y = min(tar_min.y, v.y);
+        tar_min.z = min(tar_min.z, v.z);
+
+        tar_max.x = max(tar_max.x, v.x);
+        tar_max.y = max(tar_max.y, v.y);
+        tar_max.z = max(tar_max.z, v.z);
+    }
+
+    // Perform axis casting to see if all points are within range
+    // Axis Castを使ってすべての座標は範囲内チェック
+    int count{};
+    AxisCasting(ori_point, ori_point, tar_min, tar_max, Vector3(), &count);
+    AxisCasting(ori_point, ori_point, tar_min, tar_max, tar->Rotation(), &count);
+    return count == 6;
+
+
+}
+
+
+
+/*-----------------------------------------------------OBB Points()--------------------------------------------------------------*/
+//
+//std::vector<Vector3>OBB::Points()
+//{
+//    return points;
+//}
+
+/*-----------------------------------------------------OBB Rotation()--------------------------------------------------------------*/
 
 Vector3 OBB::Rotation()
 {
     return rotation;
 }
 
-/*-----------------------------------------------------OBB Center()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Center()--------------------------------------------------------------*/
 
 Vector3 OBB::Center()
 {
-    Vector3 temp;
-    temp = points[7] - points[0];
-    temp *= .5;
-    return *points.begin() + temp;
+    return center;
+    //std::vector<Vector3>points = OBB::GeneratePoints(this->WorldMatrix(), center)
+    //Vector3 temp;
+    //temp = points[7] - points[0];
+    //temp *= .5;
+    //return *points.begin() + temp;
 }
 
-/*-----------------------------------------------------OBB Size()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Size()--------------------------------------------------------------*/
 
 Vector3 OBB::GetOBBSize()
 {
@@ -922,14 +1019,14 @@ Vector3 OBB::GetOBBSize()
     //return (points[0] - center).Length();
 }
 
-/*-----------------------------------------------------OBB Status()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB Status()--------------------------------------------------------------*/
 
 bool OBB::Status()
 {
     return isActive;
 }
 
-/*-----------------------------------------------------OBB GeneratePoints()--------------------------------------------------------------*/\
+/*-----------------------------------------------------OBB GeneratePoints()--------------------------------------------------------------*/
 
 std::vector<Vector3> OBB::GeneratePoints(XMMATRIX world, Vector3 center, Vector3 size, Vector3 rotation)
 {
@@ -968,18 +1065,26 @@ std::vector<Vector3> OBB::GeneratePoints(XMMATRIX world, Vector3 center, Vector3
 
 /*-----------------------------------------------------OBB SetMin()--------------------------------------------------------------*/
 
-void OBB::SetMin(Vector3 min)
-{
-    oriMin = min;
-}
+//void OBB::SetMin(Vector3 min)
+//{
+//    oriMin = min;
+//}
 
 /*-----------------------------------------------------OBB SetMax()--------------------------------------------------------------*/
 
-void OBB::SetMax(Vector3 max)
-{
-    oriMax = max;
+//void OBB::SetMax(Vector3 max)
+//{
+//    oriMax = max;
+//
+//}
 
+/*-----------------------------------------------------OBB SetCenter()--------------------------------------------------------------*/
+
+void OBB::SetCenter(Vector3 point)
+{
+    center = point;
 }
+
 
 /*-----------------------------------------------------OBB SetSize()--------------------------------------------------------------*/
 

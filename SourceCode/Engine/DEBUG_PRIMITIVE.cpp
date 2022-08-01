@@ -158,6 +158,9 @@ void DEBUG_ARROWS::Initialize()
     yAxis->DeregisterShader(ShaderTypes::PhongShader);
     zAxis->DeregisterShader(ShaderTypes::PhongShader);
 
+    //xAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //yAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //zAxis->DeregisterShader(ShaderTypes::ShadowMapper);
 
 
 }
@@ -281,6 +284,11 @@ void DEBUG_SCALARS::Initialize()
     xAxis->DeregisterShader(ShaderTypes::PhongShader);
     yAxis->DeregisterShader(ShaderTypes::PhongShader);
     zAxis->DeregisterShader(ShaderTypes::PhongShader);
+
+    //xAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //yAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //zAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+
 
 }
 
@@ -406,6 +414,11 @@ void DEBUG_DISCS::Initialize()
     xAxis->DeregisterShader(ShaderTypes::PhongShader);
     yAxis->DeregisterShader(ShaderTypes::PhongShader);
     zAxis->DeregisterShader(ShaderTypes::PhongShader);
+
+    //xAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //yAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+    //zAxis->DeregisterShader(ShaderTypes::ShadowMapper);
+
 
 }
 

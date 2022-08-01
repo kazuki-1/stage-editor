@@ -24,4 +24,7 @@ public:
 
     // Returns true if render is to be rendered
     bool GetRenderState();
+
+    // Checks if model is registered to type
+    bool CheckForShader(ShaderTypes type);
 };

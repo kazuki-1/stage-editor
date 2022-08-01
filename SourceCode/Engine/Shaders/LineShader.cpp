@@ -26,6 +26,7 @@ void LineShader::Render()
     {
         if (!object)
         {
+            
             objects.erase(objects.begin() + index);
             continue;
         }

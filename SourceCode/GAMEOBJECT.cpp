@@ -134,8 +134,11 @@ void GameObject::ExecuteUI()
             continue;
         if (dynamic_cast<PlayerController_Component*>(c.get()))
             continue;
-        if(dynamic_cast<TerrainAudio_Component*>(c.get()))
+        if (dynamic_cast<TerrainAudio_Component*>(c.get()))
+        {
+            dynamic_cast<TerrainAudio_Component*>(c.get())->ExecuteUI();
             continue;
+        }
         c->Execute();
     }
     GetComponent<Transform3D_Component>()->ExecuteUI();

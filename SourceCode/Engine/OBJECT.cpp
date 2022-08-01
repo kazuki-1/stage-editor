@@ -59,4 +59,12 @@ bool OBJECT::GetRenderState()
     return isVisible;
 }
 
+/*---------------------------------------------OBJECT CheckForShader()---------------------*/
 
+bool OBJECT::CheckForShader(ShaderTypes type)
+{
+    for (auto& shader : shaders)
+        if (type == shader)
+            return true;
+    return false;
+}
