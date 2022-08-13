@@ -23,6 +23,25 @@ std::string gameObjectTypes[] = { "GameObject", "GameObject2D" };
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------STAGE_UI Class--------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------STAGE_UI Render()--------------------------------------------------------------------*/
+
+void STAGE_UI::Render()
+{
+    // Rendering everything in the scene
+    for (auto& o : GameObjectManager::Instance()->GetGameObjects())
+    {
+        o.second->ExecuteUI();
+        //o.second->RenderUI();
+        o.second->Render();
+    }
+
+
+    //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
+    DebugController::Instance()->Execute();
+    DebugController::Instance()->Render();
+
+}
+
 /*--------------------------------------------------------STAGE_UI RenderUI()--------------------------------------------------------------------*/
 
 void STAGE_UI::RenderUI()
@@ -100,6 +119,13 @@ void STAGE_UI::RenderUI()
     PlayUI();
 }
 
+/*--------------------------------------------------------STAGE_UI Finalize()--------------------------------------------------------------------*/
+
+void STAGE_UI::Finalize()
+{
+    selected_model = selected_item = {};
+}
+
 /*--------------------------------------------------------STAGE_UI GameObjectWindow()--------------------------------------------------------------------*/
 
 void STAGE_UI::GameObjectWindow()
@@ -173,6 +199,7 @@ void STAGE_UI::SceneUI()
 
             DataManager::Instance()->SetFilePath(file_path);
             DataManager::Instance()->Load(file_path);
+            Finalize();
             DataManager::Instance()->InsertAndInitialize();
             browser->Close();
             fileLoad = false;
@@ -256,25 +283,6 @@ void STAGE_UI::HierarchyUI()
 
         ImGui::End();
     }
-}
-
-/*--------------------------------------------------------STAGE_UI Render()--------------------------------------------------------------------*/
-
-void STAGE_UI::Render()
-{
-    // Rendering everything in the scene
-    for (auto& o : GameObjectManager::Instance()->GetGameObjects())
-    {
-        o.second->ExecuteUI();
-        //o.second->RenderUI();
-        o.second->Render();
-    }
-
-
-    //sprite->Render({}, { 1.0f, 1.0f }, {}, { 1920, 961 });
-    DebugController::Instance()->Execute();
-    DebugController::Instance()->Render();
-
 }
 
 /*--------------------------------------------------------STAGE_UI OutputFile()--------------------------------------------------------------------*/

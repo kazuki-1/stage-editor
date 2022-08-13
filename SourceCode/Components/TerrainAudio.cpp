@@ -413,105 +413,6 @@ void TerrainAudio_Component::ExecuteEmitter()
 
 void TerrainAudio_Component::ExecuteReceiver()
 {
-    {
-        //// Execute functions for emitter
-        //PlayerController_Component* playerController = GetComponent<PlayerController_Component>();
-        //if (data->class_type != TerrainAudio_Property::RECEIVER)
-        //    return;
-        //Mesh_Component* mesh = GetComponent<Mesh_Component>();
-        //Transform3D_Component* transform = GetComponent<Transform3D_Component>();
-        //TerrainAudio_Data_Receiver* data = (TerrainAudio_Data_Receiver*)this->data->property_data.get();
-        //TerrainAudio_Receiver* receiver = (TerrainAudio_Receiver*)parameters.get();
-        //// Stops the function if gameObject does not have a playerController
-        // if (!playerController)
-        //     return;
-
-
-        //// Search all gameobjects for emitters
-        //if (receiver->list_of_emitters.size() < 1)
-        //{
-        //    for (auto& object : GAMEOBJECTS->GetGameObjects())
-        //    {
-
-        //        // Skips this object. Just in case
-        //        if (object.second.get() == this->GetParent())
-        //            continue;
-
-        //        for (auto& entity : object.second->GetListOfComponents<TerrainAudio_Component>())
-        //        {
-        //            if (entity->data->class_type == TerrainAudio_Property::EMITTER)
-        //                receiver->list_of_emitters.push_back(entity);
-        //        }
-        //    }
-        //}
-
-        //// Prepare a vector coordinates of the receivers
-        //std::vector<Vector3>receiver_coords;
-        //receiver_coords.resize(data->receiver_bones.size());
-        //for (int index = 0; index < receiver_coords.size(); ++index)
-        //{
-        //    // Retrieve their coordinates via their bone
-        //    XMVECTOR s, r, t;
-        //    XMMatrixDecompose(&s, &r, &t, mesh->GetBoneTransform(data->receiver_bones[index]));
-        //    receiver_coords[index].Load(t);
-        //}
-
-        //// Begin collision check
-        //std::shared_ptr<GameObject>player = GameObjectManager::Instance()->GetPlayer();
-        //if (!player)
-        //    return;
-        //Mesh_Component* player_mesh = player->GetComponent<Mesh_Component>();
-        //for (int index = 0; index < data->receiver_bones.size(); ++index)
-        //{
-        //    // Prepare the rays
-        //    Vector3 start, end;
-        //    start = receiver_coords[index];
-
-        //    // Error compensation
-        //    start.y += 0.092f;
-        //    end = start;
-        //    end.y -= 0.003f;
-        //    // Perform rayCasting collision check
-        //    COLLIDERS::RayCastResults rcd{};
-        //    bool collided;
-        //    collided = RAYCAST(start, end, player_mesh, rcd);
-        //    // Updates the collided mesh index
-        //    if (rcd.m_Index >= 0 && collided)
-        //        receiver->parameters[index].collided_mesh_index = rcd.m_Index;
-        //    else if (!collided)
-        //        receiver->parameters[index].collided_mesh_index = -1;
-
-        //}
-
-        //// Plays the audio if the collider has been triggered
-        //for (auto& status : receiver->parameters)
-        //{
-
-        //    // Update the trigger status based on what it previously collided with
-        //    if (status.previous_collided_mesh_index != status.collided_mesh_index && status.previous_collided_mesh_index == -1)
-        //    {
-        //        status.status = true;
-        //        status.previous_collided_mesh_index = status.collided_mesh_index;
-        //    }
-        //    else
-        //    {
-        //        status.status = false;
-        //        status.previous_collided_mesh_index = status.collided_mesh_index;
-        //    }
-
-        //    TerrainAudio_Receiver* receiver = (TerrainAudio_Receiver*)parameters.get();
-        //    // If the collided mesh index matches, plays the audio
-        //    for (auto& entity : receiver->list_of_emitters)
-        //    {
-        //        
-        //        TerrainAudio_Emitter* emitter = (TerrainAudio_Emitter*)entity->parameters.get();
-        //        TerrainAudio_Data_Emitter* data = (TerrainAudio_Data_Emitter*)entity->data->property_data.get();
-        //        if (status.status && status.collided_mesh_index == data->mesh_index)
-        //            entity->Play();
-        //    }
-
-        //}
-    }
 
     if (data->class_type != TerrainAudio_Property::RECEIVER)
         return;
@@ -562,7 +463,6 @@ void TerrainAudio_Component::ExecuteReceiver()
 
 	for (auto& em : emitters)
 	{
-		//TerrainAudio_Data_Emitter* emitter_data = (TerrainAudio_Data_Emitter*)(emitter->data->property_data.get());
         TerrainAudio_Emitter* emitter = (TerrainAudio_Emitter*)em->internal_component.get();
 
         bool collided = emitter->collider->Collide(transform->GetTranslation());
@@ -570,7 +470,6 @@ void TerrainAudio_Component::ExecuteReceiver()
         {
             receiver->timer = 0;
             em->Play();
-
         }
         
 	}

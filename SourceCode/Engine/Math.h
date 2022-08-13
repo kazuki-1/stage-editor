@@ -19,6 +19,13 @@ namespace Math
     /// <param name="max"> : Maximum value to be clamped to</param>
     /// <returns></returns>
     extern float Clamp(float tar, float min, float max);
+
+    template <class T>
+    extern T Clamp(T tar, T min, T max)
+    {
+        return (std::min)((std::max)(tar, min), max);
+    }
+
     /// <summary>
     /// Returns +1 if tar > 0
     /// </summary>
@@ -40,6 +47,7 @@ namespace Math
     /// </summary>
     /// <returns></returns>
     extern float Lerp(float f1, float f2, float factor);
+
 
 
     class Vector2

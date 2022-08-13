@@ -59,4 +59,5 @@ void SceneUI::Finalize()
     GameObjectManager::Instance()->Finalize();
     AudioEngine::Instance()->CleanupObstructors();
     COLLIDERS::RAYCAST_MANAGER::Instance()->Finalize();
+    STAGE_UI::Instance()->Finalize();
 }

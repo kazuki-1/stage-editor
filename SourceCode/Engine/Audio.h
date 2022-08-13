@@ -9,6 +9,9 @@
 #include "Singleton.h"
 #include "Math.h"
 #include "AudioStates/AudioStates.h"
+using namespace Microsoft::WRL;
+
+
 // Input channels used in 3d Audio
 #define MAX_OUTPUT_CHANNELS 8
 #define INPUT_CHANNELS 2
@@ -23,14 +26,6 @@ enum AUDIO_CALCULATION_FLAGS
     CALCULATE_CHANNELS = 0X1,  
     CALCULATE_DOPPLER = 0X2
 };
-
-
-using namespace Microsoft::WRL;
-
-
-
-
-
 enum ChannelDirections
 {
     FrontLeft, 
@@ -39,6 +34,12 @@ enum ChannelDirections
     BackRight, 
 
 };
+enum class SoundEffects
+{
+    Echo
+};
+
+
 
 class Audio;
 class AudioEmitter
@@ -76,11 +77,13 @@ protected:
     IXAudio2SubmixVoice* submixVoice{};
     WAVEFORMATEXTENSIBLE format{};
     XAUDIO2_BUFFER buffer{};
+    XAUDIO2_BUFFER effect_buffer{};
     AudioEmitter* audioEmitter;
 
     std::wstring file_path;
     bool isDucking{};
     bool isPlaying{};
+    bool hasEffect{};
     float volume_before_ducking{};
 
     HRESULT FindChunk(HANDLE h, DWORD fourcc, DWORD& cSize, DWORD& cDataPosition);
@@ -170,8 +173,10 @@ public:
     bool IsDucking();
     void RenderDebug();
     
-    void PerformObstructionCalculation();
     std::vector<float>CalculateChannelVolumes(AudioEmitter& emitter, AudioListener& listener, int input_channels, int output_channels = 2, UINT flags = AUDIO_CALCULATION_FLAGS::CALCULATE_CHANNELS);
+    void PerformObstructionCalculation();
+    void Synthesize(SoundEffects effect);
+    void RevertSynthesis();
 
     std::shared_ptr<AUDIO_STATES::AudioStateMachine>GetStateMachine();
 

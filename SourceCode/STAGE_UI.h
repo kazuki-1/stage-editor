@@ -10,12 +10,15 @@ class STAGE_UI : public Singleton<STAGE_UI>
 public:
     void RenderUI();
     void Render();
+    void Finalize();
+
+
     void GameObjectWindow();
     void SceneUI();
     void HierarchyUI();
-    void LightingUI();
     void CreateNewScene();
     void OutputFile(std::string file_name);
+
     void MouseSelect();
     void MoveToTarget();
     void PlayUI();

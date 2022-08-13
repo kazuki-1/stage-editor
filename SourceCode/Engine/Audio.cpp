@@ -10,7 +10,7 @@
 #include "AudioEngine.h"
 #include <xaudio2fx.h>
 #include "DEBUG_PRIMITIVE.h"
-
+#include "AudioStates/Synthesizer.h"
 
 //#pragma comment(lib, "x3daudio")
 #ifdef _XBOX //Big-Endian
@@ -355,51 +355,6 @@ void Audio::StopDucking()
         FadeTo(volume_before_ducking, 0.5f);
 }
 
-/*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
-
-void Audio::PerformObstructionCalculation()
-{
-
-    if (!audioEmitter)
-        return;
-    AudioListener* listener = AudioEngine::Instance()->GetAudioListener();
-
-    Vector3 start = audioEmitter->position;
-    Vector3 end = listener->position;
-
-    for (auto& obstructor : AudioEngine::Instance()->GetObstructors())
-    {
-        Dynamic_Plane* plane = obstructor.plane;
-        COLLIDERS::RayCastResults results;
-        if (!COLLIDERS::RayCast(start, end, plane, results))
-            continue;
-
-        // Horizontal influence
-        // The further the listener is away from the center point on a horizontal plane
-        // The weaker the obstruction
-        float max_influence = { plane->GetSize().Length() / 2};
-        float point_influence = { fabsf((plane->GetCenter() - results.position).Length()) };
-        point_influence = fabsf(max_influence - point_influence);
-        point_influence = point_influence / max_influence;
-        point_influence = obstructor.obstruction_rate * point_influence;
-
-        // Depth influence
-        // The further away the listener is away from the obstructor
-        // The weaker the obstruction
-        float depth_influence = (end - results.position).Length();
-        depth_influence = 1.0f - depth_influence / plane->GetSize().x;
-        depth_influence = min(depth_influence, 1.0f);
-
-
-        for (auto& volume : channel_volumes)
-            volume *= 1.0f - (point_influence * depth_influence);
-        break;
-
-    }
-
-
-}
-
 /*---------------------------------------------Audio Volume()----------------------------------------------------*/
 
 float Audio::Volume()
@@ -640,6 +595,96 @@ std::vector<float>Audio::CalculateChannelVolumes(AudioEmitter& emitter, AudioLis
 
     return output;
 }
+
+/*---------------------------------------------Audio StopDucking()----------------------------------------------------*/
+
+void Audio::PerformObstructionCalculation()
+{
+
+    if (!audioEmitter)
+        return;
+    AudioListener* listener = AudioEngine::Instance()->GetAudioListener();
+
+    Vector3 start = audioEmitter->position;
+    Vector3 end = listener->position;
+
+    for (auto& obstructor : AudioEngine::Instance()->GetObstructors())
+    {
+        Dynamic_Plane* plane = obstructor.plane;
+        COLLIDERS::RayCastResults results;
+        if (!COLLIDERS::RayCast(start, end, plane, results))
+            continue;
+
+        // Horizontal influence
+        // The further the listener is away from the center point on a horizontal plane
+        // The weaker the obstruction
+        float max_influence = { plane->GetSize().Length() / 2 };
+        float point_influence = { fabsf((plane->GetCenter() - results.position).Length()) };
+        point_influence = fabsf(max_influence - point_influence);
+        point_influence = point_influence / max_influence;
+        point_influence = obstructor.obstruction_rate * point_influence;
+
+        // Depth influence
+        // The further away the listener is away from the obstructor
+        // The weaker the obstruction
+        float depth_influence = (end - results.position).Length();
+        depth_influence = 1.0f - depth_influence / plane->GetSize().x;
+        depth_influence = min(depth_influence, 1.0f);
+
+
+        for (auto& volume : channel_volumes)
+            volume *= 1.0f - (point_influence * depth_influence);
+        break;
+
+    }
+
+
+}
+
+/*---------------------------------------------Audio Synthesize()----------------------------------------------------*/
+
+void Audio::Synthesize(SoundEffects effect)
+{
+    if (hasEffect)
+        return;
+    switch (effect)
+    {
+    case SoundEffects::Echo:
+    {
+        effect_buffer = buffer;
+        BYTE* audio_buffer = new BYTE[buffer.AudioBytes];
+        memcpy(audio_buffer, effect_buffer.pAudioData, effect_buffer.AudioBytes);
+        
+        Synthesizer::Echo<BYTE>(audio_buffer, 0.5f, 2, effect_buffer.AudioBytes);
+        memcpy((void*)(effect_buffer.pAudioData), audio_buffer, effect_buffer.AudioBytes);
+        effect_buffer.pAudioData = audio_buffer;
+        break;
+    }
+    }
+
+
+    sourceVoice->FlushSourceBuffers();
+    sourceVoice->SubmitSourceBuffer(&effect_buffer);
+    
+
+    hasEffect = true;
+
+}
+
+/*---------------------------------------------Audio RevertSynthesis()----------------------------------------------------*/
+
+void Audio::RevertSynthesis()
+{
+    if (!hasEffect)
+        return;
+
+    sourceVoice->FlushSourceBuffers();
+    sourceVoice->SubmitSourceBuffer(&buffer);
+    hasEffect = false;
+
+
+}
+
 
 /*---------------------------------------------Audio GetStateMachine()----------------------------------------------------*/
 

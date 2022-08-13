@@ -154,6 +154,7 @@
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePause.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStatePlay.h" />
     <ClInclude Include="SourceCode\Engine\AudioStates\AudioStates.h" />
+    <ClInclude Include="SourceCode\Engine\AudioStates\Synthesizer.h" />
     <ClInclude Include="SourceCode\Engine\BlendMode.h" />
     <ClInclude Include="SourceCode\Engine\Camera.h" />
     <ClInclude Include="SourceCode\Engine\COLLISION.h" />

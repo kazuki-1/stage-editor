@@ -766,6 +766,9 @@
     <ClInclude Include="SourceCode\Engine\OBJECT.h">
       <Filter>Engine\OBJECT</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\AudioStates\Synthesizer.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
