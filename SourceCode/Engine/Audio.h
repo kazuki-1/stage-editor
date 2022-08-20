@@ -6,8 +6,8 @@
 #include <map>
 #include <xaudio2.h>
 #include <x3daudio.h>
-#include "Singleton.h"
-#include "Math.h"
+#include <Library/Singleton.h>
+#include <Library/Math.h>
 #include "AudioStates/AudioStates.h"
 using namespace Microsoft::WRL;
 
@@ -99,8 +99,8 @@ public:
     Audio(std::wstring path);
     ~Audio()
     {
-        int test;
-        test = 0;
+        buffer = {};
+        sourceVoice = {};
     }
 
     /// <summary>

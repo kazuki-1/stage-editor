@@ -1,4 +1,5 @@
 #include "STAGE_UI.h"
+#include "Engine/WWise/WWiseController.h"
 #include "Engine/Input.h"
 #include "Engine/Camera.h"
 #include "Engine/DROPMANAGER.h"
@@ -10,6 +11,7 @@
 #include "Components/Mesh.h"
 #include "Scenes/SCENEMANAGER.h"
 #include "Engine/Text.h"
+#include "../WWise/SoundBank/Wwise_IDs.h"
 static int cur{};
 std::shared_ptr<GameObject>selected_model{};
 std::shared_ptr<GameObject>selected_item{};
@@ -222,8 +224,9 @@ void STAGE_UI::SceneUI()
                 create_new = false;
             }
 		}
-
-
+        AkPlayingID id{};
+        if (ImGui::Button("Play Audio"))
+            id = AK::SoundEngine::PostEvent(AK::EVENTS::PLAYMUSIC, 1);
 
 
         

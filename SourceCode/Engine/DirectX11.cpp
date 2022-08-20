@@ -9,6 +9,7 @@
 #include "Audio.h"
 #include "AudioEngine.h"
 
+int* test;
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------DirectX11 Class-----------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,6 +83,9 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, deviceFlags, &featureLevel, 1, D3D11_SDK_VERSION, &scd, dxSwapChain.GetAddressOf(), dxDevice.GetAddressOf(), 0, dxDeviceContext.GetAddressOf());
     assert(hr == S_OK);
 
+    test = new int[1232];
+
+
     ID3D11Texture2D* backBuffer;
     hr = dxSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
     assert(hr == S_OK);
@@ -107,31 +111,6 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     hr = dxDevice->CreateTexture2D(&dbd, NULL, dxDepthStencilBuffer.GetAddressOf());
     assert(hr == S_OK);
 
-    //// Depth Stencil Desc
-    //D3D11_DEPTH_STENCIL_DESC dsd{};
-    //dsd.DepthEnable = true;
-    //dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    //dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-    //dsd.StencilEnable = false;
-    //dsd.StencilReadMask = 0xFF;
-    //dsd.StencilWriteMask = 0xFF;
-
-
-    //dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-    //dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-    //dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-    //dsd.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-
-    //dsd.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-    //dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-    //dsd.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-    //dsd.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-    //hr = dxDevice->CreateDepthStencilState(&dsd, dxDepthStencilState.GetAddressOf());
-    //assert(hr == S_OK);
-
-    //dxDeviceContext->OMSetDepthStencilState(dxDepthStencilState.Get(), 0);
 
     D3D11_DEPTH_STENCIL_VIEW_DESC dsvd{};
     dsvd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -170,7 +149,7 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     ShaderManager::Instance()->Initialize();
     
     // Initializes XAudio2 
-    AudioEngine::Instance()->Initialize();
+    //AudioEngine::Instance()->Initialize();
 
 
 
@@ -186,7 +165,9 @@ HRESULT DirectX11::Initialize(int Width, int Height, bool VSYNC, HWND hwnd, bool
     XMStoreFloat4x4(&world, WO);
 
 
-    return S_OK;
+
+    hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+    return hr;
 }
 
 /*-----------------------------------------------------------DirectX11 Begin()----------------------------------------------------------------*/

@@ -1,7 +1,8 @@
 #pragma once
-#include "Engine/Singleton.h"
+#include <Library/Singleton.h>
 #include "OBJECT_DATA.h"
 #include <d3d11.h>
+#include <Library/Manager.h>
 
 class Component;
 class GameObject
@@ -114,7 +115,7 @@ public:
     std::shared_ptr<OBJECT_DATA>Data();
 };
 
-class GameObjectManager : public Singleton<GameObjectManager>
+class GameObjectManager : public Singleton<GameObjectManager>, public Manager
 {
     std::map<std::string, std::shared_ptr<GameObject>>gameObjects;
 public:

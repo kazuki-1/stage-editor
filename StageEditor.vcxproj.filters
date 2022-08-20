@@ -150,9 +150,6 @@
     <Filter Include="Components\Dialogue">
       <UniqueIdentifier>{006d95b8-c4d0-4b5a-9eda-f64d113e4e0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Math">
-      <UniqueIdentifier>{d0e1859b-c692-44da-ad1e-1b3bbcb4b550}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shaders\Individual shaders">
       <UniqueIdentifier>{b26534f5-9d5c-48ad-8deb-fca3b2a5ea2c}</UniqueIdentifier>
     </Filter>
@@ -209,6 +206,18 @@
     </Filter>
     <Filter Include="Engine\Shaders\ShaderManager">
       <UniqueIdentifier>{171af6d9-6cbb-443d-b9cd-98eaa097564e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\WWise">
+      <UniqueIdentifier>{f83dc49a-a0b7-4253-bed3-0bdca8e315ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\WWise\WWiseController">
+      <UniqueIdentifier>{90cfdfdb-f70b-4060-80b6-6f25643ad3c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Includes">
+      <UniqueIdentifier>{2f132dab-f9d0-44e8-a301-f63dbd28885d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WWise Dependencies">
+      <UniqueIdentifier>{5e7f4167-fdac-4148-8712-478af245124f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -413,9 +422,6 @@
     <ClCompile Include="SourceCode\GameObject_2D.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Engine\Math.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Engine\Shaders\SkyboxShader.cpp">
       <Filter>Engine\Shaders\Individual shaders\Skybox</Filter>
     </ClCompile>
@@ -473,6 +479,33 @@
     <ClCompile Include="SourceCode\Engine\OBJECT.cpp">
       <Filter>Engine\OBJECT</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Engine\Includes\Library\Math.cpp">
+      <Filter>Engine\Includes</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Engine\WWise\WWiseController.cpp">
+      <Filter>Engine\Audio\WWise\WWiseController</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkDefaultIOHookBlocking.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkDefaultLowLevelIODispatcher.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFileLocationBase.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFilePackage.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFilePackageLUT.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkMultipleFileLocation.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\stdafx.cpp">
+      <Filter>WWise Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\GUI.h">
@@ -511,9 +544,6 @@
     <ClInclude Include="External\ImGui\imstb_truetype.h">
       <Filter>Engine\External</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Components\Base Classes\ComponentCreator.h">
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
@@ -530,9 +560,6 @@
       <Filter>Components\Base Classes</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Engine\PERFORMANCE_COUNTER.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Singleton.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\CerealHeaders.h">
@@ -697,9 +724,6 @@
     <ClInclude Include="SourceCode\GameObject_2D.h">
       <Filter>Source Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Engine\Math.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h">
       <Filter>Engine\Shaders\Individual shaders\Skybox</Filter>
     </ClInclude>
@@ -769,6 +793,51 @@
     <ClInclude Include="SourceCode\Engine\AudioStates\Synthesizer.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Engine\WWise\WWiseController.h">
+      <Filter>Engine\Audio\WWise\WWiseController</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Manager.h">
+      <Filter>Engine\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Math.h">
+      <Filter>Engine\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Singleton.h">
+      <Filter>Engine\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkDefaultIOHookBlocking.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkDefaultLowLevelIODispatcher.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileHelpers.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileHelpersBase.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileLocationBase.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackage.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIO.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIOBlocking.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLUT.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkMultipleFileLocation.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\stdafx.h">
+      <Filter>WWise Dependencies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
@@ -791,6 +860,9 @@
     </None>
     <None Include="Shaders\ShadowMapper.fx">
       <Filter>Engine\Shaders\Shaders Files</Filter>
+    </None>
+    <None Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIO.inl">
+      <Filter>WWise Dependencies</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@
 #include <x3daudio.h>
 #include <DirectXMath.h>
 #include "Audio.h"
-#include "Singleton.h"
-#include "Math.h"
+#include <Library/Singleton.h>
+#include <Library/Math.h>
 class AudioListener;
 
 using namespace DirectX;

@@ -4,7 +4,9 @@
 #include "Audio.h"
 #include "PERFORMANCE_COUNTER.h"
 
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 #define BeginQuery PerformanceCounter::Instance()->BeginQuery
 #define EndQuery PerformanceCounter::Instance()->EndQuery
@@ -19,7 +21,6 @@ System::System()
 
 System::~System()
 {
-
 }
 
 bool System::Initialize()

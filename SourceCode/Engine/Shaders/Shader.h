@@ -6,7 +6,7 @@
 #include <filesystem>
 //#include "OBJECT.h"
 #include "../DirectX11.h"
-#include "../Singleton.h"
+#include <Library/Singleton.h>
 
 class OBJECT;
 class Shader

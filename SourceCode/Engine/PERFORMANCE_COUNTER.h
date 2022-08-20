@@ -1,5 +1,5 @@
 #pragma once
-#include "Singleton.h"
+#include <Library/Singleton.h>
 #include <Windows.h>
 #include <sstream>
 /// <summary>

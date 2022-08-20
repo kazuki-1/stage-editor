@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/IMGUI.h"
-#include "Engine/Singleton.h"
+#include <Library/Singleton.h>
 
 class GUI : public Singleton<GUI>
 {

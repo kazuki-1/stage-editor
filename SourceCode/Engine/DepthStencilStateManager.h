@@ -1,5 +1,5 @@
 #pragma once
-#include "Singleton.h"
+#include <Library/Singleton.h>
 #include <wrl.h>
 #include <d3d11.h>
 #include <map>

@@ -1,6 +1,6 @@
 #pragma once
 #include <limits.h>
-#include "../Math.h"
+#include <Library/Math.h>
 
 
 template <class T>

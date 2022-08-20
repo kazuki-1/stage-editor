@@ -1,6 +1,6 @@
 #pragma once
-#include "Singleton.h"
-#include "Math.h"
+#include <Library/Singleton.h>
+#include <Library/Math.h>
 #include "CerealHeaders.h"
 #include <map>
 #include <fstream>

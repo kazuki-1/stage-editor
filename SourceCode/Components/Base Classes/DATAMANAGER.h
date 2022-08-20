@@ -1,6 +1,6 @@
 #pragma once
 #include "../../OBJECT_DATA.h"
-#include "../../Engine/Singleton.h"
+#include <Library/Singleton.h>
 #include <vector>
 #include <memory>
 

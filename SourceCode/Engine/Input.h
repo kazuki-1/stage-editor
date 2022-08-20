@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
-#include "Singleton.h"
 #include <DirectXMath.h>
 #include <Windows.h>
-#include "Math.h"
+#include <Library/Singleton.h>
+#include <Library/Math.h>
 #include <d3d11.h>
 using namespace DirectX;
 using namespace Math;

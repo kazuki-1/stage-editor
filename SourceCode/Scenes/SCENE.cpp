@@ -7,5 +7,5 @@ void Scene::Finalize()
 {
 	GAMEOBJECTS->Finalize();
 	COLLIDERS::RAYCAST_MANAGER::Instance()->Finalize();
-	AudioController::Instance()->Finalize();
+	//AudioController::Instance()->Finalize();
 }

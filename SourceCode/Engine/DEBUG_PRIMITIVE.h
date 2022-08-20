@@ -2,7 +2,7 @@
 #include <wrl.h>
 #include <d3d11.h>
 #include "OBJECT.h"
-#include "Math.h"
+#include <Library/Math.h>
 using namespace Microsoft::WRL;
 using namespace Math;
 

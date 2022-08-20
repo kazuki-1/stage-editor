@@ -4,7 +4,7 @@
 #include "DirectX11.h"
 #include "../../External/ImGui/imgui.h"
 #include "OBJECT.h"
-#include "Math.h"
+#include <Library/Math.h>
 #define FRAMETIME 0.0166f
 using namespace Math;
 typedef MODEL_RESOURCES::ANIMATION AN;

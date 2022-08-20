@@ -10,6 +10,7 @@
 #include "TerrainAudio.h"
 #include "Dialogue.h"
 #include "../DialogueController.h"
+#include "../Engine/WWise/WWiseController.h"
 std::vector<bool>statuses;
 std::vector<Vector3>receivers;
 //std::shared_ptr<DYNAMIC_SPHERE>sphere;
@@ -253,7 +254,8 @@ void PlayerController_Component::UpdateAudioListener()
 /// <returns></returns>
 HRESULT PlayerController_Component::Initialize()
 {
-
+    AkGameObjectID id = parent->Data()->GetID();
+    AKRESULT res = AK::SoundEngine::SetDefaultListeners(&id, 1);
     return S_OK;
 
 }

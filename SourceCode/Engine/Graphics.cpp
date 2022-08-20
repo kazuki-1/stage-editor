@@ -12,6 +12,7 @@
 #include "../Scenes/SCENEMANAGER.h"
 #include "../Components/Base Classes/DATAMANAGER.h"
 #include "../Components/Base Classes/ComponentCreator.h"
+#include "WWise/WWiseController.h"
 #include "../DialogueController.h"
 using namespace DirectX;
 std::shared_ptr<SPRITE>skybox;
@@ -72,8 +73,7 @@ HRESULT Graphics::Initialize(int Width, int Height, HWND hwnd)
     skybox->DeregisterShader(ShaderTypes::Shader_2D);
     skybox->RegisterShader(ShaderTypes::Skybox);
 
-
-
+    WWiseController::Instance()->Initialize();
     return S_OK;
 }
 
@@ -100,55 +100,57 @@ bool Graphics::Frame()
 
 bool Graphics::Render()
 {
-    // Prepares the viewport
-    ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
-    DirectX11::Instance()->Begin({ .0f, .0f, .0f, .0f });
-    
-    // Perform execution of camera
-    Camera::Instance()->Execute();
-
-    // Scene Constant buffer update (Camera Settings and Light Directions)
-    //SCENE_CONSTANT_DATA data;
-    XMMATRIX v{ Camera::Instance()->ViewMatrix() }, pr{ DirectX11::Instance()->ProjectionMatrix() };
-    DirectX::XMStoreFloat4x4(&scene_data.view_proj, v * pr);
-
-
-    // Camera Position
-    scene_data.camera_position.x = Camera::Instance()->EyePosition().x;
-    scene_data.camera_position.y = Camera::Instance()->EyePosition().y;
-    scene_data.camera_position.z = Camera::Instance()->EyePosition().z;
-    scene_data.camera_position.w = 1;
-    scene_data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
-
-    // Write lighting properties into the constant buffer
-    LightingManager::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
-    int p_LightCount{}, s_LightCount{};
-    for (auto& d : LightingManager::Instance()->Dataset())
+    // Scene settings
     {
-        switch (d.second->Type())
+        // Prepares the viewport
+        ID3D11DeviceContext* dc{ DirectX11::Instance()->DeviceContext() };
+        DirectX11::Instance()->Begin({ .0f, .0f, .0f, .0f });
+
+        // Perform execution of camera
+        Camera::Instance()->Execute();
+
+        // Scene Constant buffer update (Camera Settings and Light Directions)
+        //SCENE_CONSTANT_DATA data;
+        XMMATRIX v{ Camera::Instance()->ViewMatrix() }, pr{ DirectX11::Instance()->ProjectionMatrix() };
+        DirectX::XMStoreFloat4x4(&scene_data.view_proj, v * pr);
+
+
+        // Camera Position
+        scene_data.camera_position.x = Camera::Instance()->EyePosition().x;
+        scene_data.camera_position.y = Camera::Instance()->EyePosition().y;
+        scene_data.camera_position.z = Camera::Instance()->EyePosition().z;
+        scene_data.camera_position.w = 1;
+        scene_data.ambientLightColour = { 0.2f, 0.2f, 0.2f, 1.0f };
+
+        // Write lighting properties into the constant buffer
+        LightingManager::Instance()->Retrieve("Default")->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
+        int p_LightCount{}, s_LightCount{};
+        for (auto& d : LightingManager::Instance()->Dataset())
         {
-        case LIGHTING::L_TYPE::DIRECTIONAL:
-            d.second->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
-            break;
-        case LIGHTING::L_TYPE::POINT:
-            d.second->WriteBuffer<PLIGHT_DATA>(&scene_data.pointlights[p_LightCount]);
-            ++p_LightCount;
-            break;
-        case LIGHTING::L_TYPE::SPOT:
-            d.second->WriteBuffer<SLIGHT_DATA>(&scene_data.spotlights[p_LightCount]);
-            ++s_LightCount;
-            break;
+            switch (d.second->Type())
+            {
+            case LIGHTING::L_TYPE::DIRECTIONAL:
+                d.second->WriteBuffer<DLIGHT_DATA>(&scene_data.directional);
+                break;
+            case LIGHTING::L_TYPE::POINT:
+                d.second->WriteBuffer<PLIGHT_DATA>(&scene_data.pointlights[p_LightCount]);
+                ++p_LightCount;
+                break;
+            case LIGHTING::L_TYPE::SPOT:
+                d.second->WriteBuffer<SLIGHT_DATA>(&scene_data.spotlights[p_LightCount]);
+                ++s_LightCount;
+                break;
+            }
         }
+
+        scene_data.pLightCount = p_LightCount;
+        scene_data.sLightCount = s_LightCount;
+
+        // Updates the constant buffer and uploads it
+        dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &scene_data, 0, 0);
+        dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
+        dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
     }
-    
-    scene_data.pLightCount = p_LightCount;
-    scene_data.sLightCount = s_LightCount;
-
-    // Updates the constant buffer and uploads it
-    dc->UpdateSubresource(dxSceneConstantBuffer.Get(), 0, 0, &scene_data, 0, 0);
-    dc->VSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
-    dc->PSSetConstantBuffers(0, 1, dxSceneConstantBuffer.GetAddressOf());
-
 
 
     skybox->Render({}, { 1, 1 }, {}, { 1920, 1080 });
@@ -156,6 +158,7 @@ bool Graphics::Render()
     Camera::Instance()->Render();
     SceneManager::Instance()->Render();
     LightingManager::Instance()->RenderDebug();
+    WWiseController::Instance()->Render();
 #pragma endregion
 
     InputManager::Instance()->Execute();
@@ -173,4 +176,5 @@ void Graphics::Finalize()
     // Destroys any instances of temp.stg data if there are any
     DataManager::Instance()->DestroyTemporaryData();
     DebugController::Instance()->Finalize();
+    WWiseController::Instance()->Finalize();
 }

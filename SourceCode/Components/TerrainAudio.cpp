@@ -5,6 +5,8 @@
 #include "TerrainAudio.h"
 #include "Mesh.h"
 #include "../Engine/AudioEngine.h"
+#include "../Engine/WWise/WWiseController.h"
+#include "../../WWise/SoundBank/Wwise_IDs.h"
 //#include "OBBCollider.h"
 
 std::string types[] = { "Emitter", "Receiver" };
@@ -81,15 +83,15 @@ HRESULT TerrainAudio_Component::Initialize()
             TerrainAudio_Emitter* emitter = (TerrainAudio_Emitter*)internal_component.get();
 
             // Instantiates the audio file and load the buffer with it
-            AudioEngine::Instance()->Insert(data->audio_data->name, data->audio_data->file_path);
-            emitter->buffers.resize(32);
-            for (auto& b : emitter->buffers)
-            {
-                b.buffer = std::make_shared<SoundEffect>(data->audio_data->file_path);
-                b.buffer->Initialize();
-                b.buffer->SetBuffer(AudioEngine::Instance()->Retrieve(data->audio_data->name)->Buffer());
+            //AudioEngine::Instance()->Insert(data->audio_data->name, data->audio_data->file_path);
+            //emitter->buffers.resize(32);
+            //for (auto& b : emitter->buffers)
+            //{
+            //    b.buffer = std::make_shared<SoundEffect>(data->audio_data->file_path);
+            //    b.buffer->Initialize();
+            //    b.buffer->SetBuffer(AudioEngine::Instance()->Retrieve(data->audio_data->name)->Buffer());
 
-            }
+            //}
         }
     }
 
@@ -362,26 +364,27 @@ void TerrainAudio_Component::Finalize()
 /// </summary>
 void TerrainAudio_Component::Play()
 {
-    if (data->class_type != TerrainAudio_Property::EMITTER)
-        return;
-    TerrainAudio_Emitter* emitter = static_cast<TerrainAudio_Emitter*>(internal_component.get());
-    if (!emitter)
-        return;
-    bool isDucking{ AudioController::Instance()->IsDucking() };
+    AK::SoundEngine::PostEvent(AK::EVENTS::WALKONGRAVEL, parent->Data()->GetID());
+    //if (data->class_type != TerrainAudio_Property::EMITTER)
+    //    return;
+    //TerrainAudio_Emitter* emitter = static_cast<TerrainAudio_Emitter*>(internal_component.get());
+    //if (!emitter)
+    //    return;
+    //bool isDucking{ AudioController::Instance()->IsDucking() };
 
-    // Cycle through the buffers to look for one that isn't being used 
-    for (auto& b : emitter->buffers)
-    {
-        if (isDucking)
-            b.buffer->SetVolume(0.3f);
-        else
-            b.buffer->SetVolume(1.0f);
-        if (b.state)
-            continue;
-        b.buffer->Play();
-        b.state = true;
-        break;
-    }
+    //// Cycle through the buffers to look for one that isn't being used 
+    //for (auto& b : emitter->buffers)
+    //{
+    //    if (isDucking)
+    //        b.buffer->SetVolume(0.3f);
+    //    else
+    //        b.buffer->SetVolume(1.0f);
+    //    if (b.state)
+    //        continue;
+    //    b.buffer->Play();
+    //    b.state = true;
+    //    break;
+    //}
 }
 
 /*----------------------------------------------TerrainAudio_Component ExecuteEmitter()------------------------------------------------*/

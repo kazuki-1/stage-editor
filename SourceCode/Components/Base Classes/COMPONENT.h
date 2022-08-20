@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Engine/Math.h"
+#include <Library/Math.h>
 #include "../../Engine/CerealHeaders.h"
 #include "../../Engine/COLLISION.h"
 #include "../../Engine/Sprite.h"

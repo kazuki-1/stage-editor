@@ -62,6 +62,7 @@ public:
             ++ind;
         }
     }
+    int GetID() { return id; }
     void Remove(std::shared_ptr<ComponentData>target)
     {
         dataset.erase(dataset.begin() + DataIndex(target));

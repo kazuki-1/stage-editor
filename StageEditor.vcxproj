@@ -71,10 +71,10 @@
     <ClCompile Include="SourceCode\Engine\EFFECTS.cpp" />
     <ClCompile Include="SourceCode\Engine\Graphics.cpp" />
     <ClCompile Include="SourceCode\Engine\ImGuiLocal.cpp" />
+    <ClCompile Include="SourceCode\Engine\Includes\Library\Math.cpp" />
     <ClCompile Include="SourceCode\Engine\Input.cpp" />
     <ClCompile Include="SourceCode\Engine\LIGHTING.cpp" />
     <ClCompile Include="SourceCode\Engine\Main.cpp" />
-    <ClCompile Include="SourceCode\Engine\Math.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL.cpp" />
     <ClCompile Include="SourceCode\Engine\MODEL_RESOURCE.cpp" />
     <ClCompile Include="SourceCode\Engine\OBJECT.cpp" />
@@ -97,6 +97,7 @@
     <ClCompile Include="SourceCode\Engine\Text.cpp" />
     <ClCompile Include="SourceCode\Engine\Texture.cpp" />
     <ClCompile Include="SourceCode\Engine\TextureManager.cpp" />
+    <ClCompile Include="SourceCode\Engine\WWise\WWiseController.cpp" />
     <ClCompile Include="SourceCode\GameObject.cpp" />
     <ClCompile Include="SourceCode\GameObject_2D.cpp" />
     <ClCompile Include="SourceCode\GUI.cpp" />
@@ -106,6 +107,13 @@
     <ClCompile Include="SourceCode\Scenes\SceneDemo.cpp" />
     <ClCompile Include="SourceCode\Scenes\SceneUI.cpp" />
     <ClCompile Include="SourceCode\STAGE_UI.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkDefaultIOHookBlocking.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkDefaultLowLevelIODispatcher.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFileLocationBase.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFilePackage.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkFilePackageLUT.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\AkMultipleFileLocation.cpp" />
+    <ClCompile Include="SourceCode\WWise Dependencies\Common\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\ImGui\imconfig.h" />
@@ -164,10 +172,12 @@
     <ClInclude Include="SourceCode\Engine\DepthStencilStateManager.h" />
     <ClInclude Include="SourceCode\Engine\DirectX11.h" />
     <ClInclude Include="SourceCode\Engine\DROPMANAGER.h" />
-    <ClInclude Include="SourceCode\Engine\Math.h" />
     <ClInclude Include="SourceCode\Engine\EFFECTS.h" />
     <ClInclude Include="SourceCode\Engine\Graphics.h" />
     <ClInclude Include="SourceCode\Engine\IMGUI.h" />
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Manager.h" />
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Math.h" />
+    <ClInclude Include="SourceCode\Engine\Includes\Library\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\Input.h" />
     <ClInclude Include="SourceCode\Engine\LIGHTING.h" />
     <ClInclude Include="SourceCode\Engine\MODEL.h" />
@@ -189,23 +199,33 @@
     <ClInclude Include="SourceCode\Engine\Shaders\ShaderManager.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\ShadowMapper.h" />
     <ClInclude Include="SourceCode\Engine\Shaders\SkyboxShader.h" />
-    <ClInclude Include="SourceCode\Engine\Singleton.h" />
     <ClInclude Include="SourceCode\Engine\SoundEffect.h" />
     <ClInclude Include="SourceCode\Engine\Sprite.h" />
     <ClInclude Include="SourceCode\Engine\System.h" />
     <ClInclude Include="SourceCode\Engine\Text.h" />
     <ClInclude Include="SourceCode\Engine\Texture.h" />
     <ClInclude Include="SourceCode\Engine\TextureManager.h" />
+    <ClInclude Include="SourceCode\Engine\WWise\WWiseController.h" />
     <ClInclude Include="SourceCode\GameObject.h" />
     <ClInclude Include="SourceCode\GameObject_2D.h" />
     <ClInclude Include="SourceCode\GUI.h" />
     <ClInclude Include="SourceCode\OBJECT_DATA.h" />
-    <ClInclude Include="SourceCode\PERFORMANCE_COUNTER.h" />
     <ClInclude Include="SourceCode\Scenes\Scene.h" />
     <ClInclude Include="SourceCode\Scenes\SceneManager.h" />
     <ClInclude Include="SourceCode\Scenes\SceneDemo.h" />
     <ClInclude Include="SourceCode\Scenes\SceneUI.h" />
     <ClInclude Include="SourceCode\STAGE_UI.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkDefaultIOHookBlocking.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkDefaultLowLevelIODispatcher.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileHelpers.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileHelpersBase.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFileLocationBase.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackage.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIO.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIOBlocking.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkFilePackageLUT.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\AkMultipleFileLocation.h" />
+    <ClInclude Include="SourceCode\WWise Dependencies\Common\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PhongShader.fx">
@@ -214,6 +234,7 @@
     <None Include="Shaders\Shader_2D.fx">
       <FileType>Document</FileType>
     </None>
+    <None Include="SourceCode\WWise Dependencies\Common\AkFilePackageLowLevelIO.inl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BaseShader3D.fx">
@@ -302,8 +323,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\External\Effekseer153a\include;.\External\Cereal\include;$(solution)External\DirectXTK\Inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(solution)External\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\SourceCode\Engine\Includes;.\External\WWise\Common\Common;.\External\WWise\include;.\External\Cereal\include;.\External\DirectXTK\Inc;$(IncludePath)</IncludePath>
+    <LibraryPath>.\External\WWise\lib\x64\Debug\lib;.\External\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -354,7 +375,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTK.lib;d3d11.lib;DXGI.lib;D3DCompiler.lib;XAudio2.lib;AkSoundEngine.lib;AKSpatialAudio.lib;AKMusicEngine.lib;AKMemoryMgr.lib;AKStreamMgr.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

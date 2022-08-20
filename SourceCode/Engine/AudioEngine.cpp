@@ -13,7 +13,7 @@ HRESULT AudioEngine::Initialize()
 {
 
     // Coinitialization is called here, so calling it again is not needed
-    HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+    HRESULT hr{ S_OK };
     assert(hr == S_OK);
     hr = XAudio2Create(xAudio.GetAddressOf(), 0, XAUDIO2_DEFAULT_PROCESSOR);
     assert(hr == S_OK);

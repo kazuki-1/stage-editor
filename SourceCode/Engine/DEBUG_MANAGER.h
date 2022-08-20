@@ -1,7 +1,7 @@
 #pragma once
 #include "DEBUG_PRIMITIVE.h"
 
-#include "Singleton.h"
+#include <Library/Singleton.h>
 #include <d3d11.h>
 using namespace Math;
 

@@ -43,7 +43,7 @@ HRESULT AudioController::Initialize()
 /// </summary>
 void AudioController::Execute()
 {
-    AudioEngine::Instance()->Execute();
+    //AudioEngine::Instance()->Execute();
 
     // Audio ducking functions
     if (isDucking)

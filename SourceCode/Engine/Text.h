@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include "Sprite.h"
-#include "Math.h"
+#include <Library/Math.h>
 using namespace Math;
 class TextManager;
 class TextTexture

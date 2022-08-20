@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 #include <xaudio2fx.h>
-#include "Singleton.h"
+#include <Library/Singleton.h>
 using namespace Microsoft::WRL;
 
 class Audio;

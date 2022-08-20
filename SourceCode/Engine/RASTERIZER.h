@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <memory>
-#include "Singleton.h"
+#include <Library/Singleton.h>
 using namespace Microsoft::WRL;
 
 enum class RasterizerTypes

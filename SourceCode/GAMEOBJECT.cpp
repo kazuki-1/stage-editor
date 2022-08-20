@@ -8,7 +8,7 @@
 #include "Components/Mesh.h"
 #include "Components/PlayerController.h"
 #include "Components/TerrainAudio.h"
-
+#include "Engine/WWise/WWiseController.h"
 std::string COMP_TYPE[] = {
     "BGM Component",
     "Capsule Collider",
@@ -310,6 +310,7 @@ void GameObjectManager::Insert(std::string n, std::shared_ptr<OBJECT_DATA>d)
 {
     gameObjects.insert(std::make_pair(n, std::make_shared<GameObject>(d)));
     gameObjects.find(n)->second->Initialize();
+    WWiseController::Instance()->RegisterGameObject(gameObjects.find(n)->second.get());
 
 }
 
@@ -319,6 +320,8 @@ void GameObjectManager::Insert2D(std::string n, std::shared_ptr<OBJECT_DATA>d)
 {
     gameObjects.insert(std::make_pair(n, std::make_shared<GameObject_2D>(d)));
     gameObjects.find(n)->second->Initialize();
+    WWiseController::Instance()->RegisterGameObject(gameObjects.find(n)->second.get());
+
 
 }
 
@@ -375,7 +378,10 @@ std::map<std::string, std::shared_ptr<GameObject>>GameObjectManager::GetGameObje
 void GameObjectManager::Initialize()
 {
     for (auto& g : gameObjects)
+    {
         g.second->Initialize();
+        WWiseController::Instance()->RegisterGameObject(g.second.get());
+    }
 }
 
 /*--------------------------------GameObjectManager Execute()----------------------------------*/

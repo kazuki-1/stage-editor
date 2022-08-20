@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include <map>
-#include "../../Engine/Singleton.h"
+#include <Library/Singleton.h>
 enum class COMPONENT_TYPE;
 class Component;
 class GameObject;

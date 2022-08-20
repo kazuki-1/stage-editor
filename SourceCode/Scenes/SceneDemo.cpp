@@ -15,7 +15,7 @@ HRESULT SceneDemo::Initialize()
 {
     
     DataManager::Instance()->InsertAndInitialize();
-    AudioController::Instance()->Initialize();
+    //AudioController::Instance()->Initialize();
     return S_OK;
 }
 
@@ -24,7 +24,7 @@ HRESULT SceneDemo::Initialize()
 void SceneDemo::Execute()
 {
     IMGUI::Instance()->Execute();
-    AudioController::Instance()->Execute();
+    //AudioController::Instance()->Execute();
     if(state)
         GAMEOBJECTS->Execute();;
 }

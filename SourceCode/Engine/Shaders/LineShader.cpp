@@ -2,7 +2,7 @@
 #include "../RASTERIZER.h"
 #include "../BlendMode.h"
 #include "../DEBUG_PRIMITIVE.h"
-#include "../Math.h"
+#include <Library/Math.h>
 #include "../OBJECT.h"
 #include "ShaderManager.h"
 /*------------------------------------------------------------------------------------------------------------------------------*/
